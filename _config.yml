@@ -3,9 +3,9 @@
 # ----------------------- #
 
 url: http://eewang.github.com
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+title: Journey Into Code
+subtitle: Damn, it feels good to be a hacker.
+author: Eugene Wang
 simple_search: http://google.com/search
 description:
 
@@ -96,4 +96,4 @@ disqus_show_comment_count: false
 google_analytics_tracking_id:
 
 # Facebook Like
-facebook_like: false
+facebook_like: true
