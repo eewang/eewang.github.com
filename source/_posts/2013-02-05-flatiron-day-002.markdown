@@ -1,0 +1,8 @@
+---
+layout: post
+title: "Flatiron Day 002"
+date: 2013-02-05 17:10
+comments: true
+categories: 
+---
+Day 2 of The Flatiron School was a success. Today we set up our Octopress blogs. 
