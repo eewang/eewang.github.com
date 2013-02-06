@@ -4,7 +4,7 @@
   <title><![CDATA[DEV-lish Adventures]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-06T11:41:28-05:00</updated>
+  <updated>2013-02-06T11:48:28-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Flatiron - Day 003]]></title>
+    <link href="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/"/>
+    <updated>2013-02-06T11:30:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/02/06/flatiron-day-003</id>
+    <content type="html"><![CDATA[<p>On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.</p>
+
+<!--more-->
+
+
+<p>I wrote a short script to automate the process of deploying the blog (&#8220;rake deploy&#8221;), staging files on git (&#8220;git add .&#8221;), commiting files (&#8220;git commit -am &#8216;message&#8217;&#8221;) and pushing files to a remote repository on Github. Its pretty simple and permits users to add in a commit message. Here is the code to put in your Rakefile:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Add files to github, commit and deploy&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:gen_deploy_push</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>  <span class="no">STDOUT</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;What is your commit message? &quot;</span>
+</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="no">STDIN</span><span class="o">.</span><span class="n">gets</span><span class="o">.</span><span class="n">chomp</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;rake gen_deploy&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git add .&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git commit -am &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git push&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;commit message was &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I think the code is fairly straightforward - basically the user inputs a commit message and then the command will deploy the site while commiting the code to Github.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 002]]></title>
