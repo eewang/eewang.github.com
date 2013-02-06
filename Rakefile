@@ -381,3 +381,11 @@ task :list do
   puts "Tasks: #{(Rake::Task.tasks - [Rake::Task[:list]]).join(', ')}"
   puts "(type rake -T for more detail)\n\n"
 end
+
+desc "Add files to github, commit and deploy"
+task :gen_deploy_push, :msg do
+  system "rake gen_deploy"
+  system "git add ."
+  system "git commit -am \'#{:msg}\'"
+  system "git push"
+end
