@@ -383,8 +383,7 @@ task :list do
 end
 
 desc "Add files to github, commit and deploy"
-task :gen_deploy_push, :msg do |t, args|
-  msg = args[:msg]
+task :gen_deploy_push, [:msg] do |t, args|
   system "rake gen_deploy"
   system "git add ."
   system "git commit -am \'#{:msg}\'"
