@@ -386,7 +386,7 @@ desc "Add files to github, commit and deploy"
 task :gen_deploy_push, :msg do |t, args|
   system "rake gen_deploy"
   system "git add ."
-  system "git commit -am '#{args}'"
+  system "git commit -am '#{:msg}'"
   system "git push"
-  puts "commit message was '#{args}'"
+  puts "commit message was '#{:msg}'"
 end
