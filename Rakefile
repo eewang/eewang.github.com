@@ -383,10 +383,13 @@ task :list do
 end
 
 desc "Add files to github, commit and deploy"
-task :gen_deploy_push, :msg do |t, args|
+task :gen_deploy_push do
+  msg = ''
+  STDOUT.puts "What is your commit message? "
+  msg = STDIN.gets.chomp
   system "rake gen_deploy"
   system "git add ."
-  system "git commit -am '#{:msg}'"
+  system "git commit -am '#{msg}'"
   system "git push"
-  puts "commit message was '#{:msg}'"
+  puts "commit message was '#{msg}'"
 end
