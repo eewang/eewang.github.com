@@ -1,0 +1,30 @@
+---
+layout: post
+title: "Flatiron - Day 003"
+date: 2013-02-06 11:30
+comments: true
+categories: 
+published: false
+---
+
+On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.
+
+<!--more-->
+
+I wrote a short script to automate the process of deploying the blog ("rake deploy"), staging files on git ("git add ."), commiting files ("git commit -am 'message'") and pushing files to a remote repository on Github. Its pretty simple and permits users to add in a commit message. Here is the code to put in your Rakefile: 
+
+{% codeblock lang:ruby %}
+desc "Add files to github, commit and deploy"
+task :gen_deploy_push do
+  msg = ''
+  STDOUT.puts "What is your commit message? "
+  msg = STDIN.gets.chomp
+  system "rake gen_deploy"
+  system "git add ."
+  system "git commit -am '#{msg}'"
+  system "git push"
+  puts "commit message was '#{msg}'"
+end
+{% endcodeblock %}
+
+I think the code is fairly straightforward - basically the user inputs a commit message and then the command will deploy the site while commiting the code to Github.
