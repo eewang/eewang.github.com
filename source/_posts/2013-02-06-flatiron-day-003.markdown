@@ -4,7 +4,7 @@ title: "Flatiron - Day 003"
 date: 2013-02-06 11:30
 comments: true
 categories: 
-published: false
+published: true
 ---
 
 On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.
