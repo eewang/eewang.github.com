@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: eugene.wang@flatironschool.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -83,6 +83,9 @@ googleplus_hidden: false
 # Pinboard
 pinboard_user:
 pinboard_count: 3
+
+#LinkedIn
+linkedin_user: eewang
 
 # Delicious
 delicious_user:
