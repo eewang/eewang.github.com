@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Journey Into Code]]></title>
+  <title><![CDATA[DEV-lish Adventures]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-05T18:56:02-05:00</updated>
+  <updated>2013-02-05T21:32:58-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -18,7 +18,55 @@
     <link href="http://eewang.github.com/blog/2013/02/05/flatiron-day-002/"/>
     <updated>2013-02-05T17:10:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/02/05/flatiron-day-002</id>
-    <content type="html"><![CDATA[<p>Day 2 of The Flatiron School was a success. Today we set up our Octopress blogs.</p>
+    <content type="html"><![CDATA[<p>Day 2 of The Flatiron School was a success. Today&#8217;s main focus was to set up our Octopress blogs (the result of which is on your screen) and set up our development environments. Its remarkable to think about all of the stuff that goes on &#34;under the hood&#34; when developing software - before today I didn&#8217;t really know what dot files were, and now I realize how fundamental they are to a smooth development experience (case in point, I screwed up my .bash_profile yesterday and that nearly forced me to reformat my machine).</p>
+
+<p>We started the day going through the various environment issues, including:</p>
+
+<ul>
+  <li>Installing necessary development tools like Homebrew, Ruby Version Manager and SQLite3</li>
+  <li>Configuring our multiple dot files, including .gitconfig, .bash_profile, .irbrc, .gitignore and .gemrc, adding aliases and modifying preferences</li>
+  <li>Pimping out our machines by installing an array of cool programs, like Solarize (for bash and Sublime Text), Alfred (powerful search tool) and Base 2 (visualize SQL queries)</li>
+</ul>
+
+
+<p>Getting everything set up took most of the morning, as we would use Avi&#8217;s dot files as a base and slowly apply changes as we moved forward. For me, learning to use the bash shell has been great, if a bit challenging. Using the shell to interact with your machine makes the user considerably more powerful and efficient in navigating the file system and making changes. However, its a bit of a learning curve, as before I started learning how to code, I accessed files via icons like the vast majority of computer users - I never gave a fleeting thought to the more powerful mode of interacting with a computer that is the Terminal.</p>
+
+<!--more-->
+
+
+<p>At around noon, we left to go to visit the offices of Pivotal Labs - a Ruby development shop in Union Square - where we enjoyed a catered lunch and heard Avi speak about the history of code. Avi Flombaum is a developer-philosopher, if there ever was one. Actually, he&#8217;d probably prefer philosopher-developer. Starting with the fundamentals of coding as communication, Avi weaved together a story that originated with ancient cavemen, using recipes as the first programs, and moved through the fathers (and mothers) of modern programming - luminaries like Ada Lovelace, Alan Turing and Nicola Tesla (among many others).</p>
+
+<p>Here are just a few quotes from several of the awesome people Avi talked about today. The one that stuck with me the most was the last quote by Tesla - he basically predicted the modern web more than a century ago and recognized that the ability to broadly distribute and transmit information would revolutionize economies and societies. Also, Alan Kay&#8217;s quote was encouraging, in that despite the massive growth of the Internet in the past decade, there is still way more to be done. We&#8217;ve only seen the tip of the iceberg. As someone starting to learn how to manipulate technology, its reassuring to think that I&#39;m getting out in front of the wave rather than catching the end.</p>
+
+<blockquote>
+  <p>The real romance is out ahead and yet to come. The computer revolution hasn&#8217;t started yet. Don&#8217;t be misled by the enormous flow of money into bad defacto standards for unsophisticated buyers using poor adaptations of incomplete ideas. </p>
+  <p>&#8211; Alan Kay, computer scientist</p>
+</blockquote>
+
+
+
+
+<blockquote>
+  <p>The web is more a social creation than a technical one. I designed it for a social effect — to help people work together — and not as a technical toy. The ultimate goal of the Web is to support and improve our weblike existence in the world. We clump into families, associations, and companies. We develop trust across the miles and distrust around the corner. </p>
+  <p>&#8211; Tim Berners-Lee, investor of the World Wide Web</p>
+</blockquote>
+
+
+
+
+<blockquote>
+  <p>It will soon be possible, for instance, for a business man in New York to dictate instructions and to have them appear instantly in type in London or elsewhere. He will be able to call up from his desk and talk with any telephone subscriber in the world. it will only be necessary to carry an inexpensive instrument not bigger than a watch, which will enable its bearer to hear anywhere on sea or land for distances of thousands of miles. One may listen or transmit speech or song to the uttermost parts of the world. In the same way any kind of picture, drawing, or print can be transferred from one place to another. It will be possible to operate millions of such instruments from a single station. Thus it will be a simple matter to keep the uttermost parts of the world in instant touch with each other. The song of a great singer, the speech of a political leader, the sermon of a great divine, the lecture of a man of science may thus be delivered to an audience scattered all over the world. </p>
+  <p>&#8211; Nikola Tesla, scientist, in 1909 (!)</p>
+</blockquote>
+
+
+<p>It was great to hear Avi&#8217;s passion for coding not as merely a process of learning a whole bunch of different computer programming languages, but as a method of rich communication between humans - a method that enables immense creativity and expressiveness and is built for humans rather than computers. To hear his love of coding was inspirational. He was able to break down the immensely complex task of creating software - just to communicate with a server requires a whole host of actions, before any of the actual functional code of a program is written - into simple, manageable problems. This deconstruction-synthesis approach to programming - understanding a large problem and deconstructing it into smaller problems, then reconstructing it into a integrated system - is applicable across all industries and systems, both artificial and natural.</p>
+
+<p>Take the human body for example. The human body is an unfathomably complex system, but 99% of it is below the surface. Its like the ubiquitous iceberg example - most of the complexity is &#8220;under the hood&#8221;. However, when you study the body, you can break it down into individual, relatively less complex components. The human body is comprised of the circulatory system, nervous system, skeletal system, etc. The circulatory system is comprised of veins and arteries that transport red blood cells. The red blood cells are living organisms that are comprised of nuclei, ribosomes, mitochondria and a whole host of other sub-cellular units that I&#8217;ve long since forgot. And so on. The complexity at first seems daunting and unmanageable, but once you learn how to break it down into its constituent parts and understand the interactivity between them, building a system becomes a more manageable mountain to scale.</p>
+
+<p>I think its important to take a similar approach to web development. Or any form of problem solving, for that matter. Thinking about problems in this way does more than make the large problem you&#8217;re trying to solve for more manageable - it also provides motivation to keep moving forward even when wading knee deep in code. It can be frustrating working on a single bug or trying to get a small chunk of code to work, but knowing how that small bug or code set fits within a larger system can be a motivating force to keep progressing, at least for me. I&#8217;m someone that likes to understand how the components of a larger system work together, and that general understanding makes it easier for me to work on the details than if I had no idea of the bigger problem I was trying to solve.</p>
+
+<p>Avi&#8217;s passion for coding is infectious. If you ever have a chance to take a class with him - do it. Avi makes learning how to code about so much more than using git or writing Ruby code or knowing how to manipulate a bash profile. He connects the journey of coding with a larger, innate human desire to communicate, to structure and express the hard-to-articulate thoughts in a way that can be useful to others. In many ways, its more than just a profession or a job, its a way of thinking about life - a philosophy of communication, learning and interaction. But don&#8217;t let this scare you, rather, it should excite you. It should excite you to find underlying connections between seemingly disparate industries, subjects and areas of human exploration. It should excite you that you can learn a common approach to solving problems that can be used in an almost infinite number of applications. It should excite you that there are common patterns across our day-to-day lives, both in software and in human connections. This should provide a basis for a deep desire to learn and explore, from which only great and awesome things can come.</p>
 ]]></content>
   </entry>
   
@@ -28,6 +76,9 @@
     <updated>2013-02-04T20:00:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/02/04/flatiron-day-001</id>
     <content type="html"><![CDATA[<p>Day 1 of Winter/Spring 2013 of <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> is in the books! Today, Avi applied the philosophy of &#8220;deploy on day 1&#8221; and required us all to create student profile pages and merge the various branches of the base files using git. Most of the morning was spent establishing a basic working environment (Avi promised that we&#8217;d go through environment configuration in Day 2), forking the Github Flatiron student profile page and modifying the HTML, CSS and JavaScript files to match our content. After a lunch break of pizza, salad and soda (and introductions with fellow students), Avi went through class logistics (class is from 9 am to 6 pm, school will be open on weekends for people to work, etc.) and gave us a pep talk about the joys of programming and words of wisdom for the upcoming semester. He explained that we would be progressing through increasing levels of abstraction - starting with the environment, SQL, front-end code, then progressing to Ruby and finally to Ruby on Rails. We likely won&#8217;t get to RoR until a month or so in, as Avi wants us to understand all the individual components of RoR so that we could build the framework ourselves. Personally, I like this approach - I think I learn best when I understand the component pieces of an abstracted framework. Using a framework is fantastic, but its even more powerful when understanding how its constructed so that customization can be performed (even if unnecessary). Overall, it was great to hear his passion for coding come through in his talk - in my brief experience as a (aspiring) developer, I&#8217;ve felt that its easy to get frustrated and irritated when working deep in the weeds with lines of code, but that its a much more enjoyable experience if you take a step back and appreciate the joy of creating a product.</p>
+
+<!--more-->
+
 
 <p>After that talk, we continued working on our student profiles, then later in the afternoon, we all gathered back together to work on merging all of our forked branches into the master branch. Avi acted as a train conductor and went through the branches of each of the groups, slowly diff-ing, rebase-ing and remote-ing through each group&#8217;s work until we came out with a master branch that contained our student profiles. It seemed like arduous work - especially if there are a lot of merge conflicts - but it was also pretty amazing to see the vast functionality of git, and how its able to take an incredibly complex process - people making changes to various components of a given project at various times - and structure it in such a way that is (relatively) easy to understand. Also, Avi showed us a program called Gitx that converts git project data into a multi-color map that isn&#8217;t too different from a live traffic stream. Pretty awesome stuff.</p>
 
