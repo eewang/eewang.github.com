@@ -4,7 +4,7 @@
   <title><![CDATA[DEV-lish Adventures]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-06T11:48:28-05:00</updated>
+  <updated>2013-02-06T23:35:20-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -51,6 +51,12 @@
 
 
 <p>I think the code is fairly straightforward - basically the user inputs a commit message and then the command will deploy the site while commiting the code to Github.</p>
+
+<p>After a morning spent working through the intricacies of the Gemfile and Rakefile in the Octopress application (it looks intimidating, but I found it very helpful to examine the code underlying a command before executing it - makes coding seem less like magic and more like an intricate sequence of interconnected logic), we broke for lunch. In the afternoon, we shifted gears to databases, specifically learning Structured Query Language (SQL). I first learned SQL a few years back when I interned at KPMG. I was part of the Forensic Advisory group, which used Microsoft SQL Server to comb through millions of rows of data and run pricing analyses for pharmaceutical companies. However, even though I learned the syntax and general structure of SQL at KPMG, a lot of it was more copying pre-written SQL queries and modifying them at the margins, rather than writing my own from scratch, so the exercises today were pretty helpful.</p>
+
+<p>After a brief lecture on SQL by Avi, we broke up into our groups and designed a schema for a simple quiz app. This app would have users, quizzes, questions, choices and answers, and the challenge for us was to determine the optimal database design to address the immediate use cases while also leaving room to hypothetically scale the database. Once we created a schema, we then practice writing SQL queries to create, manipulate and access that database. For the rest of the afternoon, we worked as a class to build the quiz app database, with each group contributing a piece of the database structure and Avi using the differences between our schemas to comment on the pros and cons of schema designs.</p>
+
+<p>For me, the class has been moving along at a brisk but manageable pace. In the course of three days, it seems like we&#8217;ve covered a boatload of material related to git, environment setup and databases, but I know that that&#8217;s just the beginning of the journey. We haven&#8217;t even systematically delved into Javascript, Ruby or Rails yet! Its exciting to think of all the stuff that&#8217;s out there to learn - I just need to be diligent and purposeful in completing the homework and grabbing every opportunity to learn something new or contribute to a project, no matter how small.</p>
 ]]></content>
   </entry>
   
