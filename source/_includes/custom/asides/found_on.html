@@ -1,3 +1,8 @@
+{% if site.email %}
+<h2>get at me</h2>
+<a href="mailto:{{ site.email }}">{{ site.email }}</a>
+{% endif %}
+
 <h2>find me</h2>
 {% if site.github_user %}
 <a href="https://github.com/{{site.github_user}}/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="{{ root_url }}/images/glyphicons_381_github.png"></a>
@@ -21,9 +26,4 @@
 
 {% if site.quora_user %}
 <a href="http://www.quora.com/{{site.quora_user}}" rel="tooltip" title="Quora"><img class="social_icon" title="Quora" alt="Quora icon" src="{{ root_url }}/images/glyphicons_385_quora.png"></a>
-{% endif %}
-
-{% if site.email %}
-<h2>get at me</h2>
-<a href="mailto:{{ site.email }}">{{ site.email }}</a>
 {% endif %}

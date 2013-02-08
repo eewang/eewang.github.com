@@ -1,2 +1,25 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+/*.span4  {
+  width: 290px;
+  background-color: #005599;
+}*/
+
+/*.row {
+  
+}*/
+
+/*dd {
+}
+
+dt {
+  width: 160px;
+}*/
+
+.span4 {
+  transition: 2s;
+  -webkit-transition: 2s;
+  -moz-transition: 2s;
+  -o-transition: 2s;
+}
