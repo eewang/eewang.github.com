@@ -1,5 +1,24 @@
-// This File is imported last, and will override other styles in the cascade
-// Add styles here to make changes without digging in too much
+/*This File is imported last, and will override other styles in the cascade
+Add styles here to make changes without digging in too much
+*/
+
+/*Mixins*/
+
+/*+transform3d*/
+
+/*@mixin transform3d($trans) {
+  @include transform($trans, true);
+}*/
+
+/*+backface-visibility*/
+/*@mixin backface-visibility($visibility; hidden) {
+  @include experimental(backface-visibility, $visibility, -moz, -webkit, -o, -ms, not -khtml, official);
+}*/
+
+
+/*+perspective*/
+
+/*@include perspective( perspective )*/
 
 /*.span4  {
   width: 290px;
@@ -17,9 +36,42 @@ dt {
   width: 160px;
 }*/
 
+
+
 .span4 {
-  transition: 2s;
-  -webkit-transition: 2s;
-  -moz-transition: 2s;
-  -o-transition: 2s;
+  transition: 1.5s;
+  -webkit-transition: 1.5s;
+  -moz-transition: 1.5s;
+  -o-transition: 1.5s;
 }
+
+/*.article-format {
+  height: 400px;
+  width:90%;
+  position: relative;
+  +perspective(800)
+  header, .entry-content {
+    height: 100%;
+    width: 100%;
+    +backface-visibility
+  }
+  header {
+    position: relative;
+    +transform3d( rotateX(0deg) )
+    z-index: 2;
+  }
+  .entry-content {
+    position: absolute;
+    top: 0;
+    +transform3d( rotateX(180deg) );
+    z-index: 1;
+  }
+  &:hover {
+    header {
+      +transform3d( rotateX(-180deg) );
+    }
+    .entry-content{
+      +transform3d( rotateX(0deg) );
+      z-index: 3;
+    }
+}*/
