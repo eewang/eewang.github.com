@@ -4,7 +4,7 @@
   <title><![CDATA[DEV-ilicious]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-08T09:49:35-05:00</updated>
+  <updated>2013-02-09T00:13:22-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,169 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Flatiron - Day 005]]></title>
+    <link href="http://eewang.github.com/blog/2013/02/08/flatiron-day-005/"/>
+    <updated>2013-02-08T23:44:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/02/08/flatiron-day-005</id>
+    <content type="html"><![CDATA[<p>In grade school, snow days meant building snowmen, tossing snow balls and going sledding. At the Flatiron School, snow days mean 6 hours of lecture via video conference. Avi and Co &#8220;cancelled&#8221; class today in advance of Snowmageddon 2013, but only in the sense that we weren&#8217;t expected to physically be in class. Instead, Avi set up a videoconference and hosted virtual class where we continued exploring Ruby.</p>
+
+<!--more-->
+
+
+<p>We covered a range of topics today. Starting with a review of our homework, Avi discussed iteration, arrays, string methods, regular expressions, symbols, variable scope, blocks and hashes. Whew! We went through a lot of material today, but I think I&#8217;m grasping everything decently well. Its been pretty interesting to think about how there always seems to be more than one way of doing something in Ruby.</p>
+
+<p>A good example of that was the homework we had last night. We had to write a simple <a href="http://en.wikipedia.org/wiki/Fizz_buzz" target="_blank">FizzBuzz</a> program and extend that to find all numbers that fizz, buzz or fizzbuzz within a range. I&#8217;ve posted my code below. What&#8217;s amazed me about coding, though, is that there are <a href="http://rosettacode.org/wiki/FizzBuzz" target="_blank">countless</a> ways of doing the same thing, both within and across languages. For example, the &#8220;trick&#8221; to FizzBuzz is to recognize that Fizz and Buzz combine to make FizzBuzz. This means that my code below, while it gets the job done, is not the most efficient and probaly not up to best practices. I have three strings for the three results, but in fact I should only have two strings - Fizz and Buzz, which combine to make FizzBuzz.</p>
+
+<p>Avi showed us a bunch of different ways to code the FizzBuzz problem, and if there&#8217;s a ton of different ways to solve the simple FizzBuzz problem, I can only begin to imagine how many infinite paths there are to building more complex applications. That thought is exciting to me; there are many paths out there that haven&#8217;t yet been explored and technology continues to be a space of great potential for human creativity and ingenuity. When I think back to a year ago, a part of me was resigned to thinking that we&#8217;ve reached the end of the road for technology - we have Google, Facebook and Twitter, what else could be out there? However, now that I&#8217;ve taken a peek under the hood of the web and seen a glimpse of what is possible, I&#8217;m convinced that the best is yet to come. Not just in web development, but in technology more broadly. 3-D printing, Internet-enabled hardware, sensors - the possibilities are limitless for the technology platforms that are only now in their infancy. Its both humbling and exciting to think about.</p>
+
+<hr />
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Define variable scope and initialize arrays</span>
+</span><span class='line'>
+</span><span class='line'><span class="vg">$fizzer</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="vg">$buzzer</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="vg">$fizzbuzzer</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="vg">$remainder</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Method to calculate fizzbuzz for any given number</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;FizzBuzz&quot;</span>
+</span><span class='line'>  <span class="k">elsif</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Fizz&quot;</span>
+</span><span class='line'>  <span class="k">elsif</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Buzz&quot;</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Not divided by 3 or 5&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Method to ask a user to input a number they want to fizzbuzz</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz_ask</span>
+</span><span class='line'>  <span class="nb">print</span> <span class="s2">&quot;What number do you want to fizzbuzz? &quot;</span>
+</span><span class='line'>  <span class="n">num</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'>  <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Method to fizzbuzz a range of numbers</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz_loop</span><span class="p">(</span><span class="n">num1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num2</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="n">num1</span><span class="o">.</span><span class="n">.num2</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="vg">$fizzbuzzer</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="vg">$fizzer</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="vg">$buzzer</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="vg">$remainder</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Method to ask a user to define the start and end points for fizzbuzz</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz_loop_ask</span>
+</span><span class='line'>  <span class="nb">print</span> <span class="s2">&quot;Where do you want to start fizzbuzzing? &quot;</span>
+</span><span class='line'>  <span class="n">start</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'>  <span class="nb">print</span> <span class="s2">&quot;Where do you want to end fizzbuzzing? &quot;</span>
+</span><span class='line'>  <span class="n">finish</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'>  <span class="k">while</span> <span class="n">finish</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Sorry, please input an ending value. Where do you want to end fizzbuzzing?&quot;</span>
+</span><span class='line'>    <span class="n">finish</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="n">fizzbuzz_loop</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Fizzbuzz method calls</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fizzbuzz_ask</span>
+</span><span class='line'><span class="n">fizzbuzz_loop_ask</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Print results of fizzbuzz calls</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;fizzer: </span><span class="si">#{</span><span class="vg">$fizzer</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;buzzer: </span><span class="si">#{</span><span class="vg">$buzzer</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;fizzbuzzer: </span><span class="si">#{</span><span class="vg">$fizzbuzzer</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;no fizz or buzz: </span><span class="si">#{</span><span class="vg">$remainder</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 004]]></title>
