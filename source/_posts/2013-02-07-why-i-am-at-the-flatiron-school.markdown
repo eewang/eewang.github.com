@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Why I am at the Flatiron School"
-date: 2013-02-07 20:16
+date: 2013-02-10 15:00
 comments: true
 categories: 
 published: false

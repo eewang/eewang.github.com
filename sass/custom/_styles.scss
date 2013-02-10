@@ -4,6 +4,8 @@ Add styles here to make changes without digging in too much
 
 @import "compass";
 
+/*http://www.patternify.com/*/
+
 .span4 footer {
   display: none;
 }
@@ -24,10 +26,10 @@ Add styles here to make changes without digging in too much
 .span4 {
   border-radius: 25px;
   .article-format {
-    transition: 2s;
-    -webkit-transition: 2s;
-    -moz-transition: 2s;
-    -o-transition: 2s;
+    transition: 1.5s;
+    -webkit-transition: 1.5s;
+    -moz-transition: 1.5s;
+    -o-transition: 1.5s;
     background-color: #C4CBFF;
     border-radius: 25px;
     &:hover {
@@ -46,6 +48,10 @@ Add styles here to make changes without digging in too much
 */
 .entry-content {
   padding-top: 15px;
+}
+
+article li {
+  list-style: circle;
 }
 
 .entry-title {
