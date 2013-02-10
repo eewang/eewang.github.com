@@ -4,7 +4,7 @@ title: "Flatiron - Week 1 Redux"
 date: 2013-02-10 14:00
 comments: true
 categories: 
-published: false
+published: true
 ---
 
 Flatiron is now 1/12 the way done. The first week has been pretty great; after lecture on Friday I felt physically exhausted, but mentally I was running a mile a minute, thinking of all the stuff that's out there to learn. My schedule has generally been to get into school around 9 am, morning lecture, lunch, afternoon lecture, group work, then wrap up around 6 pm, after which I'll stay until 7:30/8:00. I realize that it's only been one week, but I've already learned a ton. 
