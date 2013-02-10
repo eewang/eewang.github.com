@@ -11,6 +11,8 @@ Coding is not rocket surgery. Discuss.
 
 If you can communicate, you can code. If I wanted to ask someone to get me a sandwich, I could just ask "Hey, can you make me a peanut butter sandwich?" Humans are great at understanding that command. However, computers need to be told exactly what to do. Coding is essentially giving instructions in a very clear, organized and efficient manner. To instruct a computer to make a sandwich, I'd have to write code that breaks down a seemingly simple action into the following commands:
 
+<!--more-->
+
 - Walk to the kitchen
 - Open the cupboard
 - Take out plate
