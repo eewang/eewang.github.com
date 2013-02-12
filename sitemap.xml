@@ -2,34 +2,40 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/04/flatiron-day-001/</loc>
-        <lastmod>2013-02-05T21:55:53-05:00</lastmod>
+        <lastmod>2013-02-10T14:57:26-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/05/flatiron-day-002/</loc>
-        <lastmod>2013-02-10T00:01:14-05:00</lastmod>
+        <lastmod>2013-02-10T14:59:13-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/06/flatiron-day-003/</loc>
-        <lastmod>2013-02-06T23:34:28-05:00</lastmod>
+        <lastmod>2013-02-10T14:58:19-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/07/flatiron-day-004/</loc>
-        <lastmod>2013-02-07T19:40:29-05:00</lastmod>
+        <lastmod>2013-02-10T14:59:42-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/08/flatiron-day-005/</loc>
-        <lastmod>2013-02-09T00:11:56-05:00</lastmod>
+        <lastmod>2013-02-10T15:00:32-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/10/flatiron-week-1-redux/</loc>
         <lastmod>2013-02-10T11:37:59-05:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://eewang.github.com/blog/2013/02/11/5-reasons-everyone-should-learn-how-to-code/
+        </loc>
+        <lastmod>2013-02-11T19:27:39-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://eewang.github.com/blog/archives/</loc>
-        <lastmod>2013-02-10T11:37:59-05:00</lastmod>
+        <lastmod>2013-02-11T19:27:39-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/</loc>
-        <lastmod>2013-02-10T11:37:59-05:00</lastmod>
+        <lastmod>2013-02-11T19:27:39-05:00</lastmod>
     </url>
 </urlset>
