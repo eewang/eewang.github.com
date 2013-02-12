@@ -3,7 +3,7 @@ layout: post
 title: "Flatiron - Day 004"
 date: 2013-02-07 10:56
 comments: true
-categories: 
+categories: Flatiron, SQL, coding
 published: true
 ---
 

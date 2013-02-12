@@ -3,7 +3,7 @@ layout: post
 title: "Flatiron - Day 003"
 date: 2013-02-06 11:30
 comments: true
-categories: 
+categories: Flatiron, coding, Ruby, git
 published: true
 ---
 

@@ -3,7 +3,7 @@ layout: post
 title: "Flatiron - Day 001"
 date: 2013-02-04 20:00
 comments: true
-categories: 
+categories: flatiron, coding
 ---
 Day 1 of Winter/Spring 2013 of <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> is in the books! Today, Avi applied the philosophy of "deploy on day 1" and required us all to create student profile pages and merge the various branches of the base files using git. Most of the morning was spent establishing a basic working environment (Avi promised that we'd go through environment configuration in Day 2), forking the Github Flatiron student profile page and modifying the HTML, CSS and JavaScript files to match our content. 
 

@@ -3,7 +3,7 @@ layout: post
 title: "Flatiron - Day 005"
 date: 2013-02-08 23:44
 comments: true
-categories: 
+categories: Flatiron, Ruby, coding
 ---
 In grade school, snow days meant building snowmen, tossing snow balls and going sledding. At the Flatiron School, snow days mean 6 hours of lecture via video conference. Avi and Co "cancelled" class today in advance of Snowmageddon 2013, but only in the sense that we weren't expected to physically be in class. Instead, Avi set up a videoconference and hosted virtual class where we continued exploring Ruby.
 
