@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: coding | DEV-ilicious]]></title>
-  <link href="http://eewang.github.com/blog/categories/coding/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Flatiron | DEV-ilicious]]></title>
+  <link href="http://eewang.github.com/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
   <updated>2013-02-12T00:32:36-05:00</updated>
   <id>http://eewang.github.com/</id>
@@ -313,288 +313,6 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Flatiron - Day 004]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/07/flatiron-day-004/"/>
-    <updated>2013-02-07T10:56:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/07/flatiron-day-004</id>
-    <content type="html"><![CDATA[<p>This morning, we started with a review of the SQL homework and ventured into the wide world of SQL joins, followed by the start of our Ruby learning in the afternoon. Regarding SQL, I struggled a bit with the homework last night, but after I read up a bit more on joins, the confusion lessened and I was able to create a working quiz database. Our task was to (i) design a database schema, (ii) populate the database, (iii) query the database and (iv) determine quiz scores. I've published the SQL code I wrote to accomplish this task after the jump.</p>
-
-<!--more-->
-
-
-<p>After a lunch of Chinese food delivered to the school, we delved into Ruby. The "Programmer of the Day" was, aptly enough, Yukihiro Matsumoto, or <a href="http://en.wikipedia.org/wiki/Yukihiro_Matsumoto" target="_blank">"Matz"</a>, who invented the Ruby language. Avi described how Matz designed Ruby to be pleasing to the people using the language, not for the computer. The ultimate reason for creating Ruby was simply because it made Matz happy - not because of efficiency, power or universality, but rather human happiness. Ruby is a language designed to match the differences and idiosycracies inherent in human behavior and interaction. As Avi put it, our differences should be celebrated, not suppressed, and as a philosophical basis, Ruby enables different programmers to express themselves differently - there's no one right way of doing something.</p>
-
-<p>I enjoy Avi's occasional expositions on the philosophical underpinnnings of code. I had never before thought about coding as an expressive and creative medium, on par with other art forms like music or painting, but the more I think about it, the more I can appreciate how code empowers people to exercise creativity. Even simple functions and programs can be written in any number of different ways. The mere variety of how much can be done using code is a testament to the infinite possibilities available with code.</p>
-
-<p>For the rest of the afternoon, Avi lectured about Ruby and we broke off on occasion to work on practice problems. We covered variables, methods and basic control structures. All of the stuff we covered today was part of the class pre-work, but it was good to solidify my understanding, and I realized that there a few quirks of Ruby that I would have taken for granted if we had just skipped over the basic foundations of Ruby. For example, did you know that if you run a command like:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="kp">true</span> <span class="o">||</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>And then try to print the value of x, you won't be returned 3? That's because Ruby, in evaluating the expression, first saw that the left side of the "OR" statement (indicated by ||) was true and so it automatically knew that the entire expression was true (at least one side was true). Thus, Ruby didn't even assign the number 3 to the variable x. I hadn't considered that behavior for Ruby before, so it was good to go through some of the more nuanced aspects of the language.</p>
-
-<p>Learning Ruby took up most of the rest of the day. Tonight, we have to write a few basic programs in Ruby (FizzBuzz!) just to get more acquainted with the language.</p>
-
-<hr />
-
-<p><em>SQL Exercise</em></p>
-
-<p>This SQL code serves as the database schema and creates five tables - 'users', 'quizzes', 'questions', 'choices' and 'answers'. Each quiz has multiple questions, each of which have multiple choices. Users take quizzes and select choices as their answers, which then populates the 'answers' table.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">-- CREATES DATABASE SCHEMA FOR QUIZ.DB&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">users</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">fname</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">lname</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">quizzes</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">questions</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">description</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">quiz_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">quiz_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">quizzes</span><span class="p">(</span><span class="n">quiz_id</span><span class="p">)</span>
-</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">choices</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">content</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>
-</span><span class='line'>  <span class="n">correct</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">question_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">questions</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span>
-</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">answers</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">user_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">question_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">choice_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">users</span><span class="p">(</span><span class="n">user_id</span><span class="p">),</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">questions</span><span class="p">(</span><span class="n">question_id</span><span class="p">),</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">choice_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">choices</span><span class="p">(</span><span class="n">choice_id</span><span class="p">)</span>
-</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>In creating the database, Avi made a few good points about efficient nomenclature. When I first created my database, I had redundant field names for my tables (e.g., "id" in the "choices" table was labeled "choice_id"). The prefix of "choice" for "id" is redundant, since the inclusion of the field in the "choices" table automatically associates "id" with "choices" and differentiates it from the "id" field in the other tables. Its not a huge deal to include the table prefix in the field name, but its unnecessary and the elimination of the prefix is an example of DRY (Don't Repeat Yourself).</p>
-
-<p>After creating the schema, we had to write SQL that would populate the database. The below SQL script adds data into the "users", "quizzes", "choices" and "questions" tables. As you'll notice, there are 2 quizzes, each with 5 questions, each with 4 choices, for a total of 40 choices (2 * 5 * 4), hence the number of rows in the "choices" table. I used a "multi-insert" statement here rather than having INSERT INTO ... VALUES surrounding each of my entries. This saves time and makes the code look cleaner. Also, I added the corresponding field names after the table name in each of the insert blocks - I don't think this is necessary, as SQL will read the entries and assume that the first value goes into the first column, labeled "id", and same with the other columns, but I figure that its best practice to be explicit with the field names so that there's no ambiguity (for example, if you add fields in the future).</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">-- INSERTS INITIAL VALUES INTO QUIZ.DB&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">lname</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Derrick&quot;</span><span class="p">,</span> <span class="ss">&quot;Rose&quot;</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Kevin&quot;</span><span class="p">,</span> <span class="ss">&quot;Durant&quot;</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Lebron&quot;</span><span class="p">,</span> <span class="ss">&quot;James&quot;</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">quizzes</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Ruby on Rails&quot;</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;SQLite3&quot;</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">questions</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">quiz_id</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;What is Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Who created Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Why is Ruby on Rails so awesome?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="ss">&quot;Who uses Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="ss">&quot;What are some Ruby on Rails competitors?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="ss">&quot;What is SQLite3?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="ss">&quot;Why is SQLite3 better or worse than other databases?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="ss">&quot;How does SQLite3 vary from MySQL?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="ss">&quot;Is MongoDB better than SQLite3?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="ss">&quot;Why should you not use SQLite3 for large applications?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">choices</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">correct</span><span class="p">,</span> <span class="n">question_id</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Choice A&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Choice B&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Choice C&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="ss">&quot;Choice D&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>This SQL command populates the "answers" table with data. I purposefully populated the data such that Derrick Rose got all questions right (he's the best of the 3, after all), Kevin Durant got 3 questions right in each quiz and Lebron got only 1 question right per quiz (I'm still bitter over the 2011 Eastern Conference Finals).</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="c1">-- INSERTS RESULTS OF 3 USERS EACH TAKING 2 TESTS</span>
-</span><span class='line'>  <span class="c1">-- WITH 5 QUESTIONS INTO THE ANSWERS TABLE OF QUIZ.DB&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">answers</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">choice_id</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">39</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>This SQL command analyzes the resulting answers. In designing this query, I wanted to get back a table of six rows - one for each user-quiz pairing for 3 users, each taking 2 quizzes - with the user name, quiz name and total correct answers. I started the "answers" table, as I figured that "answers" would be my primary source for the scores; how could you determine a correct score without knowing the quiz takers' answers?. From there, I joined the table against other tables that included useful information.</p>
-
-<p>The "answers" table includes what each user selected as a choice for a given question, but not whether that choice is correct (including such data in this table would be de-normalizing the "correct answer" data, which lives in the "choices" table), so I joined the "answers" table against "choices" to determine which choices selected by users were correct. Then, I continued joining against "questions", "users" and "quizzes" to get the necessary information. Finally, I grouped the results by user_id and quiz_id, which collapses the return table into the 6 row table for each user-quiz pair that I was looking for.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- CREATES A TABLE FOR EACH USER-QUIZ SET AND</span>
-</span><span class='line'><span class="c1">-- RETURNS THE SCORE EACH USER GOT ON A GIVEN QUIZ&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">SELECT</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">fname</span> <span class="k">AS</span> <span class="s1">&#39;first name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">lname</span> <span class="k">AS</span> <span class="s1">&#39;last name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="s1">&#39;user id&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">qz</span><span class="p">.</span><span class="n">name</span> <span class="k">AS</span> <span class="s1">&#39;quiz name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="k">AS</span> <span class="s1">&#39;raw score&#39;</span>
-</span><span class='line'><span class="k">FROM</span> <span class="p">((((</span>
-</span><span class='line'>  <span class="n">answers</span> <span class="n">a</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">choices</span> <span class="k">c</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">choice_id</span> <span class="o">=</span> <span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">questions</span> <span class="n">qu</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">question_id</span> <span class="o">=</span> <span class="n">qu</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">users</span> <span class="n">u</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">quizzes</span> <span class="n">qz</span> <span class="k">ON</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span> <span class="o">=</span> <span class="n">qz</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Finally, I wrote some SQL to do some basic analytics on database. This basically is very similar to the above query, but adds the percentage score.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- CALCULATES PERCENTAGE CORRECT FOR A USER-QUIZ SET&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">SELECT</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">fname</span> <span class="k">AS</span> <span class="s1">&#39;first name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">lname</span> <span class="k">AS</span> <span class="s1">&#39;last name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">qz</span><span class="p">.</span><span class="n">name</span> <span class="k">AS</span> <span class="s1">&#39;quiz name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="k">AS</span> <span class="s1">&#39;raw score&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">||</span> <span class="s1">&#39;%&#39;</span> <span class="k">AS</span> <span class="s1">&#39;score percentage&#39;</span>
-</span><span class='line'><span class="k">FROM</span> <span class="p">((((</span>
-</span><span class='line'>  <span class="n">answers</span> <span class="n">a</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">choices</span> <span class="k">c</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">choice_id</span> <span class="o">=</span> <span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">questions</span> <span class="n">qu</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">question_id</span> <span class="o">=</span> <span class="n">qu</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">users</span> <span class="n">u</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">quizzes</span> <span class="n">qz</span> <span class="k">ON</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span> <span class="o">=</span> <span class="n">qz</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Avi said that we wouldn't be actively writing many SQL queries, since Rails abstracts so much of the database interaction. However, there will undoubtedly be times when Rails isn't sufficient for complex data queries, and we'll have to write our own SQL. Even if we don't use SQL that often, its critical to know, and I think its pretty cool, despite the at times frustrating syntax and poor debugging feedback for the sqlite3 shell. I would like to eventually explore more advanced data analysis tools, software like Hadoop or Cassandra, so knowing SQL is going to be invaluable moving forward.</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[Flatiron - Day 003]]></title>
     <link href="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/"/>
     <updated>2013-02-06T11:30:00-05:00</updated>
@@ -637,6 +355,63 @@
 <p>After a brief lecture on SQL by Avi, we broke up into our groups and designed a schema for a simple quiz app. This app would have users, quizzes, questions, choices and answers, and the challenge for us was to determine the optimal database design to address the immediate use cases while also leaving room to hypothetically scale the database. Once we created a schema, we then practice writing SQL queries to create, manipulate and access that database. For the rest of the afternoon, we worked as a class to build the quiz app database, with each group contributing a piece of the database structure and Avi using the differences between our schemas to comment on the pros and cons of schema designs.</p>
 
 <p>For me, the class has been moving along at a brisk but manageable pace. In the course of three days, it seems like we've covered a boatload of material related to git, environment setup and databases, but I know that that's just the beginning of the journey. We haven't even systematically delved into Javascript, Ruby or Rails yet! Its exciting to think of all the stuff that's out there to learn - I just need to be diligent and purposeful in completing the homework and grabbing every opportunity to learn something new or contribute to a project, no matter how small.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Flatiron - Day 002]]></title>
+    <link href="http://eewang.github.com/blog/2013/02/05/flatiron-day-002/"/>
+    <updated>2013-02-05T17:10:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/02/05/flatiron-day-002</id>
+    <content type="html"><![CDATA[<p>Day 2 of The Flatiron School was a success. Today's main focus was to set up our Octopress blogs (the result of which is on your screen) and set up our development environments. Its remarkable to think about all of the stuff that goes on \"under the hood\" when developing software - before today I didn't really know what dot files were, and now I realize how fundamental they are to a smooth development experience (case in point, I screwed up my .bash_profile yesterday and that nearly forced me to reformat my machine).</p>
+
+<!--more-->
+
+
+<p>We started the day going through the various environment issues, including:</p>
+
+<ul>
+  <li>Installing necessary development tools like Homebrew, Ruby Version Manager and SQLite3</li>
+  <li>Configuring our multiple dot files, including .gitconfig, .bash_profile, .irbrc, .gitignore and .gemrc, adding aliases and modifying preferences</li>
+  <li>Pimping out our machines by installing an array of cool programs, like Solarize (for bash and Sublime Text), Alfred (powerful search tool) and Base 2 (visualize SQL queries)</li>
+</ul>
+
+
+<p>Getting everything set up took most of the morning, as we would use Avi's dot files as a base and slowly apply changes as we moved forward. For me, learning to use the bash shell has been great, if a bit challenging. Using the shell to interact with your machine makes the user considerably more powerful and efficient in navigating the file system and making changes. However, its a bit of a learning curve, as before I started learning how to code, I accessed files via icons like the vast majority of computer users - I never gave a fleeting thought to the more powerful mode of interacting with a computer that is the Terminal.</p>
+
+<p>At around noon, we left to go to visit the offices of Pivotal Labs - a Ruby development shop in Union Square - where we enjoyed a catered lunch and heard Avi speak about the history of code. Avi Flombaum is a developer-philosopher, if there ever was one. Actually, he'd probably prefer philosopher-developer. Starting with the fundamentals of coding as communication, Avi weaved together a story that originated with ancient cavemen, using recipes as the first programs, and moved through the fathers (and mothers) of modern programming - luminaries like Ada Lovelace, Alan Turing and Nicola Tesla (among many others).</p>
+
+<p>Here are just a few quotes from several of the awesome people Avi talked about today. The one that stuck with me the most was the last quote by Tesla - he basically predicted the modern web more than a century ago and recognized that the ability to broadly distribute and transmit information would revolutionize economies and societies. Also, Alan Kay's quote was encouraging, in that despite the massive growth of the Internet in the past decade, there is still way more to be done. We've only seen the tip of the iceberg. As someone starting to learn how to manipulate technology, its reassuring to think that I\'m getting out in front of the wave rather than catching the end.</p>
+
+<blockquote>
+  <p>The real romance is out ahead and yet to come. The computer revolution hasn't started yet. Don't be misled by the enormous flow of money into bad defacto standards for unsophisticated buyers using poor adaptations of incomplete ideas. </p>
+  <p>-- Alan Kay, computer scientist</p>
+</blockquote>
+
+
+
+
+<blockquote>
+  <p>The web is more a social creation than a technical one. I designed it for a social effect — to help people work together — and not as a technical toy. The ultimate goal of the Web is to support and improve our weblike existence in the world. We clump into families, associations, and companies. We develop trust across the miles and distrust around the corner. </p>
+  <p>-- Tim Berners-Lee, investor of the World Wide Web</p>
+</blockquote>
+
+
+
+
+<blockquote>
+  <p>It will soon be possible, for instance, for a business man in New York to dictate instructions and to have them appear instantly in type in London or elsewhere. He will be able to call up from his desk and talk with any telephone subscriber in the world. it will only be necessary to carry an inexpensive instrument not bigger than a watch, which will enable its bearer to hear anywhere on sea or land for distances of thousands of miles. One may listen or transmit speech or song to the uttermost parts of the world. In the same way any kind of picture, drawing, or print can be transferred from one place to another. It will be possible to operate millions of such instruments from a single station. Thus it will be a simple matter to keep the uttermost parts of the world in instant touch with each other. The song of a great singer, the speech of a political leader, the sermon of a great divine, the lecture of a man of science may thus be delivered to an audience scattered all over the world. </p>
+  <p>-- Nikola Tesla, scientist, in 1909 (!)</p>
+</blockquote>
+
+
+<p>It was great to hear Avi's passion for coding not as merely a process of learning a whole bunch of different computer programming languages, but as a method of rich communication between humans - a method that enables immense creativity and expressiveness and is built for humans rather than computers. To hear his love of coding was inspirational. He was able to break down the immensely complex task of creating software - just to communicate with a server requires a whole host of actions, before any of the actual functional code of a program is written - into simple, manageable problems. This deconstruction-synthesis approach to programming - understanding a large problem and deconstructing it into smaller problems, then reconstructing it into a integrated system - is applicable across all industries and systems, both artificial and natural.</p>
+
+<p>Take the human body for example. The human body is an unfathomably complex system, but 99% of it is below the surface. Its like the ubiquitous iceberg example - most of the complexity is "under the hood". However, when you study the body, you can break it down into individual, relatively less complex components. The human body is comprised of the circulatory system, nervous system, skeletal system, etc. The circulatory system is comprised of veins and arteries that transport red blood cells. The red blood cells are living organisms that are comprised of nuclei, ribosomes, mitochondria and a whole host of other sub-cellular units that I've long since forgot. And so on. The complexity at first seems daunting and unmanageable, but once you learn how to break it down into its constituent parts and understand the interactivity between them, building a system becomes a more manageable mountain to scale.</p>
+
+<p>I think its important to take a similar approach to web development. Or any form of problem solving, for that matter. Thinking about problems in this way does more than make the large problem you're trying to solve for more manageable - it also provides motivation to keep moving forward even when wading knee deep in code. It can be frustrating working on a single bug or trying to get a small chunk of code to work, but knowing how that small bug or code set fits within a larger system can be a motivating force to keep progressing, at least for me. I'm someone that likes to understand how the components of a larger system work together, and that general understanding makes it easier for me to work on the details than if I had no idea of the bigger problem I was trying to solve.</p>
+
+<p>Avi's passion for coding is infectious. If you ever have a chance to take a class with him - do it. Avi makes learning how to code about so much more than using git or writing Ruby code or knowing how to manipulate a bash profile. He connects the journey of coding with a larger, innate human desire to communicate, to structure and express the hard-to-articulate thoughts in a way that can be useful to others. In many ways, its more than just a profession or a job, its a way of thinking about life - a philosophy of communication, learning and interaction. But don't let this scare you, rather, it should excite you. It should excite you to find underlying connections between seemingly disparate industries, subjects and areas of human exploration. It should excite you that you can learn a common approach to solving problems that can be used in an almost infinite number of applications. It should excite you that there are common patterns across our day-to-day lives, both in software and in human connections. This should provide a basis for a deep desire to learn and explore, from which only great and awesome things can come.</p>
 ]]></content>
   </entry>
   
