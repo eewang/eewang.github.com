@@ -3,7 +3,7 @@ layout: post
 title: "Flatiron - Day 002"
 date: 2013-02-05 17:10
 comments: true
-categories: Flatiron, coding, environment
+categories: Flatiron coding environment
 published: true
 ---
 Day 2 of The Flatiron School was a success. Today's main focus was to set up our Octopress blogs (the result of which is on your screen) and set up our development environments. Its remarkable to think about all of the stuff that goes on \"under the hood\" when developing software - before today I didn't really know what dot files were, and now I realize how fundamental they are to a smooth development experience (case in point, I screwed up my .bash_profile yesterday and that nearly forced me to reformat my machine). 

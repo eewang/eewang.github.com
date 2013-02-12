@@ -1,0 +1,15 @@
+---
+layout: post
+title: "Flatiron - Day 006"
+date: 2013-02-12 00:19
+comments: true
+categories: 
+---
+
+Much of the morning today was spent going through the Ruby homework we had over the weekend. In addition to a number of short homework assignments, we had to work on online modules at <a href="http://www.rubymonk.com/" target="_blank">RubyMonk</a> and <a href="http://www.rubykoans.com/" target="_blank">RubyKoans</a>. We explored topics like hash iteration, symbols and data structures in Ruby. In addition, we built a simple jukebox program in Ruby that allows for user interaction to select a song from a playlist. It seems like simple stuff, but it was a great exercise to think about how to break down the larger problem into smaller pieces. 
+
+<!--more-->
+
+In the afternoon, we chatted about how the first week had gone, and people provided some feedback on the pace of the class, the structure of homework, etc. The overall theme of the discussion was very positive - everyone seemed to be enjoying their time and really focusing on learning the skill set. Later in the afternoon, we worked on building templates for our student profile pages in HTML and CSS, and continuing to practice coding in Ruby. 
+
+Oh, and blogging. Blogging and presenting at meetups will be a large part of our education at Flatiron, which I find exciting because it requires us to not just learn the skill set, but to be able to communicate it effectively, which will be necessary in any future job. 

@@ -3,7 +3,7 @@ layout: post
 title: "Flatiron - Week 1 Redux"
 date: 2013-02-10 14:00
 comments: true
-categories: 
+categories: Flatiron coding
 published: true
 ---
 
@@ -39,7 +39,7 @@ Each of these topics can get pretty in depth in their own right. We've just scra
 
 <strong>4) Some pretty cool people are learning to code</strong>
 
-I've met a bunch of awesome people in class. The backgrounds of the students are pretty diverse. In addition to the people working in finance or professional services before starting Flatiron (myself included, this is New York, after all), there are people who worked as designers, entrepreneurs, teachers - we even a professional poker player in class. This diversity of professional background makes for interesting conversations, and its been great to talk to my classmates about what interests them and for how they hope to use technology to better pursue their passions. I used to think that my career options were binary - either pursue technology or explore my passion for media, education and public policy. Instead, I've realized that technology doesn't supplant my passions; technology complements and enhances my passions. 
+I've met a bunch of awesome people in class (including our <a href="http://shitavisays.tumblr.com" target="_blank">great instructor</a>). The backgrounds of the students are pretty diverse. In addition to the people working in finance or professional services before starting Flatiron (myself included, this is New York, after all), there are people who worked as designers, entrepreneurs, teachers - we even a professional poker player in class. This diversity of professional background makes for interesting conversations, and its been great to talk to my classmates about what interests them and for how they hope to use technology to better pursue their passions. I used to think that my career options were binary - either pursue technology or explore my passion for media, education and public policy. Instead, I've realized that technology doesn't supplant my passions; technology complements and enhances my passions. 
 
 <strong>5) This stuff is fun</strong>
 
