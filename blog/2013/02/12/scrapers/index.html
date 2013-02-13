@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Flatiron - Day 006 - DEV-ilicious</title>
+  <title>Semantics and Scrapers (Flatiron - Day 007) - DEV-ilicious</title>
   <meta name="author" content="Eugene Wang">
   <link rel="author" href="humans.txt">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -13,7 +13,7 @@
   
     
   
-  <meta name="description" content="Much of the morning today was spent going through the Ruby homework we had over the weekend. In addition to a number of short homework assignments, &hellip;">
+  <meta name="description" content="We covered a lot of material today, from the value of semantic mark-up in HTML to how to build web scrapers in Ruby. The day started with a review &hellip;">
   
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -21,17 +21,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/02/12/flatiron-day-006/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/02/12/scrapers/">
   <link href="/favicon.png" rel="icon">
   <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="DEV-ilicious" type="application/atom+xml">
   <meta name="og:type" content="website" />
   <meta name="og:site_name" content="DEV-ilicious" />
-  <meta name="og:title" content="Flatiron - Day 006" />
-  <meta name="og:description" content="Much of the morning today was spent going through the Ruby homework we had over the weekend. In addition to a number of short homework assignments, &hellip;" />
-  <meta name="og:url" content="http://eewang.github.com/blog/2013/02/12/flatiron-day-006/"/>
-  <meta name="url" content="http://eewang.github.com/blog/2013/02/12/flatiron-day-006/">
+  <meta name="og:title" content="Semantics and Scrapers (Flatiron - Day 007)" />
+  <meta name="og:description" content="We covered a lot of material today, from the value of semantic mark-up in HTML to how to build web scrapers in Ruby. The day started with a review &hellip;" />
+  <meta name="og:url" content="http://eewang.github.com/blog/2013/02/12/scrapers/"/>
+  <meta name="url" content="http://eewang.github.com/blog/2013/02/12/scrapers/">
   
   <meta name="subject" content=""/>
   <meta name="category" content=""/>
@@ -90,7 +90,7 @@
 
   <header>
     
-      <h1 class="entry-title">Flatiron - Day 006</h1>
+      <h1 class="entry-title">Semantics and Scrapers (Flatiron - Day 007)</h1>
     
     
       <p class="meta">
@@ -115,7 +115,7 @@
   
 
 
-<time datetime="2013-02-12T00:19:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2013</time> - 
+<time datetime="2013-02-12T23:55:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2013</time> - 
         
 
 
@@ -127,14 +127,16 @@
   </header>
 
 
-  <div class="entry-content"><p>Much of the morning today was spent going through the Ruby homework we had over the weekend. In addition to a number of short homework assignments, we had to work on online modules at <a href="http://www.rubymonk.com/" target="_blank">RubyMonk</a> and <a href="http://www.rubykoans.com/" target="_blank">RubyKoans</a>. We explored topics like hash iteration, symbols and data structures in Ruby. In addition, we built a simple jukebox program in Ruby that allows for user interaction to select a song from a playlist. It seems like simple stuff, but it was a great exercise to think about how to break down the larger problem into smaller pieces.</p>
+  <div class="entry-content"><p>We covered a lot of material today, from the value of semantic mark-up in HTML to how to build web scrapers in Ruby. The day started with a review of our homework from the previous night, which was to recreate a song cataloging program that we had written using hash iteration. Using hashes rather than arrays to organize our song list enabled us to utilize metadata about the artist, album and song title that are accessible via hash keys.</p>
 
 <!--more-->
 
 
-<p>In the afternoon, we chatted about how the first week had gone, and people provided some feedback on the pace of the class, the structure of homework, etc. The overall theme of the discussion was very positive - everyone seemed to be enjoying their time and really focusing on learning the skill set. Later in the afternoon, we worked on building templates for our student profile pages in HTML and CSS, and continuing to practice coding in Ruby.</p>
+<p>Later on in the day we went to work on our student profiles, and Avi taught us about the value of semantic markup along the way and other front-end best practices. Applying proper markup to an HTML document enables search engines to more effectively place content and generally aligns with the spirit of the Internet in writing web pages that are aware of the structure of their own content. In creating our student profiles, it was tempting to take semantic shortcuts and place content in the incorrect enclosing tags (e.g., list data in a table, which has a preset formatting). Avi emphasized, however, that the separation of content and style is a fundamental underpinning of the Web and should be respected. Content that is properly structured via HTML can be styled in an infinite number of ways, so we shouldn&#8217;t let our interest in maintaining beautiful design affect how we semantically define our content. A great example of this is the <a href="http://www.csszengarden.com/" target="_blank">CSS Zen Garden</a> project. Take a look at a few of the projects - you&#8217;ll realize that wildly different website designs can be based on the exact same HTML content.</p>
 
-<p>Oh, and blogging. Blogging and presenting at meetups will be a large part of our education at Flatiron, which I find exciting because it requires us to not just learn the skill set, but to be able to communicate it effectively, which will be necessary in any future job.</p>
+<p>In the afternoon, we were tasked with building our very first web scraper, on the student profile page we had just created, in fact. Using Nokogiri, a Ruby gem, I was able to write a program that parsed the individual student profile pages from the central index page and return a hash of attributes, covering each student&#8217;s work history, education, favorite apps, etc. For those who don&#8217;t know, scrapers are pretty awesome. They allow you to collect and organize data in any way you want from web sites, so long as you know what you&#8217;re looking for. Using scrapers, I could quickly collect sports data, or find all fitness classes at my gym, or pull out information from Wikipedia. Scrapers essentially allow you to extract large amounts of data for your own use. This is pretty powerful, and I&#8217;m excited to try and build more complex scrapers, and even attach those to analytical engines to provide useful intelligence about a topic.</p>
+
+<p>In the evening, I made it over to an event on civic technology and public hacking with a fellow student. The talk focused on the state of civic technology, and included short speeches by politicians, city officials and active members of the civic tech community. Although it was all very interesting and exciting to know that this community is filled with passionate people who care about solving problems, I was exhausted after a long day at Flatiron, so I high-tailed it out of there when I got a chance and went back home to keep working on my scraper and watch the State of the Union.</p>
 </div>
 
 
@@ -161,16 +163,14 @@
   
 
 
-<time datetime="2013-02-12T00:19:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2013</time>
+<time datetime="2013-02-12T23:55:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2013</time>
       
 
 
     </p>
     
-      <a class="pull-left" href="/blog/2013/02/11/why-i-am-at-the-flatiron-school/" title="Previous Post: How I Became a Flatiron Student">&laquo; How I Became a Flatiron Student</a>
+      <a class="pull-left" href="/blog/2013/02/12/flatiron-day-006/" title="Previous Post: Flatiron - Day 006">&laquo; Flatiron - Day 006</a>
     
-    
-      <a class="pull-right" href="/blog/2013/02/12/scrapers/" title="Next Post: Semantics and Scrapers (Flatiron - Day 007)">Semantics and Scrapers (Flatiron - Day 007) &raquo;</a>
     
   </footer>
 
@@ -293,8 +293,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/02/12/flatiron-day-006/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/02/12/flatiron-day-006/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/02/12/scrapers/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/02/12/scrapers/';
         var disqus_script = 'embed.js';
       
     (function () {
