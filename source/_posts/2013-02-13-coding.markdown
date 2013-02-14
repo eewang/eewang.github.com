@@ -4,7 +4,7 @@ title: "Coding, Fast and Slow (Flatiron - Day 008)"
 date: 2013-02-13 23:56
 comments: true
 categories: 
-published: false
+published: true
 ---
 
 I am currently reading Daniel Kahneman's pop psych book <a href="http://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow" target="_blank">"Thinking, Fast and Slow"</a>. The basic premise of the book is that humans have two generalized thought processes - one that is reflexive and instinctual (System 1), and another that is more rational and deliberative (System 2). Book smarts are commonly equated to the latter and streets smarts to the former. I often think that coding has a similar thought pattern to it, which is unsurprising given that computers are designed to mimic human thought and communication, in a context-stripped yet efficient manner. 
