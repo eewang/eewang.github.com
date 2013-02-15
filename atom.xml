@@ -4,7 +4,7 @@
   <title><![CDATA[DEV-ilicious]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-14T08:30:38-05:00</updated>
+  <updated>2013-02-15T09:13:09-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[This is not a blog post (Flatiron - Day 009)]]></title>
+    <link href="http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/"/>
+    <updated>2013-02-14T11:58:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009</id>
+    <content type="html"><![CDATA[<p>This is an instance of a blog post. In object oriented programming languages, like Ruby, the existence of a class, in this case a &#8220;Blog Post,&#8221; is independent of an individual instance of such class (i.e., this blog post). Each blog post has similar attributes with different values, such as title, author and date. These are known as instance methods in Ruby. However, the &#8220;Blog Post&#8221; class may have class-level methods that are inaccesible by a single instance of a blog post.</p>
+
+<!--more-->
+
+
+<p>An example of this might be a count of blog posts. How many blog posts I&#8217;ve written is not a characteristic of a single blog post; rather, that data can only be found by accessing the &#8220;Blog Post&#8221; class and not a blog post instance. The &#8220;Blog Post&#8221; class has functionality that does not exist for an individual blog post, and vice versa. Confused? Good, now you know how we felt for much of the day.</p>
+
+<p>We spent most of the day covering class constructors and recreating a few of the programs we&#8217;ve already written into object-oriented programs. The lecture and class discussion around object-oriented design was dense and hard to digest. Although I came across <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/" target="_blank">this useful article</a> covering how class and instance methods differ, I&#8217;m still processing my understanding of classes, and how they fit into the broader Ruby universe.</p>
+
+<p>After lecture today, we focused on trying to take our scraper that we built yesterday, rewrite it using a class constructor and link it to a SQL database. This way, instead of our scraper returning a hash of student attributes as its data structure, we could have our scraper input data directly into a database, which is easier for querying and analyzing than a hash or array. Although its been a difficult task to combine a number of different tools and skills we&#8217;ve learned over the past week, I&#8217;m enjoying the challenge of trying to map out and code how data will flow from the page to the database.</p>
+
+<p>For homework, we continued to work on Ruby Koans and our scrapers. This weekend, I&#8217;m hoping to be able to spend some time starting a few scraper projects that I have in mind. Its funny, since starting this program I&#8217;ve been looking forward to weekends so that I can just spend time coding and trying new things in Ruby. Sounds super nerdy, but its true. That said, I know that I need to seek balance in my life so that I don&#8217;t get burnt out on coding. Hopefully, I&#8217;ll have many fruitful years ahead to keep learning and exploring new horizons in technology. With the frenetic pace of the class and my tendency to dive deep into the weeds of what I&#8217;m working on, my body has been tired and I haven&#8217;t been exercising much recently. However, I&#8217;ve learned more in the past two weeks than I have in quite awhile. And its pretty exhilirating.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Coding, Fast and Slow (Flatiron - Day 008)]]></title>
