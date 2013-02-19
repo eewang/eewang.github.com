@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How I Became a Flatiron Student"
+title: "Why I Am at the Flatiron School"
 date: 2013-02-11 22:00
 comments: true
 categories: 

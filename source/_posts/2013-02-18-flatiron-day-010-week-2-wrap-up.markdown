@@ -1,0 +1,19 @@
+---
+layout: post
+title: "Flatiron - Day 010"
+date: 2013-02-18 18:07
+comments: true
+categories: 
+---
+
+When I look back on the past two weeks, its hard to believe how far the class has come. And while it seems like each day has been more challenging than the last, its clear that we're moving forward and covering a lot of ground. Avi mentioned that coding is hard because you're always at the edge of your knowledge; it doesn't get less difficult, you just move onto more advanced stuff. My classmate Victoria put it well in her <a href="http://vicfriedman.github.com" target="_blank">blog</a> when she mentions that each day brings new frustrations, but only because we're pushing ourselves and not resting on what we already know. 
+
+<!--more-->
+
+Friday was a half-day, although in the morning we still had lecture and some groupwork. We continued working on our student scrapers and trying to build the scraper into a student class so that the data pulled from the site would populate a database rather than exist in a hash or array. During the lecture, Avi emphasized the importance of breaking down a complex block of code into multiple methods, each of which just perform one action. Each method should have one and only one responsibility - if your perform multiple calculations or actions in a single method, you can likely refactor that method into two or more methods. 
+
+This is a coding best practice for a few reasons. First, the code is easier to debug as errors can be more effectively isolated. Second, the code is easier to read and follow along for other developers - rather than have to decipher the effects of multiple nested loops, its easier to trace the logic of a related set of short methods that are well organized and than one large method. Third, it makes your code more reusable. This came up when we were writing the class methods to save scraped student records to our database using SQL. Initially, I had written the code such that the various actions performed to initiate the database, create the tables and save the data to the tables were all in the same method. But as Avi showed us, you can actually break those out into separate methods that are each responsible for doing one action. This way, the methods are written more abstractly and can be used again to save different types of data in other situations to a SQL database.
+
+I've realized that I need to train myself to be more methodical about refactoring and using methods as building blocks. I have a tendency to be overly verbose in my code and to encapsulate too much logic in a single method or block. I noticed this back in my previous job when I built models in Excel; the logic in my functions and macro code were hard to decipher and at times inefficiently written. Even though in the end, the models worked, I admit that they weren't very elegant. As I go through the Flatiron program, I need to constantly remind myself that while its important to make the code I'm writing work, I need to make it right and make it fast (i.e., refactor and refactor again) to get to the next level.
+
+In the afternoon, we went to New York Health & Racquet Club for a fitness bootcamp. Although the class was tough, it was great to get in some exercise; I realized that my exercise schedule has tapered off since starting Flatiron. I've been so consumed by learning and coding that I haven't been getting as much sleep or exercise as I'm used to. My goal will be to try and go to the gym or for a run at least once during the work week - twice if its a good week. I'll hopefully have my entire career to code and work on interesting problems; its important that I don't burn out in the first 12 weeks.
