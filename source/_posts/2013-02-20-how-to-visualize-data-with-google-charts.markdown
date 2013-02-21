@@ -96,6 +96,16 @@ I also added a second array of data at the top to see how my cluster, non-stacke
 
 One thing to note is that whenever you have multiple values for a single hash key, you need to wrap them in an array, otherwise the code won't properly execute.
 
+This is the same data, except applied to a line chart (I just replaced :type => 'bar' with :type => 'line'):
+
+<img src="/images/post_images/line_chart_1.png"></img>
+
+And here it is again, except with just the first data set and applied to a pie chart:
+
+<img src="/images/post_images/pie_chart_1.png"></img>
+
+As you can see, its pretty easy to switch between graph/chart types. What's more important is to think through the purpose of the graphic and choose the appropriate type. For example, if the data you are presenting is along a continuum (e.g., stock prices, demographic distributions, etc.), line graphs may make the most sense. But if you're showing discrete datasets, you may want to use a bar chart.
+
 <strong>3) Applying Object Orientation</strong>
 
 Playing around with Googlecharts was fun, but ultimately, I wanted to use the gem in the context of a broader application. A typical use case may be wanting to display dynamic content that a user can request and format. I figured that this would be a good chance to extend a scraper for StubHub that I've been building on the side. Basically, this scraper goes through StubHub's NBA ticket listings and saves the information about each event (home/away team, date of game, venue, minimum price and number of tickets available, etc.) into a SQLite3 database. I wrote the scraper to be object-oriented, so I thought it would make sense to build in the functionality to auto-generate bar charts using Googlecharts.
