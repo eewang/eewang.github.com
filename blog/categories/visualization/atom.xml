@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Visualization | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/visualization/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-21T00:23:59-05:00</updated>
+  <updated>2013-02-21T08:54:09-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -150,6 +150,16 @@
 <p><img src="http://eewang.github.com/images/post_images/bar_chart_2.png"></img></p>
 
 <p>One thing to note is that whenever you have multiple values for a single hash key, you need to wrap them in an array, otherwise the code won't properly execute.</p>
+
+<p>This is the same data, except applied to a line chart (I just replaced :type => 'bar' with :type => 'line'):</p>
+
+<p><img src="http://eewang.github.com/images/post_images/line_chart_1.png"></img></p>
+
+<p>And here it is again, except with just the first data set and applied to a pie chart:</p>
+
+<p><img src="http://eewang.github.com/images/post_images/pie_chart_1.png"></img></p>
+
+<p>As you can see, its pretty easy to switch between graph/chart types. What's more important is to think through the purpose of the graphic and choose the appropriate type. For example, if the data you are presenting is along a continuum (e.g., stock prices, demographic distributions, etc.), line graphs may make the most sense. But if you're showing discrete datasets, you may want to use a bar chart.</p>
 
 <p><strong>3) Applying Object Orientation</strong></p>
 
