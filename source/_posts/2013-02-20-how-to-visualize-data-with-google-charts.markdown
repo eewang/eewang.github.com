@@ -243,7 +243,7 @@ until response.downcase == "done"
 end
 {% endcodeblock %}
 
-Here is the code when run in the terminal:
+Here is the code when execute it in the terminal:
 
 {% codeblock %}
 $ ruby tickets.rb
