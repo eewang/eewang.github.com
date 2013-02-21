@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Visualization | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/visualization/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-21T00:17:36-05:00</updated>
+  <updated>2013-02-21T00:21:38-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -81,7 +81,7 @@
 
 <p>Running the above code in my terminal (still with "require 'gchart'" at the top) produced this:</p>
 
-<p><img src="http://eewang.github.com/images/post_images/bar_chart_1.png/"></img></p>
+<p><img src="http://eewang.github.com/images/post_images/bar_chart_1.png"></img></p>
 
 <p>It gets the job done, but its not too exciting for a few reasons. First, there aren't any y-axis labels; I have no sense of scale or measurement. Second, there are no labels on my data bars. Third, only one set of data is displayed; what if I wanted to compare two related datasets next to each other? In order to address these issues, I passed a few more initial values to the Gchart instantiation:</p>
 
@@ -147,7 +147,7 @@
 
 <p>I also added a second array of data at the top to see how my cluster, non-stacked bar chart looks. Note too that the HEX codes for the background ("bg") and bar colors do not need the leading "#" symbol as they do in CSS. After updating the code with additional attributes, this is my bar chart:</p>
 
-<p><img src="http://eewang.github.com/images/post_images/bar_chart_2.png/"></img></p>
+<p><img src="http://eewang.github.com/images/post_images/bar_chart_2.png"></img></p>
 
 <p>One thing to note is that whenever you have multiple values for a single hash key, you need to wrap them in an array, otherwise the code won't properly execute.</p>
 
@@ -573,22 +573,22 @@
 <h6>New York Knicks Tickets - Remaining Home Games</h6>
 
 
-<p><img src="http://eewang.github.com/images/post_images/new_york_knicks_tickets.png/"></img></p>
+<p><img src="http://eewang.github.com/images/post_images/new_york_knicks_tickets.png"></img></p>
 
 <h6>Los Angeles Lakers Tickets - Remaining Home Games</h6>
 
 
-<p><img src="http://eewang.github.com/images/post_images/los_angeles_lakers_tickets.png/"></img></p>
+<p><img src="http://eewang.github.com/images/post_images/los_angeles_lakers_tickets.png"></img></p>
 
 <h6>Oklahoma City Thunder Tickets - Remaining Home Games</h6>
 
 
-<p><img src="http://eewang.github.com/images/post_images/oklahoma_city_thunder_tickets.png/"></img></p>
+<p><img src="http://eewang.github.com/images/post_images/oklahoma_city_thunder_tickets.png"></img></p>
 
 <h6>Denver Nuggets - Remaining Home Games</h6>
 
 
-<p><img src="http://eewang.github.com/images/post_images/denver_nuggets_tickets.png/"></img></p>
+<p><img src="http://eewang.github.com/images/post_images/denver_nuggets_tickets.png"></img></p>
 
 <p>The left-hand y-axis refers to the price in dollars of the cheapest ticket, since StubHub's primary event page indicates where ticket prices start from (i.e., the lowest price), and the right-hand y-axis refers to the number of tickets remaining in hundreds. I was having difficulty disconnecting the primary and secondary y-axes from each other, so the scale for the remaining tickets is not ideal (the primary y-axis determined the scale).</p>
 
