@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-21T00:21:38-05:00</updated>
+  <updated>2013-02-21T00:23:59-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -423,7 +423,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Here is the code when run in the terminal:</p>
+<p>Here is the code when execute it in the terminal:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
