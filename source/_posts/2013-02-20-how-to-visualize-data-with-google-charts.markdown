@@ -52,7 +52,7 @@ bar_chart.file
 
 Running the above code in my terminal (still with "require 'gchart'" at the top) produced this:
 
-<img src="/images/post_images/bar_chart_1.png/"></img>
+<img src="/images/post_images/bar_chart_1.png"></img>
 
 It gets the job done, but its not too exciting for a few reasons. First, there aren't any y-axis labels; I have no sense of scale or measurement. Second, there are no labels on my data bars. Third, only one set of data is displayed; what if I wanted to compare two related datasets next to each other? In order to address these issues, I passed a few more initial values to the Gchart instantiation:
 
@@ -92,7 +92,7 @@ Specifically, I added six new attributes compared to the first chart. These new 
 
 I also added a second array of data at the top to see how my cluster, non-stacked bar chart looks. Note too that the HEX codes for the background ("bg") and bar colors do not need the leading "#" symbol as they do in CSS. After updating the code with additional attributes, this is my bar chart:
 
-<img src="/images/post_images/bar_chart_2.png/"></img>
+<img src="/images/post_images/bar_chart_2.png"></img>
 
 One thing to note is that whenever you have multiple values for a single hash key, you need to wrap them in an array, otherwise the code won't properly execute.
 
@@ -267,13 +267,13 @@ Thanks for using my program!
 And here are the bar charts that are created by the program:
 
 <h6>New York Knicks Tickets - Remaining Home Games</h6>
-<img src="/images/post_images/new_york_knicks_tickets.png/"></img>
+<img src="/images/post_images/new_york_knicks_tickets.png"></img>
 <h6>Los Angeles Lakers Tickets - Remaining Home Games</h6>
-<img src="/images/post_images/los_angeles_lakers_tickets.png/"></img>
+<img src="/images/post_images/los_angeles_lakers_tickets.png"></img>
 <h6>Oklahoma City Thunder Tickets - Remaining Home Games</h6>
-<img src="/images/post_images/oklahoma_city_thunder_tickets.png/"></img>
+<img src="/images/post_images/oklahoma_city_thunder_tickets.png"></img>
 <h6>Denver Nuggets - Remaining Home Games</h6>
-<img src="/images/post_images/denver_nuggets_tickets.png/"></img>
+<img src="/images/post_images/denver_nuggets_tickets.png"></img>
 
 The left-hand y-axis refers to the price in dollars of the cheapest ticket, since StubHub's primary event page indicates where ticket prices start from (i.e., the lowest price), and the right-hand y-axis refers to the number of tickets remaining in hundreds. I was having difficulty disconnecting the primary and secondary y-axes from each other, so the scale for the remaining tickets is not ideal (the primary y-axis determined the scale).
 
