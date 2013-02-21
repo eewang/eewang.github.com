@@ -6,6 +6,17 @@ Add styles here to make changes without digging in too much
 
 /*http://www.patternify.com/*/
 
+#hero-inner h1 em {
+  font-size: 90px;
+  color: #7092FF;
+  text-shadow: 3px 3px #333;
+}
+
+#hero-inner h2 {
+  font-size: 40px;
+  font-weight: bold;
+}
+
 .span4 footer {
   display: none;
 }
