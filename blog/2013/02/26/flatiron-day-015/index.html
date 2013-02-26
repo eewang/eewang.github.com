@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Exploring the Black Box (Flatiron - Day 015) - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+  <link rel="author" href="humans.txt">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  
+    
+  
+  <meta name="description" content="Technology is often perceived as a black box, an opaque, mysterious tool that somehow performs magic. We take out our phones, press a few buttons, &hellip;">
+  
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/02/26/flatiron-day-015/">
+  <link href="/favicon.png" rel="icon">
+  <link href='http://fonts.googleapis.com/css?family=Cantarell' rel='stylesheet' type='text/css'>
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <meta name="og:type" content="website" />
+  <meta name="og:site_name" content="eugenius" />
+  <meta name="og:title" content="Exploring the Black Box (Flatiron - Day 015)" />
+  <meta name="og:description" content="Technology is often perceived as a black box, an opaque, mysterious tool that somehow performs magic. We take out our phones, press a few buttons, &hellip;" />
+  <meta name="og:url" content="http://eewang.github.com/blog/2013/02/26/flatiron-day-015/"/>
+  <meta name="url" content="http://eewang.github.com/blog/2013/02/26/flatiron-day-015/">
+  
+  <meta name="subject" content=""/>
+  <meta name="category" content=""/>
+  
+  <meta name="distribution" content="global">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38259585-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="/">eugenius</a>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
+    </ul>
+    <ul class="nav" data-subscription="rss">
+      <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      
+    </ul>
+      
+    <form class="navbar-form" action="http://google.com/search" method="get">
+      <fieldset role="search">
+        <input type="hidden" name="q" value="site:eewang.github.com" />
+        <input class="span2" type="text" name="q" results="0" placeholder="Search"/>
+      </fieldset>
+    </form>
+      
+    
+  </div>
+</div>
+</nav>
+  <div class="wrapper_single">
+    <div class="container">
+      <article class="span8 offset2" role="article">
+        <div class="article-format">
+
+  <header>
+    
+      <h1 class="entry-title">Exploring the Black Box (Flatiron - Day 015)</h1>
+    
+    
+      <p class="meta">
+        
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Eugene Wang</span></span>
+  
+
+ - 
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-26T08:04:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2013</time> - 
+        
+
+
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Technology is often perceived as a black box, an opaque, mysterious tool that somehow performs magic. We take out our phones, press a few buttons, and suddenly we&#8217;re able to converse with friends, read books, buy food and learn about pretty much anything. However, as I&#8217;ve learned over the past few weeks at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a>, technology is anything but a mysterious process; its just really good at hiding what its doing. The process of learning how to code is all about not being intimidated or frustrated by the black box, but rather excited to learn about how the black box can seem so magical.</p>
+
+<!--more-->
+
+
+<p>Avi talks a lot about design concepts of modularity and composition. Modularity in code means that individual methods should have one responsibility and objects should be separated into classes that each describe a discrete entity. Composition, on the other hand, serves as a complement to modularity, as it enables us to take discrete, atomistic elements in code and link them together to create what appears to the outside world to be a black box. This design concept of taking a series of distinct but related building blocks and chaining them together is remarkable because it seems so simple in its conception, so complex in its execution and so elegant in its operation.</p>
+
+<p>The past few days at Flatiron we&#8217;ve been learning about the Web and how applications interact with clients (i.e., the browser) and servers. As I&#8217;ve mentioned before, this is often times one of the toughest concepts new programmers need to grasp. We started exploring the Web (instead of just programming, which we&#8217;ve been doing since the first week with Ruby) using <a href="http://www.sinatrarb.com/" target="_blank">Sinatra</a>, a light-weight framework for developing applications. This week, we&#8217;re moving on to <a href="http://rubyonrails.org/" target="_blank">Rails</a>, which is a more robust framework that many modern web applications are built on (Twitter started on Rails). Think of frameworks as the scaffolding upon which an application is built. A framework is just a collection of files that makes it easier to build stuff; it provides ready-to-execute code to streamline more mundane web processes, like connecting to a server or querying a database.</p>
+
+<p>As we&#8217;re moving into web applications, we&#8217;re learning about the <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" target="_blank">model-view-controller</a> design pattern. This MVC concept demonstrates the notions of modularity and composition that make programming complex on its face but learnable at its core. There are a lot of resources online about the MVC pattern, but in short, models provide the analytical engine that defines an application&#8217;s database, views generate the browser-side display that users actually see and controllers connect the two together so that when you type in www.espn.com, the correct HTML page is rendered in your browser (views) with the necessary data from ESPN&#8217;s database (models).</p>
+
+<p>Avi often uses the metaphor of a restaurant to explain the MVC pattern and demonstrate the principles of modularity and composition. Broadly speaking, a restraunt can be broken down into the kitchen (model), staff (controller) and atmosphere/ambiance (view). The chefs in the kitchen need to cook and make dishes. They have to know the food offered on the menu inside-and-out, and their responsibility is to create food. However, they don&#8217;t have any responsibility for actually connecting with the restaurant patrons and figuring out what they want. That&#8217;s the role of the wait staff. They serve the patrons, get their orders and deliver them to the chef. The staff doesn&#8217;t have to know how to actually cook, all they do is transmit information (a very critical task nevertheless, as anyone who has had a bad restaurant experience due to bad service can attest to). Finally, the restaurant atmosphere is how the restaurant-goers experience the restaurant - the lighting, the temperature, the surrounding people, the ambiance - while the food certainly has an impact on the experience, going to a restaurant is about more than just the food.</p>
+
+<p>Taken together, the kitchen, staff and atmosphere need to work together to produce a pleasant restaurant experience for customers. If any one of them fails to do its job - the kitchen produces bad food, the staff is unfriendly or the restaurant smells - the customer has a lousy experience. That said, each part of the restaurant is responsible for its own task and does not need to know the inner workings of the other part. Cooks need to focus on food and how that food gets to customers is not their concern. Wait staff need to get food to customers, but how that food is made is irrelevant. Each component of the restaurant is able to specialize, yet the restaurant experience is best when all three work together.</p>
+
+<p>In much the same way, web applications need to have a well-designed model for the database, intuitive and beautiful views and a controller that is able to transmit user requests effectively. If any one of those three breaks down, the whole system is damaged. However, each of the three does not need to know about the inner workings of any other - that&#8217;s where the modularity comes in. As a programmer, I can work in my application&#8217;s model and focus on writing clean, efficient code that reflects the data I want to gather and use while not caring about how that data is presented to users. Then, I can move onto the views and focus on making sure that people are presented with a beautiful interface and design when using my application. In each of the model, view or controller, the design pattern of modularity and composition is repeated, as individual methods and classes in a single model have responsibilities distinct from other methods and classes, yet also relate and depend on them as well.</p>
+
+<p>These concepts seem simple and intuitive, but can be difficult to implement in practice. I think of the process of refactoring as the hard work necessary to achieve more modularity and loose coupling - the &#8220;make it right&#8221; part of <a href="http://c2.com/cgi/wiki?MakeItWorkMakeItRightMakeItFast" target="_blank">&#8220;make it work, make it right, make it fast&#8221;</a> formulation that I like so much. Just like a restaurant could function with the wait staff both serving, cooking and decorating, a web application could work without the principles of MVC. However, it just wouldn&#8217;t be right and wouldn&#8217;t make much sense. Using modularity and composition as a guide to writing code and designing elegant yet powerful applications has made me appreciate the &#8220;black box&#8221; complexity of technology that we all interact with every day, yet also eager to explore and dive into the details as I come to realize that its not really magic at all, its just good design.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+  
+    <span class="byline author vcard">by <span class="fn">Eugene Wang</span></span>
+  
+
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-26T08:04:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <a class="pull-left" href="/blog/2013/02/20/how-to-visualize-data-with-google-charts/" title="Previous Post: How to Visualize Data With Google Charts For Ruby">&laquo; How to Visualize Data With Google Charts For Ruby</a>
+    
+    
+  </footer>
+
+</div>
+
+
+      </article>
+    </div>
+    <div class="container">	
+      
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+        </section>
+      
+    </div>
+  </div>
+  <div id="footer-widgets">
+  <div class="container">
+    <div class="row">
+  <div class="span3">
+    <h2>recent posts</h2>
+    <ul class="recent_posts">
+      
+        <li>
+          <a href="/blog/2013/02/26/flatiron-day-015/">Exploring the Black Box (Flatiron - Day 015)</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/02/20/how-to-visualize-data-with-google-charts/">How to Visualize Data With Google Charts For Ruby</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/02/18/flatiron-day-010-week-2-wrap-up/">Flatiron - Day 010</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/">This is not a blog post (Flatiron - Day 009)</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/02/13/coding/">Coding, Fast and Slow (Flatiron - Day 008)</a>
+        </li>
+      
+    </ul>
+    <h2><a href="/blog/archives">archives</a></h2>
+  </div>
+  <div class="span3">
+    
+
+  </div>
+  <div class="span4">
+    
+<h2>twitter</h2>
+<a href="https://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @eugenewang</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="tweet" data-twitter-user="eugenewang">
+</div>
+
+
+  </div>
+  <div class="span2">
+    
+<h2>get at me</h2>
+<a href="mailto:eugene.wang@flatironschool.com">eugene.wang@flatironschool.com</a>
+
+
+<h2>find me</h2>
+
+<a href="https://github.com/eewang/" rel="tooltip" title="Github"><img class="social_icon" title="Github" alt="github icon" src="/images/glyphicons_381_github.png"></a>
+
+
+
+
+
+<a href="http://www.linkedin.com/in/eewang" rel="tooltip" title="Linkedin"><img class="social_icon" title="Linkedin" alt="Linkedin icon" src="/images/glyphicons_377_linked_in.png"></a>
+
+
+
+<a href="http://twitter.com/eugenewang" rel="tooltip" title="Twitter"><img class="social_icon" title="Twitter" alt="Twitter icon" src="/images/glyphicons_391_twitter_t.png"></a>
+
+
+
+
+
+
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-left">
+  <a href="/">eugenius</a>
+  - Copyright &copy; 2013 - Eugene Wang
+</p>
+<p class="pull-right">
+  <span>Powered by <a href="http://octopress.org/">Octopress</a>.</span>
+  
+    <span>Designed by <a href="http://www.AdrianArtiles.com">Adrian Artiles</a>.</span>
+  
+</p>
+
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/libs/jquery-1.7.2.min.js" type="text/javascript"><\/script>')</script>
+<script src="/javascripts/libs/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.tweet.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.instagram.js" type="text/javascript"></script>
+<script src="/javascripts/libs/jquery.masonry.min.js" type="text/javascript"></script>
+<script src="/javascripts/custom.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/02/26/flatiron-day-015/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/02/26/flatiron-day-015/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+</body>
+</html>
