@@ -4,7 +4,7 @@
   <title><![CDATA[Category: coding | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/coding/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-02-26T09:30:35-05:00</updated>
+  <updated>2013-03-04T23:00:44-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Flatiron - Week 4]]></title>
+    <link href="http://eewang.github.com/blog/2013/03/02/flatiron-week-3/"/>
+    <updated>2013-03-02T09:20:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/03/02/flatiron-week-3</id>
+    <content type="html"><![CDATA[<p>As I begin the fifth week of Flatiron School, I'm feeling pretty good about where things stand. I've been challenged, frustrated and exhausted throughout the previous month, but its been an amazing experience, as I've learned more in the past four weeks than I have since college (and probably before college). The workload has been heavy, and I've been trying to take on some personal projects on the side. Last week was Rails week, and this week we're starting to explore front-end web development via JavaScript/jQuery.</p>
+
+<!--more-->
+
+
+<p>We have a guest lecturer this week, <a href="http://www.slideshare.net/jonathangrover1" target="_blank">Jonathan Grover</a>, who is a front-end specialist. I've been working on a few Rails projects that look pretty bare bones at the moment, so it will be great to add some stylings and a dynamic user interface to the apps. Although this week is front-end focused, I hope to keep learning Rails - both during work time in class and after class - through online tutorials and working on my own projects. Given that I'll likely be working with Rails for the foreseeable future, I really want to be fluent in the framework.</p>
+
+<p>Learning Rails last week was challenging, especially to start, since so much of the Rails application building process seems to go on beyond the view of the programmer. Simply starting a new Rails app creates numerous directories and stub files, which can be intimidating to new developers like myself. Compared to Rails, Django starts programmers off with much less scaffolding and support. Django also seems more transparent, as there don't seem to be nearly as many helper methods as in Rails. I can see the benefits of working with both frameworks - it was easier for me to grasp what Django was doing when I first starting using it, but I can definitely see how Rails enables rapid prototyping and efficient development of new apps.</p>
+
+<p>As we enter the second month of the Flatiron program, one of my classmates raised the question of jobs and careers post-Flatiron last Friday. Avi mentioned that its probably still too early to think too much about jobs, and I tend to agree with him. I'm focused right now on building a skill set - learning as much as I can and knowing how to create products. But I'd be lying if I said that the thought of what will happen post-Flatiron hasn't crossed my mind. I've realized that long term, I'd like to use technology and coding as the lens through which I explore and learn about other industries and professions. All professions and industries have processes and data, some common across industries and some idiosyncratic to specific sectors. I think many of the shared processes have been addressed using technology - e.g., e-mail, scheduling software, project management, note-taking - but many of the idiosyncratic ones have not. Certain industries like tech or consumer goods have had their idiosyncratic data and processes transformed by technology, but other industries have not - e.g., energy is one that comes to mind. I'm hoping to use technology to explore the data and processes of all industries.</p>
+
+<p>Another thing that I've realized through the program is that balance is critical. Not just work-life balance but even work-work balance. This past week, I spent one night coding until 3:00 am - most of the hours post-midnight were spent in frustration trying to debug a Sinatra app. I hope that I don't get into a habit of coding so late into the night. Avi mentioned that you shouldn't code for more than 8 hours a day - if you want to keep working after 8 hours, then do some reading, or blogging, or talk to someone about coding. There are ways to keep learning and engaging without actually coding. After hours, read a book or write a blog post. Approaching the same subject in different ways will only help solidify and deepen your understanding. It will help your understanding coalesce more effectively and the mental connections between different technologies to strengthen. While its easy for me to focus on something I enjoy doing, I need to know when to stop so that I don't get burnt out or lose efficiency.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[5 Reasons Everyone Should Learn How to Code]]></title>
@@ -591,52 +611,6 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Avi said that we wouldn't be actively writing many SQL queries, since Rails abstracts so much of the database interaction. However, there will undoubtedly be times when Rails isn't sufficient for complex data queries, and we'll have to write our own SQL. Even if we don't use SQL that often, its critical to know, and I think its pretty cool, despite the at times frustrating syntax and poor debugging feedback for the sqlite3 shell. I would like to eventually explore more advanced data analysis tools, software like Hadoop or Cassandra, so knowing SQL is going to be invaluable moving forward.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Day 003]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/"/>
-    <updated>2013-02-06T11:30:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/06/flatiron-day-003</id>
-    <content type="html"><![CDATA[<p>On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.</p>
-
-<!--more-->
-
-
-<p>I wrote a short script to automate the process of deploying the blog ("rake deploy"), staging files on git ("git add ."), commiting files ("git commit -am 'message'") and pushing files to a remote repository on Github. Its pretty simple and permits users to add in a commit message. Here is the code to put in your Rakefile:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Add files to github, commit and deploy&quot;</span>
-</span><span class='line'><span class="n">task</span> <span class="ss">:gen_deploy_push</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>  <span class="no">STDOUT</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;What is your commit message? &quot;</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="no">STDIN</span><span class="o">.</span><span class="n">gets</span><span class="o">.</span><span class="n">chomp</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;rake gen_deploy&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git add .&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git commit -am &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git push&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;commit message was &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>I think the code is fairly straightforward - basically the user inputs a commit message and then the command will deploy the site while commiting the code to Github.</p>
-
-<p>After a morning spent working through the intricacies of the Gemfile and Rakefile in the Octopress application (it looks intimidating, but I found it very helpful to examine the code underlying a command before executing it - makes coding seem less like magic and more like an intricate sequence of interconnected logic), we broke for lunch. In the afternoon, we shifted gears to databases, specifically learning Structured Query Language (SQL). I first learned SQL a few years back when I interned at KPMG. I was part of the Forensic Advisory group, which used Microsoft SQL Server to comb through millions of rows of data and run pricing analyses for pharmaceutical companies. However, even though I learned the syntax and general structure of SQL at KPMG, a lot of it was more copying pre-written SQL queries and modifying them at the margins, rather than writing my own from scratch, so the exercises today were pretty helpful.</p>
-
-<p>After a brief lecture on SQL by Avi, we broke up into our groups and designed a schema for a simple quiz app. This app would have users, quizzes, questions, choices and answers, and the challenge for us was to determine the optimal database design to address the immediate use cases while also leaving room to hypothetically scale the database. Once we created a schema, we then practice writing SQL queries to create, manipulate and access that database. For the rest of the afternoon, we worked as a class to build the quiz app database, with each group contributing a piece of the database structure and Avi using the differences between our schemas to comment on the pros and cons of schema designs.</p>
-
-<p>For me, the class has been moving along at a brisk but manageable pace. In the course of three days, it seems like we've covered a boatload of material related to git, environment setup and databases, but I know that that's just the beginning of the journey. We haven't even systematically delved into Javascript, Ruby or Rails yet! Its exciting to think of all the stuff that's out there to learn - I just need to be diligent and purposeful in completing the homework and grabbing every opportunity to learn something new or contribute to a project, no matter how small.</p>
 ]]></content>
   </entry>
   
