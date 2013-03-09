@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Flatiron | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-03-09T01:45:29-05:00</updated>
+  <updated>2013-03-09T09:53:58-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Flatiron - Week 5]]></title>
+    <link href="http://eewang.github.com/blog/2013/03/09/flatiron-week-5/"/>
+    <updated>2013-03-09T09:02:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/03/09/flatiron-week-5</id>
+    <content type="html"><![CDATA[<p>When I started at Flatiron, I set myself a goal of trying to blog every day. That goal pretty quickly fell to the wayside, as I realized how much work would be involved just coding and learning alone. Also, after the first few days, the lessons began to group together in longer, multi-day themes - e.g., Rails. This week, the theme was Javascript/jQuery, which controls front-end user interaction and serves as an intermediate, client-side programming language between the user and the back-end (Ruby on Rails, in our case). Learning JS brought together the whole concept of web development, and it really helped coalesce my understanding of how users interact with web applications and send data to and retrieve data from the application's back-end.</p>
+
+<!--more-->
+
+
+<p>To be honest, I have mixed feelings about Javascript. On the one hand, it seems to be a powerful, versatile language that increasingly is being used as a server-side language through frameworks like <a href="http://nodejs.org" target="_blank">Node.js</a>. On the other hand, however, it feels a little clunky to me after learning Ruby. Compared to Ruby, Javascript is syntax heavy, littered with seemingly unnecessary semicolons and braces. This past week, there were definitely moments of frustration when I couldn't get my Javascript to work because of a missing semi-colon or a misplaced bracket. I found myself scouring my code to ensure that every open parenthesis or bracket had a corresponding closing character. Additionally, I started to inadvertantly use semicolons to end statements in my Ruby code. Good thing that Ruby is pretty flexible though, so I don't think those did too much damage, and the misplaced syntax was easy to spot.</p>
+
+<p>And yet while on one level I find Javascript's syntax-heavy nature to be irritating, on a deeper level I think it can actually be beneficial in forcing me to better organize and structure my code. With JS, I've started to put comments to indicate where certain functions end to help me not get lost in the multiple levels of embedded functions. And while this probably isn't coding best practices in the end, its helped me think deliberately about variable scope and processing flow within my code, and to not rely on my language of choice to determine that for me. Plus, its always easy to delete the comments after I get my code working to make it more presentable.</p>
+
+<p>In a similar way that learning all the components of Rails separately - learning Rack, building an Object Relational Mapper, or writing SQL statements, for example - helped me understand and appreciate the work Rails does, learning Javascript has enabled me to appreciate good coding design and organization. While having frameworks like Rails or libraries like jQuery are quite useful in abstracting away common patterns and enabling rapid and efficient development, its critical to understand how those tools actually get the job done. Knowing how Rails abstract away database queries or how jQuery simplified event handlers makes me not only appreciate the work developers have put into building those libraries but also enables me to customize features and fix problems more effectively. Avi and Bob have done a great job at Flatiron of demystifying abstract tools and emphasizing that Rails and jQuery are just collections of Ruby and Javascript code, respectively.</p>
+
+<p>Learning Javascript this past week, I felt the pace of the work accelerate at Flatiron (not that we weren't moving pretty fast already). As I've gained more confidence in my skillset and I've rounded out my understanding of the many components of web development, I've started working on side projects and exploring areas outside the core Flatiron curriculum. For example, I came across a pretty cool data visualization library called <a href="http://d3js.org" target="_blank">D3.js</a> that I want to explore. I find data visualization fascinating - they can be incredibly powerful tools to quickly communicate complex data in an engaging and beautiful manner. I'm hoping to spend some time this weekend exploring the documentation and to try and build some basic dynamic charts. Data visualization is the perfect encapsulation of what I find so unique about web development - the tight weaving together of complex data analytics with beautiful, user-centric design. Left brain and right brain working together seamlessly in awesome harmony. There's so many cool and exciting libraries, gems and APIs out there to explore; I need to remind myself to be patient and diligent in learning, to be excited about all the potential out there rather than feel burdened by the sheer amount of material.</p>
+
+<p>This next week we'll be turning back to Rails for a few days before starting work on our group projects. I'm excited about what comes next, for the opportunity to take all that we've learned and combine it into a coherent and engaging product. Creating a black box, in a sense, but knowing exactly what goes into it and how it works. I know the next few weeks will be tiring, frustrating and challenging, but its great to know that I'm building a new skill set and finally starting to create cool stuff.</p>
+
+<p>Oh, also, in case you haven't noticed, I changed the design theme of my blog. I realized that the other theme got to be a little clunky, and I didn't quite master the responsiveness of it, so the dynamic card-flip animation that I implemented ended up being more of a hindrance to readers than a cool design element. I got some feedback on the design - some people thought the animation was nice, but more people found it unnecessary and distracting from the actual blog content. And in the end, you've got to give the readers what they want!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flatiron - Week 4]]></title>
@@ -720,212 +744,6 @@
 <p>At the end of the day, programming should be fun and enjoyable. Coding is much more about creative expression than I had imagined before; after all, Matz created Ruby to make developers <a href="http://www.artima.com/intv/rubyP.html" target="_blank">happy</a>. My first exposure to computers and technology was through my parents, who worked as engineers for a large telecom company for many years. Watching them, I never considered technology to be a creative endeavor - it seemed like much more of a 9 to 5 job than I've come to realize. Since moving to New York though, its become clear to me that people in the tech sphere tend to be intellectually and creatively engaged with their craft, even to the point of "working" well beyond the daytime hours and into the weekends. <a href="http://en.wikipedia.org/wiki/Hackathon" target="_blank">Hackathons</a> are great examples of this. The whole concept of a hackathon - an intensive, focused effort to solve a problem that brings together developers, designers and subject matter experts - is to engage in creative problem solving, not to follow a rote set of instructions. Not only are hackathons indicative of passion people in technology have for their craft, its also an expression of community - a desire to work together with people of different skill sets toward a single goal.</p>
 
 <p>Flatiron has tried to imbue in us a sense of community, that programmers work better together than apart. Coding used to be an endeavor that people would do in their basements, alone, late at night. But it doesn't have to be this way. In fact, its much more enjoyable to code and program in a community of people so you can bounce ideas off of them, explore new technologies and learn from each other. For me, this was one of the most appealing aspects of doing an intensive, full-time program like Flatiron as opposed to learning in isolation. For the latter half of 2012, I was trying to learn this stuff on my own - using online tools like <a href="http://www.codecademy.com" target="_blank">Codecademy</a>, <a href="http://www.udacity.com" target="_blank">Udacity</a> and <a href="http://www.codeschool.com" target="_blank">Code School</a>. All of those tools were great, but its challenging, frustrating and, frankly, kind of boring, to learn coding entirely on your own, especially if you have a full-time (and then some) job as I did. Thankfully, I had my brother to mentor me and help me along when I hit a roadbump, as he was busy building <a href="http://www.leaguevine.com/" target="_blank">Leaguevine</a> at the time. I've found that learning in a focused group environment like at Flatiron School to not only be more fun, but also more efficient; before it might take me a whole afternoon and a whole lot of Stack Overflow-ing to debug a few lines of code, now I can easily ask others for help, which allows me to fix problems more quickly and learn more about what I'm doing in the process.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Day 005]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/08/flatiron-day-005/"/>
-    <updated>2013-02-08T23:44:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/08/flatiron-day-005</id>
-    <content type="html"><![CDATA[<p>In grade school, snow days meant building snowmen, tossing snow balls and going sledding. At the Flatiron School, snow days mean 6 hours of lecture via video conference. Avi and Co "cancelled" class today in advance of Snowmageddon 2013, but only in the sense that we weren't expected to physically be in class. Instead, Avi set up a videoconference and hosted virtual class where we continued exploring Ruby.</p>
-
-<!--more-->
-
-
-<p>We covered a range of topics today. Starting with a review of our homework, Avi discussed iteration, arrays, string methods, regular expressions, symbols, variable scope, blocks and hashes. Whew! We went through a lot of material today, but I think I'm grasping everything decently well. Its been pretty interesting to think about how there always seems to be more than one way of doing something in Ruby.</p>
-
-<p>A good example of that was the homework we had last night. We had to write a simple <a href="http://en.wikipedia.org/wiki/Fizz_buzz" target="_blank">FizzBuzz</a> program and extend that to find all numbers that fizz, buzz or fizzbuzz within a range. I've posted my code below. What's amazed me about coding, though, is that there are <a href="http://rosettacode.org/wiki/FizzBuzz" target="_blank">countless</a> ways of doing the same thing, both within and across languages. For example, the "trick" to FizzBuzz is to recognize that Fizz and Buzz combine to make FizzBuzz. This means that my code below, while it gets the job done, is not the most efficient and probaly not up to best practices. I have three strings for the three results, but in fact I should only have two strings - Fizz and Buzz, which combine to make FizzBuzz.</p>
-
-<p>Avi showed us a bunch of different ways to code the FizzBuzz problem, and if there's a ton of different ways to solve the simple FizzBuzz problem, I can only begin to imagine how many infinite paths there are to building more complex applications. That thought is exciting to me; there are many paths out there that haven't yet been explored and technology continues to be a space of great potential for human creativity and ingenuity. When I think back to a year ago, a part of me was resigned to thinking that we've reached the end of the road for technology - we have Google, Facebook and Twitter, what else could be out there? However, now that I've taken a peek under the hood of the web and seen a glimpse of what is possible, I'm convinced that the best is yet to come. Not just in web development, but in technology more broadly. 3-D printing, Internet-enabled hardware, sensors - the possibilities are limitless for the technology platforms that are only now in their infancy. Its both humbling and exciting to think about.</p>
-
-<hr />
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;Define variable scope and initialize arrays&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="vg">$fizzer</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="vg">$buzzer</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="vg">$fizzbuzzer</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="vg">$remainder</span> <span class="o">=</span> <span class="o">[]&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;Method to calculate fizzbuzz for any given number&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;puts &quot;FizzBuzz&quot;</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  elsif num % 3 == 0&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="s2">&quot;Fizz&quot;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">elsif</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;puts &quot;Buzz&quot;</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  else&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="s2">&quot;Not divided by 3 or 5&quot;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;Method to ask a user to input a number they want to fizzbuzz&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">fizzbuzz_ask</span>
-</span><span class='line'>  <span class="nb">print</span> <span class="s2">&quot;What number do you want to fizzbuzz? &quot;</span>
-</span><span class='line'>  <span class="n">num</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'>  <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;Method to fizzbuzz a range of numbers&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">fizzbuzz_loop</span><span class="p">(</span><span class="n">num1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num2</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="n">num1</span><span class="o">.</span><span class="n">.num2</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;if i % 3 == 0 &amp;amp;&amp;amp; i % 5 == 0</span>
-</span><span class='line'><span class="sr">  $fizzbuzzer &amp;lt;&amp;lt; i</span>
-</span><span class='line'><span class="sr">elsif i % 3 == 0</span>
-</span><span class='line'><span class="sr">  $fizzer &amp;lt;&amp;lt; i</span>
-</span><span class='line'><span class="sr">elsif i % 5 == 0</span>
-</span><span class='line'><span class="sr">  $buzzer &amp;lt;&amp;lt; i</span>
-</span><span class='line'><span class="sr">else</span>
-</span><span class='line'><span class="sr">  $remainder &amp;lt;&amp;lt; i</span>
-</span><span class='line'><span class="sr">end</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
-</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="no">Method</span> <span class="n">to</span> <span class="n">ask</span> <span class="n">a</span> <span class="n">user</span> <span class="n">to</span> <span class="n">define</span> <span class="n">the</span> <span class="n">start</span> <span class="ow">and</span> <span class="k">end</span> <span class="n">points</span> <span class="k">for</span> <span class="n">fizzbuzz</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;def fizzbuzz_loop_ask</span>
-</span><span class='line'><span class="sr">  print &quot;Where do you want to start fizzbuzzing? &quot;</span>
-</span><span class='line'><span class="sr">  start = gets.to_i</span>
-</span><span class='line'><span class="sr">  print &quot;Where do you want to end fizzbuzzing? &quot;</span>
-</span><span class='line'><span class="sr">  finish = gets.to_i</span>
-</span><span class='line'><span class="sr">  while finish == &quot;&quot;.to_i&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="s2">&quot;Sorry, please input an ending value. Where do you want to end fizzbuzzing?&quot;</span>
-</span><span class='line'><span class="n">finish</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
-</span><span class='line'>  <span class="n">fizzbuzz_loop</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;Fizzbuzz method calls&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">fizzbuzz_ask</span>
-</span><span class='line'><span class="n">fizzbuzz_loop_ask</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;Print results of fizzbuzz calls&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="s2">&quot;fizzer: </span><span class="si">#{</span><span class="vg">$fizzer</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;buzzer: </span><span class="si">#{</span><span class="vg">$buzzer</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;fizzbuzzer: </span><span class="si">#{</span><span class="vg">$fizzbuzzer</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;no fizz or buzz: </span><span class="si">#{</span><span class="vg">$remainder</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
