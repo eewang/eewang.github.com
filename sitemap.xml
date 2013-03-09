@@ -2,80 +2,84 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/04/flatiron-day-001/</loc>
-        <lastmod>2013-02-11T22:46:53-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/05/flatiron-day-002/</loc>
-        <lastmod>2013-02-11T22:47:08-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/06/flatiron-day-003/</loc>
-        <lastmod>2013-02-19T17:39:06-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/07/flatiron-day-004/</loc>
-        <lastmod>2013-02-10T14:59:42-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/08/flatiron-day-005/</loc>
-        <lastmod>2013-02-11T22:48:26-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/10/flatiron-week-1-redux/</loc>
-        <lastmod>2013-02-11T23:34:17-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>
             http://eewang.github.com/blog/2013/02/11/5-reasons-everyone-should-learn-how-to-code/
         </loc>
-        <lastmod>2013-02-11T23:32:24-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/11/why-i-am-at-the-flatiron-school/</loc>
-        <lastmod>2013-02-18T22:16:29-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/12/flatiron-day-006/</loc>
-        <lastmod>2013-02-12T00:31:32-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/12/scrapers/</loc>
-        <lastmod>2013-02-13T09:22:04-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/13/coding/</loc>
-        <lastmod>2013-02-14T08:30:18-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>
             http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/
         </loc>
-        <lastmod>2013-02-15T09:12:08-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/18/flatiron-day-010-week-2-wrap-up/</loc>
-        <lastmod>2013-02-18T22:29:16-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>
             http://eewang.github.com/blog/2013/02/20/how-to-visualize-data-with-google-charts/
         </loc>
-        <lastmod>2013-02-21T08:56:29-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/02/26/flatiron-day-015/</loc>
-        <lastmod>2013-02-26T09:29:51-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/2013/03/02/flatiron-week-3/</loc>
-        <lastmod>2013-03-04T23:00:29-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://eewang.github.com/archives/</loc>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/archives/</loc>
-        <lastmod>2013-03-04T23:00:29-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/</loc>
-        <lastmod>2013-03-04T23:00:29-05:00</lastmod>
+        <lastmod>2013-03-09T00:55:04-05:00</lastmod>
     </url>
 </urlset>
