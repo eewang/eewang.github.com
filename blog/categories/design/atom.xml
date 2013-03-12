@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: design | eugenius]]></title>
+  <link href="http://eewang.github.com/blog/categories/design/atom.xml" rel="self"/>
+  <link href="http://eewang.github.com/"/>
+  <updated>2013-03-12T08:51:14-04:00</updated>
+  <id>http://eewang.github.com/</id>
+  <author>
+    <name><![CDATA[Eugene Wang]]></name>
+    <email><![CDATA[eugene.wang@flatironschool.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How (and When) to Use Single Table Inheritance in Rails]]></title>
+    <link href="http://eewang.github.com/blog/2013/03/12/how-and-when-to-use-single-table-inheritance-in-rails/"/>
+    <updated>2013-03-12T00:04:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/03/12/how-and-when-to-use-single-table-inheritance-in-rails</id>
+    <content type="html"><![CDATA[<p>Last week as I was developing an application to track and analyze ticket and event postings, I came across a design problem. I had first started working on my ticket tracker application as a way to parallel the learning that we were doing in class. I started with a simple scraper that pulled data out of the Stubhub's client-facing HTML documents, then moved on to writing a simple ORM that saved the data to a SQLite database, then moved the application into Sinatra and finally into Rails.</p>
+
+<!--more-->
+
+
+<p>Along the way, as I was increasing the level of structural complexity, I was also expanding the scope of the project. I had initially started with just NBA tickets, but I've recently started exploring how to broaden the application to any event. This presented me with a design conundrum. I designed my models in the initial Ruby application to just get NBA data - the classes, methods and variables were all had "NBA" or "basketball" in the name. Also, the model attributes and table fields were specific to the JSON data related to NBA games that I could retrieve. However, this wouldn't work exactly for concerts or music festivals. Basketball games have both a home and away team, but the same cannot be said for concerts. Furthermore, sports events - e.g., baseball, basketball, football - are mostly similar in how the data is structured (home and away teams, venue, date, etc.), but each may present idiosyncratic data that is not shared by other sports. On the one hand, each type of event shares many of the same attributes, but each also have their own quirks.</p>
+
+<p>As I explored how to accurately design my models and schema while also striving to remain DRY and not denormalize my data too much, I came across the concept of Single Table Inheritance (hat tip to professor <a href="https://twitter.com/withloudhands/" target="_blank">Bob Whitney</a> for introducing me to the design concept.)</p>
+
+<p><strong>1) What is Single Table Inheritance (STI)?</strong></p>
+
+<p>STI is basically the idea of using a single table to reflect multiple models that inherit from a base model, which itself inherits from ActiveRecord::Base. In the database schema, sub-models are indicated by a single "type" column. In Rails, adding a "type" column in a database migration is sufficient (after writing the models) to let Rails know that you're planning to implement STI. For example, I decided to use STI to convert what could have been one table/model per event type - a different table for football, basketball, hockey, festivals, concerts, etc. - into just two tables, sports and concerts. Conveniently enough, this also mirrors Stubhub's API, which categorizes events broadly into three categories - sports, concerts and theater (which I'll aim to add at a later date).</p>
+
+<p>Where STI is helpful is in the structure of the models that relate to the table. For my sports table, I have multiple models that each save data to the same table. I have a class called "Sport" (I know, an awkward name, but I'm still getting used to the Rails pluralization conventions) that inherits from ActiveRecord::Base, and separate models called ProBasketball, ProFootball, Baseball, etc. that all inherit from the Sport class. This enables each of the individual sports to take on the functionality of a Sport (and ActiveRecord by default), yet also provides me with sufficient flexibility to write lower-case sport-specific methods, constants and variables. Each of these sports save to the "sports" table, with the sole differentiator being the "type" column, for which Rails uses the name of the Sport "sub-class" as the value (Rails just knows, don't ask me how.).</p>
+
+<p><strong>2) When should I use STI?</strong></p>
+
+<p>STIL should be considered when dealing with model classes that share much of the same functionality and data fields, but you as the developer may want more granular control over extending or adding to each class individually. Rather than duplicate the code over and over for multiple tables (and not being DRY) or forego the flexibility of adding idiosyncratic functionality or methods, STI permits you to use keep your data in a single table while writing specialized functionality.</p>
+
+<p>STI enables you to use all the typical model methods in Rails, like .new, .create or any of the .find helper methods that make Rails so awesome, to both the super-class and the sub-classes within a single table. For example, using STI enables me to write code like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ProBasketball</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:act_primary</span> <span class="o">=&gt;</span> <span class="s2">&quot;New York Knicks&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The above code triggers the following SQL code. Notice that ActiveRecord automatically knows that I'm looking for data from the sports table where the type is equal to ProBasketball.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="ss">&quot;sports&quot;</span> <span class="k">WHERE</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;type&quot;</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;ProBasketball&#39;</span><span class="p">)</span> <span class="k">AND</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;act_primary&quot;</span> <span class="o">=</span> <span class="s1">&#39;New York Knicks&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>What Rails is doing underneath the hood is that its going into the sports table and finding all records where the type is ProBasketball and the value in act_primary (i.e. the home team in the sports example) is the New York Knicks. This makes the above Rails/SQL command equivalent to the following:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Sport</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s2">&quot;ProBasketball&quot;</span><span class="p">,</span> <span class="ss">:act_primary</span> <span class="o">=&gt;</span> <span class="s2">&quot;New York Knicks&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="ss">&quot;sports&quot;</span> <span class="k">WHERE</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;type&quot;</span> <span class="o">=</span> <span class="s1">&#39;ProBasketball&#39;</span> <span class="k">AND</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;act_primary&quot;</span> <span class="o">=</span> <span class="s1">&#39;New York Knicks&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>A word of warning when using STI - don't use STI just because objects seem similar. Make sure that there is an object-oriented relationship between them. STI is a way to apply a higher-level abstraction to your schema and models, but don't get carried away. For example, it wouldn't make sense to just have a single table called "Objects" that uses STI to manage many relationships among unrelated models, each of which just happen to be an instance of an "object" (which everything is in Ruby anyways). A more practical example might be whether to use STI manage a table called "Vehicles," which relate to "Car", "Bicycle" and "Tank" sub-classes.</p>
+
+<p>In this case, STI probably doesn't pass the good design smell task, since a car has different characteristics and functionality than a tank, even if both are technically vehicles. A better use case for STI might be a "Cars" table that relates to sub-classes of Car, such as SUV, Hybrid and Sedan. These sub-classes may each have idiosyncratic functionality, but share many of the same characteristics and, more importantly, are intuitively related from an OO perspective. In this case, using STI may be an effective way to streamline data collection and avoiding repetition in your schema.</p>
+
+<p><strong>3) How do I implement STI?</strong></p>
+
+<p>To get started with STI from a database perspective, all you need to do is add a field called "type" to the table. Rails takes this type field and applies the name of the sub-classes that inherit from the class for which the table is named as the value for a row of data.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateSports</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;create_table :sports do |t|</span>
+</span><span class='line'><span class="sr">  t.string :type</span>
+</span><span class='line'><span class="sr">  t.string :act_primary</span>
+</span><span class='line'><span class="sr">  t.string :act_secondary</span>
+</span><span class='line'><span class="sr">  # ... more column fields #</span>
+</span><span class='line'><span class="sr">  t.timestamps</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Once the schema is set up, the next step is to get the models set up and the proper inheritance tree established. But, before you do that, make sure to add any subfolders in your app/models folder to the autoload path in the application.rb file. This will ensure that Rails knows to look at subfolders, which may be good to use to effectively organize your model files.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">config</span><span class="o">/</span><span class="n">application</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;config.autoload_paths += %W(</span><span class="si">#{</span><span class="n">config</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="sr">/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Next, you can write out the structure of the models. STI in Rails presumes that there is one "super-class" that takes on the name of the schema table and inherits from ActiveRecord::Base. In my example, this is the "Sport" class. Here is where I keep any variables or methods that relate to sports generally - e.g., the API call requests, for example. Then, you can create separate sub-classes for objects that will inherit the super-class functionality, yet also enable you to write sub-class-specific methods. For example, each individual sport has its own teams that I want to get data for, so I keep the constants (an array of NBA teams, for example) relevant to only one sport in that sport's sub-class.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">sport</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class Sport &amp;lt; ActiveRecord::Base</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">probasketball</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class ProBasketball &amp;lt; Sport</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">profootball</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class ProFootball &amp;lt; Sport</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">baseball</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class Baseball &amp;lt; Sport</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>4) What are some drawbacks of STI?</strong></p>
+
+<p>STI isn't always the best design choice for your schema. If sub-classes that you intend to use for STI have many different data fields, then including them all in the same table would result in a lot of null values and make it difficult to scale over time. In this case, you may end up with so much code in your model sub-classes that the shared functionality between sub-classes is minimal and warrants separate tables. Also, as I mentioned above, STI shouldn't be used just because two object types have similar attributes - both airplanes and bicycles have wheels, but it probalby doesn't make sense to group them into the same table, given that intuitively, they're different objects that will have vastly different functionality and data fields in an application.</p>
+
+<p>Also, you may have noticed that STI didn't exactly solve the problem I mentioned in the beginning of expanding my application to concerts and music festivals. In looking through the Stubhub API documentation, I realized that not all data fields that are applicable to sporting events are also used in describing concerts (e.g., concerts don't have an away team), even if about 80% - 90% of the data fields overlapped. In this case, I wanted to err on the side of caution and didn't want to deal with a single "events" table that included stubbed out columns with null values for concerts or sporting events, so I decided to create two tables - one for concerts and one for sporting events - and then apply STI to the sub-categories inherent in those two classes, such as individual sports for the latter and festivals vs. performances in the former. So, STI didn't solve all of my problems in that I still have duplicate data fields between my concerts and sports tables (e.g., event date, event venue, etc.), but it did help make my application flexible enough to scale to other sports or concert types while remaining relatively DRY.</p>
+
+<p><strong>5) Where can I learn more about STI?</strong></p>
+
+<p>There are a few good resources and blog posts online, as well as the requisite StackOverflow inquiries, about STI. I think these resources do a pretty decent job of describing STI, but if you think that STI might be a sensible domain design choice for your application, I'd recommend playing around with it in a sample application first before relying on it. I imagine that it might be difficult to switch between using STI and not using STI once in production given the significant schema changes that may be required, so prudence in applying the technique is encouraged.</p>
+
+<p><a href="http://www.alexreisner.com/code/single-table-inheritance-in-rails" target="_blank">Alex Reisner - Single Table Inheritance in Rails</a></p>
+
+<p><a href="http://www.therailworld.com/posts/18-Single-Table-Inheritance-with-Rails" target="_blank">The Rail World - Single Table Inheritance with Rails</a></p>
+
+<p><a href="http://www.archonsystems.com/devblog/2011/12/20/rails-single-table-inheritance-with-polymorphic-association/" target="_blank">Archon Systems - Rails Single Table Inheritance with Polymorphic Association</a></p>
+]]></content>
+  </entry>
+  
+</feed>
