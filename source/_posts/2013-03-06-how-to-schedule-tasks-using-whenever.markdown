@@ -9,6 +9,13 @@ published: false
 
 How to use the "Whenever" gem to schedule cron tasks.
 
+1) Set up Whenever gem
+
+2) Create a rake task
+
+3) Update the crontab
+
+4) 
 
 - Creating your rake task
 - Running console commands to update cron tasks

@@ -1,10 +1,9 @@
 ---
 layout: post
 title: "How (and When) to Use Single Table Inheritance in Rails"
-date: 2013-03-08 00:04
+date: 2013-03-12 00:04
 comments: true
 categories: 
-published: false
 ---
 
 Last week as I was developing an application to track and analyze ticket and event postings, I came across a design problem. I had first started working on my ticket tracker application as a way to parallel the learning that we were doing in class. I started with a simple scraper that pulled data out of the Stubhub's client-facing HTML documents, then moved on to writing a simple ORM that saved the data to a SQLite database, then moved the application into Sinatra and finally into Rails. 
@@ -13,7 +12,7 @@ Last week as I was developing an application to track and analyze ticket and eve
 
 Along the way, as I was increasing the level of structural complexity, I was also expanding the scope of the project. I had initially started with just NBA tickets, but I've recently started exploring how to broaden the application to any event. This presented me with a design conundrum. I designed my models in the initial Ruby application to just get NBA data - the classes, methods and variables were all had "NBA" or "basketball" in the name. Also, the model attributes and table fields were specific to the JSON data related to NBA games that I could retrieve. However, this wouldn't work exactly for concerts or music festivals. Basketball games have both a home and away team, but the same cannot be said for concerts. Furthermore, sports events - e.g., baseball, basketball, football - are mostly similar in how the data is structured (home and away teams, venue, date, etc.), but each may present idiosyncratic data that is not shared by other sports. On the one hand, each type of event shares many of the same attributes, but each also have their own quirks.
 
-As I explored how to accurately design my models and schema while also striving to remain DRY and not denormalize my data too much, I came across the concept of Single Table Inheritance (hattip to our instructor <a href="https://twitter.com/withloudhands/" target="_blank">Bob Whitney</a> for introducing me to the design concept.) 
+As I explored how to accurately design my models and schema while also striving to remain DRY and not denormalize my data too much, I came across the concept of Single Table Inheritance (hat tip to professor <a href="https://twitter.com/withloudhands/" target="_blank">Bob Whitney</a> for introducing me to the design concept.) 
 
 <strong>1) What is Single Table Inheritance (STI)?</strong>
 
@@ -23,11 +22,33 @@ Where STI is helpful is in the structure of the models that relate to the table.
 
 <strong>2) When should I use STI?</strong>
 
-STI enables you to use all the typical model methods in Rails, like .new or .create, to both the super-class and the sub-classes within a single table.
+STIL should be considered when dealing with model classes that share much of the same functionality and data fields, but you as the developer may want more granular control over extending or adding to each class individually. Rather than duplicate the code over and over for multiple tables (and not being DRY) or forego the flexibility of adding idiosyncratic functionality or methods, STI permits you to use keep your data in a single table while writing specialized functionality.
 
-# Add codeblock to for Rails console
+STI enables you to use all the typical model methods in Rails, like .new, .create or any of the .find helper methods that make Rails so awesome, to both the super-class and the sub-classes within a single table. For example, using STI enables me to write code like this:
 
-A word of warning when using STI - don't use STI just because objects seem similar. Make sure that there is an object-oriented relationship between them. STI is a way to apply a higher-level abstraction to your schema and models, but don't get carried away. For example, it wouldn't make sense to just have a single table called "Objects" that uses STI to manage many relationships among unrelated models, each of which just happen to be an instance of an "object" (which everything is in Ruby anyways). A more practical example might be whether to use STI manage a table called "Vehicles," which relate to "Car", "Bicycle" and "Tank" sub-classes. In this case, STI probably doesn't pass the good design smell task, since a car has different characteristics and functionality than a tank, even if both are technically vehicles. A better use case for STI might be a "Cars" table that relates to sub-classes of Car, such as SUV, Hybrid and Sedan. These sub-classes may each have idiosyncratic functionality, but share many of the same characteristics and, more importantly, are intuitively related from an OO perspective. In this case, using STI may be an effective way to streamline data collection and avoiding repetition in your schema.
+{% codeblock lang:ruby %}
+ProBasketball.where(:act_primary => "New York Knicks")
+{% endcodeblock %}
+
+The above code triggers the following SQL code. Notice that ActiveRecord automatically knows that I'm looking for data from the sports table where the type is equal to ProBasketball.
+
+{% codeblock lang:sql %}
+SELECT "sports".* FROM "sports" WHERE "sports"."type" IN ('ProBasketball') AND "sports"."act_primary" = 'New York Knicks'
+{% endcodeblock %}
+
+What Rails is doing underneath the hood is that its going into the sports table and finding all records where the type is ProBasketball and the value in act_primary (i.e. the home team in the sports example) is the New York Knicks. This makes the above Rails/SQL command equivalent to the following:
+
+{% codeblock lang:ruby %}
+Sport.where(:type => "ProBasketball", :act_primary => "New York Knicks")
+{% endcodeblock %}
+
+{% codeblock lang:sql %}
+SELECT "sports".* FROM "sports" WHERE "sports"."type" = 'ProBasketball' AND "sports"."act_primary" = 'New York Knicks'
+{% endcodeblock %}
+
+A word of warning when using STI - don't use STI just because objects seem similar. Make sure that there is an object-oriented relationship between them. STI is a way to apply a higher-level abstraction to your schema and models, but don't get carried away. For example, it wouldn't make sense to just have a single table called "Objects" that uses STI to manage many relationships among unrelated models, each of which just happen to be an instance of an "object" (which everything is in Ruby anyways). A more practical example might be whether to use STI manage a table called "Vehicles," which relate to "Car", "Bicycle" and "Tank" sub-classes. 
+
+In this case, STI probably doesn't pass the good design smell task, since a car has different characteristics and functionality than a tank, even if both are technically vehicles. A better use case for STI might be a "Cars" table that relates to sub-classes of Car, such as SUV, Hybrid and Sedan. These sub-classes may each have idiosyncratic functionality, but share many of the same characteristics and, more importantly, are intuitively related from an OO perspective. In this case, using STI may be an effective way to streamline data collection and avoiding repetition in your schema.
 
 <strong>3) How do I implement STI?</strong>
 
@@ -86,19 +107,17 @@ end
 
 <strong>4) What are some drawbacks of STI?</strong>
 
-STI isn't always the best design choice for your schema. If sub-classes that you intend to use for STI have many different data fields, then including them all in the same table would result in a lot of null values and make it difficult to scale over time.
+STI isn't always the best design choice for your schema. If sub-classes that you intend to use for STI have many different data fields, then including them all in the same table would result in a lot of null values and make it difficult to scale over time. In this case, you may end up with so much code in your model sub-classes that the shared functionality between sub-classes is minimal and warrants separate tables. Also, as I mentioned above, STI shouldn't be used just because two object types have similar attributes - both airplanes and bicycles have wheels, but it probalby doesn't make sense to group them into the same table, given that intuitively, they're different objects that will have vastly different functionality and data fields in an application.
 
-
+Also, you may have noticed that STI didn't exactly solve the problem I mentioned in the beginning of expanding my application to concerts and music festivals. In looking through the Stubhub API documentation, I realized that not all data fields that are applicable to sporting events are also used in describing concerts (e.g., concerts don't have an away team), even if about 80% - 90% of the data fields overlapped. In this case, I wanted to err on the side of caution and didn't want to deal with a single "events" table that included stubbed out columns with null values for concerts or sporting events, so I decided to create two tables - one for concerts and one for sporting events - and then apply STI to the sub-categories inherent in those two classes, such as individual sports for the latter and festivals vs. performances in the former. So, STI didn't solve all of my problems in that I still have duplicate data fields between my concerts and sports tables (e.g., event date, event venue, etc.), but it did help make my application flexible enough to scale to other sports or concert types while remaining relatively DRY.
 
 <strong>5) Where can I learn more about STI?</strong>
 
-There are a few good resources and blog posts online, as well as the requisite StackOverflow inquiries, about STI.
+There are a few good resources and blog posts online, as well as the requisite StackOverflow inquiries, about STI. I think these resources do a pretty decent job of describing STI, but if you think that STI might be a sensible domain design choice for your application, I'd recommend playing around with it in a sample application first before relying on it. I imagine that it might be difficult to switch between using STI and not using STI once in production given the significant schema changes that may be required, so prudence in applying the technique is encouraged.
 
 <a href="http://www.alexreisner.com/code/single-table-inheritance-in-rails" target="_blank">Alex Reisner - Single Table Inheritance in Rails</a>
 
 <a href="http://www.therailworld.com/posts/18-Single-Table-Inheritance-with-Rails" target="_blank">The Rail World - Single Table Inheritance with Rails</a>
 
 <a href="http://www.archonsystems.com/devblog/2011/12/20/rails-single-table-inheritance-with-polymorphic-association/" target="_blank">Archon Systems - Rails Single Table Inheritance with Polymorphic Association</a>
-
-
 
