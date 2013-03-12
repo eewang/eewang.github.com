@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-03-12T08:51:14-04:00</updated>
+  <updated>2013-03-12T09:00:52-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -25,7 +25,7 @@
 
 <p>Along the way, as I was increasing the level of structural complexity, I was also expanding the scope of the project. I had initially started with just NBA tickets, but I've recently started exploring how to broaden the application to any event. This presented me with a design conundrum. I designed my models in the initial Ruby application to just get NBA data - the classes, methods and variables were all had "NBA" or "basketball" in the name. Also, the model attributes and table fields were specific to the JSON data related to NBA games that I could retrieve. However, this wouldn't work exactly for concerts or music festivals. Basketball games have both a home and away team, but the same cannot be said for concerts. Furthermore, sports events - e.g., baseball, basketball, football - are mostly similar in how the data is structured (home and away teams, venue, date, etc.), but each may present idiosyncratic data that is not shared by other sports. On the one hand, each type of event shares many of the same attributes, but each also have their own quirks.</p>
 
-<p>As I explored how to accurately design my models and schema while also striving to remain DRY and not denormalize my data too much, I came across the concept of Single Table Inheritance (hat tip to professor <a href="https://twitter.com/withloudhands/" target="_blank">Bob Whitney</a> for introducing me to the design concept.)</p>
+<p>As I explored how to accurately design my models and schema while also striving to remain DRY and not denormalize my data too much, I came across the concept of Single Table Inheritance (hat tip to professor <a href="https://twitter.com/withloudhands/" target="_blank">Bob Whitney</a> for introducing me to the design concept.) And in case you're interested, you can find my application <a href="https://github.com/eewang/ticket_tracker" target="_blank">here</a> (very much still a work in progress).</p>
 
 <p><strong>1) What is Single Table Inheritance (STI)?</strong></p>
 
