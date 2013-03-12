@@ -3,7 +3,7 @@ layout: post
 title: "How (and When) to Use Single Table Inheritance in Rails"
 date: 2013-03-12 00:04
 comments: true
-categories: 
+categories: Rails Flatiron database design
 ---
 
 Last week as I was developing an application to track and analyze ticket and event postings, I came across a design problem. I had first started working on my ticket tracker application as a way to parallel the learning that we were doing in class. I started with a simple scraper that pulled data out of the Stubhub's client-facing HTML documents, then moved on to writing a simple ORM that saved the data to a SQLite database, then moved the application into Sinatra and finally into Rails. 
