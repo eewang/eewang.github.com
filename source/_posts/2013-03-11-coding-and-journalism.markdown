@@ -39,4 +39,4 @@ Journalism examines institutions, developers examine processes and operations.
 
 One tidbit of wisdom that Avi mentioned a few weeks back that really stuck with me is that one of the most important traits of a good developer is empathy. Quality developers understand problems and can feel the pain that an inefficient process or broken institution can create.
 
-The New York Times development team is awesome. The guy who created Backbone.js works at the NYT. They're exploring new ways to tell stories (link to the story about the skiing accident that acts like a storyboard.)
+The New York Times development team is awesome. The guy who created Backbone.js works at the NYT. They're exploring new ways to tell stories, like this super cool story package about a <a href="http://www.nytimes.com/projects/2012/snow-fall/#/?part=tunnel-creek" target="_blank">disastrous avalanche</a>.
