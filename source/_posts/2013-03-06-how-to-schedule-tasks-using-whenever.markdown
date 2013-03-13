@@ -6,7 +6,7 @@ comments: true
 categories: 
 ---
 
-In building out my ticket tracker application, I realized that I needed to be able to automatically run scripts at certain intervals throughout the week. I wanted my application to execute a call to Stubhub's API and pull data on events periodically so that I didn't have to do it myself each day. In looking on <a href="http://ruby-toolbox.org" target="_blank">Ruby Toolbox</a>, I came across a gem called Whenever that allows you to quickly and easily schedule tasks using a nifty tool called a cron log.
+In building out my ticket tracker application, I realized that I needed to be able to automatically run scripts at certain intervals throughout the week. I wanted my application to execute a call to Stubhub's API and pull data on events periodically so that I didn't have to do it myself each day. In looking on <a href="http://ruby-toolbox.org" target="_blank">Ruby Toolbox</a>, I came across a gem called <a href="https://github.com/javan/whenever" target="_blank">Whenever</a> that allows you to quickly and easily schedule tasks using a nifty tool called a cron log.
 
 <!--more-->
 
@@ -81,7 +81,7 @@ After I set up my rake task, I need to use Whenever to schedule my task. Thankfu
 # Learn more: http://github.com/javan/whenever
 {% endcodeblock %}
 
- Whenever applies a simple, intuitive domain-specific language (DSL) with a few keywords to schedule tasks (you can find a more thorough run-down in in the gem's <a href="https://github.com/javan/whenever" target="_blank">README</a>). Whenever uses a human-readable syntax that takes the form of "every [x].[minute/hour/day/week/etc.], :at => [time] do <code>" to schedule tasks. The gem has pretty good support for specialized tasks, and even supports scheduling tasks on just weekdays or weekends. 
+ Whenever applies a simple, intuitive domain-specific language (DSL) with a few keywords to schedule tasks (you can find a more thorough run-down in in the gem's README file. Whenever uses a human-readable syntax that takes the form of "every [x].[minute/hour/day/week/etc.], :at => [time] do <code>" to schedule tasks. The gem has pretty good support for specialized tasks, and even supports scheduling tasks on just weekdays or weekends. 
 
 In the below code, I've told Whenever to run my events:fetch rake task every day at 10:00 pm. I've also set the environment to be my development environment and I set a location in my Rails application for both an error log and a default log so that I can get feedback from Whenever just to make sure that it ran correctly. I don't think the "set :output" line is absolutely necessary, but when I started using Whenever, I wasn't always sure if the job was running correctly, so I made the rake task output to a log so I could follow the execution path.
 
