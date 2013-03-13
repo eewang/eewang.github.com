@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-03-12T09:00:52-04:00</updated>
+  <updated>2013-03-12T21:36:16-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,177 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Schedule Tasks Using 'Whenever']]></title>
+    <link href="http://eewang.github.com/blog/2013/03/12/how-to-schedule-tasks-using-whenever/"/>
+    <updated>2013-03-12T20:49:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/03/12/how-to-schedule-tasks-using-whenever</id>
+    <content type="html"><![CDATA[<p>In building out my ticket tracker application, I realized that I needed to be able to automatically run scripts at certain intervals throughout the week. I wanted my application to execute a call to Stubhub&#8217;s API and pull data on events periodically so that I didn&#8217;t have to do it myself each day. In looking on <a href="http://ruby-toolbox.org" target="_blank">Ruby Toolbox</a>, I came across a gem called Whenever that allows you to quickly and easily schedule tasks using a nifty tool called a cron log.</p>
+
+<!--more-->
+
+
+<p>Whenever serves as a wrapper for the cron job processor, which is functionality inherent to your operating system that allows for scheduling jobs to run periodically. According to <a href="http://en.wikipedia.org/wiki/Cron" target="_blank">Wikipedia</a>, cron tasks are often used to automate system maintenance or administration, though it can be used for other purposes, like connecting to the Internet or downloading e-mail. Apparently you can set up cron tasks independently of Ruby or any web application; Whenever enables you to manipulate standard functionality of your machine using Ruby code.</p>
+
+<p>To get started with Whenever, you need to install the gem. Like any other gem, this is a pretty simple installation process:</p>
+
+<p><strong>1) Set up Whenever gem</strong></p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>gem install whenever
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you have the gem installed, you need to &#8220;wheneverize&#8221; your application. You can do this by going into the root directory of your application and using the following console command:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wheneverize .
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command creates a &#8220;schedule.rb&#8221; file in your config folder, which you&#8217;ll be using to manage your application&#8217;s automated tasks.</p>
+
+<p><strong>2) Create a rake task</strong></p>
+
+<p>There are several ways to set up cron tasks to run automatically using Whenever, but I found the simplest way to be to just write a rake task in your Rails app&#8217;s tasks folder.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">namespace</span> <span class="ss">:events</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">desc</span> <span class="s2">&quot;Rake task to get events data&quot;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:fetch</span> <span class="o">=&gt;</span> <span class="ss">:environment</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">events</span> <span class="o">=</span> <span class="no">Event</span><span class="o">.</span><span class="n">nba_search</span>
+</span><span class='line'>    <span class="n">events</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">item</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">hash</span><span class="o">|</span>
+</span><span class='line'>        <span class="vi">@event</span> <span class="o">=</span> <span class="no">Event</span><span class="o">.</span><span class="n">new</span><span class="p">({</span>
+</span><span class='line'>        <span class="c1"># Code to instantiate an event</span>
+</span><span class='line'>        <span class="p">})</span>
+</span><span class='line'>        <span class="vi">@event</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="si">}</span><span class="s2"> - Success!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above code takes advantage of a few rake-specific keywords, like namespace, desc and task. The namespace:task combination is how you&#8217;ll actually call your rake task - in the Rails rake task &#8220;db:migrate&#8221;, &#8220;db&#8221; is the namespace and &#8220;migrate&#8221; is the task. In this particular instance, I&#8217;m using Whenever to parse event data from Stubhub&#8217;s API and save them to a database using ActiveRecord. After writing the rake task, I am now able to call the above rake task in my console using:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rake events:fetch
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After I set up my rake task, I need to use Whenever to schedule my task. Thankfully, the schedule.rb that Whenever automatically creates in your config folder comes ready with in-file instructions about how to set-up cron tasks:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Use this file to easily define all of your cron jobs.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># It&#39;s helpful, but not entirely necessary to understand cron before proceeding.</span>
+</span><span class='line'><span class="c1"># http://en.wikipedia.org/wiki/Cron</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Example:</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># set :output, &quot;/path/to/my/cron_log.log&quot;</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># every 2.hours do</span>
+</span><span class='line'><span class="c1">#   command &quot;/usr/bin/some_great_command&quot;</span>
+</span><span class='line'><span class="c1">#   runner &quot;MyModel.some_method&quot;</span>
+</span><span class='line'><span class="c1">#   rake &quot;some:great:rake:task&quot;</span>
+</span><span class='line'><span class="c1"># end</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># every 4.days do</span>
+</span><span class='line'><span class="c1">#   runner &quot;AnotherModel.prune_old_records&quot;</span>
+</span><span class='line'><span class="c1"># end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Learn more: http://github.com/javan/whenever</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> Whenever applies a simple, intuitive domain-specific language (DSL) with a few keywords to schedule tasks (you can find a more thorough run-down in in the gem&#8217;s <a href="https://github.com/javan/whenever" target="_blank">README</a>). Whenever uses a human-readable syntax that takes the form of &#8220;every [x].[minute/hour/day/week/etc.], :at => [time] do <code>" to schedule tasks. The gem has pretty good support for specialized tasks, and even supports scheduling tasks on just weekdays or weekends.</p>
+
+<p>In the below code, I've told Whenever to run my events:fetch rake task every day at 10:00 pm. I've also set the environment to be my development environment and I set a location in my Rails application for both an error log and a default log so that I can get feedback from Whenever just to make sure that it ran correctly. I don't think the "set :output" line is absolutely necessary, but when I started using Whenever, I wasn't always sure if the job was running correctly, so I made the rake task output to a log so I could follow the execution path.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:environment</span><span class="p">,</span> <span class="s2">&quot;development&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:output</span><span class="p">,</span> <span class="p">{</span><span class="ss">:error</span> <span class="o">=&gt;</span> <span class="s2">&quot;log/cron_error_log.log&quot;</span><span class="p">,</span> <span class="ss">:standard</span> <span class="o">=&gt;</span> <span class="s2">&quot;log/cron_log.log&quot;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">every</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="ss">:at</span> <span class="o">=&gt;</span> <span class="s1">&#39;10:00 pm&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">rake</span> <span class="s2">&quot;events:fetch&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>3) Update the crontab</strong></p>
+
+<p>After setting up the rake task, you need to run following command in the console to tell Whenever to start running your periodic tasks:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>whenever --update-crontab
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should see a result along the lines of:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>write<span class="o">]</span> crontab file updated
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to check that the gem correctly scheduled your cron task, you can use the command &#8220;crontab -l&#8221; to list all cron tasks.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>crontab -l
+</span><span class='line'><span class="c"># Begin Whenever generated tasks for: /Users/eugenewang/projects/rails/ticket_tracker/config/schedule.rb</span>
+</span><span class='line'>0 22 * * * /bin/bash -l -c <span class="s1">&#39;cd /Users/eugenewang/projects/rails/ticket_tracker &amp;&amp; RAILS_ENV=development bundle exec rake events:fetch --silent &gt;&gt; log/cron_log.log 2&gt;&gt; log/cron_error_log.log&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And that should be it! You can now sit back and watch Whenever automatically execute your rake tasks. When you start using Whenever, I would recommend shortening the feedback loop by writing one or two test rake tasks that just print &#8220;Hello World&#8221; to your cron log every minute. This is what I did just to confirm that the gem was working. Then, I moved progressively onward until I was able to execute large API calls.</p>
+
+<p>One word of caution though when using Whenever - be sure you have a general sense of how long your tasks actually take to execute. One rake task I set up took over a minute to execute on its own, and I inadvertantely scheduled the task to run every minute, so naturally a task backlog quickly built up. Even when I stopped the task and updated the crontab, the backlog caused the task to continue to run until it ran out of gas on its own. When all was said and done, I had over 2 million rows of data in my database - much of it duplicative and unwanted. Although I ended up with way too much data, at least I knew that the gem worked!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How (and When) to Use Single Table Inheritance in Rails]]></title>
