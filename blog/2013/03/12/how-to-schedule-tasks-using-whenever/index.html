@@ -217,9 +217,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p> Whenever applies a simple, intuitive domain-specific language (DSL) with a few keywords to schedule tasks (you can find a more thorough run-down in in the gem&#8217;s README file. Whenever uses a human-readable syntax that takes the form of &#8220;every [x].[minute/hour/day/week/etc.], :at => [time] do <code>" to schedule tasks. The gem has pretty good support for specialized tasks, and even supports scheduling tasks on just weekdays or weekends.</p>
+<p> Whenever applies a simple, intuitive domain-specific language (DSL) with a few keywords to schedule tasks (you can find a more thorough run-down in in the gem&#8217;s README file. Whenever uses a human-readable syntax that takes the form of &#8220;every [x].[minute/hour/day/week/etc.], :at => [time] do&#8221; to schedule tasks. The gem has pretty good support for specialized tasks, and even supports scheduling tasks on just weekdays or weekends.</p>
 
-<p>In the below code, I've told Whenever to run my events:fetch rake task every day at 10:00 pm. I've also set the environment to be my development environment and I set a location in my Rails application for both an error log and a default log so that I can get feedback from Whenever just to make sure that it ran correctly. I don't think the "set :output" line is absolutely necessary, but when I started using Whenever, I wasn't always sure if the job was running correctly, so I made the rake task output to a log so I could follow the execution path.</p>
+<p>In the below code, I&#8217;ve told Whenever to run my events:fetch rake task every day at 10:00 pm. I&#8217;ve also set the environment to be my development environment and I set a location in my Rails application for both an error log and a default log so that I can get feedback from Whenever just to make sure that it ran correctly. I don&#8217;t think the &#8220;set :output&#8221; line is absolutely necessary, but when I started using Whenever, I wasn&#8217;t always sure if the job was running correctly, so I made the rake task output to a log so I could follow the execution path.</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
