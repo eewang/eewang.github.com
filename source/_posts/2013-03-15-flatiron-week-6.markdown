@@ -7,7 +7,7 @@ categories:
 published: true
 ---
 
-Today marked the half-way point for the Flatiron program. This past week was heavy on Rails instruction; Avi wanted to hammer into us the importance of understanding complex forms and working with multiple, associated models. On Monday, we brainstormed ideas for our final group projects and went through a planning session where we discussed ideas at a high-level - the features, technical obstacles and work sprints that we could tackle within the short timeframe for development.
+Today marked the half-way point for the Flatiron program. This past week was heavy on Ruby on Rails instruction; Avi wanted to hammer into us the importance of understanding complex forms and working with multiple, associated models. On Monday, we brainstormed ideas for our final group projects and went through a planning session where we discussed ideas at a high-level - the features, technical obstacles and work sprints that we could tackle within the short timeframe for development.
 
 <!--more-->
 
