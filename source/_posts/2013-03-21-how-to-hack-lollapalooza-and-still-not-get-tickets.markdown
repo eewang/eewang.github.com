@@ -1,0 +1,1879 @@
+---
+layout: post
+title: "How to hack Lollapalooza and still not get tickets"
+date: 2013-03-21 17:50
+comments: true
+categories: Ruby hacking
+published: true
+---
+
+As a Chicago native (and by "native" I mean a resident of a leafy suburb about 45 minutes away), my secret shame is that I've never been to <a href="http://www.lollapalooza.com" target="_blank">Lollapalooza</a>. Whenever I talk to people not from Chicago about Chicago, they always seem to mention that one time they went to Lolla and had a blast rocking out all night along Lake Shore Drive just a stone's throw away from the Sears (that's right, Sears) Tower. Conversations like these tend to end awkwardly when I can't match their enthusiasm for the premier music festival in my home city.
+
+<!--more-->
+
+Thus, I was pretty excited when I got an e-mail this week from the Lollapalooza organizing people that tickets would go on sale shortly for the August festival. Specifically, "Souvenir" tickets for $75 would go on sale at some unannounced time this week. Early bird tickets go for $200 and regular tickets for $225, so I definitely wanted to try and get steep discount by snagging a Souvenir ticket. However, I didn't want to have to constantly be refreshing the Lollapalooza site every moment of the day just to get a chance to buy the discount tickets. So, I figured I'd put to good use my developer skills and hack together a Ruby script that would monitor the Lollapalooza site for me and notify me if anything related to the Souvenir tickets changed.
+
+I wanted this script to basically do three things: 
+
+  1) Know what elements on the Lollapalooza site were likely to change<br>
+  2) Check the site on a frequent basis<br>
+  3) Contact me when the site changes per #1<br>
+
+In order to do this, I used Nokogiri to scrape the Lollapalooza site, the Whenever gem to monitor the site and the Twilio API to text me if something changed. My first step was to use Nokogiri and the Chrome Inspector to examine the structure of the Lolla home page. I toyed around with a number of Nokogiri methods to try and pinpoint the exact location of the words "SOON" and "Souvenir", as those were the main keywords that identified the sale of discounted tickets. I assumed that the moment Souvenir tickets would start selling on the site, either the location of the "Souvenir" text would move to a more prominent position on the page or the accompanying word "SOON" would change, since "SOON" as an indicator of when tickets would go on sale would become irrelevant once they actually started selling tickets. Finally, I assumed that the text itself would change into a link to the ticket purchase site once tickets went on sale.
+
+Taking these three assumptions - that the position of "SOON" or "Souvenir" would change, or the entire element would be converted into a link - as my event triggers, I used Nokogiri to first determine where the current text positions of these words were in the entirety of the HTML using the following code:
+
+{% codeblock lang:ruby %}
+# lolla.rb 
+
+class Lolla
+
+  @@source = "http://www.lollapalooza.com"
+
+  @@doc = Nokogiri::XML(open(@@source))
+  # ...
+  def self.search_index(string)
+    @@doc.text.index(string)
+  end
+  # ...
+end
+
+{% endcodeblock %}
+
+This returned 764 and 743 as the array index positions where "SOON" and "Souvenir" began if the entirety of the site's text was strung together. So, I set these values as the values that I would check the site against periodically, so that if the words changed position (or disappeared entirely), that would mean that discounted tickets were available for purchase. I recognize that this is a pretty hairpin trigger, as in if a single letter was added to the text before the two keywords I was targeting, this would shoot off a text message to me. However, I figured that I'd rather have the script be too sensitive and notify me to check the site too often than to miss an opportunity to buy a ticket.
+
+{% codeblock lang:ruby %}
+# lolla.rb
+
+class Lolla
+
+  INDEX_CHECK = {
+    :SOON => 764,
+    :Souvenir => 743
+  }
+  # ...
+  def self.index(string)
+    Lolla.index_check[string.to_sym]
+  end
+
+  def self.index_check 
+    INDEX_CHECK
+  end
+  # ...
+  def self.index_changed?(string)
+    if Lolla.search_index(string) != Lolla.index(string)
+      return true
+    else
+      return false
+    end
+  end
+  # ...
+
+end
+{% endcodeblock %}
+
+Then, I examined the structure of the element that encapsulated the Souvenir ticket indicator. I wrote a few methods that would check if an anchor tag or href attribute was added to the parent span. This way, if the organizers added a link to buy the tickets but for some reason forgot to change text, the notification would still trigger.
+
+{% codeblock lang:ruby %}
+# lolla.rb
+
+class Lolla
+
+  @@lolla_node = @@doc.children[1].children[3].children[1].children[1].children[7].children[0].children[0]
+  # ...
+  def self.node_names
+    children_names = []
+    Lolla.check_link.children.each do |node|
+      children_names << node.name
+    end
+    children_names
+  end
+  # ...
+  def self.node_contains_link?
+    if Lolla.node_names.include?("a") || Lolla.node_names.include?("href")
+      return true
+    else
+      return false
+    end
+  end
+
+end
+{% endcodeblock %}
+
+Finally, I put it all together with the Twilio API and some control flow so that the script would check each of the three conditions sequentially and if they changed from their initial state, it would send me an SMS text message. If the condition didn't change, it would print to a log notifying me that there were no changes to report along with a timestamp so that I could confirm when the script ran successfully.
+
+{% codeblock lang:ruby %}
+# lolla.rb
+
+class Lolla
+  # ...
+  def self.check
+    if Lolla.index_changed?("SOON")
+      Lolla.notify("The placement of 'SOON' changed on the Lollapalooza site!")
+      puts "Site changed! 'SOON' was at #{Lolla.index_check[:SOON]} before, now at #{Lolla.search_index("SOON")}."
+    elsif Lolla.index_changed?("Souvenir")
+      Lolla.notify("The placement of 'Souvenir' changed on the Lollapalooza site!")
+      puts "Site changed! 'SOON' was at #{Lolla.index_check[:Souvenir]} before, now at #{Lolla.search_index("Souvenir")}."
+    elsif Lolla.node_contains_link?
+      Lolla.notify("A link has been added to the node on the Lollapalooza site!")
+      puts "Site changed!"
+    else
+      puts "Checked at #{DateTime.now} - No changes to report"
+    end
+  end
+
+end
+
+{% endcodeblock %}
+
+Here is the entire script:
+
+{% codeblock lang:ruby %}
+# lolla.rb
+
+require 'twilio-ruby'
+require 'nokogiri'
+require 'open-uri'
+require 'pry'
+require 'date'
+
+# => Notify in the event of the following:
+  # => Initial location of "Souvenir" changes
+  # => Initial location of "SOON" changes
+  # => Addition of a link to the "Souvenir" text
+
+class Lolla
+
+  @@account_sid = '################################'
+  @@auth_token = '##############################'
+  @@client = Twilio::REST::Client.new @@account_sid, @@auth_token
+
+  @@source = "http://www.lollapalooza.com"
+
+  @@doc = Nokogiri::XML(open(@@source))
+
+  @@lolla_node = @@doc.children[1].children[3].children[1].children[1].children[7].children[0].children[0]
+
+  INDEX_CHECK = {
+    :SOON => 764,
+    :Souvenir => 743
+  }
+
+  def self.document
+    @@doc
+  end
+
+  def self.search_index(string)
+    @@doc.text.index(string)
+  end
+
+  def self.index_changed?(string)
+    if Lolla.search_index(string) != Lolla.index(string)
+      return true
+    else
+      return false
+    end
+  end
+
+  def self.index(string)
+    Lolla.index_check[string.to_sym]
+  end
+
+  def self.index_check 
+    INDEX_CHECK
+  end
+
+  def self.notify(msg)
+    message = @@client.account.sms.messages.create(:body => msg,
+        :to => "+16303791842",
+        :from => "+17082219589")
+    puts "Message sent!"
+  end
+
+  def self.check_link
+    @@lolla_node
+  end
+
+  def self.node_names
+    children_names = []
+    Lolla.check_link.children.each do |node|
+      children_names << node.name
+    end
+    children_names
+  end
+
+  def self.node_contains_link?
+    if Lolla.node_names.include?("a") || Lolla.node_names.include?("href")
+      return true
+    else
+      return false
+    end
+  end
+
+  def self.check
+    if Lolla.index_changed?("SOON")
+      Lolla.notify("The placement of 'SOON' changed on the Lollapalooza site!")
+      puts "Site changed! 'SOON' was at #{Lolla.index_check[:SOON]} before, now at #{Lolla.search_index("SOON")}."
+    elsif Lolla.index_changed?("Souvenir")
+      Lolla.notify("The placement of 'Souvenir' changed on the Lollapalooza site!")
+      puts "Site changed! 'SOON' was at #{Lolla.index_check[:Souvenir]} before, now at #{Lolla.search_index("Souvenir")}."
+    elsif Lolla.node_contains_link?
+      Lolla.notify("A link has been added to the node on the Lollapalooza site!")
+      puts "Site changed!"
+    else
+      puts "Checked at #{DateTime.now} - No changes to report"
+    end
+  end
+
+end
+
+{% endcodeblock %}
+
+With the script completed and working (I tested it first with my own blog - setting initial position values via Nokogiri then changing a few words and confirming that I got a text message from Twilio notifying me of the change), I then moved on to scheduling the task using Whenever. In case you don't know what Whenever is, it's a great, easy-to-use gem to schedule tasks (see <a href="http://eewang.github.com/blog/2013/03/12/how-to-schedule-tasks-using-whenever/" target="_blank">this blog post</a> for a more detailed explanation). All I did was create a rake task to run the "check" class method every minute and add the rake task to my cron task list using the schedule.rb file.
+
+{% codeblock lang:ruby %}
+# lolla.rake
+
+namespace :lolla do
+  desc "Check Lollapalooza site"
+  task :check => :environment do
+    Lolla.check
+  end
+end
+
+# schedule.rb
+
+set :environment, "development"
+set :output, {:error => "log/cron_error_log.log", :standard => "log/cron_log.log"}
+
+every 1.minute do
+  rake "lolla:check"
+end
+
+{% endcodeblock %}
+
+And that was it! After setting up the script to run every minute, I just needed to keep my computer connected to the Internet and check the log periodically to confirm that it was running. There were a few timeout errors here and there, but for the most part, the script ran successfully every minute. Also, the script threw one false positive around 12:15 pm on Wednesday, which sent me scrambling to the site to buy tickets, only to find that in actuality, the script's notification functionality was triggered by a minor change in the position of "SOON" and "Souvenir" on the site.
+
+Writing a script to try and buy discounted tickets was a bittersweet experience. On the one hand, the script worked perfectly and notified me right when the site changed. On the other hand, I wasn't able to get tickets. I'll let these three screenshots and timestamps tell the story.
+
+<strong>5:34 pm</strong>
+
+<img src="/images/post_images/lollapalooza/lolla_before_2.png"></img>
+
+<strong>5:35 pm</strong>
+
+<img src="/images/post_images/lollapalooza/lolla_frontgate.png"></img>
+
+<strong>5:36 pm</strong>
+
+<img src="/images/post_images/lollapalooza/lolla_after_2.png"></img>
+
+The lesson here is that tickets sell out super fast. Also, next time I try and get an edge in buying tickets, I'll try to optimize more for performance.
+
+I've posted below my full scrape log. You'll notice that there were some moments when the scrape wasn't running - namely when my computer was turned off or I was not connected to the Internet. Despite the one false alarm, the script performed its task admirably - it notified me right when Souvenir tickets went on sale, at some point between 5:33 pm and  5:34 pm today. Unfortunately, my trigger finger was not fast enough, and even though I was able to click on the link to buy tickets (i.e., before they sold out), after Front Gate Tickets processed my request there were no more tickets remaining.
+
+Oh well, I guess I'll just have to wait in line with everybody else when Early Bird tickets go on sale next Tuesday at 10 am CST.
+
+---
+
+
+{% codeblock %}
+
+Checked at 2013-03-19T22:46:03-04:00 - No changes to report
+Checked at 2013-03-19T22:47:04-04:00 - No changes to report
+Checked at 2013-03-19T22:48:03-04:00 - No changes to report
+Checked at 2013-03-19T22:49:04-04:00 - No changes to report
+Checked at 2013-03-19T22:50:05-04:00 - No changes to report
+Checked at 2013-03-19T22:52:07-04:00 - No changes to report
+Checked at 2013-03-19T22:54:03-04:00 - No changes to report
+Checked at 2013-03-19T22:55:03-04:00 - No changes to report
+Checked at 2013-03-19T22:56:02-04:00 - No changes to report
+Checked at 2013-03-19T22:57:03-04:00 - No changes to report
+Checked at 2013-03-19T22:58:03-04:00 - No changes to report
+Checked at 2013-03-19T22:59:02-04:00 - No changes to report
+Checked at 2013-03-19T23:00:03-04:00 - No changes to report
+Checked at 2013-03-19T23:01:03-04:00 - No changes to report
+Checked at 2013-03-19T23:02:02-04:00 - No changes to report
+Checked at 2013-03-19T23:03:03-04:00 - No changes to report
+Checked at 2013-03-19T23:04:02-04:00 - No changes to report
+Checked at 2013-03-19T23:05:03-04:00 - No changes to report
+Checked at 2013-03-19T23:06:03-04:00 - No changes to report
+Checked at 2013-03-19T23:07:02-04:00 - No changes to report
+Checked at 2013-03-19T23:08:03-04:00 - No changes to report
+Checked at 2013-03-20T00:09:09-04:00 - No changes to report
+Checked at 2013-03-20T00:10:03-04:00 - No changes to report
+Checked at 2013-03-20T00:11:03-04:00 - No changes to report
+Checked at 2013-03-20T00:13:03-04:00 - No changes to report
+Checked at 2013-03-20T01:14:04-04:00 - No changes to report
+Checked at 2013-03-20T01:15:03-04:00 - No changes to report
+Checked at 2013-03-20T01:16:03-04:00 - No changes to report
+Checked at 2013-03-20T01:17:05-04:00 - No changes to report
+Checked at 2013-03-20T01:18:03-04:00 - No changes to report
+Checked at 2013-03-20T01:19:03-04:00 - No changes to report
+Checked at 2013-03-20T01:20:03-04:00 - No changes to report
+Checked at 2013-03-20T01:21:04-04:00 - No changes to report
+Checked at 2013-03-20T01:22:04-04:00 - No changes to report
+Checked at 2013-03-20T01:23:05-04:00 - No changes to report
+Checked at 2013-03-20T01:24:05-04:00 - No changes to report
+Checked at 2013-03-20T02:25:03-04:00 - No changes to report
+Checked at 2013-03-20T06:50:09-04:00 - No changes to report
+Checked at 2013-03-20T06:51:03-04:00 - No changes to report
+Checked at 2013-03-20T06:52:03-04:00 - No changes to report
+Checked at 2013-03-20T06:53:02-04:00 - No changes to report
+Checked at 2013-03-20T06:54:03-04:00 - No changes to report
+Checked at 2013-03-20T06:55:03-04:00 - No changes to report
+Checked at 2013-03-20T06:56:03-04:00 - No changes to report
+Checked at 2013-03-20T06:57:03-04:00 - No changes to report
+Checked at 2013-03-20T06:58:03-04:00 - No changes to report
+Checked at 2013-03-20T06:59:04-04:00 - No changes to report
+Checked at 2013-03-20T07:00:03-04:00 - No changes to report
+Checked at 2013-03-20T07:01:02-04:00 - No changes to report
+Checked at 2013-03-20T07:02:03-04:00 - No changes to report
+Checked at 2013-03-20T07:03:03-04:00 - No changes to report
+Checked at 2013-03-20T07:04:03-04:00 - No changes to report
+Checked at 2013-03-20T07:05:02-04:00 - No changes to report
+Checked at 2013-03-20T07:06:03-04:00 - No changes to report
+Checked at 2013-03-20T07:07:03-04:00 - No changes to report
+Checked at 2013-03-20T07:08:03-04:00 - No changes to report
+Checked at 2013-03-20T07:09:03-04:00 - No changes to report
+Checked at 2013-03-20T07:10:02-04:00 - No changes to report
+Checked at 2013-03-20T07:11:03-04:00 - No changes to report
+Checked at 2013-03-20T07:12:03-04:00 - No changes to report
+Checked at 2013-03-20T07:13:02-04:00 - No changes to report
+Checked at 2013-03-20T07:14:03-04:00 - No changes to report
+Checked at 2013-03-20T07:15:02-04:00 - No changes to report
+Checked at 2013-03-20T07:16:03-04:00 - No changes to report
+Checked at 2013-03-20T07:17:02-04:00 - No changes to report
+Checked at 2013-03-20T07:18:03-04:00 - No changes to report
+Checked at 2013-03-20T07:19:03-04:00 - No changes to report
+Checked at 2013-03-20T07:20:07-04:00 - No changes to report
+Checked at 2013-03-20T07:21:03-04:00 - No changes to report
+Checked at 2013-03-20T07:22:05-04:00 - No changes to report
+Checked at 2013-03-20T07:23:04-04:00 - No changes to report
+Checked at 2013-03-20T07:24:03-04:00 - No changes to report
+Checked at 2013-03-20T07:25:03-04:00 - No changes to report
+Checked at 2013-03-20T07:26:03-04:00 - No changes to report
+Checked at 2013-03-20T07:27:03-04:00 - No changes to report
+Checked at 2013-03-20T07:28:03-04:00 - No changes to report
+Checked at 2013-03-20T07:46:25-04:00 - No changes to report
+Checked at 2013-03-20T07:47:03-04:00 - No changes to report
+Checked at 2013-03-20T07:48:03-04:00 - No changes to report
+Checked at 2013-03-20T07:49:03-04:00 - No changes to report
+Checked at 2013-03-20T07:50:02-04:00 - No changes to report
+Checked at 2013-03-20T07:51:03-04:00 - No changes to report
+Checked at 2013-03-20T07:52:03-04:00 - No changes to report
+Checked at 2013-03-20T07:53:02-04:00 - No changes to report
+Checked at 2013-03-20T07:54:03-04:00 - No changes to report
+Checked at 2013-03-20T07:55:03-04:00 - No changes to report
+Checked at 2013-03-20T07:56:02-04:00 - No changes to report
+Checked at 2013-03-20T07:57:03-04:00 - No changes to report
+Checked at 2013-03-20T07:58:03-04:00 - No changes to report
+Checked at 2013-03-20T08:09:32-04:00 - No changes to report
+Checked at 2013-03-20T08:10:03-04:00 - No changes to report
+Checked at 2013-03-20T08:11:03-04:00 - No changes to report
+Checked at 2013-03-20T08:12:02-04:00 - No changes to report
+Checked at 2013-03-20T08:13:03-04:00 - No changes to report
+Checked at 2013-03-20T08:14:02-04:00 - No changes to report
+Checked at 2013-03-20T08:15:02-04:00 - No changes to report
+Checked at 2013-03-20T08:16:03-04:00 - No changes to report
+Checked at 2013-03-20T08:17:02-04:00 - No changes to report
+Checked at 2013-03-20T08:18:03-04:00 - No changes to report
+Checked at 2013-03-20T08:19:02-04:00 - No changes to report
+Checked at 2013-03-20T08:20:03-04:00 - No changes to report
+Checked at 2013-03-20T08:21:02-04:00 - No changes to report
+Checked at 2013-03-20T08:47:04-04:00 - No changes to report
+Checked at 2013-03-20T08:48:02-04:00 - No changes to report
+Checked at 2013-03-20T08:49:03-04:00 - No changes to report
+Checked at 2013-03-20T08:50:02-04:00 - No changes to report
+Checked at 2013-03-20T08:51:03-04:00 - No changes to report
+Checked at 2013-03-20T08:52:02-04:00 - No changes to report
+Checked at 2013-03-20T08:53:03-04:00 - No changes to report
+Checked at 2013-03-20T08:54:03-04:00 - No changes to report
+Checked at 2013-03-20T08:55:02-04:00 - No changes to report
+Checked at 2013-03-20T08:56:03-04:00 - No changes to report
+Checked at 2013-03-20T08:57:02-04:00 - No changes to report
+Checked at 2013-03-20T08:58:03-04:00 - No changes to report
+Checked at 2013-03-20T08:59:02-04:00 - No changes to report
+Checked at 2013-03-20T09:00:03-04:00 - No changes to report
+Checked at 2013-03-20T09:01:03-04:00 - No changes to report
+Checked at 2013-03-20T09:02:04-04:00 - No changes to report
+Checked at 2013-03-20T09:03:02-04:00 - No changes to report
+Checked at 2013-03-20T09:04:03-04:00 - No changes to report
+Checked at 2013-03-20T09:05:02-04:00 - No changes to report
+Checked at 2013-03-20T09:06:03-04:00 - No changes to report
+Checked at 2013-03-20T09:07:02-04:00 - No changes to report
+Checked at 2013-03-20T09:08:03-04:00 - No changes to report
+Checked at 2013-03-20T09:09:02-04:00 - No changes to report
+Checked at 2013-03-20T09:10:03-04:00 - No changes to report
+Checked at 2013-03-20T09:11:02-04:00 - No changes to report
+Checked at 2013-03-20T09:12:03-04:00 - No changes to report
+Checked at 2013-03-20T09:13:03-04:00 - No changes to report
+Checked at 2013-03-20T09:14:04-04:00 - No changes to report
+Checked at 2013-03-20T09:15:03-04:00 - No changes to report
+Checked at 2013-03-20T09:16:02-04:00 - No changes to report
+Checked at 2013-03-20T09:17:03-04:00 - No changes to report
+Checked at 2013-03-20T09:18:04-04:00 - No changes to report
+Checked at 2013-03-20T09:19:03-04:00 - No changes to report
+Checked at 2013-03-20T09:20:03-04:00 - No changes to report
+Checked at 2013-03-20T09:21:03-04:00 - No changes to report
+Checked at 2013-03-20T09:22:04-04:00 - No changes to report
+Checked at 2013-03-20T09:23:03-04:00 - No changes to report
+Checked at 2013-03-20T09:24:03-04:00 - No changes to report
+Checked at 2013-03-20T09:25:04-04:00 - No changes to report
+Checked at 2013-03-20T09:26:04-04:00 - No changes to report
+Checked at 2013-03-20T09:27:03-04:00 - No changes to report
+Checked at 2013-03-20T09:28:04-04:00 - No changes to report
+Checked at 2013-03-20T09:29:03-04:00 - No changes to report
+Checked at 2013-03-20T09:30:05-04:00 - No changes to report
+Checked at 2013-03-20T09:31:02-04:00 - No changes to report
+Checked at 2013-03-20T09:32:03-04:00 - No changes to report
+Checked at 2013-03-20T09:33:04-04:00 - No changes to report
+Checked at 2013-03-20T09:34:03-04:00 - No changes to report
+Checked at 2013-03-20T09:35:03-04:00 - No changes to report
+Checked at 2013-03-20T09:36:04-04:00 - No changes to report
+Checked at 2013-03-20T09:37:03-04:00 - No changes to report
+Checked at 2013-03-20T09:38:03-04:00 - No changes to report
+Checked at 2013-03-20T09:39:03-04:00 - No changes to report
+Checked at 2013-03-20T09:54:05-04:00 - No changes to report
+Checked at 2013-03-20T09:55:03-04:00 - No changes to report
+Checked at 2013-03-20T09:56:04-04:00 - No changes to report
+Checked at 2013-03-20T09:57:04-04:00 - No changes to report
+Checked at 2013-03-20T09:58:27-04:00 - No changes to report
+Checked at 2013-03-20T09:59:04-04:00 - No changes to report
+Checked at 2013-03-20T10:00:04-04:00 - No changes to report
+Checked at 2013-03-20T10:01:03-04:00 - No changes to report
+Checked at 2013-03-20T10:02:04-04:00 - No changes to report
+Checked at 2013-03-20T10:03:03-04:00 - No changes to report
+Checked at 2013-03-20T10:04:03-04:00 - No changes to report
+Checked at 2013-03-20T10:05:04-04:00 - No changes to report
+Checked at 2013-03-20T10:06:03-04:00 - No changes to report
+Checked at 2013-03-20T10:07:05-04:00 - No changes to report
+Checked at 2013-03-20T10:08:03-04:00 - No changes to report
+Checked at 2013-03-20T10:09:03-04:00 - No changes to report
+Checked at 2013-03-20T10:10:04-04:00 - No changes to report
+Checked at 2013-03-20T10:11:03-04:00 - No changes to report
+Checked at 2013-03-20T10:12:04-04:00 - No changes to report
+Checked at 2013-03-20T10:13:03-04:00 - No changes to report
+Checked at 2013-03-20T10:14:04-04:00 - No changes to report
+Checked at 2013-03-20T10:15:04-04:00 - No changes to report
+Checked at 2013-03-20T10:16:03-04:00 - No changes to report
+Checked at 2013-03-20T10:17:07-04:00 - No changes to report
+Checked at 2013-03-20T10:18:04-04:00 - No changes to report
+Checked at 2013-03-20T10:19:03-04:00 - No changes to report
+Checked at 2013-03-20T10:20:03-04:00 - No changes to report
+Checked at 2013-03-20T10:21:05-04:00 - No changes to report
+Checked at 2013-03-20T10:30:59-04:00 - No changes to report
+Checked at 2013-03-20T10:31:04-04:00 - No changes to report
+Checked at 2013-03-20T10:32:04-04:00 - No changes to report
+Checked at 2013-03-20T10:33:03-04:00 - No changes to report
+Checked at 2013-03-20T10:34:04-04:00 - No changes to report
+Checked at 2013-03-20T10:35:05-04:00 - No changes to report
+Checked at 2013-03-20T10:36:04-04:00 - No changes to report
+Checked at 2013-03-20T10:37:03-04:00 - No changes to report
+Checked at 2013-03-20T10:38:05-04:00 - No changes to report
+Checked at 2013-03-20T10:39:04-04:00 - No changes to report
+Checked at 2013-03-20T10:40:03-04:00 - No changes to report
+Checked at 2013-03-20T10:41:03-04:00 - No changes to report
+Checked at 2013-03-20T10:42:04-04:00 - No changes to report
+Checked at 2013-03-20T10:43:03-04:00 - No changes to report
+Checked at 2013-03-20T10:44:04-04:00 - No changes to report
+Checked at 2013-03-20T10:45:04-04:00 - No changes to report
+Checked at 2013-03-20T10:46:04-04:00 - No changes to report
+Checked at 2013-03-20T10:47:04-04:00 - No changes to report
+Checked at 2013-03-20T10:48:03-04:00 - No changes to report
+Checked at 2013-03-20T10:49:03-04:00 - No changes to report
+Checked at 2013-03-20T10:51:04-04:00 - No changes to report
+Checked at 2013-03-20T10:52:04-04:00 - No changes to report
+Checked at 2013-03-20T10:53:03-04:00 - No changes to report
+Checked at 2013-03-20T10:54:06-04:00 - No changes to report
+Checked at 2013-03-20T10:55:04-04:00 - No changes to report
+Checked at 2013-03-20T10:56:03-04:00 - No changes to report
+Checked at 2013-03-20T10:57:03-04:00 - No changes to report
+Checked at 2013-03-20T10:58:03-04:00 - No changes to report
+Checked at 2013-03-20T10:59:05-04:00 - No changes to report
+Checked at 2013-03-20T11:00:04-04:00 - No changes to report
+Checked at 2013-03-20T11:01:04-04:00 - No changes to report
+Checked at 2013-03-20T11:02:03-04:00 - No changes to report
+Checked at 2013-03-20T11:03:07-04:00 - No changes to report
+Checked at 2013-03-20T11:04:03-04:00 - No changes to report
+Checked at 2013-03-20T11:05:02-04:00 - No changes to report
+Checked at 2013-03-20T11:06:03-04:00 - No changes to report
+Checked at 2013-03-20T11:07:03-04:00 - No changes to report
+Checked at 2013-03-20T11:08:02-04:00 - No changes to report
+Checked at 2013-03-20T11:09:02-04:00 - No changes to report
+Checked at 2013-03-20T11:10:03-04:00 - No changes to report
+Checked at 2013-03-20T11:11:02-04:00 - No changes to report
+Checked at 2013-03-20T11:12:05-04:00 - No changes to report
+Checked at 2013-03-20T11:13:03-04:00 - No changes to report
+Checked at 2013-03-20T11:14:03-04:00 - No changes to report
+Checked at 2013-03-20T11:15:03-04:00 - No changes to report
+Checked at 2013-03-20T11:16:03-04:00 - No changes to report
+Checked at 2013-03-20T11:17:02-04:00 - No changes to report
+Checked at 2013-03-20T11:18:03-04:00 - No changes to report
+Checked at 2013-03-20T11:19:02-04:00 - No changes to report
+Checked at 2013-03-20T11:20:03-04:00 - No changes to report
+Checked at 2013-03-20T11:21:02-04:00 - No changes to report
+Checked at 2013-03-20T11:22:03-04:00 - No changes to report
+Checked at 2013-03-20T11:23:02-04:00 - No changes to report
+Checked at 2013-03-20T11:24:03-04:00 - No changes to report
+Checked at 2013-03-20T11:25:03-04:00 - No changes to report
+Checked at 2013-03-20T11:26:03-04:00 - No changes to report
+Checked at 2013-03-20T11:27:03-04:00 - No changes to report
+Checked at 2013-03-20T11:28:02-04:00 - No changes to report
+Checked at 2013-03-20T11:29:03-04:00 - No changes to report
+Checked at 2013-03-20T11:30:03-04:00 - No changes to report
+Checked at 2013-03-20T11:32:02-04:00 - No changes to report
+Checked at 2013-03-20T11:34:04-04:00 - No changes to report
+Checked at 2013-03-20T11:35:02-04:00 - No changes to report
+Checked at 2013-03-20T11:36:03-04:00 - No changes to report
+Checked at 2013-03-20T11:37:03-04:00 - No changes to report
+Checked at 2013-03-20T11:38:02-04:00 - No changes to report
+Checked at 2013-03-20T11:39:03-04:00 - No changes to report
+Checked at 2013-03-20T11:40:03-04:00 - No changes to report
+Checked at 2013-03-20T11:41:03-04:00 - No changes to report
+Checked at 2013-03-20T11:42:02-04:00 - No changes to report
+Checked at 2013-03-20T11:43:03-04:00 - No changes to report
+Checked at 2013-03-20T11:44:03-04:00 - No changes to report
+Checked at 2013-03-20T11:45:02-04:00 - No changes to report
+Checked at 2013-03-20T11:46:03-04:00 - No changes to report
+Checked at 2013-03-20T11:47:02-04:00 - No changes to report
+Checked at 2013-03-20T11:48:03-04:00 - No changes to report
+Checked at 2013-03-20T11:49:03-04:00 - No changes to report
+Checked at 2013-03-20T11:50:03-04:00 - No changes to report
+Checked at 2013-03-20T11:51:03-04:00 - No changes to report
+Checked at 2013-03-20T11:52:03-04:00 - No changes to report
+Checked at 2013-03-20T11:53:03-04:00 - No changes to report
+Checked at 2013-03-20T11:54:03-04:00 - No changes to report
+Checked at 2013-03-20T11:55:03-04:00 - No changes to report
+Checked at 2013-03-20T11:56:07-04:00 - No changes to report
+Checked at 2013-03-20T11:57:03-04:00 - No changes to report
+Checked at 2013-03-20T11:58:02-04:00 - No changes to report
+Checked at 2013-03-20T11:59:03-04:00 - No changes to report
+Checked at 2013-03-20T12:00:03-04:00 - No changes to report
+Checked at 2013-03-20T12:01:03-04:00 - No changes to report
+Checked at 2013-03-20T12:02:03-04:00 - No changes to report
+Checked at 2013-03-20T12:03:03-04:00 - No changes to report
+Checked at 2013-03-20T12:04:03-04:00 - No changes to report
+Checked at 2013-03-20T12:05:02-04:00 - No changes to report
+Checked at 2013-03-20T12:06:03-04:00 - No changes to report
+Checked at 2013-03-20T12:07:03-04:00 - No changes to report
+Checked at 2013-03-20T12:08:02-04:00 - No changes to report
+Checked at 2013-03-20T12:09:04-04:00 - No changes to report
+Checked at 2013-03-20T12:10:03-04:00 - No changes to report
+Checked at 2013-03-20T12:11:03-04:00 - No changes to report
+Checked at 2013-03-20T12:12:02-04:00 - No changes to report
+Checked at 2013-03-20T12:13:03-04:00 - No changes to report
+Checked at 2013-03-20T12:14:03-04:00 - No changes to report
+Message sent!
+Site changed!
+Message sent!
+Site changed!
+Message sent!
+Site changed!
+Message sent!
+Site changed!
+Checked at 2013-03-20T12:29:03-04:00 - No changes to report
+Checked at 2013-03-20T12:30:03-04:00 - No changes to report
+Checked at 2013-03-20T12:31:03-04:00 - No changes to report
+Checked at 2013-03-20T12:32:03-04:00 - No changes to report
+Checked at 2013-03-20T12:33:04-04:00 - No changes to report
+Checked at 2013-03-20T12:34:03-04:00 - No changes to report
+Checked at 2013-03-20T12:35:04-04:00 - No changes to report
+Checked at 2013-03-20T12:36:03-04:00 - No changes to report
+Checked at 2013-03-20T12:37:03-04:00 - No changes to report
+Checked at 2013-03-20T12:38:03-04:00 - No changes to report
+Checked at 2013-03-20T12:39:03-04:00 - No changes to report
+Checked at 2013-03-20T12:40:03-04:00 - No changes to report
+Checked at 2013-03-20T12:41:03-04:00 - No changes to report
+Checked at 2013-03-20T12:42:04-04:00 - No changes to report
+Checked at 2013-03-20T12:43:03-04:00 - No changes to report
+Checked at 2013-03-20T12:44:03-04:00 - No changes to report
+Checked at 2013-03-20T12:45:02-04:00 - No changes to report
+Checked at 2013-03-20T12:46:03-04:00 - No changes to report
+Checked at 2013-03-20T12:47:03-04:00 - No changes to report
+Checked at 2013-03-20T12:48:03-04:00 - No changes to report
+Checked at 2013-03-20T12:50:07-04:00 - No changes to report
+Checked at 2013-03-20T12:51:02-04:00 - No changes to report
+Checked at 2013-03-20T12:52:03-04:00 - No changes to report
+Checked at 2013-03-20T12:53:05-04:00 - No changes to report
+Checked at 2013-03-20T12:54:02-04:00 - No changes to report
+Checked at 2013-03-20T12:56:03-04:00 - No changes to report
+Checked at 2013-03-20T12:57:03-04:00 - No changes to report
+Checked at 2013-03-20T12:58:03-04:00 - No changes to report
+Checked at 2013-03-20T12:59:03-04:00 - No changes to report
+Checked at 2013-03-20T13:00:03-04:00 - No changes to report
+Checked at 2013-03-20T13:01:02-04:00 - No changes to report
+Checked at 2013-03-20T13:02:03-04:00 - No changes to report
+Checked at 2013-03-20T13:03:03-04:00 - No changes to report
+Checked at 2013-03-20T13:04:03-04:00 - No changes to report
+Checked at 2013-03-20T13:05:03-04:00 - No changes to report
+Checked at 2013-03-20T13:06:02-04:00 - No changes to report
+Checked at 2013-03-20T13:07:05-04:00 - No changes to report
+Checked at 2013-03-20T13:08:02-04:00 - No changes to report
+Checked at 2013-03-20T13:09:03-04:00 - No changes to report
+Checked at 2013-03-20T13:10:03-04:00 - No changes to report
+Checked at 2013-03-20T13:11:03-04:00 - No changes to report
+Checked at 2013-03-20T13:12:02-04:00 - No changes to report
+Checked at 2013-03-20T13:13:03-04:00 - No changes to report
+Checked at 2013-03-20T13:14:02-04:00 - No changes to report
+Checked at 2013-03-20T13:15:03-04:00 - No changes to report
+Checked at 2013-03-20T13:16:02-04:00 - No changes to report
+Checked at 2013-03-20T13:17:03-04:00 - No changes to report
+Checked at 2013-03-20T13:18:03-04:00 - No changes to report
+Checked at 2013-03-20T13:19:03-04:00 - No changes to report
+Checked at 2013-03-20T13:20:02-04:00 - No changes to report
+Checked at 2013-03-20T13:21:02-04:00 - No changes to report
+Checked at 2013-03-20T13:22:03-04:00 - No changes to report
+Checked at 2013-03-20T13:23:03-04:00 - No changes to report
+Checked at 2013-03-20T13:24:04-04:00 - No changes to report
+Checked at 2013-03-20T13:25:03-04:00 - No changes to report
+Checked at 2013-03-20T13:26:02-04:00 - No changes to report
+Checked at 2013-03-20T13:27:03-04:00 - No changes to report
+Checked at 2013-03-20T13:28:03-04:00 - No changes to report
+Checked at 2013-03-20T13:29:02-04:00 - No changes to report
+Checked at 2013-03-20T13:30:03-04:00 - No changes to report
+Checked at 2013-03-20T13:31:02-04:00 - No changes to report
+Checked at 2013-03-20T13:32:03-04:00 - No changes to report
+Checked at 2013-03-20T13:33:03-04:00 - No changes to report
+Checked at 2013-03-20T13:34:02-04:00 - No changes to report
+Checked at 2013-03-20T13:35:02-04:00 - No changes to report
+Checked at 2013-03-20T13:36:04-04:00 - No changes to report
+Checked at 2013-03-20T13:37:03-04:00 - No changes to report
+Checked at 2013-03-20T13:38:03-04:00 - No changes to report
+Checked at 2013-03-20T13:39:03-04:00 - No changes to report
+Checked at 2013-03-20T13:40:02-04:00 - No changes to report
+Checked at 2013-03-20T13:41:04-04:00 - No changes to report
+Checked at 2013-03-20T13:42:02-04:00 - No changes to report
+Checked at 2013-03-20T13:43:02-04:00 - No changes to report
+Checked at 2013-03-20T13:44:03-04:00 - No changes to report
+Checked at 2013-03-20T13:45:03-04:00 - No changes to report
+Checked at 2013-03-20T13:46:03-04:00 - No changes to report
+Checked at 2013-03-20T13:47:02-04:00 - No changes to report
+Checked at 2013-03-20T13:48:03-04:00 - No changes to report
+Checked at 2013-03-20T13:49:03-04:00 - No changes to report
+Checked at 2013-03-20T13:50:02-04:00 - No changes to report
+Checked at 2013-03-20T13:51:03-04:00 - No changes to report
+Checked at 2013-03-20T13:52:02-04:00 - No changes to report
+Checked at 2013-03-20T13:53:04-04:00 - No changes to report
+Checked at 2013-03-20T13:54:02-04:00 - No changes to report
+Checked at 2013-03-20T13:55:04-04:00 - No changes to report
+Checked at 2013-03-20T13:56:04-04:00 - No changes to report
+Checked at 2013-03-20T13:57:03-04:00 - No changes to report
+Checked at 2013-03-20T13:58:03-04:00 - No changes to report
+Checked at 2013-03-20T13:59:03-04:00 - No changes to report
+Checked at 2013-03-20T14:00:04-04:00 - No changes to report
+Checked at 2013-03-20T14:01:03-04:00 - No changes to report
+Checked at 2013-03-20T14:02:07-04:00 - No changes to report
+Checked at 2013-03-20T14:03:04-04:00 - No changes to report
+Checked at 2013-03-20T14:04:03-04:00 - No changes to report
+Checked at 2013-03-20T14:05:05-04:00 - No changes to report
+Checked at 2013-03-20T14:06:03-04:00 - No changes to report
+Checked at 2013-03-20T14:07:04-04:00 - No changes to report
+Checked at 2013-03-20T14:08:03-04:00 - No changes to report
+Checked at 2013-03-20T14:09:04-04:00 - No changes to report
+Checked at 2013-03-20T14:10:04-04:00 - No changes to report
+Checked at 2013-03-20T14:11:02-04:00 - No changes to report
+Checked at 2013-03-20T14:12:02-04:00 - No changes to report
+Checked at 2013-03-20T14:13:03-04:00 - No changes to report
+Checked at 2013-03-20T14:14:03-04:00 - No changes to report
+Checked at 2013-03-20T14:15:03-04:00 - No changes to report
+Checked at 2013-03-20T14:16:02-04:00 - No changes to report
+Checked at 2013-03-20T14:17:03-04:00 - No changes to report
+Checked at 2013-03-20T14:18:03-04:00 - No changes to report
+Checked at 2013-03-20T14:19:03-04:00 - No changes to report
+Checked at 2013-03-20T14:20:04-04:00 - No changes to report
+Checked at 2013-03-20T14:21:03-04:00 - No changes to report
+Checked at 2013-03-20T14:22:04-04:00 - No changes to report
+Checked at 2013-03-20T14:23:03-04:00 - No changes to report
+Checked at 2013-03-20T14:24:03-04:00 - No changes to report
+Checked at 2013-03-20T14:25:03-04:00 - No changes to report
+Checked at 2013-03-20T14:26:03-04:00 - No changes to report
+Checked at 2013-03-20T14:27:03-04:00 - No changes to report
+Checked at 2013-03-20T14:28:04-04:00 - No changes to report
+Checked at 2013-03-20T14:29:06-04:00 - No changes to report
+Checked at 2013-03-20T14:30:03-04:00 - No changes to report
+Checked at 2013-03-20T14:31:03-04:00 - No changes to report
+Checked at 2013-03-20T14:32:04-04:00 - No changes to report
+Checked at 2013-03-20T14:33:03-04:00 - No changes to report
+Checked at 2013-03-20T14:34:04-04:00 - No changes to report
+Checked at 2013-03-20T14:35:03-04:00 - No changes to report
+Checked at 2013-03-20T14:36:03-04:00 - No changes to report
+Checked at 2013-03-20T14:37:03-04:00 - No changes to report
+Checked at 2013-03-20T14:38:04-04:00 - No changes to report
+Checked at 2013-03-20T14:39:05-04:00 - No changes to report
+Checked at 2013-03-20T14:40:04-04:00 - No changes to report
+Checked at 2013-03-20T14:41:05-04:00 - No changes to report
+Checked at 2013-03-20T14:42:04-04:00 - No changes to report
+Checked at 2013-03-20T14:43:05-04:00 - No changes to report
+Checked at 2013-03-20T14:44:04-04:00 - No changes to report
+Checked at 2013-03-20T14:45:04-04:00 - No changes to report
+Checked at 2013-03-20T14:46:05-04:00 - No changes to report
+Checked at 2013-03-20T14:47:03-04:00 - No changes to report
+Checked at 2013-03-20T14:48:03-04:00 - No changes to report
+Checked at 2013-03-20T14:49:06-04:00 - No changes to report
+Checked at 2013-03-20T14:50:04-04:00 - No changes to report
+Checked at 2013-03-20T14:51:05-04:00 - No changes to report
+Checked at 2013-03-20T14:52:03-04:00 - No changes to report
+Checked at 2013-03-20T14:53:03-04:00 - No changes to report
+Checked at 2013-03-20T14:54:05-04:00 - No changes to report
+Checked at 2013-03-20T14:55:03-04:00 - No changes to report
+Checked at 2013-03-20T14:56:02-04:00 - No changes to report
+Checked at 2013-03-20T14:57:03-04:00 - No changes to report
+Checked at 2013-03-20T14:58:03-04:00 - No changes to report
+Checked at 2013-03-20T14:59:04-04:00 - No changes to report
+Checked at 2013-03-20T15:00:02-04:00 - No changes to report
+Checked at 2013-03-20T15:01:03-04:00 - No changes to report
+Checked at 2013-03-20T15:02:04-04:00 - No changes to report
+Checked at 2013-03-20T15:03:03-04:00 - No changes to report
+Checked at 2013-03-20T15:04:03-04:00 - No changes to report
+Checked at 2013-03-20T15:05:03-04:00 - No changes to report
+Checked at 2013-03-20T15:06:02-04:00 - No changes to report
+Checked at 2013-03-20T15:07:04-04:00 - No changes to report
+Checked at 2013-03-20T15:08:03-04:00 - No changes to report
+Checked at 2013-03-20T15:09:03-04:00 - No changes to report
+Checked at 2013-03-20T15:10:04-04:00 - No changes to report
+Checked at 2013-03-20T15:11:04-04:00 - No changes to report
+Checked at 2013-03-20T15:12:03-04:00 - No changes to report
+Checked at 2013-03-20T15:13:03-04:00 - No changes to report
+Checked at 2013-03-20T15:14:05-04:00 - No changes to report
+Checked at 2013-03-20T15:15:03-04:00 - No changes to report
+Checked at 2013-03-20T15:16:04-04:00 - No changes to report
+Checked at 2013-03-20T15:17:04-04:00 - No changes to report
+Checked at 2013-03-20T15:18:04-04:00 - No changes to report
+Checked at 2013-03-20T15:19:04-04:00 - No changes to report
+Checked at 2013-03-20T15:20:03-04:00 - No changes to report
+Checked at 2013-03-20T15:21:03-04:00 - No changes to report
+Checked at 2013-03-20T15:22:04-04:00 - No changes to report
+Checked at 2013-03-20T15:23:04-04:00 - No changes to report
+Checked at 2013-03-20T15:24:03-04:00 - No changes to report
+Checked at 2013-03-20T15:25:03-04:00 - No changes to report
+Checked at 2013-03-20T15:26:04-04:00 - No changes to report
+Checked at 2013-03-20T15:27:02-04:00 - No changes to report
+Checked at 2013-03-20T15:28:03-04:00 - No changes to report
+Checked at 2013-03-20T15:29:03-04:00 - No changes to report
+Checked at 2013-03-20T15:30:03-04:00 - No changes to report
+Checked at 2013-03-20T15:31:03-04:00 - No changes to report
+Checked at 2013-03-20T15:32:03-04:00 - No changes to report
+Checked at 2013-03-20T15:33:03-04:00 - No changes to report
+Checked at 2013-03-20T15:34:02-04:00 - No changes to report
+Checked at 2013-03-20T15:35:03-04:00 - No changes to report
+Checked at 2013-03-20T15:36:03-04:00 - No changes to report
+Checked at 2013-03-20T15:37:04-04:00 - No changes to report
+Checked at 2013-03-20T15:38:02-04:00 - No changes to report
+Checked at 2013-03-20T15:39:04-04:00 - No changes to report
+Checked at 2013-03-20T15:40:02-04:00 - No changes to report
+Checked at 2013-03-20T15:41:03-04:00 - No changes to report
+Checked at 2013-03-20T15:42:02-04:00 - No changes to report
+Checked at 2013-03-20T15:43:04-04:00 - No changes to report
+Checked at 2013-03-20T15:44:03-04:00 - No changes to report
+Checked at 2013-03-20T15:45:04-04:00 - No changes to report
+Checked at 2013-03-20T15:46:03-04:00 - No changes to report
+Checked at 2013-03-20T15:47:06-04:00 - No changes to report
+Checked at 2013-03-20T15:48:03-04:00 - No changes to report
+Checked at 2013-03-20T15:49:03-04:00 - No changes to report
+Checked at 2013-03-20T15:50:04-04:00 - No changes to report
+Checked at 2013-03-20T15:51:03-04:00 - No changes to report
+Checked at 2013-03-20T15:52:03-04:00 - No changes to report
+Checked at 2013-03-20T15:53:04-04:00 - No changes to report
+Checked at 2013-03-20T15:54:03-04:00 - No changes to report
+Checked at 2013-03-20T15:55:04-04:00 - No changes to report
+Checked at 2013-03-20T15:56:06-04:00 - No changes to report
+Checked at 2013-03-20T15:57:03-04:00 - No changes to report
+Checked at 2013-03-20T15:58:03-04:00 - No changes to report
+Checked at 2013-03-20T15:59:03-04:00 - No changes to report
+Checked at 2013-03-20T16:00:04-04:00 - No changes to report
+Checked at 2013-03-20T16:01:04-04:00 - No changes to report
+Checked at 2013-03-20T16:02:03-04:00 - No changes to report
+Checked at 2013-03-20T16:03:03-04:00 - No changes to report
+Checked at 2013-03-20T16:04:03-04:00 - No changes to report
+Checked at 2013-03-20T16:05:04-04:00 - No changes to report
+Checked at 2013-03-20T16:06:04-04:00 - No changes to report
+Checked at 2013-03-20T16:07:04-04:00 - No changes to report
+Checked at 2013-03-20T16:08:03-04:00 - No changes to report
+Checked at 2013-03-20T16:09:04-04:00 - No changes to report
+Checked at 2013-03-20T16:10:04-04:00 - No changes to report
+Checked at 2013-03-20T16:11:03-04:00 - No changes to report
+Checked at 2013-03-20T16:12:03-04:00 - No changes to report
+Checked at 2013-03-20T16:13:04-04:00 - No changes to report
+Checked at 2013-03-20T16:14:04-04:00 - No changes to report
+Checked at 2013-03-20T16:15:04-04:00 - No changes to report
+Checked at 2013-03-20T16:16:03-04:00 - No changes to report
+Checked at 2013-03-20T16:17:03-04:00 - No changes to report
+Checked at 2013-03-20T16:18:04-04:00 - No changes to report
+Checked at 2013-03-20T16:19:03-04:00 - No changes to report
+Checked at 2013-03-20T16:20:04-04:00 - No changes to report
+Checked at 2013-03-20T16:21:03-04:00 - No changes to report
+Checked at 2013-03-20T16:22:03-04:00 - No changes to report
+Checked at 2013-03-20T16:23:04-04:00 - No changes to report
+Checked at 2013-03-20T16:24:04-04:00 - No changes to report
+Checked at 2013-03-20T16:25:07-04:00 - No changes to report
+Checked at 2013-03-20T16:26:04-04:00 - No changes to report
+Checked at 2013-03-20T16:27:04-04:00 - No changes to report
+Checked at 2013-03-20T16:28:04-04:00 - No changes to report
+Checked at 2013-03-20T16:29:04-04:00 - No changes to report
+Checked at 2013-03-20T16:30:03-04:00 - No changes to report
+Checked at 2013-03-20T16:31:03-04:00 - No changes to report
+Checked at 2013-03-20T16:32:03-04:00 - No changes to report
+Checked at 2013-03-20T16:33:02-04:00 - No changes to report
+Checked at 2013-03-20T16:34:02-04:00 - No changes to report
+Checked at 2013-03-20T16:35:06-04:00 - No changes to report
+Checked at 2013-03-20T16:36:04-04:00 - No changes to report
+Checked at 2013-03-20T16:37:02-04:00 - No changes to report
+Checked at 2013-03-20T16:38:03-04:00 - No changes to report
+Checked at 2013-03-20T16:39:04-04:00 - No changes to report
+Checked at 2013-03-20T16:40:05-04:00 - No changes to report
+Checked at 2013-03-20T16:41:03-04:00 - No changes to report
+Checked at 2013-03-20T16:42:04-04:00 - No changes to report
+Checked at 2013-03-20T16:43:02-04:00 - No changes to report
+Checked at 2013-03-20T16:44:03-04:00 - No changes to report
+Checked at 2013-03-20T16:45:04-04:00 - No changes to report
+Checked at 2013-03-20T16:46:05-04:00 - No changes to report
+Checked at 2013-03-20T16:47:03-04:00 - No changes to report
+Checked at 2013-03-20T16:48:04-04:00 - No changes to report
+Checked at 2013-03-20T16:49:04-04:00 - No changes to report
+Checked at 2013-03-20T16:50:03-04:00 - No changes to report
+Checked at 2013-03-20T16:51:03-04:00 - No changes to report
+Checked at 2013-03-20T16:52:03-04:00 - No changes to report
+Checked at 2013-03-20T16:53:03-04:00 - No changes to report
+Checked at 2013-03-20T16:54:05-04:00 - No changes to report
+Checked at 2013-03-20T16:55:03-04:00 - No changes to report
+Checked at 2013-03-20T16:56:03-04:00 - No changes to report
+Checked at 2013-03-20T16:57:06-04:00 - No changes to report
+Checked at 2013-03-20T16:58:03-04:00 - No changes to report
+Checked at 2013-03-20T16:59:03-04:00 - No changes to report
+Checked at 2013-03-20T17:00:05-04:00 - No changes to report
+Checked at 2013-03-20T17:01:04-04:00 - No changes to report
+Checked at 2013-03-20T17:02:05-04:00 - No changes to report
+Checked at 2013-03-20T17:03:03-04:00 - No changes to report
+Checked at 2013-03-20T17:04:04-04:00 - No changes to report
+Checked at 2013-03-20T17:05:05-04:00 - No changes to report
+Checked at 2013-03-20T17:06:02-04:00 - No changes to report
+Checked at 2013-03-20T17:07:03-04:00 - No changes to report
+Checked at 2013-03-20T17:08:04-04:00 - No changes to report
+Checked at 2013-03-20T17:09:03-04:00 - No changes to report
+Checked at 2013-03-20T17:10:04-04:00 - No changes to report
+Checked at 2013-03-20T17:11:04-04:00 - No changes to report
+Checked at 2013-03-20T17:12:03-04:00 - No changes to report
+Checked at 2013-03-20T17:13:03-04:00 - No changes to report
+Checked at 2013-03-20T17:14:05-04:00 - No changes to report
+Checked at 2013-03-20T17:15:03-04:00 - No changes to report
+Checked at 2013-03-20T17:16:03-04:00 - No changes to report
+Checked at 2013-03-20T17:17:04-04:00 - No changes to report
+Checked at 2013-03-20T17:18:03-04:00 - No changes to report
+Checked at 2013-03-20T17:19:03-04:00 - No changes to report
+Checked at 2013-03-20T17:20:04-04:00 - No changes to report
+Checked at 2013-03-20T17:21:02-04:00 - No changes to report
+Checked at 2013-03-20T17:22:03-04:00 - No changes to report
+Checked at 2013-03-20T17:23:03-04:00 - No changes to report
+Checked at 2013-03-20T17:24:05-04:00 - No changes to report
+Checked at 2013-03-20T17:25:03-04:00 - No changes to report
+Checked at 2013-03-20T17:26:03-04:00 - No changes to report
+Checked at 2013-03-20T17:27:02-04:00 - No changes to report
+Checked at 2013-03-20T17:28:03-04:00 - No changes to report
+Checked at 2013-03-20T17:29:04-04:00 - No changes to report
+Checked at 2013-03-20T17:30:03-04:00 - No changes to report
+Checked at 2013-03-20T17:31:05-04:00 - No changes to report
+Checked at 2013-03-20T17:32:04-04:00 - No changes to report
+Checked at 2013-03-20T17:33:03-04:00 - No changes to report
+Checked at 2013-03-20T17:34:06-04:00 - No changes to report
+Checked at 2013-03-20T17:35:02-04:00 - No changes to report
+Checked at 2013-03-20T17:36:04-04:00 - No changes to report
+Checked at 2013-03-20T17:37:04-04:00 - No changes to report
+Checked at 2013-03-20T17:38:04-04:00 - No changes to report
+Checked at 2013-03-20T17:39:03-04:00 - No changes to report
+Checked at 2013-03-20T17:40:03-04:00 - No changes to report
+Checked at 2013-03-20T17:41:04-04:00 - No changes to report
+Checked at 2013-03-20T17:42:05-04:00 - No changes to report
+Checked at 2013-03-20T17:43:04-04:00 - No changes to report
+Checked at 2013-03-20T17:44:03-04:00 - No changes to report
+Checked at 2013-03-20T17:45:04-04:00 - No changes to report
+Checked at 2013-03-20T17:46:03-04:00 - No changes to report
+Checked at 2013-03-20T17:47:03-04:00 - No changes to report
+Checked at 2013-03-20T17:48:03-04:00 - No changes to report
+Checked at 2013-03-20T17:49:03-04:00 - No changes to report
+Checked at 2013-03-20T17:50:02-04:00 - No changes to report
+Checked at 2013-03-20T17:51:05-04:00 - No changes to report
+Checked at 2013-03-20T17:52:02-04:00 - No changes to report
+Checked at 2013-03-20T17:53:04-04:00 - No changes to report
+Checked at 2013-03-20T17:54:04-04:00 - No changes to report
+Checked at 2013-03-20T17:55:02-04:00 - No changes to report
+Checked at 2013-03-20T17:56:03-04:00 - No changes to report
+Checked at 2013-03-20T17:57:04-04:00 - No changes to report
+Checked at 2013-03-20T17:58:02-04:00 - No changes to report
+Checked at 2013-03-20T17:59:03-04:00 - No changes to report
+Checked at 2013-03-20T18:00:06-04:00 - No changes to report
+Checked at 2013-03-20T18:01:03-04:00 - No changes to report
+Checked at 2013-03-20T18:02:04-04:00 - No changes to report
+Checked at 2013-03-20T18:03:04-04:00 - No changes to report
+Checked at 2013-03-20T18:04:03-04:00 - No changes to report
+Checked at 2013-03-20T18:05:07-04:00 - No changes to report
+Checked at 2013-03-20T18:06:03-04:00 - No changes to report
+Checked at 2013-03-20T18:07:02-04:00 - No changes to report
+Checked at 2013-03-20T18:08:03-04:00 - No changes to report
+Checked at 2013-03-20T18:09:03-04:00 - No changes to report
+Checked at 2013-03-20T18:10:02-04:00 - No changes to report
+Checked at 2013-03-20T18:11:03-04:00 - No changes to report
+Checked at 2013-03-20T18:12:02-04:00 - No changes to report
+Checked at 2013-03-20T18:13:03-04:00 - No changes to report
+Checked at 2013-03-20T18:14:03-04:00 - No changes to report
+Checked at 2013-03-20T18:15:02-04:00 - No changes to report
+Checked at 2013-03-20T18:16:03-04:00 - No changes to report
+Checked at 2013-03-20T18:17:02-04:00 - No changes to report
+Checked at 2013-03-20T18:18:03-04:00 - No changes to report
+Checked at 2013-03-20T18:19:03-04:00 - No changes to report
+Checked at 2013-03-20T18:20:02-04:00 - No changes to report
+Checked at 2013-03-20T18:21:03-04:00 - No changes to report
+Checked at 2013-03-20T18:22:02-04:00 - No changes to report
+Checked at 2013-03-20T18:23:03-04:00 - No changes to report
+Checked at 2013-03-20T18:24:03-04:00 - No changes to report
+Checked at 2013-03-20T18:25:02-04:00 - No changes to report
+Checked at 2013-03-20T18:26:04-04:00 - No changes to report
+Checked at 2013-03-20T18:27:03-04:00 - No changes to report
+Checked at 2013-03-20T18:28:03-04:00 - No changes to report
+Checked at 2013-03-20T18:29:03-04:00 - No changes to report
+Checked at 2013-03-20T18:30:03-04:00 - No changes to report
+Checked at 2013-03-20T18:31:03-04:00 - No changes to report
+Checked at 2013-03-20T18:32:02-04:00 - No changes to report
+Checked at 2013-03-20T18:33:03-04:00 - No changes to report
+Checked at 2013-03-20T18:34:03-04:00 - No changes to report
+Checked at 2013-03-20T18:35:03-04:00 - No changes to report
+Checked at 2013-03-20T18:36:03-04:00 - No changes to report
+Checked at 2013-03-20T18:37:03-04:00 - No changes to report
+Checked at 2013-03-20T18:38:02-04:00 - No changes to report
+Checked at 2013-03-20T18:39:03-04:00 - No changes to report
+Checked at 2013-03-20T18:40:02-04:00 - No changes to report
+Checked at 2013-03-20T18:41:02-04:00 - No changes to report
+Checked at 2013-03-20T18:42:02-04:00 - No changes to report
+Checked at 2013-03-20T18:43:02-04:00 - No changes to report
+Checked at 2013-03-20T18:44:03-04:00 - No changes to report
+Checked at 2013-03-20T18:45:03-04:00 - No changes to report
+Checked at 2013-03-20T21:36:04-04:00 - No changes to report
+Checked at 2013-03-20T21:37:03-04:00 - No changes to report
+Checked at 2013-03-20T21:38:03-04:00 - No changes to report
+Checked at 2013-03-20T21:39:03-04:00 - No changes to report
+Checked at 2013-03-20T21:40:02-04:00 - No changes to report
+Checked at 2013-03-20T21:41:03-04:00 - No changes to report
+Checked at 2013-03-20T21:42:03-04:00 - No changes to report
+Checked at 2013-03-20T21:43:03-04:00 - No changes to report
+Checked at 2013-03-20T21:44:02-04:00 - No changes to report
+Checked at 2013-03-20T21:45:03-04:00 - No changes to report
+Checked at 2013-03-20T21:46:03-04:00 - No changes to report
+Checked at 2013-03-20T21:47:03-04:00 - No changes to report
+Checked at 2013-03-20T21:48:02-04:00 - No changes to report
+Checked at 2013-03-20T21:49:03-04:00 - No changes to report
+Checked at 2013-03-20T21:50:03-04:00 - No changes to report
+Checked at 2013-03-20T21:51:02-04:00 - No changes to report
+Checked at 2013-03-20T21:52:04-04:00 - No changes to report
+Checked at 2013-03-20T21:53:03-04:00 - No changes to report
+Checked at 2013-03-20T21:54:03-04:00 - No changes to report
+Checked at 2013-03-20T21:55:03-04:00 - No changes to report
+Checked at 2013-03-20T21:56:02-04:00 - No changes to report
+Checked at 2013-03-20T21:57:03-04:00 - No changes to report
+Checked at 2013-03-20T21:58:03-04:00 - No changes to report
+Checked at 2013-03-20T21:59:03-04:00 - No changes to report
+Checked at 2013-03-20T22:00:03-04:00 - No changes to report
+Checked at 2013-03-20T22:01:03-04:00 - No changes to report
+Checked at 2013-03-20T22:02:03-04:00 - No changes to report
+Checked at 2013-03-20T22:03:03-04:00 - No changes to report
+Checked at 2013-03-20T22:04:03-04:00 - No changes to report
+Checked at 2013-03-20T22:05:02-04:00 - No changes to report
+Checked at 2013-03-20T22:35:03-04:00 - No changes to report
+Checked at 2013-03-20T22:36:03-04:00 - No changes to report
+Checked at 2013-03-20T22:37:03-04:00 - No changes to report
+Checked at 2013-03-20T22:38:03-04:00 - No changes to report
+Checked at 2013-03-20T22:39:04-04:00 - No changes to report
+Checked at 2013-03-20T22:40:03-04:00 - No changes to report
+Checked at 2013-03-20T22:41:03-04:00 - No changes to report
+Checked at 2013-03-20T22:42:03-04:00 - No changes to report
+Checked at 2013-03-20T22:43:03-04:00 - No changes to report
+Checked at 2013-03-20T22:44:04-04:00 - No changes to report
+Checked at 2013-03-20T22:49:03-04:00 - No changes to report
+Checked at 2013-03-20T22:50:03-04:00 - No changes to report
+Checked at 2013-03-20T22:51:04-04:00 - No changes to report
+Checked at 2013-03-20T22:52:02-04:00 - No changes to report
+Checked at 2013-03-20T22:53:04-04:00 - No changes to report
+Checked at 2013-03-20T22:54:03-04:00 - No changes to report
+Checked at 2013-03-20T22:55:03-04:00 - No changes to report
+Checked at 2013-03-20T22:56:04-04:00 - No changes to report
+Checked at 2013-03-20T22:57:02-04:00 - No changes to report
+Checked at 2013-03-20T22:58:04-04:00 - No changes to report
+Checked at 2013-03-20T22:59:02-04:00 - No changes to report
+Checked at 2013-03-20T23:00:03-04:00 - No changes to report
+Checked at 2013-03-20T23:01:03-04:00 - No changes to report
+Checked at 2013-03-20T23:02:02-04:00 - No changes to report
+Checked at 2013-03-20T23:03:03-04:00 - No changes to report
+Checked at 2013-03-20T23:04:03-04:00 - No changes to report
+Checked at 2013-03-20T23:05:03-04:00 - No changes to report
+Checked at 2013-03-20T23:06:03-04:00 - No changes to report
+Checked at 2013-03-20T23:07:03-04:00 - No changes to report
+Checked at 2013-03-20T23:08:03-04:00 - No changes to report
+Checked at 2013-03-20T23:09:03-04:00 - No changes to report
+Checked at 2013-03-20T23:10:02-04:00 - No changes to report
+Checked at 2013-03-20T23:11:03-04:00 - No changes to report
+Checked at 2013-03-20T23:12:03-04:00 - No changes to report
+Checked at 2013-03-20T23:13:03-04:00 - No changes to report
+Checked at 2013-03-20T23:14:03-04:00 - No changes to report
+Checked at 2013-03-20T23:15:02-04:00 - No changes to report
+Checked at 2013-03-20T23:16:02-04:00 - No changes to report
+Checked at 2013-03-20T23:17:03-04:00 - No changes to report
+Checked at 2013-03-20T23:18:03-04:00 - No changes to report
+Checked at 2013-03-20T23:19:02-04:00 - No changes to report
+Checked at 2013-03-20T23:20:03-04:00 - No changes to report
+Checked at 2013-03-20T23:21:03-04:00 - No changes to report
+Checked at 2013-03-20T23:22:02-04:00 - No changes to report
+Checked at 2013-03-20T23:23:03-04:00 - No changes to report
+Checked at 2013-03-20T23:24:03-04:00 - No changes to report
+Checked at 2013-03-20T23:25:02-04:00 - No changes to report
+Checked at 2013-03-20T23:26:03-04:00 - No changes to report
+Checked at 2013-03-20T23:27:02-04:00 - No changes to report
+Checked at 2013-03-20T23:28:04-04:00 - No changes to report
+Checked at 2013-03-20T23:29:02-04:00 - No changes to report
+Checked at 2013-03-20T23:30:03-04:00 - No changes to report
+Checked at 2013-03-20T23:31:03-04:00 - No changes to report
+Checked at 2013-03-20T23:32:03-04:00 - No changes to report
+Checked at 2013-03-20T23:33:03-04:00 - No changes to report
+Checked at 2013-03-20T23:34:03-04:00 - No changes to report
+Checked at 2013-03-20T23:35:03-04:00 - No changes to report
+Checked at 2013-03-20T23:36:02-04:00 - No changes to report
+Checked at 2013-03-20T23:37:03-04:00 - No changes to report
+Checked at 2013-03-20T23:38:02-04:00 - No changes to report
+Checked at 2013-03-20T23:39:03-04:00 - No changes to report
+Checked at 2013-03-20T23:40:03-04:00 - No changes to report
+Checked at 2013-03-20T23:41:03-04:00 - No changes to report
+Checked at 2013-03-20T23:42:03-04:00 - No changes to report
+Checked at 2013-03-20T23:43:03-04:00 - No changes to report
+Checked at 2013-03-20T23:44:03-04:00 - No changes to report
+Checked at 2013-03-20T23:45:02-04:00 - No changes to report
+Checked at 2013-03-20T23:46:03-04:00 - No changes to report
+Checked at 2013-03-20T23:47:03-04:00 - No changes to report
+Checked at 2013-03-20T23:48:03-04:00 - No changes to report
+Checked at 2013-03-20T23:49:03-04:00 - No changes to report
+Checked at 2013-03-20T23:50:03-04:00 - No changes to report
+Checked at 2013-03-20T23:51:03-04:00 - No changes to report
+Checked at 2013-03-20T23:52:03-04:00 - No changes to report
+Checked at 2013-03-20T23:53:03-04:00 - No changes to report
+Checked at 2013-03-20T23:54:04-04:00 - No changes to report
+Checked at 2013-03-20T23:55:03-04:00 - No changes to report
+Checked at 2013-03-20T23:56:03-04:00 - No changes to report
+Checked at 2013-03-20T23:57:03-04:00 - No changes to report
+Checked at 2013-03-20T23:58:03-04:00 - No changes to report
+Checked at 2013-03-20T23:59:04-04:00 - No changes to report
+Checked at 2013-03-21T00:00:03-04:00 - No changes to report
+Checked at 2013-03-21T00:30:17-04:00 - No changes to report
+Checked at 2013-03-21T00:31:03-04:00 - No changes to report
+Checked at 2013-03-21T00:32:03-04:00 - No changes to report
+Checked at 2013-03-21T00:33:03-04:00 - No changes to report
+Checked at 2013-03-21T00:34:03-04:00 - No changes to report
+Checked at 2013-03-21T00:35:02-04:00 - No changes to report
+Checked at 2013-03-21T00:36:03-04:00 - No changes to report
+Checked at 2013-03-21T00:37:03-04:00 - No changes to report
+Checked at 2013-03-21T00:38:03-04:00 - No changes to report
+Checked at 2013-03-21T00:39:03-04:00 - No changes to report
+Checked at 2013-03-21T00:40:03-04:00 - No changes to report
+Checked at 2013-03-21T00:41:03-04:00 - No changes to report
+Checked at 2013-03-21T00:42:02-04:00 - No changes to report
+Checked at 2013-03-21T00:43:03-04:00 - No changes to report
+Checked at 2013-03-21T00:44:03-04:00 - No changes to report
+Checked at 2013-03-21T00:45:02-04:00 - No changes to report
+Checked at 2013-03-21T00:46:04-04:00 - No changes to report
+Checked at 2013-03-21T00:47:03-04:00 - No changes to report
+Checked at 2013-03-21T00:48:02-04:00 - No changes to report
+Checked at 2013-03-21T00:49:03-04:00 - No changes to report
+Checked at 2013-03-21T00:50:03-04:00 - No changes to report
+Checked at 2013-03-21T00:51:03-04:00 - No changes to report
+Checked at 2013-03-21T00:52:03-04:00 - No changes to report
+Checked at 2013-03-21T00:53:03-04:00 - No changes to report
+Checked at 2013-03-21T00:54:03-04:00 - No changes to report
+Checked at 2013-03-21T00:55:03-04:00 - No changes to report
+Checked at 2013-03-21T00:56:03-04:00 - No changes to report
+Checked at 2013-03-21T00:57:03-04:00 - No changes to report
+Checked at 2013-03-21T00:58:03-04:00 - No changes to report
+Checked at 2013-03-21T00:59:03-04:00 - No changes to report
+Checked at 2013-03-21T01:00:03-04:00 - No changes to report
+Checked at 2013-03-21T01:01:03-04:00 - No changes to report
+Checked at 2013-03-21T01:02:03-04:00 - No changes to report
+Checked at 2013-03-21T01:03:03-04:00 - No changes to report
+Checked at 2013-03-21T01:04:03-04:00 - No changes to report
+Checked at 2013-03-21T01:05:03-04:00 - No changes to report
+Checked at 2013-03-21T01:06:03-04:00 - No changes to report
+Checked at 2013-03-21T01:07:04-04:00 - No changes to report
+Checked at 2013-03-21T01:08:03-04:00 - No changes to report
+Checked at 2013-03-21T01:09:03-04:00 - No changes to report
+Checked at 2013-03-21T01:10:03-04:00 - No changes to report
+Checked at 2013-03-21T01:11:03-04:00 - No changes to report
+Checked at 2013-03-21T01:12:03-04:00 - No changes to report
+Checked at 2013-03-21T01:13:03-04:00 - No changes to report
+Checked at 2013-03-21T01:14:04-04:00 - No changes to report
+Checked at 2013-03-21T01:15:03-04:00 - No changes to report
+Checked at 2013-03-21T01:16:02-04:00 - No changes to report
+Checked at 2013-03-21T01:17:02-04:00 - No changes to report
+Checked at 2013-03-21T01:18:02-04:00 - No changes to report
+Checked at 2013-03-21T01:19:03-04:00 - No changes to report
+Checked at 2013-03-21T01:20:04-04:00 - No changes to report
+Checked at 2013-03-21T01:21:03-04:00 - No changes to report
+Checked at 2013-03-21T01:22:03-04:00 - No changes to report
+Checked at 2013-03-21T01:23:03-04:00 - No changes to report
+Checked at 2013-03-21T01:24:02-04:00 - No changes to report
+Checked at 2013-03-21T01:25:02-04:00 - No changes to report
+Checked at 2013-03-21T01:26:03-04:00 - No changes to report
+Checked at 2013-03-21T01:27:03-04:00 - No changes to report
+Checked at 2013-03-21T01:28:02-04:00 - No changes to report
+Checked at 2013-03-21T01:29:02-04:00 - No changes to report
+Checked at 2013-03-21T01:30:03-04:00 - No changes to report
+Checked at 2013-03-21T01:40:05-04:00 - No changes to report
+Checked at 2013-03-21T01:41:08-04:00 - No changes to report
+Checked at 2013-03-21T01:48:07-04:00 - No changes to report
+Checked at 2013-03-21T01:48:13-04:00 - No changes to report
+Checked at 2013-03-21T01:49:02-04:00 - No changes to report
+Checked at 2013-03-21T01:50:03-04:00 - No changes to report
+Checked at 2013-03-21T01:51:03-04:00 - No changes to report
+Checked at 2013-03-21T01:52:02-04:00 - No changes to report
+Checked at 2013-03-21T01:53:03-04:00 - No changes to report
+Checked at 2013-03-21T01:54:03-04:00 - No changes to report
+Checked at 2013-03-21T01:55:03-04:00 - No changes to report
+Checked at 2013-03-21T01:56:02-04:00 - No changes to report
+Checked at 2013-03-21T01:57:02-04:00 - No changes to report
+Checked at 2013-03-21T01:58:03-04:00 - No changes to report
+Checked at 2013-03-21T01:59:02-04:00 - No changes to report
+Checked at 2013-03-21T02:00:02-04:00 - No changes to report
+Checked at 2013-03-21T02:07:03-04:00 - No changes to report
+Checked at 2013-03-21T02:08:07-04:00 - No changes to report
+Checked at 2013-03-21T02:09:03-04:00 - No changes to report
+Checked at 2013-03-21T02:10:03-04:00 - No changes to report
+Checked at 2013-03-21T02:11:03-04:00 - No changes to report
+Checked at 2013-03-21T02:12:03-04:00 - No changes to report
+Checked at 2013-03-21T02:13:03-04:00 - No changes to report
+Checked at 2013-03-21T02:14:03-04:00 - No changes to report
+Checked at 2013-03-21T02:15:03-04:00 - No changes to report
+Checked at 2013-03-21T02:16:03-04:00 - No changes to report
+Checked at 2013-03-21T02:18:04-04:00 - No changes to report
+Checked at 2013-03-21T02:21:03-04:00 - No changes to report
+Checked at 2013-03-21T02:27:05-04:00 - No changes to report
+Checked at 2013-03-21T02:29:03-04:00 - No changes to report
+Checked at 2013-03-21T02:30:02-04:00 - No changes to report
+Checked at 2013-03-21T02:31:03-04:00 - No changes to report
+Checked at 2013-03-21T02:32:02-04:00 - No changes to report
+Checked at 2013-03-21T02:33:04-04:00 - No changes to report
+Checked at 2013-03-21T02:34:02-04:00 - No changes to report
+Checked at 2013-03-21T02:35:03-04:00 - No changes to report
+Checked at 2013-03-21T02:36:02-04:00 - No changes to report
+Checked at 2013-03-21T02:37:03-04:00 - No changes to report
+Checked at 2013-03-21T02:38:02-04:00 - No changes to report
+Checked at 2013-03-21T02:39:03-04:00 - No changes to report
+Checked at 2013-03-21T02:40:03-04:00 - No changes to report
+Checked at 2013-03-21T02:41:02-04:00 - No changes to report
+Checked at 2013-03-21T02:42:03-04:00 - No changes to report
+Checked at 2013-03-21T02:43:02-04:00 - No changes to report
+Checked at 2013-03-21T02:44:03-04:00 - No changes to report
+Checked at 2013-03-21T02:45:03-04:00 - No changes to report
+Checked at 2013-03-21T02:46:02-04:00 - No changes to report
+Checked at 2013-03-21T02:47:03-04:00 - No changes to report
+Checked at 2013-03-21T02:48:02-04:00 - No changes to report
+Checked at 2013-03-21T02:49:03-04:00 - No changes to report
+Checked at 2013-03-21T02:50:02-04:00 - No changes to report
+Checked at 2013-03-21T02:51:03-04:00 - No changes to report
+Checked at 2013-03-21T02:52:02-04:00 - No changes to report
+Checked at 2013-03-21T02:53:03-04:00 - No changes to report
+Checked at 2013-03-21T02:54:03-04:00 - No changes to report
+Checked at 2013-03-21T02:55:03-04:00 - No changes to report
+Checked at 2013-03-21T02:56:03-04:00 - No changes to report
+Checked at 2013-03-21T02:57:03-04:00 - No changes to report
+Checked at 2013-03-21T02:58:03-04:00 - No changes to report
+Checked at 2013-03-21T02:59:03-04:00 - No changes to report
+Checked at 2013-03-21T03:00:03-04:00 - No changes to report
+Checked at 2013-03-21T03:01:03-04:00 - No changes to report
+Checked at 2013-03-21T03:02:03-04:00 - No changes to report
+Checked at 2013-03-21T03:03:03-04:00 - No changes to report
+Checked at 2013-03-21T03:04:03-04:00 - No changes to report
+Checked at 2013-03-21T03:05:03-04:00 - No changes to report
+Checked at 2013-03-21T03:06:03-04:00 - No changes to report
+Checked at 2013-03-21T03:07:03-04:00 - No changes to report
+Checked at 2013-03-21T03:08:03-04:00 - No changes to report
+Checked at 2013-03-21T03:09:03-04:00 - No changes to report
+Checked at 2013-03-21T03:10:03-04:00 - No changes to report
+Checked at 2013-03-21T03:11:03-04:00 - No changes to report
+Checked at 2013-03-21T03:12:03-04:00 - No changes to report
+Checked at 2013-03-21T03:13:03-04:00 - No changes to report
+Checked at 2013-03-21T03:14:03-04:00 - No changes to report
+Checked at 2013-03-21T03:15:04-04:00 - No changes to report
+Checked at 2013-03-21T03:18:02-04:00 - No changes to report
+Checked at 2013-03-21T03:19:23-04:00 - No changes to report
+Checked at 2013-03-21T03:20:03-04:00 - No changes to report
+Checked at 2013-03-21T03:24:02-04:00 - No changes to report
+Checked at 2013-03-21T03:31:15-04:00 - No changes to report
+Checked at 2013-03-21T03:32:02-04:00 - No changes to report
+Checked at 2013-03-21T03:35:03-04:00 - No changes to report
+Checked at 2013-03-21T03:36:16-04:00 - No changes to report
+Checked at 2013-03-21T03:37:03-04:00 - No changes to report
+Checked at 2013-03-21T03:39:02-04:00 - No changes to report
+Checked at 2013-03-21T03:41:03-04:00 - No changes to report
+Checked at 2013-03-21T03:46:03-04:00 - No changes to report
+Checked at 2013-03-21T03:49:03-04:00 - No changes to report
+Checked at 2013-03-21T03:58:05-04:00 - No changes to report
+Checked at 2013-03-21T04:00:04-04:00 - No changes to report
+Checked at 2013-03-21T04:04:02-04:00 - No changes to report
+Checked at 2013-03-21T04:05:03-04:00 - No changes to report
+Checked at 2013-03-21T04:06:03-04:00 - No changes to report
+Checked at 2013-03-21T04:09:08-04:00 - No changes to report
+Checked at 2013-03-21T04:10:02-04:00 - No changes to report
+Checked at 2013-03-21T04:11:03-04:00 - No changes to report
+Checked at 2013-03-21T04:16:06-04:00 - No changes to report
+Checked at 2013-03-21T04:18:03-04:00 - No changes to report
+Checked at 2013-03-21T04:19:05-04:00 - No changes to report
+Checked at 2013-03-21T04:20:03-04:00 - No changes to report
+Checked at 2013-03-21T04:21:03-04:00 - No changes to report
+Checked at 2013-03-21T04:23:03-04:00 - No changes to report
+Checked at 2013-03-21T04:29:04-04:00 - No changes to report
+Checked at 2013-03-21T04:31:40-04:00 - No changes to report
+Checked at 2013-03-21T04:33:04-04:00 - No changes to report
+Checked at 2013-03-21T04:34:03-04:00 - No changes to report
+Checked at 2013-03-21T04:37:05-04:00 - No changes to report
+Checked at 2013-03-21T04:40:03-04:00 - No changes to report
+Checked at 2013-03-21T04:41:03-04:00 - No changes to report
+Checked at 2013-03-21T04:42:03-04:00 - No changes to report
+Checked at 2013-03-21T04:45:03-04:00 - No changes to report
+Checked at 2013-03-21T04:46:02-04:00 - No changes to report
+Checked at 2013-03-21T04:47:03-04:00 - No changes to report
+Checked at 2013-03-21T04:48:03-04:00 - No changes to report
+Checked at 2013-03-21T04:49:03-04:00 - No changes to report
+Checked at 2013-03-21T04:50:03-04:00 - No changes to report
+Checked at 2013-03-21T04:51:02-04:00 - No changes to report
+Checked at 2013-03-21T04:52:03-04:00 - No changes to report
+Checked at 2013-03-21T04:53:03-04:00 - No changes to report
+Checked at 2013-03-21T04:54:03-04:00 - No changes to report
+Checked at 2013-03-21T04:55:03-04:00 - No changes to report
+Checked at 2013-03-21T04:56:02-04:00 - No changes to report
+Checked at 2013-03-21T04:57:03-04:00 - No changes to report
+Checked at 2013-03-21T04:58:03-04:00 - No changes to report
+Checked at 2013-03-21T04:59:03-04:00 - No changes to report
+Checked at 2013-03-21T05:00:03-04:00 - No changes to report
+Checked at 2013-03-21T05:01:03-04:00 - No changes to report
+Checked at 2013-03-21T05:02:03-04:00 - No changes to report
+Checked at 2013-03-21T05:03:03-04:00 - No changes to report
+Checked at 2013-03-21T05:04:03-04:00 - No changes to report
+Checked at 2013-03-21T05:05:02-04:00 - No changes to report
+Checked at 2013-03-21T05:06:03-04:00 - No changes to report
+Checked at 2013-03-21T05:07:03-04:00 - No changes to report
+Checked at 2013-03-21T05:08:03-04:00 - No changes to report
+Checked at 2013-03-21T05:09:03-04:00 - No changes to report
+Checked at 2013-03-21T05:10:03-04:00 - No changes to report
+Checked at 2013-03-21T05:11:03-04:00 - No changes to report
+Checked at 2013-03-21T05:12:03-04:00 - No changes to report
+Checked at 2013-03-21T05:13:03-04:00 - No changes to report
+Checked at 2013-03-21T05:14:03-04:00 - No changes to report
+Checked at 2013-03-21T05:15:04-04:00 - No changes to report
+Checked at 2013-03-21T05:16:03-04:00 - No changes to report
+Checked at 2013-03-21T05:17:03-04:00 - No changes to report
+Checked at 2013-03-21T05:18:03-04:00 - No changes to report
+Checked at 2013-03-21T05:19:03-04:00 - No changes to report
+Checked at 2013-03-21T05:20:02-04:00 - No changes to report
+Checked at 2013-03-21T05:21:03-04:00 - No changes to report
+Checked at 2013-03-21T05:22:04-04:00 - No changes to report
+Checked at 2013-03-21T05:23:02-04:00 - No changes to report
+Checked at 2013-03-21T05:24:03-04:00 - No changes to report
+Checked at 2013-03-21T05:25:03-04:00 - No changes to report
+Checked at 2013-03-21T05:26:03-04:00 - No changes to report
+Checked at 2013-03-21T05:27:03-04:00 - No changes to report
+Checked at 2013-03-21T05:28:03-04:00 - No changes to report
+Checked at 2013-03-21T05:29:04-04:00 - No changes to report
+Checked at 2013-03-21T05:30:02-04:00 - No changes to report
+Checked at 2013-03-21T05:31:03-04:00 - No changes to report
+Checked at 2013-03-21T05:32:03-04:00 - No changes to report
+Checked at 2013-03-21T05:33:03-04:00 - No changes to report
+Checked at 2013-03-21T05:34:03-04:00 - No changes to report
+Checked at 2013-03-21T05:35:02-04:00 - No changes to report
+Checked at 2013-03-21T05:36:02-04:00 - No changes to report
+Checked at 2013-03-21T05:37:02-04:00 - No changes to report
+Checked at 2013-03-21T05:38:03-04:00 - No changes to report
+Checked at 2013-03-21T05:39:03-04:00 - No changes to report
+Checked at 2013-03-21T05:40:02-04:00 - No changes to report
+Checked at 2013-03-21T05:41:03-04:00 - No changes to report
+Checked at 2013-03-21T05:42:02-04:00 - No changes to report
+Checked at 2013-03-21T05:43:03-04:00 - No changes to report
+Checked at 2013-03-21T05:44:03-04:00 - No changes to report
+Checked at 2013-03-21T05:45:03-04:00 - No changes to report
+Checked at 2013-03-21T05:46:02-04:00 - No changes to report
+Checked at 2013-03-21T05:47:03-04:00 - No changes to report
+Checked at 2013-03-21T05:50:03-04:00 - No changes to report
+Checked at 2013-03-21T05:51:04-04:00 - No changes to report
+Checked at 2013-03-21T05:52:03-04:00 - No changes to report
+Checked at 2013-03-21T05:53:21-04:00 - No changes to report
+Checked at 2013-03-21T05:55:03-04:00 - No changes to report
+Checked at 2013-03-21T05:57:05-04:00 - No changes to report
+Checked at 2013-03-21T05:59:07-04:00 - No changes to report
+Checked at 2013-03-21T06:01:23-04:00 - No changes to report
+Checked at 2013-03-21T06:02:02-04:00 - No changes to report
+Checked at 2013-03-21T06:03:03-04:00 - No changes to report
+Checked at 2013-03-21T06:04:03-04:00 - No changes to report
+Checked at 2013-03-21T06:05:03-04:00 - No changes to report
+Checked at 2013-03-21T06:06:02-04:00 - No changes to report
+Checked at 2013-03-21T06:07:03-04:00 - No changes to report
+Checked at 2013-03-21T06:08:03-04:00 - No changes to report
+Checked at 2013-03-21T06:09:02-04:00 - No changes to report
+Checked at 2013-03-21T06:10:03-04:00 - No changes to report
+Checked at 2013-03-21T06:11:03-04:00 - No changes to report
+Checked at 2013-03-21T06:12:03-04:00 - No changes to report
+Checked at 2013-03-21T06:13:03-04:00 - No changes to report
+Checked at 2013-03-21T06:14:03-04:00 - No changes to report
+Checked at 2013-03-21T06:15:02-04:00 - No changes to report
+Checked at 2013-03-21T06:16:03-04:00 - No changes to report
+Checked at 2013-03-21T06:17:02-04:00 - No changes to report
+Checked at 2013-03-21T06:18:03-04:00 - No changes to report
+Checked at 2013-03-21T06:19:03-04:00 - No changes to report
+Checked at 2013-03-21T06:20:02-04:00 - No changes to report
+Checked at 2013-03-21T06:21:02-04:00 - No changes to report
+Checked at 2013-03-21T06:22:03-04:00 - No changes to report
+Checked at 2013-03-21T06:23:02-04:00 - No changes to report
+Checked at 2013-03-21T06:24:03-04:00 - No changes to report
+Checked at 2013-03-21T06:25:03-04:00 - No changes to report
+Checked at 2013-03-21T06:26:02-04:00 - No changes to report
+Checked at 2013-03-21T06:27:03-04:00 - No changes to report
+Checked at 2013-03-21T06:28:02-04:00 - No changes to report
+Checked at 2013-03-21T06:29:03-04:00 - No changes to report
+Checked at 2013-03-21T06:30:02-04:00 - No changes to report
+Checked at 2013-03-21T06:31:03-04:00 - No changes to report
+Checked at 2013-03-21T06:32:05-04:00 - No changes to report
+Checked at 2013-03-21T06:33:05-04:00 - No changes to report
+Checked at 2013-03-21T06:34:02-04:00 - No changes to report
+Checked at 2013-03-21T06:35:03-04:00 - No changes to report
+Checked at 2013-03-21T06:37:05-04:00 - No changes to report
+Checked at 2013-03-21T06:39:04-04:00 - No changes to report
+Checked at 2013-03-21T06:40:04-04:00 - No changes to report
+Checked at 2013-03-21T06:44:03-04:00 - No changes to report
+Checked at 2013-03-21T06:45:04-04:00 - No changes to report
+Checked at 2013-03-21T06:47:02-04:00 - No changes to report
+Checked at 2013-03-21T06:48:03-04:00 - No changes to report
+Checked at 2013-03-21T06:49:05-04:00 - No changes to report
+Checked at 2013-03-21T06:50:02-04:00 - No changes to report
+Checked at 2013-03-21T06:51:03-04:00 - No changes to report
+Checked at 2013-03-21T06:52:02-04:00 - No changes to report
+Checked at 2013-03-21T06:53:03-04:00 - No changes to report
+Checked at 2013-03-21T06:54:03-04:00 - No changes to report
+Checked at 2013-03-21T06:55:03-04:00 - No changes to report
+Checked at 2013-03-21T06:56:02-04:00 - No changes to report
+Checked at 2013-03-21T06:57:03-04:00 - No changes to report
+Checked at 2013-03-21T06:58:03-04:00 - No changes to report
+Checked at 2013-03-21T06:59:02-04:00 - No changes to report
+Checked at 2013-03-21T07:00:03-04:00 - No changes to report
+Checked at 2013-03-21T07:01:03-04:00 - No changes to report
+Checked at 2013-03-21T07:02:03-04:00 - No changes to report
+Checked at 2013-03-21T07:03:02-04:00 - No changes to report
+Checked at 2013-03-21T07:04:03-04:00 - No changes to report
+Checked at 2013-03-21T07:05:02-04:00 - No changes to report
+Checked at 2013-03-21T07:06:02-04:00 - No changes to report
+Checked at 2013-03-21T07:07:03-04:00 - No changes to report
+Checked at 2013-03-21T07:08:03-04:00 - No changes to report
+Checked at 2013-03-21T07:09:02-04:00 - No changes to report
+Checked at 2013-03-21T07:10:03-04:00 - No changes to report
+Checked at 2013-03-21T07:11:02-04:00 - No changes to report
+Checked at 2013-03-21T07:12:02-04:00 - No changes to report
+Checked at 2013-03-21T07:13:02-04:00 - No changes to report
+Checked at 2013-03-21T07:14:03-04:00 - No changes to report
+Checked at 2013-03-21T07:15:03-04:00 - No changes to report
+Checked at 2013-03-21T07:16:03-04:00 - No changes to report
+Checked at 2013-03-21T07:17:02-04:00 - No changes to report
+Checked at 2013-03-21T07:18:03-04:00 - No changes to report
+Checked at 2013-03-21T07:19:03-04:00 - No changes to report
+Checked at 2013-03-21T07:20:02-04:00 - No changes to report
+Checked at 2013-03-21T07:21:03-04:00 - No changes to report
+Checked at 2013-03-21T07:22:04-04:00 - No changes to report
+Checked at 2013-03-21T07:23:02-04:00 - No changes to report
+Checked at 2013-03-21T07:24:03-04:00 - No changes to report
+Checked at 2013-03-21T07:25:03-04:00 - No changes to report
+Checked at 2013-03-21T07:26:03-04:00 - No changes to report
+Checked at 2013-03-21T07:27:02-04:00 - No changes to report
+Checked at 2013-03-21T07:28:03-04:00 - No changes to report
+Checked at 2013-03-21T07:29:03-04:00 - No changes to report
+Checked at 2013-03-21T07:30:03-04:00 - No changes to report
+Checked at 2013-03-21T07:31:02-04:00 - No changes to report
+Checked at 2013-03-21T07:37:21-04:00 - No changes to report
+Checked at 2013-03-21T07:38:16-04:00 - No changes to report
+Checked at 2013-03-21T07:39:03-04:00 - No changes to report
+Checked at 2013-03-21T07:40:03-04:00 - No changes to report
+Checked at 2013-03-21T07:41:02-04:00 - No changes to report
+Checked at 2013-03-21T07:45:03-04:00 - No changes to report
+Checked at 2013-03-21T07:47:04-04:00 - No changes to report
+Checked at 2013-03-21T07:54:03-04:00 - No changes to report
+Checked at 2013-03-21T07:55:03-04:00 - No changes to report
+Checked at 2013-03-21T07:56:03-04:00 - No changes to report
+Checked at 2013-03-21T07:57:03-04:00 - No changes to report
+Checked at 2013-03-21T07:58:03-04:00 - No changes to report
+Checked at 2013-03-21T07:59:03-04:00 - No changes to report
+Checked at 2013-03-21T08:00:03-04:00 - No changes to report
+Checked at 2013-03-21T08:01:03-04:00 - No changes to report
+Checked at 2013-03-21T08:02:03-04:00 - No changes to report
+Checked at 2013-03-21T08:03:03-04:00 - No changes to report
+Checked at 2013-03-21T08:04:03-04:00 - No changes to report
+Checked at 2013-03-21T08:05:03-04:00 - No changes to report
+Checked at 2013-03-21T08:06:02-04:00 - No changes to report
+Checked at 2013-03-21T08:07:02-04:00 - No changes to report
+Checked at 2013-03-21T08:08:03-04:00 - No changes to report
+Checked at 2013-03-21T08:09:03-04:00 - No changes to report
+Checked at 2013-03-21T08:10:03-04:00 - No changes to report
+Checked at 2013-03-21T08:11:03-04:00 - No changes to report
+Checked at 2013-03-21T08:12:03-04:00 - No changes to report
+Checked at 2013-03-21T08:13:03-04:00 - No changes to report
+Checked at 2013-03-21T08:14:03-04:00 - No changes to report
+Checked at 2013-03-21T08:15:03-04:00 - No changes to report
+Checked at 2013-03-21T08:16:03-04:00 - No changes to report
+Checked at 2013-03-21T08:17:03-04:00 - No changes to report
+Checked at 2013-03-21T08:18:04-04:00 - No changes to report
+Checked at 2013-03-21T08:19:03-04:00 - No changes to report
+Checked at 2013-03-21T08:20:03-04:00 - No changes to report
+Checked at 2013-03-21T08:21:03-04:00 - No changes to report
+Checked at 2013-03-21T08:22:03-04:00 - No changes to report
+Checked at 2013-03-21T08:23:03-04:00 - No changes to report
+Checked at 2013-03-21T08:24:03-04:00 - No changes to report
+Checked at 2013-03-21T08:25:03-04:00 - No changes to report
+Checked at 2013-03-21T08:26:03-04:00 - No changes to report
+Checked at 2013-03-21T08:27:03-04:00 - No changes to report
+Checked at 2013-03-21T08:28:02-04:00 - No changes to report
+Checked at 2013-03-21T08:29:02-04:00 - No changes to report
+Checked at 2013-03-21T08:30:03-04:00 - No changes to report
+Checked at 2013-03-21T08:31:03-04:00 - No changes to report
+Checked at 2013-03-21T08:32:03-04:00 - No changes to report
+Checked at 2013-03-21T08:33:03-04:00 - No changes to report
+Checked at 2013-03-21T08:34:02-04:00 - No changes to report
+Checked at 2013-03-21T08:35:03-04:00 - No changes to report
+Checked at 2013-03-21T08:36:03-04:00 - No changes to report
+Checked at 2013-03-21T09:04:03-04:00 - No changes to report
+Checked at 2013-03-21T09:05:02-04:00 - No changes to report
+Checked at 2013-03-21T09:06:03-04:00 - No changes to report
+Checked at 2013-03-21T09:07:03-04:00 - No changes to report
+Checked at 2013-03-21T09:08:03-04:00 - No changes to report
+Checked at 2013-03-21T09:09:03-04:00 - No changes to report
+Checked at 2013-03-21T09:10:03-04:00 - No changes to report
+Checked at 2013-03-21T09:11:04-04:00 - No changes to report
+Checked at 2013-03-21T09:12:03-04:00 - No changes to report
+Checked at 2013-03-21T09:13:03-04:00 - No changes to report
+Checked at 2013-03-21T09:14:03-04:00 - No changes to report
+Checked at 2013-03-21T09:15:03-04:00 - No changes to report
+Checked at 2013-03-21T09:16:03-04:00 - No changes to report
+Checked at 2013-03-21T09:17:02-04:00 - No changes to report
+Checked at 2013-03-21T09:18:03-04:00 - No changes to report
+Checked at 2013-03-21T09:19:03-04:00 - No changes to report
+Checked at 2013-03-21T09:20:04-04:00 - No changes to report
+Checked at 2013-03-21T09:21:03-04:00 - No changes to report
+Checked at 2013-03-21T09:22:02-04:00 - No changes to report
+Checked at 2013-03-21T09:23:03-04:00 - No changes to report
+Checked at 2013-03-21T09:24:03-04:00 - No changes to report
+Checked at 2013-03-21T09:25:02-04:00 - No changes to report
+Checked at 2013-03-21T09:26:03-04:00 - No changes to report
+Checked at 2013-03-21T09:27:03-04:00 - No changes to report
+Checked at 2013-03-21T09:28:02-04:00 - No changes to report
+Checked at 2013-03-21T09:29:03-04:00 - No changes to report
+Checked at 2013-03-21T09:30:03-04:00 - No changes to report
+Checked at 2013-03-21T09:31:03-04:00 - No changes to report
+Checked at 2013-03-21T09:32:03-04:00 - No changes to report
+Checked at 2013-03-21T09:33:03-04:00 - No changes to report
+Checked at 2013-03-21T09:34:06-04:00 - No changes to report
+Checked at 2013-03-21T09:35:03-04:00 - No changes to report
+Checked at 2013-03-21T09:36:03-04:00 - No changes to report
+Checked at 2013-03-21T09:37:03-04:00 - No changes to report
+Checked at 2013-03-21T09:38:03-04:00 - No changes to report
+Checked at 2013-03-21T09:39:03-04:00 - No changes to report
+Checked at 2013-03-21T09:40:03-04:00 - No changes to report
+Checked at 2013-03-21T09:41:03-04:00 - No changes to report
+Checked at 2013-03-21T09:42:03-04:00 - No changes to report
+Checked at 2013-03-21T09:43:03-04:00 - No changes to report
+Checked at 2013-03-21T09:44:03-04:00 - No changes to report
+Checked at 2013-03-21T09:45:03-04:00 - No changes to report
+Checked at 2013-03-21T09:46:07-04:00 - No changes to report
+Checked at 2013-03-21T09:47:03-04:00 - No changes to report
+Checked at 2013-03-21T09:48:04-04:00 - No changes to report
+Checked at 2013-03-21T09:49:03-04:00 - No changes to report
+Checked at 2013-03-21T09:50:02-04:00 - No changes to report
+Checked at 2013-03-21T09:51:04-04:00 - No changes to report
+Checked at 2013-03-21T09:52:03-04:00 - No changes to report
+Checked at 2013-03-21T09:53:03-04:00 - No changes to report
+Checked at 2013-03-21T09:54:04-04:00 - No changes to report
+Checked at 2013-03-21T09:55:03-04:00 - No changes to report
+Checked at 2013-03-21T09:56:03-04:00 - No changes to report
+Checked at 2013-03-21T09:57:03-04:00 - No changes to report
+Checked at 2013-03-21T09:58:03-04:00 - No changes to report
+Checked at 2013-03-21T09:59:04-04:00 - No changes to report
+Checked at 2013-03-21T10:00:04-04:00 - No changes to report
+Checked at 2013-03-21T10:01:04-04:00 - No changes to report
+Checked at 2013-03-21T10:02:04-04:00 - No changes to report
+Checked at 2013-03-21T10:03:04-04:00 - No changes to report
+Checked at 2013-03-21T10:04:04-04:00 - No changes to report
+Checked at 2013-03-21T10:05:03-04:00 - No changes to report
+Checked at 2013-03-21T10:06:03-04:00 - No changes to report
+Checked at 2013-03-21T10:07:03-04:00 - No changes to report
+Checked at 2013-03-21T10:08:03-04:00 - No changes to report
+Checked at 2013-03-21T10:09:03-04:00 - No changes to report
+Checked at 2013-03-21T10:10:03-04:00 - No changes to report
+Checked at 2013-03-21T10:11:04-04:00 - No changes to report
+Checked at 2013-03-21T10:12:04-04:00 - No changes to report
+Checked at 2013-03-21T10:13:03-04:00 - No changes to report
+Checked at 2013-03-21T10:14:03-04:00 - No changes to report
+Checked at 2013-03-21T10:15:03-04:00 - No changes to report
+Checked at 2013-03-21T10:16:03-04:00 - No changes to report
+Checked at 2013-03-21T10:17:03-04:00 - No changes to report
+Checked at 2013-03-21T10:18:04-04:00 - No changes to report
+Checked at 2013-03-21T10:19:03-04:00 - No changes to report
+Checked at 2013-03-21T10:20:03-04:00 - No changes to report
+Checked at 2013-03-21T10:21:04-04:00 - No changes to report
+Checked at 2013-03-21T10:22:03-04:00 - No changes to report
+Checked at 2013-03-21T10:23:04-04:00 - No changes to report
+Checked at 2013-03-21T10:24:04-04:00 - No changes to report
+Checked at 2013-03-21T10:25:03-04:00 - No changes to report
+Checked at 2013-03-21T10:26:03-04:00 - No changes to report
+Checked at 2013-03-21T10:27:04-04:00 - No changes to report
+Checked at 2013-03-21T10:28:03-04:00 - No changes to report
+Checked at 2013-03-21T10:29:04-04:00 - No changes to report
+Checked at 2013-03-21T10:30:03-04:00 - No changes to report
+Checked at 2013-03-21T10:31:04-04:00 - No changes to report
+Checked at 2013-03-21T10:32:03-04:00 - No changes to report
+Checked at 2013-03-21T10:33:03-04:00 - No changes to report
+Checked at 2013-03-21T10:34:03-04:00 - No changes to report
+Checked at 2013-03-21T10:35:04-04:00 - No changes to report
+Checked at 2013-03-21T10:36:03-04:00 - No changes to report
+Checked at 2013-03-21T10:37:05-04:00 - No changes to report
+Checked at 2013-03-21T10:38:02-04:00 - No changes to report
+Checked at 2013-03-21T10:39:03-04:00 - No changes to report
+Checked at 2013-03-21T10:40:03-04:00 - No changes to report
+Checked at 2013-03-21T10:41:04-04:00 - No changes to report
+Checked at 2013-03-21T10:42:03-04:00 - No changes to report
+Checked at 2013-03-21T10:43:03-04:00 - No changes to report
+Checked at 2013-03-21T10:44:04-04:00 - No changes to report
+Checked at 2013-03-21T10:45:03-04:00 - No changes to report
+Checked at 2013-03-21T10:46:03-04:00 - No changes to report
+Checked at 2013-03-21T10:47:03-04:00 - No changes to report
+Checked at 2013-03-21T10:48:03-04:00 - No changes to report
+Checked at 2013-03-21T10:49:04-04:00 - No changes to report
+Checked at 2013-03-21T10:50:03-04:00 - No changes to report
+Checked at 2013-03-21T10:51:03-04:00 - No changes to report
+Checked at 2013-03-21T10:52:03-04:00 - No changes to report
+Checked at 2013-03-21T10:53:03-04:00 - No changes to report
+Checked at 2013-03-21T10:54:03-04:00 - No changes to report
+Checked at 2013-03-21T10:55:03-04:00 - No changes to report
+Checked at 2013-03-21T10:56:02-04:00 - No changes to report
+Checked at 2013-03-21T10:57:03-04:00 - No changes to report
+Checked at 2013-03-21T10:58:03-04:00 - No changes to report
+Checked at 2013-03-21T10:59:03-04:00 - No changes to report
+Checked at 2013-03-21T11:00:03-04:00 - No changes to report
+Checked at 2013-03-21T11:01:03-04:00 - No changes to report
+Checked at 2013-03-21T11:02:02-04:00 - No changes to report
+Checked at 2013-03-21T11:03:04-04:00 - No changes to report
+Checked at 2013-03-21T11:04:03-04:00 - No changes to report
+Checked at 2013-03-21T11:05:03-04:00 - No changes to report
+Checked at 2013-03-21T11:06:03-04:00 - No changes to report
+Checked at 2013-03-21T11:07:03-04:00 - No changes to report
+Checked at 2013-03-21T11:08:03-04:00 - No changes to report
+Checked at 2013-03-21T11:09:02-04:00 - No changes to report
+Checked at 2013-03-21T11:10:03-04:00 - No changes to report
+Checked at 2013-03-21T11:11:03-04:00 - No changes to report
+Checked at 2013-03-21T11:12:04-04:00 - No changes to report
+Checked at 2013-03-21T11:13:03-04:00 - No changes to report
+Checked at 2013-03-21T11:14:03-04:00 - No changes to report
+Checked at 2013-03-21T11:15:03-04:00 - No changes to report
+Checked at 2013-03-21T11:16:04-04:00 - No changes to report
+Checked at 2013-03-21T11:17:03-04:00 - No changes to report
+Checked at 2013-03-21T11:18:02-04:00 - No changes to report
+Checked at 2013-03-21T11:19:03-04:00 - No changes to report
+Checked at 2013-03-21T11:20:03-04:00 - No changes to report
+Checked at 2013-03-21T11:21:03-04:00 - No changes to report
+Checked at 2013-03-21T11:22:03-04:00 - No changes to report
+Checked at 2013-03-21T11:23:03-04:00 - No changes to report
+Checked at 2013-03-21T11:24:03-04:00 - No changes to report
+Checked at 2013-03-21T11:25:04-04:00 - No changes to report
+Checked at 2013-03-21T11:26:04-04:00 - No changes to report
+Checked at 2013-03-21T11:27:03-04:00 - No changes to report
+Checked at 2013-03-21T11:28:03-04:00 - No changes to report
+Checked at 2013-03-21T11:29:04-04:00 - No changes to report
+Checked at 2013-03-21T11:30:03-04:00 - No changes to report
+Checked at 2013-03-21T11:31:02-04:00 - No changes to report
+Checked at 2013-03-21T11:32:03-04:00 - No changes to report
+Checked at 2013-03-21T11:33:05-04:00 - No changes to report
+Checked at 2013-03-21T11:34:03-04:00 - No changes to report
+Checked at 2013-03-21T11:35:02-04:00 - No changes to report
+Checked at 2013-03-21T11:36:03-04:00 - No changes to report
+Checked at 2013-03-21T11:37:03-04:00 - No changes to report
+Checked at 2013-03-21T11:38:03-04:00 - No changes to report
+Checked at 2013-03-21T11:39:03-04:00 - No changes to report
+Checked at 2013-03-21T11:40:05-04:00 - No changes to report
+Checked at 2013-03-21T11:41:04-04:00 - No changes to report
+Checked at 2013-03-21T11:42:03-04:00 - No changes to report
+Checked at 2013-03-21T11:43:03-04:00 - No changes to report
+Checked at 2013-03-21T11:44:03-04:00 - No changes to report
+Checked at 2013-03-21T11:45:03-04:00 - No changes to report
+Checked at 2013-03-21T11:46:02-04:00 - No changes to report
+Checked at 2013-03-21T11:47:05-04:00 - No changes to report
+Checked at 2013-03-21T11:48:02-04:00 - No changes to report
+Checked at 2013-03-21T11:49:03-04:00 - No changes to report
+Checked at 2013-03-21T11:50:03-04:00 - No changes to report
+Checked at 2013-03-21T11:51:02-04:00 - No changes to report
+Checked at 2013-03-21T11:52:02-04:00 - No changes to report
+Checked at 2013-03-21T11:53:04-04:00 - No changes to report
+Checked at 2013-03-21T11:54:04-04:00 - No changes to report
+Checked at 2013-03-21T11:55:03-04:00 - No changes to report
+Checked at 2013-03-21T11:56:03-04:00 - No changes to report
+Checked at 2013-03-21T11:57:03-04:00 - No changes to report
+Checked at 2013-03-21T11:58:03-04:00 - No changes to report
+Checked at 2013-03-21T11:59:03-04:00 - No changes to report
+Checked at 2013-03-21T12:00:08-04:00 - No changes to report
+Checked at 2013-03-21T12:01:05-04:00 - No changes to report
+Checked at 2013-03-21T13:21:05-04:00 - No changes to report
+Checked at 2013-03-21T13:22:04-04:00 - No changes to report
+Checked at 2013-03-21T13:23:03-04:00 - No changes to report
+Checked at 2013-03-21T13:24:03-04:00 - No changes to report
+Checked at 2013-03-21T13:25:03-04:00 - No changes to report
+Checked at 2013-03-21T13:26:03-04:00 - No changes to report
+Checked at 2013-03-21T13:27:03-04:00 - No changes to report
+Checked at 2013-03-21T13:28:04-04:00 - No changes to report
+Checked at 2013-03-21T13:29:03-04:00 - No changes to report
+Checked at 2013-03-21T13:30:05-04:00 - No changes to report
+Checked at 2013-03-21T13:31:04-04:00 - No changes to report
+Checked at 2013-03-21T13:32:03-04:00 - No changes to report
+Checked at 2013-03-21T13:33:04-04:00 - No changes to report
+Checked at 2013-03-21T13:34:03-04:00 - No changes to report
+Checked at 2013-03-21T13:35:03-04:00 - No changes to report
+Checked at 2013-03-21T13:36:03-04:00 - No changes to report
+Checked at 2013-03-21T13:37:03-04:00 - No changes to report
+Checked at 2013-03-21T13:38:04-04:00 - No changes to report
+Checked at 2013-03-21T13:39:03-04:00 - No changes to report
+Checked at 2013-03-21T13:40:02-04:00 - No changes to report
+Checked at 2013-03-21T13:41:03-04:00 - No changes to report
+Checked at 2013-03-21T13:42:04-04:00 - No changes to report
+Checked at 2013-03-21T13:43:03-04:00 - No changes to report
+Checked at 2013-03-21T13:44:03-04:00 - No changes to report
+Checked at 2013-03-21T13:45:05-04:00 - No changes to report
+Checked at 2013-03-21T13:46:03-04:00 - No changes to report
+Checked at 2013-03-21T13:47:03-04:00 - No changes to report
+Checked at 2013-03-21T13:48:03-04:00 - No changes to report
+Checked at 2013-03-21T13:49:04-04:00 - No changes to report
+Checked at 2013-03-21T13:50:03-04:00 - No changes to report
+Checked at 2013-03-21T13:51:02-04:00 - No changes to report
+Checked at 2013-03-21T13:52:03-04:00 - No changes to report
+Checked at 2013-03-21T13:53:03-04:00 - No changes to report
+Checked at 2013-03-21T13:54:03-04:00 - No changes to report
+Checked at 2013-03-21T13:55:03-04:00 - No changes to report
+Checked at 2013-03-21T13:56:03-04:00 - No changes to report
+Checked at 2013-03-21T13:57:03-04:00 - No changes to report
+Checked at 2013-03-21T13:58:03-04:00 - No changes to report
+Checked at 2013-03-21T13:59:03-04:00 - No changes to report
+Checked at 2013-03-21T14:00:02-04:00 - No changes to report
+Checked at 2013-03-21T14:01:03-04:00 - No changes to report
+Checked at 2013-03-21T14:02:03-04:00 - No changes to report
+Checked at 2013-03-21T14:03:03-04:00 - No changes to report
+Checked at 2013-03-21T14:04:03-04:00 - No changes to report
+Checked at 2013-03-21T14:05:03-04:00 - No changes to report
+Checked at 2013-03-21T14:06:04-04:00 - No changes to report
+Checked at 2013-03-21T14:07:03-04:00 - No changes to report
+Checked at 2013-03-21T14:08:05-04:00 - No changes to report
+Checked at 2013-03-21T14:09:02-04:00 - No changes to report
+Checked at 2013-03-21T14:10:05-04:00 - No changes to report
+Checked at 2013-03-21T14:11:04-04:00 - No changes to report
+Checked at 2013-03-21T14:12:03-04:00 - No changes to report
+Checked at 2013-03-21T14:13:06-04:00 - No changes to report
+Checked at 2013-03-21T14:14:04-04:00 - No changes to report
+Checked at 2013-03-21T14:15:04-04:00 - No changes to report
+Checked at 2013-03-21T14:16:04-04:00 - No changes to report
+Checked at 2013-03-21T14:17:04-04:00 - No changes to report
+Checked at 2013-03-21T14:18:03-04:00 - No changes to report
+Checked at 2013-03-21T14:19:04-04:00 - No changes to report
+Checked at 2013-03-21T14:20:04-04:00 - No changes to report
+Checked at 2013-03-21T14:21:03-04:00 - No changes to report
+Checked at 2013-03-21T14:22:06-04:00 - No changes to report
+Checked at 2013-03-21T14:23:05-04:00 - No changes to report
+Checked at 2013-03-21T14:24:05-04:00 - No changes to report
+Checked at 2013-03-21T14:25:03-04:00 - No changes to report
+Checked at 2013-03-21T14:26:04-04:00 - No changes to report
+Checked at 2013-03-21T14:27:04-04:00 - No changes to report
+Checked at 2013-03-21T14:28:03-04:00 - No changes to report
+Checked at 2013-03-21T14:29:03-04:00 - No changes to report
+Checked at 2013-03-21T14:30:03-04:00 - No changes to report
+Checked at 2013-03-21T14:31:04-04:00 - No changes to report
+Checked at 2013-03-21T14:32:03-04:00 - No changes to report
+Checked at 2013-03-21T14:33:02-04:00 - No changes to report
+Checked at 2013-03-21T14:34:05-04:00 - No changes to report
+Checked at 2013-03-21T14:35:03-04:00 - No changes to report
+Checked at 2013-03-21T14:36:03-04:00 - No changes to report
+Checked at 2013-03-21T14:37:03-04:00 - No changes to report
+Checked at 2013-03-21T14:38:04-04:00 - No changes to report
+Checked at 2013-03-21T14:39:03-04:00 - No changes to report
+Checked at 2013-03-21T14:40:03-04:00 - No changes to report
+Checked at 2013-03-21T14:41:03-04:00 - No changes to report
+Checked at 2013-03-21T14:42:03-04:00 - No changes to report
+Checked at 2013-03-21T14:43:03-04:00 - No changes to report
+Checked at 2013-03-21T14:44:03-04:00 - No changes to report
+Checked at 2013-03-21T14:45:04-04:00 - No changes to report
+Checked at 2013-03-21T14:46:04-04:00 - No changes to report
+Checked at 2013-03-21T14:47:02-04:00 - No changes to report
+Checked at 2013-03-21T14:48:03-04:00 - No changes to report
+Checked at 2013-03-21T14:49:03-04:00 - No changes to report
+Checked at 2013-03-21T14:50:03-04:00 - No changes to report
+Checked at 2013-03-21T14:51:02-04:00 - No changes to report
+Checked at 2013-03-21T14:52:04-04:00 - No changes to report
+Checked at 2013-03-21T14:53:03-04:00 - No changes to report
+Checked at 2013-03-21T14:54:02-04:00 - No changes to report
+Checked at 2013-03-21T14:55:05-04:00 - No changes to report
+Checked at 2013-03-21T14:56:03-04:00 - No changes to report
+Checked at 2013-03-21T14:57:04-04:00 - No changes to report
+Checked at 2013-03-21T14:58:05-04:00 - No changes to report
+Checked at 2013-03-21T14:59:03-04:00 - No changes to report
+Checked at 2013-03-21T15:00:03-04:00 - No changes to report
+Checked at 2013-03-21T15:01:03-04:00 - No changes to report
+Checked at 2013-03-21T15:02:03-04:00 - No changes to report
+Checked at 2013-03-21T15:03:05-04:00 - No changes to report
+Checked at 2013-03-21T15:04:03-04:00 - No changes to report
+Checked at 2013-03-21T15:05:03-04:00 - No changes to report
+Checked at 2013-03-21T15:06:03-04:00 - No changes to report
+Checked at 2013-03-21T15:07:06-04:00 - No changes to report
+Checked at 2013-03-21T15:08:05-04:00 - No changes to report
+Checked at 2013-03-21T15:09:04-04:00 - No changes to report
+Checked at 2013-03-21T15:10:03-04:00 - No changes to report
+Checked at 2013-03-21T15:11:03-04:00 - No changes to report
+Checked at 2013-03-21T15:12:03-04:00 - No changes to report
+Checked at 2013-03-21T15:13:03-04:00 - No changes to report
+Checked at 2013-03-21T15:14:06-04:00 - No changes to report
+Checked at 2013-03-21T15:15:02-04:00 - No changes to report
+Checked at 2013-03-21T15:16:03-04:00 - No changes to report
+Checked at 2013-03-21T15:17:04-04:00 - No changes to report
+Checked at 2013-03-21T15:18:04-04:00 - No changes to report
+Checked at 2013-03-21T15:19:04-04:00 - No changes to report
+Checked at 2013-03-21T15:20:03-04:00 - No changes to report
+Checked at 2013-03-21T15:21:03-04:00 - No changes to report
+Checked at 2013-03-21T15:22:06-04:00 - No changes to report
+Checked at 2013-03-21T15:23:03-04:00 - No changes to report
+Checked at 2013-03-21T15:24:03-04:00 - No changes to report
+Checked at 2013-03-21T15:25:04-04:00 - No changes to report
+Checked at 2013-03-21T15:26:03-04:00 - No changes to report
+Checked at 2013-03-21T15:27:04-04:00 - No changes to report
+Checked at 2013-03-21T15:28:03-04:00 - No changes to report
+Checked at 2013-03-21T15:29:03-04:00 - No changes to report
+Checked at 2013-03-21T15:30:03-04:00 - No changes to report
+Checked at 2013-03-21T15:31:03-04:00 - No changes to report
+Checked at 2013-03-21T15:32:02-04:00 - No changes to report
+Checked at 2013-03-21T15:33:03-04:00 - No changes to report
+Checked at 2013-03-21T15:34:04-04:00 - No changes to report
+Checked at 2013-03-21T15:35:03-04:00 - No changes to report
+Checked at 2013-03-21T15:36:03-04:00 - No changes to report
+Checked at 2013-03-21T15:37:03-04:00 - No changes to report
+Checked at 2013-03-21T15:38:03-04:00 - No changes to report
+Checked at 2013-03-21T15:39:05-04:00 - No changes to report
+Checked at 2013-03-21T15:40:03-04:00 - No changes to report
+Checked at 2013-03-21T15:41:05-04:00 - No changes to report
+Checked at 2013-03-21T15:42:03-04:00 - No changes to report
+Checked at 2013-03-21T15:43:04-04:00 - No changes to report
+Checked at 2013-03-21T15:44:02-04:00 - No changes to report
+Checked at 2013-03-21T15:45:02-04:00 - No changes to report
+Checked at 2013-03-21T15:46:04-04:00 - No changes to report
+Checked at 2013-03-21T15:47:03-04:00 - No changes to report
+Checked at 2013-03-21T15:48:03-04:00 - No changes to report
+Checked at 2013-03-21T15:49:03-04:00 - No changes to report
+Checked at 2013-03-21T15:50:04-04:00 - No changes to report
+Checked at 2013-03-21T15:51:03-04:00 - No changes to report
+Checked at 2013-03-21T15:52:04-04:00 - No changes to report
+Checked at 2013-03-21T15:53:04-04:00 - No changes to report
+Checked at 2013-03-21T15:54:03-04:00 - No changes to report
+Checked at 2013-03-21T15:55:03-04:00 - No changes to report
+Checked at 2013-03-21T15:56:03-04:00 - No changes to report
+Checked at 2013-03-21T15:57:03-04:00 - No changes to report
+Checked at 2013-03-21T15:58:07-04:00 - No changes to report
+Checked at 2013-03-21T15:59:06-04:00 - No changes to report
+Checked at 2013-03-21T16:00:02-04:00 - No changes to report
+Checked at 2013-03-21T16:01:03-04:00 - No changes to report
+Checked at 2013-03-21T16:02:05-04:00 - No changes to report
+Checked at 2013-03-21T16:03:03-04:00 - No changes to report
+Checked at 2013-03-21T16:04:03-04:00 - No changes to report
+Checked at 2013-03-21T16:05:03-04:00 - No changes to report
+Checked at 2013-03-21T16:06:03-04:00 - No changes to report
+Checked at 2013-03-21T16:07:03-04:00 - No changes to report
+Checked at 2013-03-21T16:08:02-04:00 - No changes to report
+Checked at 2013-03-21T16:09:05-04:00 - No changes to report
+Checked at 2013-03-21T16:10:05-04:00 - No changes to report
+Checked at 2013-03-21T16:11:05-04:00 - No changes to report
+Checked at 2013-03-21T16:12:03-04:00 - No changes to report
+Checked at 2013-03-21T16:13:03-04:00 - No changes to report
+Checked at 2013-03-21T16:14:08-04:00 - No changes to report
+Checked at 2013-03-21T16:15:03-04:00 - No changes to report
+Checked at 2013-03-21T16:16:04-04:00 - No changes to report
+Checked at 2013-03-21T16:17:03-04:00 - No changes to report
+Checked at 2013-03-21T16:18:04-04:00 - No changes to report
+Checked at 2013-03-21T16:19:02-04:00 - No changes to report
+Checked at 2013-03-21T16:20:06-04:00 - No changes to report
+Checked at 2013-03-21T16:21:03-04:00 - No changes to report
+Checked at 2013-03-21T16:22:04-04:00 - No changes to report
+Checked at 2013-03-21T16:23:04-04:00 - No changes to report
+Checked at 2013-03-21T16:24:04-04:00 - No changes to report
+Checked at 2013-03-21T16:25:06-04:00 - No changes to report
+Checked at 2013-03-21T16:26:04-04:00 - No changes to report
+Checked at 2013-03-21T16:27:04-04:00 - No changes to report
+Checked at 2013-03-21T16:28:04-04:00 - No changes to report
+Checked at 2013-03-21T16:29:03-04:00 - No changes to report
+Checked at 2013-03-21T16:30:04-04:00 - No changes to report
+Checked at 2013-03-21T16:31:03-04:00 - No changes to report
+Checked at 2013-03-21T16:32:02-04:00 - No changes to report
+Checked at 2013-03-21T16:33:06-04:00 - No changes to report
+Checked at 2013-03-21T16:34:04-04:00 - No changes to report
+Checked at 2013-03-21T16:35:05-04:00 - No changes to report
+Checked at 2013-03-21T16:36:04-04:00 - No changes to report
+Checked at 2013-03-21T16:37:03-04:00 - No changes to report
+Checked at 2013-03-21T16:38:05-04:00 - No changes to report
+Checked at 2013-03-21T16:39:03-04:00 - No changes to report
+Checked at 2013-03-21T16:40:04-04:00 - No changes to report
+Checked at 2013-03-21T16:41:03-04:00 - No changes to report
+Checked at 2013-03-21T16:42:04-04:00 - No changes to report
+Checked at 2013-03-21T16:43:03-04:00 - No changes to report
+Checked at 2013-03-21T16:44:03-04:00 - No changes to report
+Checked at 2013-03-21T16:45:03-04:00 - No changes to report
+Checked at 2013-03-21T16:46:04-04:00 - No changes to report
+Checked at 2013-03-21T16:47:03-04:00 - No changes to report
+Checked at 2013-03-21T16:48:04-04:00 - No changes to report
+Checked at 2013-03-21T16:49:04-04:00 - No changes to report
+Checked at 2013-03-21T16:50:04-04:00 - No changes to report
+Checked at 2013-03-21T16:51:05-04:00 - No changes to report
+Checked at 2013-03-21T16:52:03-04:00 - No changes to report
+Checked at 2013-03-21T16:53:06-04:00 - No changes to report
+Checked at 2013-03-21T16:54:03-04:00 - No changes to report
+Checked at 2013-03-21T16:55:02-04:00 - No changes to report
+Checked at 2013-03-21T16:56:05-04:00 - No changes to report
+Checked at 2013-03-21T16:57:02-04:00 - No changes to report
+Checked at 2013-03-21T16:58:04-04:00 - No changes to report
+Checked at 2013-03-21T16:59:05-04:00 - No changes to report
+Checked at 2013-03-21T17:00:06-04:00 - No changes to report
+Checked at 2013-03-21T17:01:07-04:00 - No changes to report
+Checked at 2013-03-21T17:02:04-04:00 - No changes to report
+Checked at 2013-03-21T17:03:02-04:00 - No changes to report
+Checked at 2013-03-21T17:04:03-04:00 - No changes to report
+Checked at 2013-03-21T17:05:06-04:00 - No changes to report
+Checked at 2013-03-21T17:06:03-04:00 - No changes to report
+Checked at 2013-03-21T17:07:03-04:00 - No changes to report
+Checked at 2013-03-21T17:08:04-04:00 - No changes to report
+Checked at 2013-03-21T17:09:04-04:00 - No changes to report
+Checked at 2013-03-21T17:10:06-04:00 - No changes to report
+Checked at 2013-03-21T17:11:04-04:00 - No changes to report
+Checked at 2013-03-21T17:12:04-04:00 - No changes to report
+Checked at 2013-03-21T17:13:03-04:00 - No changes to report
+Checked at 2013-03-21T17:14:03-04:00 - No changes to report
+Checked at 2013-03-21T17:15:04-04:00 - No changes to report
+Checked at 2013-03-21T17:16:03-04:00 - No changes to report
+Checked at 2013-03-21T17:17:06-04:00 - No changes to report
+Checked at 2013-03-21T17:18:03-04:00 - No changes to report
+Checked at 2013-03-21T17:19:05-04:00 - No changes to report
+Checked at 2013-03-21T17:20:03-04:00 - No changes to report
+Checked at 2013-03-21T17:21:06-04:00 - No changes to report
+Checked at 2013-03-21T17:22:04-04:00 - No changes to report
+Checked at 2013-03-21T17:23:04-04:00 - No changes to report
+Checked at 2013-03-21T17:24:04-04:00 - No changes to report
+Checked at 2013-03-21T17:25:04-04:00 - No changes to report
+Checked at 2013-03-21T17:26:03-04:00 - No changes to report
+Checked at 2013-03-21T17:27:03-04:00 - No changes to report
+Checked at 2013-03-21T17:28:03-04:00 - No changes to report
+Checked at 2013-03-21T17:29:04-04:00 - No changes to report
+Checked at 2013-03-21T17:30:06-04:00 - No changes to report
+Checked at 2013-03-21T17:31:03-04:00 - No changes to report
+Checked at 2013-03-21T17:32:03-04:00 - No changes to report
+Checked at 2013-03-21T17:33:05-04:00 - No changes to report
+Message sent!
+Site changed! 'SOON' was at 764 before, now at 797.
+Message sent!
+Site changed! 'SOON' was at 764 before, now at 797.
+Message sent!
+Site changed! 'SOON' was at 764 before, now at 797.
+Message sent!
+Site changed! 'SOON' was at 764 before, now at 797.
+
+{% endcodeblock %}

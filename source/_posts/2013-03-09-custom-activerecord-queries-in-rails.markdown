@@ -43,3 +43,16 @@ Be on the lookout for this pattern. While sometimes innocent and occasionally de
 These are the rules of inheritance; break them at your peril. For inheritance to work, two things must always be true. First, the objects that you are modeling must truly have a generalization–specialization relationship. Second, you must use the correct coding techniques. - p.142
 
 A lot of being a more experienced developer seems to revolve around a spidey sense about coding design patterns. Avi demonstrates this regularly when he'll spend just a few minutes flying between levels of abstraction that take us beginners hours to implement ourselves. In fact, experience in most any profession or skillset can be reflected in the "sixth sense" someone has about recognizing patterns. An experienced trader can front-run the market because he or she "senses" that prices will move in a certain direction. A branding expert can quickly conceptualize a marketing campaign because he or she can immediately grasp the underlying nature of the message a client wants to convey. In the same way, experience as a developer means that you get better at spotting patterns in code. POODR aims to provide beginners with a jumpstart in finding those patterns.
+
+P 123, 128,134 pood
+
+"The general rule for refactoring into a new inheritance hierarchy is to arrange code so that you can promote abstractions rather than demote concretions." p. 148
+
+"Explicitly stating that subclasses are required to implement a message provides useful documentation for those who can be relied upon to read it and useful error messages for those who cannot." - p. 153
+
+"Instead of allowing subclasses to know the algorithm and requiring that they send super, superclasses can instead send hook messages, ones that exist solely to provide subclasses a place to con- tribute information by implementing matching methods. This strategy removes knowledge of the algorithm from the subclass and returns control to the superclass." - p. 134
+
+
+
+
+
