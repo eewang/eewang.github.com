@@ -268,7 +268,7 @@ Writing a script to try and buy discounted tickets was a bittersweet experience.
 
 <img src="/images/post_images/lollapalooza/lolla_after_2.png"></img>
 
-The lesson here is that tickets sell out super fast. Next time I try and get an edge in buying tickets, I'll try to optimize more for performance and maybe try and find a way to decrease the periodicity of my task to less than a minute, although I'd probably have more timeout errors. Also, I could have also refactored and cleaned-up my code a bit more (probably used too many class variables, for example).
+The lesson here is that tickets sell out super fast. Next time I try and get an edge in buying tickets, I'll try to optimize more for performance and maybe try and find a way to decrease the periodicity of my task to less than a minute, although I'd probably have more timeout errors and probably piss off the Lollapalooza system admins in the process. Also, since I wrote this script as quickly as I could (since the tickets could post at any minute), I could have also refactored and cleaned-up my code a bit more.
 
 I've posted below my full scrape log. You'll notice that there were some moments when the scrape wasn't running - namely when my computer was turned off or I was not connected to the Internet. Despite the one false alarm, the script performed its task admirably - it notified me right when Souvenir tickets went on sale, at some point between 5:33 pm and  5:34 pm today. Unfortunately, my trigger finger was not fast enough, and even though I was able to click on the link to buy tickets (i.e., before they sold out), after Front Gate Tickets processed my request there were no more tickets remaining.
 
