@@ -4,7 +4,7 @@
   <title><![CDATA[Category: hacking | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/hacking/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-03-21T21:58:20-04:00</updated>
+  <updated>2013-03-21T22:02:23-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -629,7 +629,7 @@
 
 <p><img src="http://eewang.github.com/images/post_images/lollapalooza/lolla_after_2.png"></img></p>
 
-<p>The lesson here is that tickets sell out super fast. Also, next time I try and get an edge in buying tickets, I'll try to optimize more for performance.</p>
+<p>The lesson here is that tickets sell out super fast. Next time I try and get an edge in buying tickets, I'll try to optimize more for performance and maybe try and find a way to decrease the periodicity of my task to less than a minute, although I'd probably have more timeout errors. Also, I could have also refactored and cleaned-up my code a bit more (probably used too many class variables, for example).</p>
 
 <p>I've posted below my full scrape log. You'll notice that there were some moments when the scrape wasn't running - namely when my computer was turned off or I was not connected to the Internet. Despite the one false alarm, the script performed its task admirably - it notified me right when Souvenir tickets went on sale, at some point between 5:33 pm and  5:34 pm today. Unfortunately, my trigger finger was not fast enough, and even though I was able to click on the link to buy tickets (i.e., before they sold out), after Front Gate Tickets processed my request there were no more tickets remaining.</p>
 
