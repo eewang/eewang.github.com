@@ -52,7 +52,8 @@ P 123, 128,134 pood
 
 "Instead of allowing subclasses to know the algorithm and requiring that they send super, superclasses can instead send hook messages, ones that exist solely to provide subclasses a place to con- tribute information by implementing matching methods. This strategy removes knowledge of the algorithm from the subclass and returns control to the superclass." - p. 134
 
-
-
+"Inheritance - is-a
+Modules/Duck Types - behaves-like
+Composition - has-a" - p. 209
 
 

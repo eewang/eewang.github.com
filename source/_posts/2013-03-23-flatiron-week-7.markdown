@@ -1,0 +1,37 @@
+---
+layout: post
+title: "Flatiron - Week 7"
+date: 2013-03-23 22:56
+comments: true
+categories: 
+---
+
+We spent this past week focused mostly on getting our group projects off the ground. We didn't really have lecture this week; each day was spent pair programming and building our applications. My group, which consists of myself, <a href="http://janeeats.github.com" target="_blank">Jane Vora</a>, <a href="http://anthonywijnen.com" target="_blank">Anthony Wijnen</a> and <a href="http://ei-lene.github.com" target="_blank">Ei-lene Heng</a>, is building an app to structure and streamline the process of asking questions in class during group work. The current process of just raising your hand and hoping that a teacher is free is pretty inefficient and awards the lucky students rather than students who have an especially urgent question or have been waiting a long time.
+
+<!--more-->
+
+Since this was the first week at Flatiron devoted to building applications, I learned a lot about how to work effectively in a group and maintain an agile approach to building web products. Here are a few lessons I learned this past week:
+
+<strong>1) Design a good group workflow that holds people accountable</strong>
+
+Our team this past week developed a pretty solid workflow. Each day, we pair programming with a different teammate. This enabled us to get an understanding of how each person codes, while switching roles periodically such that whomever was coding in the morning became the person giving instructions in the afternoon. Also, we established a rule such that every code commit to Github must be to a feature branch with a pull request to the master branch. This way, the team submitting the pull request would have to walk the other pair through the changes so that the other pair could ask questions, understand the code changes and ultimately be responsible for approving the request. 
+
+I think this is an effective group workflow because it forces developers to explain and clearly articulate the purpose of the code they wrote. It helps the entire team spot patterns and refactoring opportunities, while holding individual team members accountable for the code they write. Oftentimes in the process of reviewing the other pair's pull request, we would find opportunities to more efficiently merge code or enter into a discussion of how a feature will actually behave. While I've come to appreciate the Git/Github process and workflow (after much wall head-banging, no doubt), it doesn't replace actual in-person communication, which is how features are flushed out and errors spotted.
+
+<strong>2) Explore rabbit holes but don't dive in</strong>
+
+Avi often talks about the notion of a programming "rabbit hole" - a non-core path in building an application that lead to great frustration without actual productive learning opportunities. These are often littered throughout the application building process - using gems, for example, can become a rabbit hole when trying to properly configure a gem or customize its functionality in a certain way. I don't think rabbit holes should be avoided entirely; often, you don't know something is a rabbit hole until you've started going down it. Rather, what's more important is to have discipline and perception in recognizing what is a rabbit hole, knowing how far to go down it and establishing a clear path out.
+
+An example of a rabbit hole I encountered this past week was in using <a href="https://github.com/intridea/omniauth-github" target="_blank">OmniAuth for Github</a>. OmniAuth enables applications to permit users to authenticate using third-party applications, like Facebook, Twitter or Github. This allows developers to build off the Facebook platform, for example, and extend its functionality using Facebook data. OmniAuth is an incredibly useful tool and streamlines login/logout functionality shared by nearly every application. 
+
+However, OmniAuth does its magic by working in the Rack middleware in Rails, which is an area that I don't feel particularly strong in. Also, after learning authentication just over a week ago, we've been working mostly on building our own simple authentication systems rather than applying a third-party auth system. Needless to say, trying to implement OmniAuth for Github this past week was a challenge. I had to improve my understanding of authentication generally while also implementing the OmniAuth gem and exploring the Github API. It felt a bit overwhelming. As I tried to implement OmniAuth for Github, error messages kept popping up and it seemed like I was going nowhere with it. I had come across a rabbit hole, at least for the moment. Eventually, Github integration will be a necessary component of our application (so that users can create gists and share code snippets when asking questions through the app), but its not necessarily a core feature. By putting off the implementation of OmniAuth for Github until I have a better understanding of OmniAuth generally (i.e., this week, hopefully), I can be more efficient in building my app by focusing on the MVP functionality.
+
+Knowing when exploration turns into a rabbit hole and being disciplined about turning back is hard. My natural tendency is to just plow through and try and solve the problem, regardless of how much time I spent on it and even if taking a step back and learning more about the underlying problem before is the more efficient strategy in the long-run. You get that nagging feeling that you just can't step away from the code, even if you know you should stop going down the rabbit hole. That's how I'll end up coding late into the night, by trying to climb out of a rabbit hole - an exercise in futility at 3 am in the morning.
+
+I've come to realize that its better to just take a step back, calm down, re-evaluate and pick it back up in the morning. A good night's sleep helps refocus the mind. But having that discipline to stop working is often as hard to develop as the motivation to begin work.
+
+<strong>3) Embrace the uncertainty that comes with agile development</strong>
+
+With this past week being our first extended experience with an agile development process, I learned not to be too beholden to individual features or processes, but rather to maintain flexibility and get comfortable with not knowing. Early on in the development process, not only do you not know what the end product will look like, you don't even know what you don't know about the obstacles, challenges and opportunities along the way. Thus, instead of writing out long, detailed specs about every feature of the product, its better to work iteratively with tight, short feedback loops to boost software responsiveness. 
+
+In our daily work, we've tried to work in short sprints using <a href="http://www.trello.com" target="_blank">Trello</a> as our project management tool. Checking in regularly with the other team also enabled us to keep moving in the right direction while avoiding rabbit holes. I appreciate the iterative process of software development, as it emphasizes flexibility, testing and product feedback rather than grand design and extensive planning before actual coding. This next week we'll go back to splitting up the day between lecture and groupwork; I'm eager to get into some more advanced Rails topics that we can hopefully apply immediately to our projects.
