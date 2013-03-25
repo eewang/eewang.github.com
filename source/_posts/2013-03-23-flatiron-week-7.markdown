@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Flatiron - Week 7"
+title: "Agile Product Development (Flatiron - Week 7)"
 date: 2013-03-23 22:56
 comments: true
 categories: 
 ---
 
-We spent this past week focused mostly on getting our group projects off the ground. We didn't really have lecture this week; each day was spent pair programming and building our applications. My group, which consists of myself, <a href="http://janeeats.github.com" target="_blank">Jane Vora</a>, <a href="http://anthonywijnen.com" target="_blank">Anthony Wijnen</a> and <a href="http://ei-lene.github.com" target="_blank">Ei-lene Heng</a>, is building an app to structure and streamline the process of asking questions in class during group work. The current process of just raising your hand and hoping that a teacher is free is pretty inefficient and awards the lucky students rather than students who have an especially urgent question or have been waiting a long time.
+We spent this past week focused mostly on getting our group projects off the ground. We didn't really have lecture this week; each day was spent pair programming and building our applications using agile development best practices. My group, which consists of myself, <a href="http://janeeats.github.com" target="_blank">Jane Vora</a>, <a href="http://anthonywijnen.com" target="_blank">Anthony Wijnen</a> and <a href="http://ei-lene.github.com" target="_blank">Ei-lene Heng</a>, is building an app to structure and streamline the process of asking questions in class during group work. The current process of just raising your hand and hoping that a teacher is free is pretty inefficient and awards the lucky students rather than students who have an especially urgent question or have been waiting a long time.
 
 <!--more-->
 
