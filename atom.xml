@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-04-08T09:52:26-04:00</updated>
+  <updated>2013-04-08T09:54:03-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,173 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Building ViewFinder (Flatiron - Week 9)]]></title>
+    <link href="http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9/"/>
+    <updated>2013-04-07T14:42:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9</id>
+    <content type="html"><![CDATA[<p>The majority of this past week was spent building <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, which is a Rails app that leverages the Instagram API to enable users to guess where photos were taken and gamefies Instagram photo feeds. Building ViewFinder along with <a href="http://www.erinandcode.com" target="_blank">Erin Lee</a> and <a href="http://jlarusso.github.io" target="_blank">Jesse LaRusso</a> has been a pretty great experience; we got way farther than I had expected initially for the NYC on Rails presentation. Looking back at our Trello board, we defined our MVP for the presentation as an app where users could browse tagged photos and write in the address or intersection where they think the photo was taken. What we ended up with was much more than that, and more visually appealing than I could have imagined initially.</p>
+
+<!--more-->
+
+
+<p><strong>1) Brainstorming and ideation</strong></p>
+
+<p>The idea for ViewFinder came from the View From Your Window (VFYW) game that the blogger Andrew Sullivan has on his blog, <a href="http://dish.andrewsullivan.com/" target="_blank">The Daily Dish</a>. If you haven&#8217;t read the Daily Dish, you should start (and pay for the privilege!). Sully is a coherent and reasoned blogger, and his writing covers a large swath of topics, from public policy and politics, to business, to arts and literature. For his VFYW game, readers will send him photos of their view outside their window and since his readership spans the globe, the photos tend to be from far-flung regions like Japan, Indonesia or Estonia. I&#8217;ve never played the game, because the amount of context clues provided by a VFYW photo are not enough for me to have a reasoned guess of where the photo was taken, given the global scope. However, I&#8217;ve always thought that the concept of the game was fun, and that it could be made more accessible to the average person by adding context, localizing the game and making it social.</p>
+
+<p>I had initially planned to pursue this as a side project during the Flatiron program. Separately, Jesse, Erin and I were considering doing a project for The Disruptor Cup, which is a NYC hackathon that focuses on emergency preparedness. We had discussed an idea centered on analyzing government spending data in the aftermath of Hurricane Sandy and using the d3 Javascript library for data visualization as the interface for users to interact with the data. However, that idea didn&#8217;t get too far, as just getting up to speed with the d3 library such that we could build complex data visualizations presented a pretty steep learning curve. And given the timing of the Disruptor Cup (early/mid-April) relative to our actual class projects, we decided to punt on the hackathon. We figured that there will always be other hackathons to participate in (and civic data is a particular passion for Jesse and I), and we didn&#8217;t want to get too bogged down such that our in-class work quality would fall.</p>
+
+<p>We explored a few other data visualization ideas for the NYC on Rails presentation. Most of these centered on using the NYC Open Data API to build a data visualization or map. However, we couldn&#8217;t quite figure out what we could build that would be a great learning experience, be a functional product and, most importantly, actually be fun to build. We knew that we wanted to work with data and APIs in some form, do something with maps and build an the end product with a well-designed front end.</p>
+
+<p>In the end, I proposed ViewFinder as our NYC on Rails presentation. Erin and Jesse seemed to warm up to the idea pretty quickly, and we brainstormed a lot of ideas and features that we could build. We ended up agreeing to focus on building out a location-based game, where users could guess where Instagram photos were taken by geographic area in New York. Initially, we had Union Square, Times Square and 30 Rock as our main areas, but those gradually evolved into Midtown Manhattan, Downtown Manhattan and Downtown Brooklyn.</p>
+
+<p><strong>2) Schema, design and gameplay</strong></p>
+
+<p>I was happy that I was able to apply various programming techniques and tools that Avi/Bob/Blake have covered over the past few weeks. The two that come most clearly to mind are metaprogramming and asynchronous background job processing. Metaprogramming is a really useful technique to write methods that write their own methods. They are most applicable to code abstract patterns that vary by the data they accept rather than the actual methods that are applied to the data.</p>
+
+<p>The area where I used metaprogramming most actively was in designing the Instagram API calls and connecting that to the gameplay. For the Instagram API calls, there are a few different ways to access the API - you can search by tag, by geographic location, by user or by popular media. For each of these calls, I needed to filter the data to remove any images that were not geotagged, as non-geotagged photos would be useless in a location guessing game. Thus, in my Instagram wrapper class - which wraps the Instagram gem, which itself directly accesses the Instagram API - I have the following code:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># instagram_wrapper.rb</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">acts_as_locatable</span><span class="p">(</span><span class="o">*</span><span class="n">queries</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">queries</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">query</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">define_method</span> <span class="s2">&quot;filter_</span><span class="si">#{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">options</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">location_images</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">delete_if</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">nil?</span><span class="p">}</span>
+</span><span class='line'>      <span class="n">location_images</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">acts_as_locatable</span> <span class="ss">:tag_recent_media</span><span class="p">,</span> <span class="ss">:media_search</span><span class="p">,</span> <span class="ss">:user_recent_media</span><span class="p">,</span> <span class="ss">:media_popular</span><span class="p">,</span> <span class="ss">:user_media_feed</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&#8220;acts_as_locatable&#8221; at the end of the above code block is a class method that takes in an arbitrary number of arguments and is executed at runtime. For each argument, it creates a method with the name of the argument prefixed with &#8220;filter_&#8221;. Each of these filter methods strip away the non-geotagged results of any of the Instagram API queries defined by the parameters passed to the acts_as_locatable class method. These methods flow into the photo model, which then takes the results of the filtered Instagram query and saves them to the database.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">acts_as_instagrammable</span><span class="p">(</span><span class="o">*</span><span class="n">queries</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">queries</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">query</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">define_singleton_method</span> <span class="s2">&quot;instagram_</span><span class="si">#{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">options</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">i</span> <span class="o">=</span> <span class="no">InstagramWrapper</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>      <span class="n">filtered_images</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;filter_</span><span class="si">#{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">filtered_images</span><span class="o">.</span><span class="n">collect</span> <span class="k">do</span> <span class="o">|</span><span class="n">pic</span><span class="o">|</span>
+</span><span class='line'>        <span class="no">Photo</span><span class="o">.</span><span class="n">save_instagram_photos</span><span class="p">(</span><span class="n">pic</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">acts_as_instagrammable</span> <span class="ss">:media_search</span><span class="p">,</span> <span class="ss">:tag_recent_media</span><span class="p">,</span> <span class="ss">:media_popular</span><span class="p">,</span> <span class="ss">:user_media_feed</span><span class="p">,</span> <span class="ss">:user_recent_media</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Like in the first code block, &#8220;acts_as_instagrammable&#8221; is a class method that creates a new instance of the Instagram wrapper, calls the relevant filtered Instagram API call and saves the photos to the database. This way, I know that whenever I want to get photos from Instagram, I can use their method names (e.g., tag_recent_media) and know that what I ultimately get back are instances of my photo database, which will only include geotagged items.</p>
+
+<p>Finally, the below meta-method is the crux of the gameplay, and queries the database for photos while simultaneously initiating a background processing job via Sidekiq to get more data from Instagram.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">location_games</span><span class="p">(</span><span class="o">*</span><span class="n">games</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">games</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">game</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">game</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="vi">@game</span> <span class="o">=</span> <span class="n">game</span>
+</span><span class='line'>      <span class="vi">@coordinates</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:coordinates</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">radius</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:radius</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">size</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:size</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="n">current_user</span>
+</span><span class='line'>      <span class="vi">@photos</span> <span class="o">=</span> <span class="no">Photo</span><span class="o">.</span><span class="n">game_photos_random</span><span class="p">(</span><span class="vi">@coordinates</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@photos</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</span><span class='line'>        <span class="nb">p</span><span class="o">.</span><span class="n">locale_lat</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:coordinates</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>        <span class="nb">p</span><span class="o">.</span><span class="n">locale_lon</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:coordinates</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>        <span class="nb">p</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">create_game</span><span class="p">({</span><span class="ss">:game</span> <span class="o">=&gt;</span> <span class="vi">@game</span><span class="p">,</span> <span class="ss">:coordinates</span> <span class="o">=&gt;</span> <span class="vi">@coordinates</span><span class="p">,</span> <span class="ss">:photos</span> <span class="o">=&gt;</span> <span class="vi">@photos</span><span class="p">})</span>
+</span><span class='line'>      <span class="vi">@start_photo</span> <span class="o">=</span> <span class="n">session</span><span class="o">[</span><span class="n">game</span><span class="o">][</span><span class="ss">:photos</span><span class="o">].</span><span class="n">empty?</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="no">Photo</span><span class="o">.</span><span class="n">first_unguessed_photo</span><span class="p">(</span><span class="n">session</span><span class="o">[</span><span class="n">game</span><span class="o">][</span><span class="ss">:photos</span><span class="o">]</span><span class="p">,</span> <span class="n">current_user</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@guessed_count</span> <span class="o">=</span> <span class="vi">@photos</span><span class="o">.</span><span class="n">count</span> <span class="p">{</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span> <span class="nb">p</span><span class="o">.</span><span class="n">guessed_by?</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>      <span class="no">InstagramWorker</span><span class="o">.</span><span class="n">perform_async</span><span class="p">(</span><span class="vi">@coordinates</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">render</span> <span class="s2">&quot;index&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">location_games</span> <span class="ss">:downtown</span><span class="p">,</span> <span class="ss">:midtown</span><span class="p">,</span> <span class="ss">:downtown_brooklyn</span> <span class="c1">#, :world_trade, :dumbo</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above block does a number of things, and is admittedly probably a decent candidate for additional refactoring. This meta-method creates a method for each game that is created. Initially, we just defined three games in a hash (not shown here) called LOCATION_GAMES, but eventually we think it would be cool for users to create their own games. For example, someone who is really into architecture or beautiful aboreal landscapes can tag photos on Instagram with #viewfinder and another tag and basically create themed games. Additionally, we imagine that this game can be replicated across most any geography, so we wanted to have a flexible design where you could quickly define the parameters of a game and have that flow into the application. Currently, games are defined within the context of a photo, but I think we are looking to break out games into their own game model and make ViewFinder more solidly object-oriented.</p>
+
+<p>Anyways, the above code is activated when a user clicks on a location-based game on the ViewFinder landing page. For each game, the method will determine the game parameters (i.e., coordinates, radius and photo set size), go to the database and get a random set of photos that have not been guesesd by the logged in user, are tagged with #viewfinder or #vfyw and are within the defined radius of the coordinates. Simultaneously, the method will set off a background job to get more data from Instagram within the location parameters of the game. This way, as more people play and demand for a given game scales, the application should theoretically make more API calls and thus get more real-time data from Instagram, all without impacting the user experience as the arduous task of accessing the Instagram API and saving photos to the database is disassociated from the photos that are loaded on the front-end.</p>
+
+<p>There are definitely many areas where we can do additional refactoring and clean up the code. One place specifically where I think we can do better is in using view helper methods more actively, as well as moving more logic to our controllers. With the NYC on Rails presentation coming up on Thursday, I&#8217;ll admit that we took a few shortcuts in the middle of the week just to get stuff working. In the next few weeks, I hope to go back through the code from start to finish and refactor extensively.</p>
+
+<p>In terms of the front-end design of the application, we wanted to make the user interface highly visual and intuitive for new users to quickly get up to speed on the game. We went through several iterations of design that used various photo carousel options. We eventually rotated back to Twitter Bootstrap&#8217;s carousel, and I&#8217;m pretty happy with how the design ended up.</p>
+
+<p><strong>3) Technical challenges</strong></p>
+
+<p>Probably the biggest technical challenge that we faced was in figuring out how to use the Google Maps API to drag and drop a map marker that then posts to our guesses controller to create a photo location guess. We had to delve deeper into Javascript than we had previously in class, and we also learned how to use AJAX in the process. The map that is displayed when a user decides to guess on a photo is centered on the game that the user is playing. When a user decides to play the Midtown game, for example, the photos that get loaded into the game are tagged with the coordinates of the game origin. This way, when the guess map is loaded, the map is centered and zoomed in accordingly.</p>
+
+<p>After figuring out how to load the map correctly, we needed to be able to post the coordinates of the map marker to create a guess. To do this, we used Javascript to recalculate the map marker coordinates whenever the map changed (the map marker automatically moves to the center of the map) and AJAX to create a guess with the respective coordinates when the user pressed &#8220;GUESS&#8221;. Then, when the next page is loaded (i.e., the guesses show page), the map contains a marker for each guess that has been made on that photo. Figuring out how to make Rails and Javascript play nice in terms of transferring data between the two was challenging, but now that we were able to do that successfully, it&#8217;s a great feeling to know that I now have that skill in my toolbelt.</p>
+
+<p>Another challenge we faced was working with Instagram authentication and enabling users to sign-in via Instagram and display their user feed and friend feeds. This challenge tied in with the difficulty of designing a clean, intuitive user flow - from choosing a game all the way to viewing the results after making a guess. The first thing I tried to do actually when working on ViewFinder was to try and set up Instagram authentication. I used the Omniauth gem to do this, but it was a frustrating experience. I learned eventually that I was over-programming, in a sense, and needed to just let Omniauth take care of the authentication process. Building an intuitive user experience with Instagram authentication is still something we&#8217;re working on, and I think that making the gameplay more object-oriented will help in that regard.</p>
+
+<p><strong>4) Future extensions</strong></p>
+
+<p>I think it would be great to enable users to create their own games. Eventually, I&#8217;d like it for people passionate about sculptures, for example, to be able to take pictures across the globe and tag their pics with #sculpture and #viewfinder and have the application pick that up for their followers to guess where they&#8217;ve been. In general, I like the notion of themed games as a way to enable people that are passionate about whatever to better express that passion.</p>
+
+<p>Also, it would be really cool if users could play timed games on ViewFinder, or challenge their friends to see who can best guess a set of 10 photos in a fixed amount of time. Another feature that I&#8217;d like to work on is to build out the analytics of the game and tap into the competitive nature of people. I&#8217;m a bit of a data analytics geek, and it would be super cool if we could use user data from the game to create cool data visualizations.</p>
+
+<p>On the technical side, there is a certain amount of technical debt that got built up with the rush to deploy before the NYC on Rails presentation. I don&#8217;t think the debt is insurmountable, but the app can definitely benefit from some refactoring. Using view helpers more effectively, moving some code into modules for shared functionality and making gameplay more object-oriented are all changes that I think would make the codebase cleaner and the user experience more fluid.</p>
+
+<p>I definitely would like to continue developing ViewFinder and building out new features. I&#8217;ve enjoyed the process of designing the product, working in a team and writing code. There&#8217;s an undefinable joy in having an idea and being able to execute on that idea and see the results. Like many creative ventures, coding is hard enough so that its always challenging, but its also accessible and progress is possible with concerted effort. And to steal a phrase from Avi, coding is all about taking complexity and delivering simplicity. A simple, sensible user interface hides the complexity within a codebase, and now being able to understand how that complexity creates simplicity has been fantastic.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Agile Product Development (Flatiron - Week 7)]]></title>
@@ -5310,53 +5477,6 @@
 
 
 <p>Avi said that we wouldn&#8217;t be actively writing many SQL queries, since Rails abstracts so much of the database interaction. However, there will undoubtedly be times when Rails isn&#8217;t sufficient for complex data queries, and we&#8217;ll have to write our own SQL. Even if we don&#8217;t use SQL that often, its critical to know, and I think its pretty cool, despite the at times frustrating syntax and poor debugging feedback for the sqlite3 shell. I would like to eventually explore more advanced data analysis tools, software like Hadoop or Cassandra, so knowing SQL is going to be invaluable moving forward.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Day 003]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/"/>
-    <updated>2013-02-06T11:30:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/06/flatiron-day-003</id>
-    <content type="html"><![CDATA[<p>On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.</p>
-
-<!--more-->
-
-
-<p>I wrote a short script to automate the process of deploying the blog (&#8220;rake deploy&#8221;), staging files on git (&#8220;git add .&#8221;), commiting files (&#8220;git commit -am &#8216;message&#8217;&#8221;) and pushing files to a remote repository on Github. Its pretty simple and permits users to add in a commit message. Here is the code to put in your Rakefile:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Add files to github, commit and deploy&quot;</span>
-</span><span class='line'><span class="n">task</span> <span class="ss">:gen_deploy_push</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>  <span class="no">STDOUT</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;What is your commit message? &quot;</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="no">STDIN</span><span class="o">.</span><span class="n">gets</span><span class="o">.</span><span class="n">chomp</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;rake gen_deploy&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git add .&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git commit -am &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git push&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;commit message was &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I think the code is fairly straightforward - basically the user inputs a commit message and then the command will deploy the site while commiting the code to Github.</p>
-
-<p>After a morning spent working through the intricacies of the Gemfile and Rakefile in the Octopress application (it looks intimidating, but I found it very helpful to examine the code underlying a command before executing it - makes coding seem less like magic and more like an intricate sequence of interconnected logic), we broke for lunch. In the afternoon, we shifted gears to databases, specifically learning Structured Query Language (SQL). I first learned SQL a few years back when I interned at KPMG. I was part of the Forensic Advisory group, which used Microsoft SQL Server to comb through millions of rows of data and run pricing analyses for pharmaceutical companies. However, even though I learned the syntax and general structure of SQL at KPMG, a lot of it was more copying pre-written SQL queries and modifying them at the margins, rather than writing my own from scratch, so the exercises today were pretty helpful.</p>
-
-<p>After a brief lecture on SQL by Avi, we broke up into our groups and designed a schema for a simple quiz app. This app would have users, quizzes, questions, choices and answers, and the challenge for us was to determine the optimal database design to address the immediate use cases while also leaving room to hypothetically scale the database. Once we created a schema, we then practice writing SQL queries to create, manipulate and access that database. For the rest of the afternoon, we worked as a class to build the quiz app database, with each group contributing a piece of the database structure and Avi using the differences between our schemas to comment on the pros and cons of schema designs.</p>
-
-<p>For me, the class has been moving along at a brisk but manageable pace. In the course of three days, it seems like we&#8217;ve covered a boatload of material related to git, environment setup and databases, but I know that that&#8217;s just the beginning of the journey. We haven&#8217;t even systematically delved into Javascript, Ruby or Rails yet! Its exciting to think of all the stuff that&#8217;s out there to learn - I just need to be diligent and purposeful in completing the homework and grabbing every opportunity to learn something new or contribute to a project, no matter how small.</p>
 ]]></content>
   </entry>
   
