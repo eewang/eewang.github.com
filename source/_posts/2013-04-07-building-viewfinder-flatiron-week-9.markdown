@@ -4,7 +4,7 @@ title: "Building ViewFinder (Flatiron - Week 9)"
 date: 2013-04-07 14:42
 comments: true
 categories: 
-published: false
+published: true
 ---
 
 The majority of this past week was spent building <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, which is a Rails app that leverages the Instagram API to enable users to guess where photos were taken and gamefies Instagram photo feeds. Building ViewFinder along with <a href="http://www.erinandcode.com" target="_blank">Erin Lee</a> and <a href="http://jlarusso.github.io" target="_blank">Jesse LaRusso</a> has been a pretty great experience; we got way farther than I had expected initially for the NYC on Rails presentation. Looking back at our Trello board, we defined our MVP for the presentation as an app where users could browse tagged photos and write in the address or intersection where they think the photo was taken. What we ended up with was much more than that, and more visually appealing than I could have imagined initially.
