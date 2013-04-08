@@ -1,40 +1,72 @@
 ---
 layout: post
 title: "TRUE Object-Oriented Design"
-date: 2013-03-09 11:23
+date: 2013-03-28 11:23
 comments: true
 categories: 
 published: false
 ---
 
-I've started to think of good design like a mountain range. The most abstract layers are the most foundational to the application - the base of the mountain, if you will - whereas the least abstract layers are the items that you actually see - the peaks. Each peak might represent a different component of your application, yet the base of the mountain represents the shared functionality or code patterns between the peaks. In looking at a mountain range from afar, no one can perceive the geological complexity of the sandstone or granite (or whatever else mountains are made of) that allow the peaks to reach the sky. In the same way, good application design hides the complex inner workings of a program, yet it is this complexity that enables the public interface of an well-built application to work so seamlessly. 
+Avi always stresses that being a good developer is about more than just being a good coder. Like all professions, coding is only part of the job. What's arguably more important than coding are the soft skills that transcend any individual profession. Skills like communication, empathy, diligence and hard work. All good professional jobs help build these skills, and software development is no different.
+
+<!--more-->
+
+But building those skills aren't easy, especially when applied to the domain of coding. Clearly and succinctly explaining the internals of a codebase to a newbie is really difficult; it requires not only communication skills but also empathy and patience. As I've been learning how to code, I'm also trying to broaden my understanding of technology generally through reading, writing and engaging in the community (e.g., meetups, hackathons). Work-work balance is critical; while its important to code most every day when learning the skill, its also important to not just code. Regular coding enables me to get deep into the weeds and determine exactly how to properly route requests through my application, while reading and blogging helps me look at code from a 30,000 foot level (apologies for the cliche) and develop a high-level understanding of software design and structure. 
+
+I've started to think of good design like a mountain range. The most abstract/least concrete layers are the most foundational to the application - the base of the mountain, if you will - whereas the least abstract/most concrete layers are the items that you actually see - the peaks. Each peak might represent a different component of your application, yet the base of the mountain represents the shared functionality or code patterns between the peaks. In looking at a mountain range from afar, no one can perceive the geological complexity of the sandstone or granite (or whatever else mountains are made of) that allow the peaks to reach the sky. In the same way, good application design hides the complex inner workings of a program, yet it is this complexity that enables the public interface of an well-built application to work so seamlessly. 
 
 Admittedly, the mountain range metaphor is a bit contrived, but the same effective design pattern can be seen in other spheres, both natural and artificial. A rainforest's beauty is seen from the treetops, but the complexity deep within the roots and vines that create an interlocking and co-dependent ecosystem and enable the treetops to extend high above the earth is hidden from the external observer. A well-functioning corporation requires harmony between its many internal groups in order to provide a service or product to its customers effectively. Software design just takes these common patterns of loose coupling, modularity and composition and applies them in the context of objects, classes and methods.
 
 In "Practical Object Oriented Design in Ruby", Sandi Metz expresses these design patterns in a pithy and effective manner, complete with code examples, comparisons of good and bad design patterns and a common theme of designing a bike shop application that weaves the 9 chapters together. POODR is an eminently readable book, and Ms. Metz does a remarkable job balancing deep dives into code with plain English explanations of good application design. As an aside, Ms. Metz's day job is as an application developer for my alma mater, Duke University, which makes her all the more awesome.
 
-<strong>"Code should be transparent, reasonable, usable and exemplary."</strong>
+Here are a few of her most quotable quotables and thoughts on how to implement her adivce:
 
-<strong>"Depend on things that change less often than you do."</strong>
+{% blockquote --POODR %}
+Code should be transparent, reasonable, usable and exemplary.
+{% endblockquote %}
 
-"A dependency on a private method of an external framework is a form of technical debt. Avoid these dependencies."
+Sandi Metz is perhaps best known for this pithy guide on how to write code. Programs should be easily understandable, well-suited for their purpose, navigable and malleable and just awesome.
 
-"create public methods that allow senders to get what they want without knowing how your class implements its behavior."
+{% blockquote --POODR %}
+Depend on things that change less often than you do.
+{% endblockquote %}
 
-"[Law of] Demeter is often paraphrased as “only talk to your immediate neighbors” or “use only one dot.”"
-  - Ties into the use of join tables in Rails - using song.genres rather than song.song_genres.genres
+{% blockquote --POODR %}
+A dependency on a private method of an external framework is a form of technical debt. Avoid these dependencies.
+{% endblockquote %}
+
+{% blockquote --POODR %}
+Create public methods that allow senders to get what they want without knowing how your class implements its behavior.
+{% endblockquote %}
+
+{% blockquote --POODR %}
+[Law of] Demeter is often paraphrased as “only talk to your immediate neighbors” or “use only one dot.”
+{% endblockquote %}
+
+{% blockquote --POODR %}
+Depend on behavior, not data. 
+{% endblockquote %}
 
 p. 80 - level of abstraction vs. likelihood of change
 
-Depend on behavior, not data (p. 49)
+(p. 49)
 
-"If objects were human and could describe their own relationships, in Figure 4.5 Trip would be telling Mechanic: “I know what I want and I know how you do it;” in Figure 4.6: “I know what I want and I know what you do” and in Figure 4.7: “I know what I want and I trust you to do your part.”
-This blind trust is a keystone of object-oriented design. It allows objects to collaborate without binding themselves to context and is necessary in any application that expects to grow and change."
+{% blockquote --POODR %}
+If objects were human and could describe their own relationships, in Figure 4.5 Trip would be telling Mechanic: “I know what I want and I know how you do it;” in Figure 4.6: “I know what I want and I know what you do” and in Figure 4.7: “I know what I want and I trust you to do your part.”
+This blind trust is a keystone of object-oriented design. It allows objects to collaborate without binding themselves to context and is necessary in any application that expects to grow and change.
+{% endblockquote %}
 
-"This tension between the costs of concretion and the costs of abstraction is fun- damental to object-oriented design. Concrete code is easy to understand but costly to extend. Abstract code may initially seem more obscure but, once understood, is far easier to change. Use of a duck type moves your code along the scale from more concrete to more abstract, making the code easier to extend but casting a veil over the underlying class of the duck."
+{% blockquote --POODR %}
+"This tension between the costs of concretion and the costs of abstraction is fundamental to object-oriented design. Concrete code is easy to understand but costly to extend. Abstract code may initially seem more obscure but, once understood, is far easier to change. Use of a duck type moves your code along the scale from more concrete to more abstract, making the code easier to extend but casting a veil over the underlying class of the duck."
+{% endblockquote %}
 
+
+{% blockquote --POODR %}
 "The ability to tolerate ambiguity about the class of an object is the hallmark of a confident designer. Once you begin to treat your objects as if they are defined by their behavior rather than by their class, you enter into a new realm of expressive
 flexible design."
+{% endblockquote %}
+
+
 
 "This code contains an if statement that checks an attribute that holds the category of self to determine what message to send to self. This should bring back memories of a pattern discussed in the previous chapter on duck typing, where you saw an if statement that checked the class of an object to determine what message to send to that object.
 In both of these patterns an object decides what message to send based on a cate- gory of the receiver. You can think of the class of an object as merely a specific case of an attribute that holds the category of self ; considered this way, these patterns are the same. In each case if the sender could talk it would be saying “I know who you are and because of that I know what you do.” This knowledge is a dependency that raises the cost of change.
