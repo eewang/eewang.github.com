@@ -1,91 +1,68 @@
 ---
 layout: post
 title: "TRUE Object-Oriented Design"
-date: 2013-03-28 11:23
+date: 2013-04-13 11:23
 comments: true
 categories: 
-published: false
+published: true
 ---
 
 Avi always stresses that being a good developer is about more than just being a good coder. Like all professions, coding is only part of the job. What's arguably more important than coding are the soft skills that transcend any individual profession. Skills like communication, empathy, diligence and hard work. All good professional jobs help build these skills, and software development is no different.
 
 <!--more-->
 
-But building those skills aren't easy, especially when applied to the domain of coding. Clearly and succinctly explaining the internals of a codebase to a newbie is really difficult; it requires not only communication skills but also empathy and patience. As I've been learning how to code, I'm also trying to broaden my understanding of technology generally through reading, writing and engaging in the community (e.g., meetups, hackathons). Work-work balance is critical; while its important to code most every day when learning the skill, its also important to not just code. Regular coding enables me to get deep into the weeds and determine exactly how to properly route requests through my application, while reading and blogging helps me look at code from a 30,000 foot level (apologies for the cliche) and develop a high-level understanding of software design and structure. 
+But building those skills aren't easy, especially when applied to the domain of coding. Clearly and succinctly explaining the internals of a codebase to a newbie is really difficult; it requires not only communication skills but also empathy and patience. As I've been learning how to code, I'm also trying to broaden my understanding of technology generally through reading, writing and engaging in the community (e.g., meetups, hackathons). Work-work balance is critical; while its important to code most every day when learning the skill, its also important to not just code. Regular coding enables me to get deep into the weeds and determine exactly how to properly route requests through my application, while reading and blogging helps me look at code from a high-level and develop a high-level understanding of software design and structure. 
 
-I've started to think of good design like a mountain range. The most abstract/least concrete layers are the most foundational to the application - the base of the mountain, if you will - whereas the least abstract/most concrete layers are the items that you actually see - the peaks. Each peak might represent a different component of your application, yet the base of the mountain represents the shared functionality or code patterns between the peaks. In looking at a mountain range from afar, no one can perceive the geological complexity of the sandstone or granite (or whatever else mountains are made of) that allow the peaks to reach the sky. In the same way, good application design hides the complex inner workings of a program, yet it is this complexity that enables the public interface of an well-built application to work so seamlessly. 
+I've started to think of good design like a mountain range. The most abstract/least concrete layers are the most foundational to the application - the base of the mountain, if you will - whereas the least abstract/most concrete layers are the items that you actually see - the peaks. Each peak might represent a different component of your application, yet the base of the mountain represents the shared functionality or code patterns between the peaks. In looking at a mountain range from afar, no one can perceive the geological complexity of the sandstone or granite that allow the peaks to reach the sky. In the same way, good application design hides the complex inner workings of a program, yet it is this complexity that enables the public interface of an well-built application to work so seamlessly. As our teacher Bob Whitney said, the job of a developer is to take in complexity and deliver simplicity.
 
 Admittedly, the mountain range metaphor is a bit contrived, but the same effective design pattern can be seen in other spheres, both natural and artificial. A rainforest's beauty is seen from the treetops, but the complexity deep within the roots and vines that create an interlocking and co-dependent ecosystem and enable the treetops to extend high above the earth is hidden from the external observer. A well-functioning corporation requires harmony between its many internal groups in order to provide a service or product to its customers effectively. Software design just takes these common patterns of loose coupling, modularity and composition and applies them in the context of objects, classes and methods.
 
-In "Practical Object Oriented Design in Ruby", Sandi Metz expresses these design patterns in a pithy and effective manner, complete with code examples, comparisons of good and bad design patterns and a common theme of designing a bike shop application that weaves the 9 chapters together. POODR is an eminently readable book, and Ms. Metz does a remarkable job balancing deep dives into code with plain English explanations of good application design. As an aside, Ms. Metz's day job is as an application developer for my alma mater, Duke University, which makes her all the more awesome.
+One book that I've recently finished reading that covers software design best practices is "Practical Object Oriented Design in Ruby" by Sandi Metz.
+In POODR (her own acronym), Sandi Metz expresses these design patterns in a pithy and effective manner, complete with code examples, comparisons of good and bad design patterns and a common example of designing a bike shop application that weaves the 9 chapters together. POODR is an eminently readable book, and Ms. Metz does a remarkable job balancing deep dives into code with plain English explanations of good application design. As an aside, Ms. Metz's day job is as an application developer for my alma mater, Duke University, which makes her all the more awesome.
 
-Here are a few of her most quotable quotables and thoughts on how to implement her adivce:
+Here are a few of her most quotable quotables and a few thoughts on how to consider her advice:
 
-{% blockquote --POODR %}
+{% blockquote %}
 Code should be transparent, reasonable, usable and exemplary.
 {% endblockquote %}
 
-Sandi Metz is perhaps best known for this pithy guide on how to write code. Programs should be easily understandable, well-suited for their purpose, navigable and malleable and just awesome.
+Sandi Metz is perhaps best known for this pithy guide on how to write code. Programs should be easily understandable, well-suited for their purpose, navigable and malleable and just awesome. TRUE is a useful north star for good code.
 
-{% blockquote --POODR %}
+{% blockquote %}
 Depend on things that change less often than you do.
 {% endblockquote %}
 
-{% blockquote --POODR %}
-A dependency on a private method of an external framework is a form of technical debt. Avoid these dependencies.
-{% endblockquote %}
+Dependencies in code are often unavoidable. Thus, what matters most is picking the right dependencies rather than trying to write entirely dependency-free code. Create dependencies that are manageable by ensuring that classes and objects that will likely change in the future should have proportionately fewer dependencies than code blocks that are more stable. The Ruby core library is a great example of this - it is better to build objects that depend on the String class, for example, than depend on an internal, domain-specific class, since the Ruby String class is pretty well-established and less likely to change going forward. 
 
-{% blockquote --POODR %}
-Create public methods that allow senders to get what they want without knowing how your class implements its behavior.
-{% endblockquote %}
+In a similar vein...
 
-{% blockquote --POODR %}
-[Law of] Demeter is often paraphrased as “only talk to your immediate neighbors” or “use only one dot.”
-{% endblockquote %}
-
-{% blockquote --POODR %}
+{% blockquote %}
 Depend on behavior, not data. 
 {% endblockquote %}
 
-p. 80 - level of abstraction vs. likelihood of change
+Data can take many different formats. A lot of coding is about taking one data item and cutting it up a hundred different ways before its actually displayed to the user. Thus, data will change frequently relative to behavior, which tends to be more consistent. Think of data as rows and behavior as columns in a database - its easier to grow a database vertically than horizontally. This means that its better to depend on behavior rather than data, because behavior is less likely to change.
 
-(p. 49)
-
-{% blockquote --POODR %}
-If objects were human and could describe their own relationships, in Figure 4.5 Trip would be telling Mechanic: “I know what I want and I know how you do it;” in Figure 4.6: “I know what I want and I know what you do” and in Figure 4.7: “I know what I want and I trust you to do your part.”
-This blind trust is a keystone of object-oriented design. It allows objects to collaborate without binding themselves to context and is necessary in any application that expects to grow and change.
+{% blockquote %}
+Create public methods that allow senders to get what they want without knowing how your class implements its behavior.
 {% endblockquote %}
 
-{% blockquote --POODR %}
+Classes should have a well defined public API that enables interaction with other objects without knowing too much about those objects. One example that Sandi Metz uses is the notion of polymorphic interfaces, which are basically methods that can iteract with multiple data types (e.g., arrays or hashes). A common pitfall among new developers is designing methods that only take in a single data type. This requires a class B that might interact with class A to know what type of data class A expects. Oftentimes, its not class B's responsibility to know what data class A expects; class A's public method should have a polymorphic interface to lessen the dependencies between the two classes.
+
+{% blockquote %}
 "This tension between the costs of concretion and the costs of abstraction is fundamental to object-oriented design. Concrete code is easy to understand but costly to extend. Abstract code may initially seem more obscure but, once understood, is far easier to change. Use of a duck type moves your code along the scale from more concrete to more abstract, making the code easier to extend but casting a veil over the underlying class of the duck."
 {% endblockquote %}
 
+I love this quote in POODR because it highlights an underlying tradeoff that developers consider whenever refactoring code and applying the priciples of good object-oriented design. On the one end of the spectrum is concrete code that relies on well-defined dataset. On the other end is highly abstract code (e.g., methods that write methods via metaprogramming) that is more powerful and flexible than concrete code, but also often less readable to the untrained eye or freshman developer. A duck type is an object that can be of any type and used within function calls. I'm sure that's not the technical definition, but to me, I think of duck types as abstract objects that can take many different forms, and so methods that can accept duck types need to be written abstractly in order to function properly.
 
-{% blockquote --POODR %}
+{% blockquote %}
 "The ability to tolerate ambiguity about the class of an object is the hallmark of a confident designer. Once you begin to treat your objects as if they are defined by their behavior rather than by their class, you enter into a new realm of expressive
 flexible design."
 {% endblockquote %}
 
+Fundamental to Sandi Metz's software design philosophy seems to be the focus on defining behavior rather than data or data types. I like this quote because it focuses on building a flexible product that can adapt to whatever the future holds for an application. Early on in the development process, ambiguity reigns supreme since programmers cannot know what the product will eventually look like. Thus, a good developer and application designer should be able tolerate and accept that uncertainty and design around the problem. Building abstract frameworks to define object behavior enables an application to grow iteratively and organically as the product specifications change.
 
+One thing I learned from the book is that different tools exist in software design to address different problems. The use of class inheritance, for example, should be used in some instances whereas modules and duck types should be used in others. Its difficult to go into a full example in the length of a blog post, but I would especially recommend reading chapters 5 through 8 about duck typing, inheritance, behavior sharing via modules and object composition. Sandi Metz does a great job of mixing in code examples along with good explanations of the high-level thought process of the pros and cons of each programming technique. Not every tool is right for every job, and so a hallmark of a good developer is being able to spot which tools are right for which jobs.
 
-"This code contains an if statement that checks an attribute that holds the category of self to determine what message to send to self. This should bring back memories of a pattern discussed in the previous chapter on duck typing, where you saw an if statement that checked the class of an object to determine what message to send to that object.
-In both of these patterns an object decides what message to send based on a cate- gory of the receiver. You can think of the class of an object as merely a specific case of an attribute that holds the category of self ; considered this way, these patterns are the same. In each case if the sender could talk it would be saying “I know who you are and because of that I know what you do.” This knowledge is a dependency that raises the cost of change.
-Be on the lookout for this pattern. While sometimes innocent and occasionally defensible, its presence might be exposing a costly flaw in your design. Chapter 5, Reducing Costs with Duck Typing, used this pattern to discover a missing duck type; here the pattern indicates a missing subtype, better known as a subclass."" - p. 136
+A lot of being a more experienced developer seems to revolve around this spidey sense about coding design patterns. Avi demonstrates this regularly when he'll spend just a few minutes flying between levels of abstraction that take us beginners hours to implement ourselves. In fact, experience in most any profession or skillset can be reflected in the "sixth sense" someone has about recognizing patterns. An experienced trader can front-run the market because he or she "senses" that prices will move in a certain direction. A branding expert can quickly conceptualize a marketing campaign because he or she can immediately grasp the underlying nature of the message a client wants to convey. In the same way, experience as a developer means that you get better at spotting patterns in code. POODR aims to provide beginners with a jumpstart in finding those patterns.
 
-These are the rules of inheritance; break them at your peril. For inheritance to work, two things must always be true. First, the objects that you are modeling must truly have a generalization–specialization relationship. Second, you must use the correct coding techniques. - p.142
-
-A lot of being a more experienced developer seems to revolve around a spidey sense about coding design patterns. Avi demonstrates this regularly when he'll spend just a few minutes flying between levels of abstraction that take us beginners hours to implement ourselves. In fact, experience in most any profession or skillset can be reflected in the "sixth sense" someone has about recognizing patterns. An experienced trader can front-run the market because he or she "senses" that prices will move in a certain direction. A branding expert can quickly conceptualize a marketing campaign because he or she can immediately grasp the underlying nature of the message a client wants to convey. In the same way, experience as a developer means that you get better at spotting patterns in code. POODR aims to provide beginners with a jumpstart in finding those patterns.
-
-P 123, 128,134 pood
-
-"The general rule for refactoring into a new inheritance hierarchy is to arrange code so that you can promote abstractions rather than demote concretions." p. 148
-
-"Explicitly stating that subclasses are required to implement a message provides useful documentation for those who can be relied upon to read it and useful error messages for those who cannot." - p. 153
-
-"Instead of allowing subclasses to know the algorithm and requiring that they send super, superclasses can instead send hook messages, ones that exist solely to provide subclasses a place to con- tribute information by implementing matching methods. This strategy removes knowledge of the algorithm from the subclass and returns control to the superclass." - p. 134
-
-"Inheritance - is-a
-Modules/Duck Types - behaves-like
-Composition - has-a" - p. 209
-
-
+Two other Ruby/Rails books that I'm reading are "Rails Antipatterns" by Chad Pytel and Tammer Saleh and "Metaprogramming Ruby" by Paolo Perrotta. I'm hoping to write a post on those books as well in the coming week or two, so stay tuned.
