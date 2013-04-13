@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-04-08T09:54:03-04:00</updated>
+  <updated>2013-04-13T00:56:29-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[TRUE Object-Oriented Design]]></title>
+    <link href="http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails/"/>
+    <updated>2013-04-13T11:23:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails</id>
+    <content type="html"><![CDATA[<p>Avi always stresses that being a good developer is about more than just being a good coder. Like all professions, coding is only part of the job. What&#8217;s arguably more important than coding are the soft skills that transcend any individual profession. Skills like communication, empathy, diligence and hard work. All good professional jobs help build these skills, and software development is no different.</p>
+
+<!--more-->
+
+
+<p>But building those skills aren&#8217;t easy, especially when applied to the domain of coding. Clearly and succinctly explaining the internals of a codebase to a newbie is really difficult; it requires not only communication skills but also empathy and patience. As I&#8217;ve been learning how to code, I&#8217;m also trying to broaden my understanding of technology generally through reading, writing and engaging in the community (e.g., meetups, hackathons). Work-work balance is critical; while its important to code most every day when learning the skill, its also important to not just code. Regular coding enables me to get deep into the weeds and determine exactly how to properly route requests through my application, while reading and blogging helps me look at code from a high-level and develop a high-level understanding of software design and structure.</p>
+
+<p>I&#8217;ve started to think of good design like a mountain range. The most abstract/least concrete layers are the most foundational to the application - the base of the mountain, if you will - whereas the least abstract/most concrete layers are the items that you actually see - the peaks. Each peak might represent a different component of your application, yet the base of the mountain represents the shared functionality or code patterns between the peaks. In looking at a mountain range from afar, no one can perceive the geological complexity of the sandstone or granite that allow the peaks to reach the sky. In the same way, good application design hides the complex inner workings of a program, yet it is this complexity that enables the public interface of an well-built application to work so seamlessly. As our teacher Bob Whitney said, the job of a developer is to take in complexity and deliver simplicity.</p>
+
+<p>Admittedly, the mountain range metaphor is a bit contrived, but the same effective design pattern can be seen in other spheres, both natural and artificial. A rainforest&#8217;s beauty is seen from the treetops, but the complexity deep within the roots and vines that create an interlocking and co-dependent ecosystem and enable the treetops to extend high above the earth is hidden from the external observer. A well-functioning corporation requires harmony between its many internal groups in order to provide a service or product to its customers effectively. Software design just takes these common patterns of loose coupling, modularity and composition and applies them in the context of objects, classes and methods.</p>
+
+<p>One book that I&#8217;ve recently finished reading that covers software design best practices is &#8220;Practical Object Oriented Design in Ruby&#8221; by Sandi Metz.
+In POODR (her own acronym), Sandi Metz expresses these design patterns in a pithy and effective manner, complete with code examples, comparisons of good and bad design patterns and a common example of designing a bike shop application that weaves the 9 chapters together. POODR is an eminently readable book, and Ms. Metz does a remarkable job balancing deep dives into code with plain English explanations of good application design. As an aside, Ms. Metz&#8217;s day job is as an application developer for my alma mater, Duke University, which makes her all the more awesome.</p>
+
+<p>Here are a few of her most quotable quotables and a few thoughts on how to consider her advice:</p>
+
+<blockquote><p>Code should be transparent, reasonable, usable and exemplary.</p></blockquote>
+
+
+<p>Sandi Metz is perhaps best known for this pithy guide on how to write code. Programs should be easily understandable, well-suited for their purpose, navigable and malleable and just awesome. TRUE is a useful north star for good code.</p>
+
+<blockquote><p>Depend on things that change less often than you do.</p></blockquote>
+
+
+<p>Dependencies in code are often unavoidable. Thus, what matters most is picking the right dependencies rather than trying to write entirely dependency-free code. Create dependencies that are manageable by ensuring that classes and objects that will likely change in the future should have proportionately fewer dependencies than code blocks that are more stable. The Ruby core library is a great example of this - it is better to build objects that depend on the String class, for example, than depend on an internal, domain-specific class, since the Ruby String class is pretty well-established and less likely to change going forward.</p>
+
+<p>In a similar vein&#8230;</p>
+
+<blockquote><p>Depend on behavior, not data.</p></blockquote>
+
+
+<p>Data can take many different formats. A lot of coding is about taking one data item and cutting it up a hundred different ways before its actually displayed to the user. Thus, data will change frequently relative to behavior, which tends to be more consistent. Think of data as rows and behavior as columns in a database - its easier to grow a database vertically than horizontally. This means that its better to depend on behavior rather than data, because behavior is less likely to change.</p>
+
+<blockquote><p>Create public methods that allow senders to get what they want without knowing how your class implements its behavior.</p></blockquote>
+
+
+<p>Classes should have a well defined public API that enables interaction with other objects without knowing too much about those objects. One example that Sandi Metz uses is the notion of polymorphic interfaces, which are basically methods that can iteract with multiple data types (e.g., arrays or hashes). A common pitfall among new developers is designing methods that only take in a single data type. This requires a class B that might interact with class A to know what type of data class A expects. Oftentimes, its not class B&#8217;s responsibility to know what data class A expects; class A&#8217;s public method should have a polymorphic interface to lessen the dependencies between the two classes.</p>
+
+<blockquote><p>&#8220;This tension between the costs of concretion and the costs of abstraction is fundamental to object-oriented design. Concrete code is easy to understand but costly to extend. Abstract code may initially seem more obscure but, once understood, is far easier to change. Use of a duck type moves your code along the scale from more concrete to more abstract, making the code easier to extend but casting a veil over the underlying class of the duck.&#8221;</p></blockquote>
+
+
+<p>I love this quote in POODR because it highlights an underlying tradeoff that developers consider whenever refactoring code and applying the priciples of good object-oriented design. On the one end of the spectrum is concrete code that relies on well-defined dataset. On the other end is highly abstract code (e.g., methods that write methods via metaprogramming) that is more powerful and flexible than concrete code, but also often less readable to the untrained eye or freshman developer. A duck type is an object that can be of any type and used within function calls. I&#8217;m sure that&#8217;s not the technical definition, but to me, I think of duck types as abstract objects that can take many different forms, and so methods that can accept duck types need to be written abstractly in order to function properly.</p>
+
+<blockquote><p>&#8220;The ability to tolerate ambiguity about the class of an object is the hallmark of a confident designer. Once you begin to treat your objects as if they are defined by their behavior rather than by their class, you enter into a new realm of expressive<br/>flexible design.&#8221;</p></blockquote>
+
+
+<p>Fundamental to Sandi Metz&#8217;s software design philosophy seems to be the focus on defining behavior rather than data or data types. I like this quote because it focuses on building a flexible product that can adapt to whatever the future holds for an application. Early on in the development process, ambiguity reigns supreme since programmers cannot know what the product will eventually look like. Thus, a good developer and application designer should be able tolerate and accept that uncertainty and design around the problem. Building abstract frameworks to define object behavior enables an application to grow iteratively and organically as the product specifications change.</p>
+
+<p>One thing I learned from the book is that different tools exist in software design to address different problems. The use of class inheritance, for example, should be used in some instances whereas modules and duck types should be used in others. Its difficult to go into a full example in the length of a blog post, but I would especially recommend reading chapters 5 through 8 about duck typing, inheritance, behavior sharing via modules and object composition. Sandi Metz does a great job of mixing in code examples along with good explanations of the high-level thought process of the pros and cons of each programming technique. Not every tool is right for every job, and so a hallmark of a good developer is being able to spot which tools are right for which jobs.</p>
+
+<p>A lot of being a more experienced developer seems to revolve around this spidey sense about coding design patterns. Avi demonstrates this regularly when he&#8217;ll spend just a few minutes flying between levels of abstraction that take us beginners hours to implement ourselves. In fact, experience in most any profession or skillset can be reflected in the &#8220;sixth sense&#8221; someone has about recognizing patterns. An experienced trader can front-run the market because he or she &#8220;senses&#8221; that prices will move in a certain direction. A branding expert can quickly conceptualize a marketing campaign because he or she can immediately grasp the underlying nature of the message a client wants to convey. In the same way, experience as a developer means that you get better at spotting patterns in code. POODR aims to provide beginners with a jumpstart in finding those patterns.</p>
+
+<p>Two other Ruby/Rails books that I&#8217;m reading are &#8220;Rails Antipatterns&#8221; by Chad Pytel and Tammer Saleh and &#8220;Metaprogramming Ruby&#8221; by Paolo Perrotta. I&#8217;m hoping to write a post on those books as well in the coming week or two, so stay tuned.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Building ViewFinder (Flatiron - Week 9)]]></title>
@@ -5205,278 +5266,6 @@
 </span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;no fizz or buzz: </span><span class="si">#{</span><span class="vg">$remainder</span><span class="si">}</span><span class="s2">&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Day 004]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/07/flatiron-day-004/"/>
-    <updated>2013-02-07T10:56:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/07/flatiron-day-004</id>
-    <content type="html"><![CDATA[<p>This morning, we started with a review of the SQL homework and ventured into the wide world of SQL joins, followed by the start of our Ruby learning in the afternoon. Regarding SQL, I struggled a bit with the homework last night, but after I read up a bit more on joins, the confusion lessened and I was able to create a working quiz database. Our task was to (i) design a database schema, (ii) populate the database, (iii) query the database and (iv) determine quiz scores. I&#8217;ve published the SQL code I wrote to accomplish this task after the jump.</p>
-
-<!--more-->
-
-
-<p>After a lunch of Chinese food delivered to the school, we delved into Ruby. The &#8220;Programmer of the Day&#8221; was, aptly enough, Yukihiro Matsumoto, or <a href="http://en.wikipedia.org/wiki/Yukihiro_Matsumoto" target="_blank">&#8220;Matz&#8221;</a>, who invented the Ruby language. Avi described how Matz designed Ruby to be pleasing to the people using the language, not for the computer. The ultimate reason for creating Ruby was simply because it made Matz happy - not because of efficiency, power or universality, but rather human happiness. Ruby is a language designed to match the differences and idiosycracies inherent in human behavior and interaction. As Avi put it, our differences should be celebrated, not suppressed, and as a philosophical basis, Ruby enables different programmers to express themselves differently - there&#8217;s no one right way of doing something.</p>
-
-<p>I enjoy Avi&#8217;s occasional expositions on the philosophical underpinnnings of code. I had never before thought about coding as an expressive and creative medium, on par with other art forms like music or painting, but the more I think about it, the more I can appreciate how code empowers people to exercise creativity. Even simple functions and programs can be written in any number of different ways. The mere variety of how much can be done using code is a testament to the infinite possibilities available with code.</p>
-
-<p>For the rest of the afternoon, Avi lectured about Ruby and we broke off on occasion to work on practice problems. We covered variables, methods and basic control structures. All of the stuff we covered today was part of the class pre-work, but it was good to solidify my understanding, and I realized that there a few quirks of Ruby that I would have taken for granted if we had just skipped over the basic foundations of Ruby. For example, did you know that if you run a command like:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="kp">true</span> <span class="o">||</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And then try to print the value of x, you won&#8217;t be returned 3? That&#8217;s because Ruby, in evaluating the expression, first saw that the left side of the &#8220;OR&#8221; statement (indicated by ||) was true and so it automatically knew that the entire expression was true (at least one side was true). Thus, Ruby didn&#8217;t even assign the number 3 to the variable x. I hadn&#8217;t considered that behavior for Ruby before, so it was good to go through some of the more nuanced aspects of the language.</p>
-
-<p>Learning Ruby took up most of the rest of the day. Tonight, we have to write a few basic programs in Ruby (FizzBuzz!) just to get more acquainted with the language.</p>
-
-<hr />
-
-<p><em>SQL Exercise</em></p>
-
-<p>This SQL code serves as the database schema and creates five tables - &#8216;users&#8217;, &#8216;quizzes&#8217;, &#8216;questions&#8217;, &#8216;choices&#8217; and &#8216;answers&#8217;. Each quiz has multiple questions, each of which have multiple choices. Users take quizzes and select choices as their answers, which then populates the &#8216;answers&#8217; table.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- CREATES DATABASE SCHEMA FOR QUIZ.DB</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">users</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">fname</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">lname</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">quizzes</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">questions</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">description</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">quiz_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">quiz_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">quizzes</span><span class="p">(</span><span class="n">quiz_id</span><span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">choices</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">content</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>
-</span><span class='line'>  <span class="n">correct</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">question_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">questions</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">answers</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">user_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">question_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">choice_id</span> <span class="nb">integer</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">users</span><span class="p">(</span><span class="n">user_id</span><span class="p">),</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">questions</span><span class="p">(</span><span class="n">question_id</span><span class="p">),</span>
-</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">choice_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">choices</span><span class="p">(</span><span class="n">choice_id</span><span class="p">)</span>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In creating the database, Avi made a few good points about efficient nomenclature. When I first created my database, I had redundant field names for my tables (e.g., &#8220;id&#8221; in the &#8220;choices&#8221; table was labeled &#8220;choice_id&#8221;). The prefix of &#8220;choice&#8221; for &#8220;id&#8221; is redundant, since the inclusion of the field in the &#8220;choices&#8221; table automatically associates &#8220;id&#8221; with &#8220;choices&#8221; and differentiates it from the &#8220;id&#8221; field in the other tables. Its not a huge deal to include the table prefix in the field name, but its unnecessary and the elimination of the prefix is an example of DRY (Don&#8217;t Repeat Yourself).</p>
-
-<p>After creating the schema, we had to write SQL that would populate the database. The below SQL script adds data into the &#8220;users&#8221;, &#8220;quizzes&#8221;, &#8220;choices&#8221; and &#8220;questions&#8221; tables. As you&#8217;ll notice, there are 2 quizzes, each with 5 questions, each with 4 choices, for a total of 40 choices (2 * 5 * 4), hence the number of rows in the &#8220;choices&#8221; table. I used a &#8220;multi-insert&#8221; statement here rather than having INSERT INTO &#8230; VALUES surrounding each of my entries. This saves time and makes the code look cleaner. Also, I added the corresponding field names after the table name in each of the insert blocks - I don&#8217;t think this is necessary, as SQL will read the entries and assume that the first value goes into the first column, labeled &#8220;id&#8221;, and same with the other columns, but I figure that its best practice to be explicit with the field names so that there&#8217;s no ambiguity (for example, if you add fields in the future).</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- INSERTS INITIAL VALUES INTO QUIZ.DB</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">lname</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Derrick&quot;</span><span class="p">,</span> <span class="ss">&quot;Rose&quot;</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Kevin&quot;</span><span class="p">,</span> <span class="ss">&quot;Durant&quot;</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Lebron&quot;</span><span class="p">,</span> <span class="ss">&quot;James&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">quizzes</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Ruby on Rails&quot;</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;SQLite3&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">questions</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">quiz_id</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;What is Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Who created Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Why is Ruby on Rails so awesome?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="ss">&quot;Who uses Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="ss">&quot;What are some Ruby on Rails competitors?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="ss">&quot;What is SQLite3?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="ss">&quot;Why is SQLite3 better or worse than other databases?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="ss">&quot;How does SQLite3 vary from MySQL?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="ss">&quot;Is MongoDB better than SQLite3?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="ss">&quot;Why should you not use SQLite3 for large applications?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">choices</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">correct</span><span class="p">,</span> <span class="n">question_id</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Choice A&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Choice B&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Choice C&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="ss">&quot;Choice D&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This SQL command populates the &#8220;answers&#8221; table with data. I purposefully populated the data such that Derrick Rose got all questions right (he&#8217;s the best of the 3, after all), Kevin Durant got 3 questions right in each quiz and Lebron got only 1 question right per quiz (I&#8217;m still bitter over the 2011 Eastern Conference Finals).</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="c1">-- INSERTS RESULTS OF 3 USERS EACH TAKING 2 TESTS </span>
-</span><span class='line'>  <span class="c1">-- WITH 5 QUESTIONS INTO THE ANSWERS TABLE OF QUIZ.DB</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">answers</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">choice_id</span><span class="p">)</span> <span class="k">VALUES</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">39</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This SQL command analyzes the resulting answers. In designing this query, I wanted to get back a table of six rows - one for each user-quiz pairing for 3 users, each taking 2 quizzes - with the user name, quiz name and total correct answers. I started the &#8220;answers&#8221; table, as I figured that &#8220;answers&#8221; would be my primary source for the scores; how could you determine a correct score without knowing the quiz takers&#8217; answers?. From there, I joined the table against other tables that included useful information.</p>
-
-<p>The &#8220;answers&#8221; table includes what each user selected as a choice for a given question, but not whether that choice is correct (including such data in this table would be de-normalizing the &#8220;correct answer&#8221; data, which lives in the &#8220;choices&#8221; table), so I joined the &#8220;answers&#8221; table against &#8220;choices&#8221; to determine which choices selected by users were correct. Then, I continued joining against &#8220;questions&#8221;, &#8220;users&#8221; and &#8220;quizzes&#8221; to get the necessary information. Finally, I grouped the results by user_id and quiz_id, which collapses the return table into the 6 row table for each user-quiz pair that I was looking for.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- CREATES A TABLE FOR EACH USER-QUIZ SET AND </span>
-</span><span class='line'><span class="c1">-- RETURNS THE SCORE EACH USER GOT ON A GIVEN QUIZ</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">SELECT</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">fname</span> <span class="k">AS</span> <span class="s1">&#39;first name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">lname</span> <span class="k">AS</span> <span class="s1">&#39;last name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="s1">&#39;user id&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">qz</span><span class="p">.</span><span class="n">name</span> <span class="k">AS</span> <span class="s1">&#39;quiz name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="k">AS</span> <span class="s1">&#39;raw score&#39;</span>
-</span><span class='line'><span class="k">FROM</span> <span class="p">((((</span>
-</span><span class='line'>  <span class="n">answers</span> <span class="n">a</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">choices</span> <span class="k">c</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">choice_id</span> <span class="o">=</span> <span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">questions</span> <span class="n">qu</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">question_id</span> <span class="o">=</span> <span class="n">qu</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">users</span> <span class="n">u</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">quizzes</span> <span class="n">qz</span> <span class="k">ON</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span> <span class="o">=</span> <span class="n">qz</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, I wrote some SQL to do some basic analytics on database. This basically is very similar to the above query, but adds the percentage score.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- CALCULATES PERCENTAGE CORRECT FOR A USER-QUIZ SET</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">SELECT</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">fname</span> <span class="k">AS</span> <span class="s1">&#39;first name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">lname</span> <span class="k">AS</span> <span class="s1">&#39;last name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="n">qz</span><span class="p">.</span><span class="n">name</span> <span class="k">AS</span> <span class="s1">&#39;quiz name&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="k">AS</span> <span class="s1">&#39;raw score&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">||</span> <span class="s1">&#39;%&#39;</span> <span class="k">AS</span> <span class="s1">&#39;score percentage&#39;</span>
-</span><span class='line'><span class="k">FROM</span> <span class="p">((((</span>
-</span><span class='line'>  <span class="n">answers</span> <span class="n">a</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">choices</span> <span class="k">c</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">choice_id</span> <span class="o">=</span> <span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">questions</span> <span class="n">qu</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">question_id</span> <span class="o">=</span> <span class="n">qu</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">users</span> <span class="n">u</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">quizzes</span> <span class="n">qz</span> <span class="k">ON</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span> <span class="o">=</span> <span class="n">qz</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Avi said that we wouldn&#8217;t be actively writing many SQL queries, since Rails abstracts so much of the database interaction. However, there will undoubtedly be times when Rails isn&#8217;t sufficient for complex data queries, and we&#8217;ll have to write our own SQL. Even if we don&#8217;t use SQL that often, its critical to know, and I think its pretty cool, despite the at times frustrating syntax and poor debugging feedback for the sqlite3 shell. I would like to eventually explore more advanced data analysis tools, software like Hadoop or Cassandra, so knowing SQL is going to be invaluable moving forward.</p>
 ]]></content>
   </entry>
   
