@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-04-13T00:56:29-04:00</updated>
+  <updated>2013-04-17T20:16:10-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,420 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[In Praise of Project Euler]]></title>
+    <link href="http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler/"/>
+    <updated>2013-04-17T16:39:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler</id>
+    <content type="html"><![CDATA[<p>On the suggestion of my Flatiron classmates <a href="http://chickenriceplatter.github.io/" target="_blank">David</a> and <a href="http://andrewcallahan.github.io" target="_blank">Andrew</a>, I started trying out <a href="http://projecteuler.net/" target="_blank">Project Euler</a> recently. For the uninitiated, Project Euler is a series of math problems aptly named after the famed mathemetician Leonhard Euler, known for such learned things like fluid dynamics, number theory and calculus. Project Euler is effectively a database of math problems that are intended to be solved using code (any language can be used; I&#8217;m using Ruby). The questions test your logical thinking skills, and while they&#8217;re named after a mathemetician, the actual math necessary is more along the lines of high school math (e.g., prime numbers, factoring, etc.). This is not to diminish the difficulty of these problems - some of them are quite challenging - but rather to distinguish between the problem solving skills, which Project Euler helps build, versus pure math skill, which is more the province of a graduate school program.</p>
+
+<!--more-->
+
+
+<p>I&#8217;ve only completed about 5 problems, but I&#8217;m already an advocate of trying them out. I like Project Euler because the problems are challenging enough where they really force you to build a clear, logical problem solving process yet not so obscure that you need to break out your AP Calculus book. Don&#8217;t be turned away from the problems because of the math - the biggest challenge is taking the large problem and breaking it down small-step-by-small-step.</p>
+
+<p>Here&#8217;s an example problem:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>If we list all the natural numbers below 10 that are multiples of 3 or 5, 
+</span><span class='line'>we get 3, 5, 6 and 9. The sum of these multiples is 23. 
+</span><span class='line'>Find the sum of all the multiples of 3 or 5 below 1000.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, the problems are challenging but manageable. The prompt typically has an example pattern and then asks you to extrapolate that pattern to some large number (in this case, 1000). Here are the main reasons why I think its great to try a few Project Euler problems:</p>
+
+<p><strong>1) Great mental exercise</strong></p>
+
+<p>I&#8217;m trying to average a problem a day as a form of mental exercise. While doing Project Euler problems probably won&#8217;t directly make you a better Rails programmer, it will boost your overall problem solving process. And what else is coding at its core but implementing a clear process to solving problems via technology? Just as going for a 6-mile run today may not keep you from getting a cold tomorrow, doing Project Euler problems won&#8217;t help you solve that nasty bug in your code today, but having a consistent habit of problem solving exercise will make your mind healthier in the long run.</p>
+
+<p><strong>2) Learning core Ruby</strong></p>
+
+<p>Having to solve Project Euler problems has forced me back into the core Ruby documentation to try and find creative solutions. For example, I don&#8217;t typically use Ruby&#8217;s &#8216;inject&#8217; method in my day-to-day coding. Inject is a pretty high-level Ruby function that allows you to specify an initial value and apply a code block to an Enumerable (e.g., an array), the result of which becomes the initial value in the following iteration. Most of the code I&#8217;ve written rely on the less abstract &#8216;collect&#8217; or &#8216;map&#8217; methods in Ruby. However, I&#8217;ve rediscovered the utility of the inject method since Project Euler problems tend to include some sort of iterative sum or product. I won&#8217;t go into the details of the inject method here, but you can find more information about it in <a href="http://blog.jayfields.com/2008/03/ruby-inject.html" target="_blank">this blog post</a> if you&#8217;re interested.</p>
+
+<p><strong>3) Refactoring practice</strong></p>
+
+<p>Refactoring is the near-constant process of changing code without affecting what the user sees. Its the middle part of the &#8220;make it work, make it right, make it fast&#8221; adage. Recognizing patterns and understanding the tradeoffs included in applying certain methods or approaching a problem in a certain way are critical to skillful refactoring. Project Euler problems really help hammer in the practice of always looking over your code and finding ways to refactor it.</p>
+
+<p>I&#8217;ve started taking a three-pronged approach to solving Project Euler problems. First, I&#8217;ll try and solve the problem for a smaller number (e.g., less than 100) with whatever code works. Second, I&#8217;ll solve the problem for the large number stated in the Project Euler prompt. Finally, I&#8217;ll refactor the code into an object-oriented manner, either by creating my own class or monkey-patching an existing Ruby class (often, the Integer class). This three-step process has helped me practice raw problem-solving and get into the habit of breaking down complex problems into small, simple tasks. Refactoring is a universal coding skill, so I&#8217;m hopeful that Project Euler will help me develop a better sense for patterns and make me a better problem solver.</p>
+
+<p><strong>4) Creative problem solving</strong></p>
+
+<p>This reason falls in line with the refactoring practice Project Euler provides. As the cliche goes, there&#8217;s often more than one way to skin a cat, and problem solving is no different. An example of this is the code below (warning: spoiler alert) that I wrote to solve Project Euler problem 8. The problem provides a 1000-digit number and you are required to find the greatest product of any five consecutive digits.</p>
+
+<p>When I was thinking about this problem, I could see a few solutions. One way it could be done would be to go through the number in 5-digit chunks, basically creating sub-arrays out of the number, storing the value into a products array, then returning the maximum value. Another way to solve the problem would be to find the product of 5-digit chunks, store the result in a variable, then replace the value of that variable with subsequent products only if such product is larger. Yet another way to solve the problem would be to calculate the product of a 5-digit chunk, then iteratively check whether the next number is larger than the first number in the 5-digit array (i.e., the next product calculation). If so, then calculate the product. Otherwise, move onto the next number to add.</p>
+
+<p>I think this last process is the most efficient, because each product that is actually calculated is guaranteed to be larger than the previous max product, since all else equal, replacing one number in a 5-digit product with a larger number will result in a larger number. This saves computation time and moves the determination of whether to calculate the product to a less computationally intensive task (comparing two numbers versus multiplication. At least, I think this is the case. I&#8217;m not super well versed in algorithm efficiency, but this makes sense to me at least.</p>
+
+<p>The code I ended up implementing takes the most from the middle process. I could have extended the code further to make it more efficient, but I focused instead on making the code more object-oriented. My below code shows the three-step process I&#8217;m taking toward these problems - first, make it work with a smaller number, then make it work with the actual number, then refactor into an object.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># PROBLEM NUMBER 8</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># PROBLEM NAME</span>
+</span><span class='line'><span class="c1"># Largest product in a series</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># PROBLEM DESCRIPTION</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Find the greatest product of five consecutive digits in the 1000-digit number.</span>
+</span><span class='line'><span class="c1"># 73167176531330624919225119674426574742355349194934</span>
+</span><span class='line'><span class="c1"># 96983520312774506326239578318016984801869478851843</span>
+</span><span class='line'><span class="c1"># 85861560789112949495459501737958331952853208805511</span>
+</span><span class='line'><span class="c1"># 12540698747158523863050715693290963295227443043557</span>
+</span><span class='line'><span class="c1"># 66896648950445244523161731856403098711121722383113</span>
+</span><span class='line'><span class="c1"># 62229893423380308135336276614282806444486645238749</span>
+</span><span class='line'><span class="c1"># 30358907296290491560440772390713810515859307960866</span>
+</span><span class='line'><span class="c1"># 70172427121883998797908792274921901699720888093776</span>
+</span><span class='line'><span class="c1"># 65727333001053367881220235421809751254540594752243</span>
+</span><span class='line'><span class="c1"># 52584907711670556013604839586446706324415722155397</span>
+</span><span class='line'><span class="c1"># 53697817977846174064955149290862569321978468622482</span>
+</span><span class='line'><span class="c1"># 83972241375657056057490261407972968652414535100474</span>
+</span><span class='line'><span class="c1"># 82166370484403199890008895243450658541227588666881</span>
+</span><span class='line'><span class="c1"># 16427171479924442928230863465674813919123162824586</span>
+</span><span class='line'><span class="c1"># 17866458359124566529476545682848912883142607690042</span>
+</span><span class='line'><span class="c1"># 24219022671055626321111109370544217506941658960408</span>
+</span><span class='line'><span class="c1"># 07198403850962455444362981230987879927244284909188</span>
+</span><span class='line'><span class="c1"># 84580156166097919133875499200524063689912560717606</span>
+</span><span class='line'><span class="c1"># 05886116467109405077541002256983155200055935729725</span>
+</span><span class='line'><span class="c1"># 71636269561882670428252483600823257530420752963450</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># PROCESS</span>
+</span><span class='line'><span class="c1"># =&gt; Convert Fixnum to String to Array</span>
+</span><span class='line'><span class="c1"># =&gt; Go through first five numbers and find the product</span>
+</span><span class='line'><span class="c1"># =&gt; Save the result in a &quot;result&quot; variable</span>
+</span><span class='line'><span class="c1"># =&gt; Remove the first number (1) (unshift) and add the 6th number (push)</span>
+</span><span class='line'><span class="c1"># =&gt; Find the product of the second set of 5 numbers</span>
+</span><span class='line'><span class="c1"># =&gt; If the result is larger than the value of &quot;result&quot;, replace the result value. Otherwise, discard the latest result</span>
+</span><span class='line'><span class="c1"># =&gt; Repeat steps 3 to 5 until the end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># =&gt; With each number that is removed and added, check if the number being added is greater than the number being removed. If so, calculate the product.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># ANSWER</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># =&gt; 40824</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># =&gt; METHOD 1</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># num = 4938294829384</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># num_array = num.to_s.split(&quot;&quot;).collect { |i| i.to_i }</span>
+</span><span class='line'><span class="c1"># iterations = num_array.length - 5</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># start = 0</span>
+</span><span class='line'><span class="c1"># finish = 4</span>
+</span><span class='line'><span class="c1"># product_array = []</span>
+</span><span class='line'><span class="c1"># max_product = 0</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># (0..iterations).each do |i|</span>
+</span><span class='line'><span class="c1">#   sub_array = (start..finish).collect { |n| num_array[n] }</span>
+</span><span class='line'><span class="c1">#   product = sub_array.inject(1) { |result, num| result * num }</span>
+</span><span class='line'><span class="c1">#   product_array &lt;&lt; product</span>
+</span><span class='line'><span class="c1">#   if product &gt; max_product</span>
+</span><span class='line'><span class="c1">#     max_product = product</span>
+</span><span class='line'><span class="c1">#   end</span>
+</span><span class='line'><span class="c1">#   start += 1</span>
+</span><span class='line'><span class="c1">#   finish += 1</span>
+</span><span class='line'><span class="c1"># end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># =&gt; METHOD 2</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># num = &quot;73167176531330624919225119674426574742355349194934</span>
+</span><span class='line'><span class="c1"># 96983520312774506326239578318016984801869478851843</span>
+</span><span class='line'><span class="c1"># 85861560789112949495459501737958331952853208805511</span>
+</span><span class='line'><span class="c1"># 12540698747158523863050715693290963295227443043557</span>
+</span><span class='line'><span class="c1"># 66896648950445244523161731856403098711121722383113</span>
+</span><span class='line'><span class="c1"># 62229893423380308135336276614282806444486645238749</span>
+</span><span class='line'><span class="c1"># 30358907296290491560440772390713810515859307960866</span>
+</span><span class='line'><span class="c1"># 70172427121883998797908792274921901699720888093776</span>
+</span><span class='line'><span class="c1"># 65727333001053367881220235421809751254540594752243</span>
+</span><span class='line'><span class="c1"># 52584907711670556013604839586446706324415722155397</span>
+</span><span class='line'><span class="c1"># 53697817977846174064955149290862569321978468622482</span>
+</span><span class='line'><span class="c1"># 83972241375657056057490261407972968652414535100474</span>
+</span><span class='line'><span class="c1"># 82166370484403199890008895243450658541227588666881</span>
+</span><span class='line'><span class="c1"># 16427171479924442928230863465674813919123162824586</span>
+</span><span class='line'><span class="c1"># 17866458359124566529476545682848912883142607690042</span>
+</span><span class='line'><span class="c1"># 24219022671055626321111109370544217506941658960408</span>
+</span><span class='line'><span class="c1"># 07198403850962455444362981230987879927244284909188</span>
+</span><span class='line'><span class="c1"># 84580156166097919133875499200524063689912560717606</span>
+</span><span class='line'><span class="c1"># 05886116467109405077541002256983155200055935729725</span>
+</span><span class='line'><span class="c1"># 71636269561882670428252483600823257530420752963450&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># num_array = num.split(&quot;&quot;).collect { |i| i.to_i }</span>
+</span><span class='line'><span class="c1"># iterations = num_array.length - 5</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># start = 0</span>
+</span><span class='line'><span class="c1"># finish = 4</span>
+</span><span class='line'><span class="c1"># product_array = []</span>
+</span><span class='line'><span class="c1"># max_product = 0</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># (0..iterations).each do |i|</span>
+</span><span class='line'><span class="c1">#   sub_array = (start..finish).collect { |n| num_array[n] }</span>
+</span><span class='line'><span class="c1">#   product = sub_array.inject(1) { |result, num| result * num }</span>
+</span><span class='line'><span class="c1">#   product_array &lt;&lt; product</span>
+</span><span class='line'><span class="c1">#   if product &gt; max_product</span>
+</span><span class='line'><span class="c1">#     max_product = product</span>
+</span><span class='line'><span class="c1">#   end</span>
+</span><span class='line'><span class="c1">#   start += 1</span>
+</span><span class='line'><span class="c1">#   finish += 1</span>
+</span><span class='line'><span class="c1"># end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># =&gt; METHOD 3 (Object Orientation)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">num</span> <span class="o">=</span> <span class="s2">&quot;73167176531330624919225119674426574742355349194934</span>
+</span><span class='line'><span class="s2">96983520312774506326239578318016984801869478851843</span>
+</span><span class='line'><span class="s2">85861560789112949495459501737958331952853208805511</span>
+</span><span class='line'><span class="s2">12540698747158523863050715693290963295227443043557</span>
+</span><span class='line'><span class="s2">66896648950445244523161731856403098711121722383113</span>
+</span><span class='line'><span class="s2">62229893423380308135336276614282806444486645238749</span>
+</span><span class='line'><span class="s2">30358907296290491560440772390713810515859307960866</span>
+</span><span class='line'><span class="s2">70172427121883998797908792274921901699720888093776</span>
+</span><span class='line'><span class="s2">65727333001053367881220235421809751254540594752243</span>
+</span><span class='line'><span class="s2">52584907711670556013604839586446706324415722155397</span>
+</span><span class='line'><span class="s2">53697817977846174064955149290862569321978468622482</span>
+</span><span class='line'><span class="s2">83972241375657056057490261407972968652414535100474</span>
+</span><span class='line'><span class="s2">82166370484403199890008895243450658541227588666881</span>
+</span><span class='line'><span class="s2">16427171479924442928230863465674813919123162824586</span>
+</span><span class='line'><span class="s2">17866458359124566529476545682848912883142607690042</span>
+</span><span class='line'><span class="s2">24219022671055626321111109370544217506941658960408</span>
+</span><span class='line'><span class="s2">07198403850962455444362981230987879927244284909188</span>
+</span><span class='line'><span class="s2">84580156166097919133875499200524063689912560717606</span>
+</span><span class='line'><span class="s2">05886116467109405077541002256983155200055935729725</span>
+</span><span class='line'><span class="s2">71636269561882670428252483600823257530420752963450&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Product</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:number</span><span class="p">,</span> <span class="ss">:set</span><span class="p">,</span> <span class="ss">:start</span><span class="p">,</span> <span class="ss">:finish</span><span class="p">,</span> <span class="ss">:max_product</span><span class="p">,</span> <span class="ss">:product_array</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">set</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@set</span> <span class="o">=</span> <span class="n">set</span>
+</span><span class='line'>    <span class="vi">@start</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="vi">@finish</span> <span class="o">=</span> <span class="n">set</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="vi">@max_product</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="vi">@product_array</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create_array</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">number</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span><span class="o">.</span><span class="n">to_i</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">iteration_count</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">create_array</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="nb">self</span><span class="o">.</span><span class="n">set</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">find_max_product</span>
+</span><span class='line'>    <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.self</span><span class="o">.</span><span class="n">iteration_count</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">sub_array</span> <span class="o">=</span> <span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">.self</span><span class="o">.</span><span class="n">finish</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="nb">self</span><span class="o">.</span><span class="n">create_array</span><span class="o">[</span><span class="n">n</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">product</span> <span class="o">=</span> <span class="n">sub_array</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">result</span><span class="p">,</span> <span class="n">num</span><span class="o">|</span> <span class="n">result</span> <span class="o">*</span> <span class="n">num</span> <span class="p">}</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">max_product</span> <span class="o">=</span> <span class="n">product</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">max_product_compare</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">max_product</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">max_product_compare</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</span><span class='line'>    <span class="kp">true</span> <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="nb">self</span><span class="o">.</span><span class="n">max_product</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">p</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">num</span>
+</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">find_max_product</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">binding</span><span class="o">.</span><span class="n">pry</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As I mentioned above, don&#8217;t be intimidated by the math parts of Project Euler. In retrospect, I wish I had started doing these problems earlier on in the semester, but its never too late to get some good mental exercise in.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Antipatterns in Rails]]></title>
+    <link href="http://eewang.github.com/blog/2013/04/13/antipatterns-in-rails/"/>
+    <updated>2013-04-13T15:03:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/04/13/antipatterns-in-rails</id>
+    <content type="html"><![CDATA[<p>I recently finished reading Rails Antipatterns, which is a great book that uses commonly abused patterns in Rails to illustrate refactoring opportunities. I recommend the book as a way to improve your &#8220;code smell&#8221;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[TRUE Object-Oriented Design]]></title>
@@ -5054,218 +5468,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <hr />
 
 <p>I hope those 5 reasons provide enough motivation to start the lifelong journey of learning how to use technology as a tool through code. If you&#8217;re a developer or learning how to program, what made you first want to code? What were some of the difficulties in getting started? If you don&#8217;t have any interest in coding, why not? I don&#8217;t think everyone is meant to be a programmer, but there are certainly misconceptions and assumptions about coding that cause people to establish mental obstacles to actually trying to learn, and I&#8217;d like to hear what people think.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Week 1 Redux]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/10/flatiron-week-1-redux/"/>
-    <updated>2013-02-10T14:00:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/10/flatiron-week-1-redux</id>
-    <content type="html"><![CDATA[<p>Flatiron is now 1/12 the way done. The first week has been pretty great; after lecture on Friday I felt physically exhausted, but mentally I was running a mile a minute, thinking of all the stuff that&#8217;s out there to learn. My schedule has generally been to get into school around 9 am, morning lecture, lunch, afternoon lecture, group work, then wrap up around 6 pm, after which I&#8217;ll stay until 7:30/8:00. I realize that it&#8217;s only been one week, but I&#8217;ve already learned a ton.</p>
-
-<!--more-->
-
-
-<p>Here are a few of my high-level thoughts on how the first week went:</p>
-
-<p><strong>1) The interwebs are awesome</strong></p>
-
-<p>The Internet is essentially the largest, most secure and most accessible library humans have ever known is available largely for free. If you take a step back and think about it, you&#8217;ll realize how remarkable that is. The fact that I can search, communicate, schedule and manage my life using Google&#8217;s services and products without paying them is amazing. I&#8217;ll pay more today for a cup of coffee than I have ever paid Google, despite the fact that I depend on Google to manage my e-mail, calendar and data. And while I&#8217;m fully cognizant of the fact that &#8220;if you&#8217;re not paying for it, you&#8217;re the product,&#8221; I&#8217;d rather have it that way than for the Internet to be only accessible to people with money. If I can rely on advertisers and data providers to subsidize my learning and exploration, I&#8217;m more or less okay with that.</p>
-
-<p><strong>2) &#8220;Coding is not rocket surgery&#8221;</strong></p>
-
-<p>Computers tend to be perceived as magical black boxes. You click on an browser icon, type in a URL and bam, you have the world&#8217;s information at your fingertips. But in actuality, computers aren&#8217;t that smart - they&#8217;re just really good at following instructions and doing the same thing over and over again. On the other hand, humans are great at inferring context, understanding nuance and efficiently processing a statement like &#8220;Do you mind making me a sandwich?&#8221; - which is actually a subtle command in the form of a question. Computers, on the other hand, need to be told exactly what to do. However, computers, unlike humans, don&#8217;t get tired. Thus, computer science is more like the study of operations, and the purpose of coding is to automate processes and operational procedures so that humans can be freed to do what they do best - be creative and make complex decisions.</p>
-
-<p>This means that to be able to tell a computer what to do (i.e., be a programmer), you need to just be very good at communicating a specific set of instructions. And once you take a look under the hood of a computer (my recommendation would be to start using your <a href="http://en.wikipedia.org/wiki/Terminal_(OS_X)" target="_blank">terminal</a> to access files and applications), you&#8217;ll realize as I&#8217;ve realized that programs are created by people and can be understood so long as you put in the time and effort to read through the program instructions and follow the logic tree. Avi captured this well by claiming that &#8220;coding is not rocket surgery&#8221; - not to diminish the challenge of learning how to code, but rather to demystify the process and encourage beginners to overcome the mental barrier of understanding computers not as objects of frustration but as tools to be used.</p>
-
-<p><strong>3) There is so much out there to learn</strong></p>
-
-<p>A good chunk of the first week was spent working on our student profiles, setting up our blogs and generally getting acquainted with the school and day-to-day schedule. In terms of subject matter, we covered the following topics this week:</p>
-
-<ul>
-  <li>Git/GitHub</li>
-  <li>SQL</li>
-  <li>Ruby</li>
-  <li>Environment set-up</li>
-  <li>Basic HTML/CSS</li>
-</ul>
-
-
-<p>Each of these topics can get pretty in depth in their own right. We&#8217;ve just scratched the surface on Ruby, for example. But as I&#8217;ve found in learning most anything, the more you explore, the more you find to explore. Like going down a rabbit hole, we&#8217;re just getting started.</p>
-
-<p><strong>4) Some pretty cool people are learning to code</strong></p>
-
-<p>I&#8217;ve met a bunch of awesome people in class (including our <a href="http://shitavisays.tumblr.com" target="_blank">great instructor</a>). The backgrounds of the students are pretty diverse. In addition to the people working in finance or professional services before starting Flatiron (myself included, this is New York, after all), there are people who worked as designers, entrepreneurs, teachers - we even a professional poker player in class. This diversity of professional background makes for interesting conversations, and its been great to talk to my classmates about what interests them and for how they hope to use technology to better pursue their passions. I used to think that my career options were binary - either pursue technology or explore my passion for media, education and public policy. Instead, I&#8217;ve realized that technology doesn&#8217;t supplant my passions; technology complements and enhances my passions.</p>
-
-<p><strong>5) This stuff is fun</strong></p>
-
-<p>At the end of the day, programming should be fun and enjoyable. Coding is much more about creative expression than I had imagined before; after all, Matz created Ruby to make developers <a href="http://www.artima.com/intv/rubyP.html" target="_blank">happy</a>. My first exposure to computers and technology was through my parents, who worked as engineers for a large telecom company for many years. Watching them, I never considered technology to be a creative endeavor - it seemed like much more of a 9 to 5 job than I&#8217;ve come to realize. Since moving to New York though, its become clear to me that people in the tech sphere tend to be intellectually and creatively engaged with their craft, even to the point of &#8220;working&#8221; well beyond the daytime hours and into the weekends. <a href="http://en.wikipedia.org/wiki/Hackathon" target="_blank">Hackathons</a> are great examples of this. The whole concept of a hackathon - an intensive, focused effort to solve a problem that brings together developers, designers and subject matter experts - is to engage in creative problem solving, not to follow a rote set of instructions. Not only are hackathons indicative of passion people in technology have for their craft, its also an expression of community - a desire to work together with people of different skill sets toward a single goal.</p>
-
-<p>Flatiron has tried to imbue in us a sense of community, that programmers work better together than apart. Coding used to be an endeavor that people would do in their basements, alone, late at night. But it doesn&#8217;t have to be this way. In fact, its much more enjoyable to code and program in a community of people so you can bounce ideas off of them, explore new technologies and learn from each other. For me, this was one of the most appealing aspects of doing an intensive, full-time program like Flatiron as opposed to learning in isolation. For the latter half of 2012, I was trying to learn this stuff on my own - using online tools like <a href="http://www.codecademy.com" target="_blank">Codecademy</a>, <a href="http://www.udacity.com" target="_blank">Udacity</a> and <a href="http://www.codeschool.com" target="_blank">Code School</a>. All of those tools were great, but its challenging, frustrating and, frankly, kind of boring, to learn coding entirely on your own, especially if you have a full-time (and then some) job as I did. Thankfully, I had my brother to mentor me and help me along when I hit a roadbump, as he was busy building <a href="http://www.leaguevine.com/" target="_blank">Leaguevine</a> at the time. I&#8217;ve found that learning in a focused group environment like at Flatiron School to not only be more fun, but also more efficient; before it might take me a whole afternoon and a whole lot of Stack Overflow-ing to debug a few lines of code, now I can easily ask others for help, which allows me to fix problems more quickly and learn more about what I&#8217;m doing in the process.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Day 005]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/08/flatiron-day-005/"/>
-    <updated>2013-02-08T23:44:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/08/flatiron-day-005</id>
-    <content type="html"><![CDATA[<p>In grade school, snow days meant building snowmen, tossing snow balls and going sledding. At the Flatiron School, snow days mean 6 hours of lecture via video conference. Avi and Co &#8220;cancelled&#8221; class today in advance of Snowmageddon 2013, but only in the sense that we weren&#8217;t expected to physically be in class. Instead, Avi set up a videoconference and hosted virtual class where we continued exploring Ruby.</p>
-
-<!--more-->
-
-
-<p>We covered a range of topics today. Starting with a review of our homework, Avi discussed iteration, arrays, string methods, regular expressions, symbols, variable scope, blocks and hashes. Whew! We went through a lot of material today, but I think I&#8217;m grasping everything decently well. Its been pretty interesting to think about how there always seems to be more than one way of doing something in Ruby.</p>
-
-<p>A good example of that was the homework we had last night. We had to write a simple <a href="http://en.wikipedia.org/wiki/Fizz_buzz" target="_blank">FizzBuzz</a> program and extend that to find all numbers that fizz, buzz or fizzbuzz within a range. I&#8217;ve posted my code below. What&#8217;s amazed me about coding, though, is that there are <a href="http://rosettacode.org/wiki/FizzBuzz" target="_blank">countless</a> ways of doing the same thing, both within and across languages. For example, the &#8220;trick&#8221; to FizzBuzz is to recognize that Fizz and Buzz combine to make FizzBuzz. This means that my code below, while it gets the job done, is not the most efficient and probaly not up to best practices. I have three strings for the three results, but in fact I should only have two strings - Fizz and Buzz, which combine to make FizzBuzz.</p>
-
-<p>Avi showed us a bunch of different ways to code the FizzBuzz problem, and if there&#8217;s a ton of different ways to solve the simple FizzBuzz problem, I can only begin to imagine how many infinite paths there are to building more complex applications. That thought is exciting to me; there are many paths out there that haven&#8217;t yet been explored and technology continues to be a space of great potential for human creativity and ingenuity. When I think back to a year ago, a part of me was resigned to thinking that we&#8217;ve reached the end of the road for technology - we have Google, Facebook and Twitter, what else could be out there? However, now that I&#8217;ve taken a peek under the hood of the web and seen a glimpse of what is possible, I&#8217;m convinced that the best is yet to come. Not just in web development, but in technology more broadly. 3-D printing, Internet-enabled hardware, sensors - the possibilities are limitless for the technology platforms that are only now in their infancy. Its both humbling and exciting to think about.</p>
-
-<hr />
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Define variable scope and initialize arrays</span>
-</span><span class='line'>
-</span><span class='line'><span class="vg">$fizzer</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="vg">$buzzer</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="vg">$fizzbuzzer</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="vg">$remainder</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Method to calculate fizzbuzz for any given number</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;FizzBuzz&quot;</span>
-</span><span class='line'>  <span class="k">elsif</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Fizz&quot;</span>
-</span><span class='line'>  <span class="k">elsif</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Buzz&quot;</span>
-</span><span class='line'>  <span class="k">else</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Not divided by 3 or 5&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Method to ask a user to input a number they want to fizzbuzz</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz_ask</span>
-</span><span class='line'>  <span class="nb">print</span> <span class="s2">&quot;What number do you want to fizzbuzz? &quot;</span>
-</span><span class='line'>  <span class="n">num</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'>  <span class="n">fizzbuzz</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Method to fizzbuzz a range of numbers</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz_loop</span><span class="p">(</span><span class="n">num1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num2</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">(</span><span class="n">num1</span><span class="o">.</span><span class="n">.num2</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
-</span><span class='line'>    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>      <span class="vg">$fizzbuzzer</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
-</span><span class='line'>    <span class="k">elsif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>      <span class="vg">$fizzer</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
-</span><span class='line'>    <span class="k">elsif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>      <span class="vg">$buzzer</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="vg">$remainder</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Method to ask a user to define the start and end points for fizzbuzz</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">fizzbuzz_loop_ask</span>
-</span><span class='line'>  <span class="nb">print</span> <span class="s2">&quot;Where do you want to start fizzbuzzing? &quot;</span>
-</span><span class='line'>  <span class="n">start</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'>  <span class="nb">print</span> <span class="s2">&quot;Where do you want to end fizzbuzzing? &quot;</span>
-</span><span class='line'>  <span class="n">finish</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'>  <span class="k">while</span> <span class="n">finish</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Sorry, please input an ending value. Where do you want to end fizzbuzzing?&quot;</span>
-</span><span class='line'>    <span class="n">finish</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="n">fizzbuzz_loop</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">finish</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Fizzbuzz method calls</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">fizzbuzz_ask</span>
-</span><span class='line'><span class="n">fizzbuzz_loop_ask</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Print results of fizzbuzz calls</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;fizzer: </span><span class="si">#{</span><span class="vg">$fizzer</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;buzzer: </span><span class="si">#{</span><span class="vg">$buzzer</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;fizzbuzzer: </span><span class="si">#{</span><span class="vg">$fizzbuzzer</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;no fizz or buzz: </span><span class="si">#{</span><span class="vg">$remainder</span><span class="si">}</span><span class="s2">&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
