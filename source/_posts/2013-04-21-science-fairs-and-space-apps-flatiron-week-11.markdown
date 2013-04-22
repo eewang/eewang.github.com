@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Science Fairs and Space Apps (Flatiron - Week 11)"
+title: "Of Science Fairs and Space Apps (Flatiron - Week 11)"
 date: 2013-04-21 21:56
 comments: true
 categories: 
