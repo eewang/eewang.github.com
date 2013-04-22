@@ -1,0 +1,26 @@
+---
+layout: post
+title: "Science Fairs and Space Apps (Flatiron - Week 11)"
+date: 2013-04-21 21:56
+comments: true
+categories: 
+---
+
+I can hardly believe that there is only one week left in the Flatiron School. This past week we had our Science Fair where we showed off the applications that we had been building for most of the second half of the semester. I talked about <a href="http://handrai.se" target="_blank">HandRaise</a> and <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, the two apps that I've spent the most time building. We had a strong showing from the NYC tech community; I was definitely exhausted by the end of the four-hour long event. 
+
+<!--more-->
+
+Most of the week other than the Science Fair was spent working on apps. This next week will be pretty heavy on testing (we worked some on Rspec the previous week) and interview prep as the program wraps up. There are also a few side projects that I'd like to focus on more. Also, I'm hoping to write a post looking back on my Flatiron experience toward the end of this week and early next, as well as my next goals that I hope others both in Flatiron and in the dev community more broadly can hold me accountable to.
+
+This weekend me and a few other Flatiron classmates went to <a href="http://spaceappschallenge.org/" target="_blank">NYC Space Apps</a>. The hackathon was sponsored by NASA and focused on an array of space- and not-so-space-related projects. While other projects focused on using Arduinos to build space-related hardware to an Asteroid mapper, our project was to build an app to help people discover ways to boost energy efficiency and save money. Specifically, we were hoping to build a social tool for people to input in information about their energy and gas bills, see how much they pay relative to the neighborhood average and their friends (via Facebook OAuth) and, ultimately, discover relevant incentive programs (often tax credits or rebates offered at the federal, state and local levels) that they can use to lower their energy bills. It didn't have anything to do with space, but here's <a href="http://spaceappschallenge.org/challenge/mobile-incentives-tied-to-utility-rates/" target="_blank">proof</a> that it was actually a project on offer. Its a conceptually interesting idea, but one that we found was difficult to put together as we would have liked to do ideally within the course of a hackathon weekend. And while we didn't end up presenting our product, I think I learned a few useful lessons for future hackathons.
+
+<strong>1) Establish a clear workflow </strong> - At Flatiron, I take for granted my HandRaise team's process of pushing code to a feature branch, submitting pull requests and requiring the developer to explain the code to the pull request acceptor. I think this is a solid process, but it may not be the best process for a hackathon, where code is pushed more regularly. I found it difficult to work on a project with so many people all pushing code at the same time. I'm not sure what the best git process is for a hackathon, but whatever is decided, make sure the whole team agrees to it and is communicating regularly on what they're pushing to either the master or staging branch.
+
+<strong>2) Use the recommended APIs </strong> - Hackathons often encourage participants to use the APIs of the sponsoring firms, and Space Apps was no different. Companies like FourSquare, TokBox and 10gen were there to talk about their products and APIs. While we had to listen to some marketing pitches early on, I would have liked to try and integrate the sponsoring company APIs more into the product we tried to build, if only to get the practice and be considered in the running for the best app to use a given API.
+
+<strong>3) Meet people </strong> - This mostly goes without saying, but hackathons are an awesome way to meet people in the development community. Its not easy to balance the desire to hack away and build something with being social, but its important to see what others are working on and trying to create. I find inspiration in the creative pursuits of others, and hackathons are a great way to see how people can bring an array of different skills to the table to be productive and create cool stuff. 
+
+<strong>4) Start hacking early and iterate quickly</strong> - An agile development process is all the rage (so hot right now), and hackathons are a great way to put to apply agile best practices. When we were discussing what to do for the hackathon on Saturday morning, I think we spent too much time planning out our application and not enough time just hacking away. In part this was unavoidable given the size of our team (we had about 10 people at one point), but in general, its a good idea to have something small to start with and just see where that goes.
+
+<strong>5) Think big, but start (and demo) small</strong> - Its great to think of how your hackathon app might change lives, but in reality, its best to focus tightly in on a single user flow that can be reliably demoed by the end of the hackathon. Best for the team to each work on different components of the same flow or feature than for each member to work on the first part of multiple features.
+
