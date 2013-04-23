@@ -1,0 +1,1055 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Not All Sort Algorithms Are Created Equal - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="Yesterday we explored a few computer science topics, such as sort algorithms, Big O notation, linked lists and binary search nodes. I was tasked with &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/04/22/sort-algorithms/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Not All Sort Algorithms Are Created Equal</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-22T11:20:00-04:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Yesterday we explored a few computer science topics, such as sort algorithms, Big O notation, linked lists and binary search nodes. I was tasked with learning more about sort algorithms, which is something I typically take for granted when coding, since Ruby has a built in #sort method (which, incidentally, uses the quick sort algorithm that I&#8217;ll go into later). At a high level, a sort algorithm is a set of instructions to follow to sort a collection (e.g., an array) based on one or multiple criterion.</p>
+
+<!--more-->
+
+
+<p>A quick <a href="http://en.wikipedia.org/wiki/Sort_algorithms" target="_blank">search</a> on Wikipedia indicates that there are quite a few sort algorithms out there to choose from. Each of them have pros and cons depending on the context in which they are used. Applying a bubble sort algorithm to sort an array of numbers performs differently (in terms of computation speed) depending on how large the array is (e.g., 2 numbers or 2000 numbers?) or how organized the array is (e.g., is it entirely randomized or mostly sorted already?). For large, randomized data sets, an insertion sort may perform better than a bubble sort, but a bubble sort may perform better than an insertion sort for small sets.</p>
+
+<p>Sort algorithms can be categorized among several parameters, including efficiency, stability and computational complexity. Efficiency is a proxy for speed, or how quickly it takes for a given set to be sorted by the algorithm in question. This can vary considerably by the complexity and order of the input set.</p>
+
+<p>Stability is a concept that considers the original placement of a value within a set. For example, in the array [1, 2, 3, 4, 2], a correctly sorted list will come out to [1, 2, 2, 3, 4]. A sort algorithm is stable if the first &#8216;2&#8217; in the original array is in the first &#8216;2&#8217; in the sorted array and the second &#8216;2&#8217; in the original array is the second &#8216;2&#8217; in the sorted array. This example of stability is a bit contrived in this example, but is more relevant for sorting a set of objects that have more than one attribute. For example, say I have a list of NBA point guards and various stats (e.g., points per game, assists per game, etc.). If two point guards have the exact same PPG and I run a sort algorithm that does not lead to a stable result, then each time I run that sort algorithm I could have a different order of players, even if by PPG, the list is correctly sorted.</p>
+
+<p>Computational complexity relates to what operations are used to actually sort the list and determine relative size. For example, a comparison sorting algorithm, like a bubble sort or insertion sort, uses relational operators (e.g., &lt;=, >=, !=) to determine where a given value should be placed in a sorted list. Conversely, an adaptive sort uses the existing sort order of a set to determine how the sort performs, with the basic understanding that the better sorted an initial input is, the faster the sort algorithm should perform.</p>
+
+<p>Here&#8217;s a quick description on the sort algorithms that seemed to come up most frequently in my research on the topic. I tried to understand the most common search algorithms and implement them in Ruby. I also benchmarked the performance of the algorithms in question for an already sorted array, a reverse sorted array and a randomized array. Benchmarking the performance of the sort algorithms was helpful for me to better understand when you might want to use a bubble sort over a selection sort. You can see my full code below (note that the code is far from perfect - if you have any comments on anything that I may have missed or done inefficiently, please let me know!).</p>
+
+<p><strong>Bubble Sort</strong></p>
+
+<p>To sort an array of numbers (the simplest example of a set) a bubble sort algorithm goes through each index in the array and compares the value with the following value. If the first value is larger than the second value, then the two values will be switched (assuming the sort is done in ascending order). This pattern is repeated until all the numbers are sorted. On the first iteration, the largest number will &#8220;bubble&#8221; to the end of the array (i.e., index of n-1). On the second iteration, the second largest number will &#8220;bubble&#8221; to the n-2 position in the array. And so on until the array is sorted.</p>
+
+<p>The bubble sort algorithm performs decently well on small sets, but performance degrades as sets get larger. The downside of the bubble sort is that small numbers toward the end of a set will slow down the sort as the algorithm has to move them one-by-one all the way to the front of the set. A modified version of the bubble sort is the comb sort, which helps address the  small number issue that the bubble sort presents.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Array</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bubble_sort</span>
+</span><span class='line'>    <span class="n">length</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>    <span class="k">until</span> <span class="nb">self</span><span class="o">.</span><span class="n">sorted?</span>
+</span><span class='line'>      <span class="c1"># puts self.join(&quot;&quot;)</span>
+</span><span class='line'>      <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">2</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">compare</span> <span class="o">=</span> <span class="o">[</span><span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">]]</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">compare</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">compare</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>          <span class="n">switch_num</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+</span><span class='line'>          <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>          <span class="nb">self</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">switch_num</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="nb">self</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The bubble sort takes an array and goes through each value, switching that value with the next value if the next value is smaller than the first value. Each time the sort goes through the array, it checks if the array is sorted. If it is, then it stops, otherwise it continues to sort the array.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="mi">58927384</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">bubble_sort</span>
+</span><span class='line'>
+</span><span class='line'><span class="mi">58927384</span>
+</span><span class='line'><span class="mi">58273849</span>
+</span><span class='line'><span class="mi">52738489</span>
+</span><span class='line'><span class="mi">25374889</span>
+</span><span class='line'><span class="mi">23547889</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Selection Sort</strong></p>
+
+<p>A selection sort starts by taking the first element in a list of numbers. Then, the algorithm goes through all of the remaining numbers and finds the minimum value, which it then swaps positions with the first number. After this first iteration, the smallest number in the array is now in the correct (i.e., first) position. This process continues until n - 1 iterations have been made and all numbers are sorted.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Array</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">selection_sort</span>
+</span><span class='line'>    <span class="n">length</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>    <span class="n">sorted</span> <span class="o">=</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">1</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># puts sorted.join(&quot;&quot;)</span>
+</span><span class='line'>      <span class="n">search_array</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">[</span><span class="n">i</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">current_num</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">min_num</span> <span class="o">=</span> <span class="n">search_array</span><span class="o">.</span><span class="n">min</span>
+</span><span class='line'>      <span class="n">switch_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">search_array</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">min_num</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">sorted</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">min_num</span>
+</span><span class='line'>      <span class="n">sorted</span><span class="o">[</span><span class="n">switch_index</span><span class="o">]</span> <span class="o">=</span> <span class="n">current_num</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">sorted</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sort algorithm will go through an array and for each value it checks, it will find the minimum value for the sub-set of the array following the value it is checking. It will then replace the current value with the minimum value that it finds. This way, the smallest number of a successively smaller sub-set of the original array is placed just before such sub-set. By the time the loop gets to the end of the array, the array has been sorted.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="mi">58927384</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">selection_sort</span>
+</span><span class='line'>
+</span><span class='line'><span class="mi">58927384</span>
+</span><span class='line'><span class="mi">28957384</span>
+</span><span class='line'><span class="mi">23957884</span>
+</span><span class='line'><span class="mi">23457889</span>
+</span><span class='line'><span class="mi">23457889</span>
+</span><span class='line'><span class="mi">23457889</span>
+</span><span class='line'><span class="mi">23457889</span>
+</span><span class='line'><span class="mi">23457889</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Insertion Sort</strong></p>
+
+<p>An insertion sort starts by taking the last two numbers in an array. The algorithm then takes each number in the original array and puts that number in the correct place in the new sorted array, and continues that pattern until all of the original array is now in a sorted new array.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Array</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">insertion_sort</span>
+</span><span class='line'>    <span class="n">length</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>    <span class="n">sorted</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="n">sorted</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="nb">self</span><span class="o">[</span><span class="n">length</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">max</span><span class="p">)</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="nb">self</span><span class="o">[</span><span class="n">length</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">min</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">2</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># puts sorted.join(&quot;&quot;)</span>
+</span><span class='line'>      <span class="n">num</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">insert_at</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">.</span><span class="n">max</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="p">?</span> <span class="n">sorted</span><span class="o">.</span><span class="n">length</span> <span class="p">:</span> <span class="n">sorted</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">int</span><span class="o">|</span> <span class="n">int</span> <span class="o">-</span> <span class="n">num</span> <span class="p">}</span><span class="o">.</span><span class="n">index</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">sorted</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">insert_at</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">sorted</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sort code creates a second array of two numbers, then goes back through the original array and puts each number in the correct place in the second array. The &#8220;insert_at&#8221; variable determines where in the second array the value from the original array should be included.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="mi">58927384</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">insertion_sort</span>
+</span><span class='line'>
+</span><span class='line'><span class="mi">48</span>
+</span><span class='line'><span class="mi">458</span>
+</span><span class='line'><span class="mi">4588</span>
+</span><span class='line'><span class="mi">45889</span>
+</span><span class='line'><span class="mi">245889</span>
+</span><span class='line'><span class="mi">2457889</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Merge Sort</strong></p>
+
+<p>Merge sort is an algorithm that recursively breaks down a set until each item is in its own array. Then, the algorithm recreates the set by merging successively larger sub-sets in an orderly fashion until the original set is sorted. This was a challenging one for me to conceptualize, and I&#8217;ll admit that the code below was mostly taken from the Phil Crissman blog I link to below. The speed of the merge sort comes from the fact that its easier to a sorted list with another already sorted list. The algorithm breaks down a large array until it can reconstruct the set by merging sorted sub-sets.</p>
+
+<p><strong>Quick Sort</strong></p>
+
+<p>I didn&#8217;t implement a quick sort algorithm, but the basic notion behind the quick sort algorithm is that it selects a element in the set called the pivot (typically, the median value), moves all values less than the pivot to before the pivot and all values greater than the pivot to after the pivot. After this first iteration, the pivot value is in the correct place in the set, even if the values before and after the pivot are not in the correct order. Then, this process is repeated for the sub-sets smaller and larger than the pivot value until the entire set is sorted.</p>
+
+<p>The quick sort seems to be a pretty fast and efficient algorithm, and its used in Ruby for the array#sort algorithm. However, it doesn&#8217;t seem to be the most stable algorithm, as the original set order is not preserved in the event of a perfect match between two values. Conceptually, I find this sort algorithm the most interesting, because it uses contextual clues to sort more efficiently. The Wikipedia entry for <a href="https://en.wikipedia.org/wiki/Quicksort" target="_blank">quick sort</a> has a great graphic illustrating how the quick sort works. I might try and implement my own quick sort at some point; if I do, I&#8217;ll definitely update this post!</p>
+
+<p><strong>Benchmarking</strong></p>
+
+<p>For each of these tests, I created a random number and converted that number into an array using the number#array function in the code at the bottom. For the quick sort, I used the Ruby array#sort method. I wanted to see how the sort algorithms I chose to examine varied based on the size of the array and the sort level of the input array. I tested each algorithm on an already sorted array, a reverse sorted array and a randomly sorted array.</p>
+
+<p>Let me just say upfront that I think the merge sort implementation seems off here. Based on my reading, the merge sort should be a relatively efficient and fast sort algorithm (falling below a quick sort but above the other sort algorithms), but for some reason the merge sort I examined doesn&#8217;t perform that well. I suspect that its because the method is making an unnecessary number of recursive loops. It would be interesting to examine more closely, but I&#8217;m afraid that this may be a rabbit hole that I don&#8217;t have the expertise (or time) yet to delve fully into.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>number = 58927384
+</span><span class='line'>
+</span><span class='line'>Sort Algorithm (input type)     Sort Time (ms)
+</span><span class='line'>----------------------------------------------
+</span><span class='line'>Bubble Sort (sorted)            0.013
+</span><span class='line'>Insertion Sort (sorted)         0.035
+</span><span class='line'>Selection Sort (sorted)         0.038
+</span><span class='line'>Merge Sort (sorted)             0.093
+</span><span class='line'>Quick Sort (sorted)             0.011
+</span><span class='line'>  
+</span><span class='line'>Bubble Sort (reverse)           0.055
+</span><span class='line'>Insertion Sort (reverse)        0.028
+</span><span class='line'>Selection Sort (reverse)        0.027
+</span><span class='line'>Merge Sort (reverse)            0.066
+</span><span class='line'>Quick Sort (reverse)            0.007
+</span><span class='line'>  
+</span><span class='line'>Bubble Sort (random)            0.045
+</span><span class='line'>Insertion Sort (random)         0.027
+</span><span class='line'>Selection Sort (random)         0.027
+</span><span class='line'>Merge Sort (random)             0.067
+</span><span class='line'>Quick Sort (random)             0.006</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>number = 52398471342
+</span><span class='line'>
+</span><span class='line'>Sort Algorithm (input type)     Sort Time (ms)
+</span><span class='line'>----------------------------------------------
+</span><span class='line'>Bubble Sort (sorted)            0.012
+</span><span class='line'>Insertion Sort (sorted)         0.041
+</span><span class='line'>Selection Sort (sorted)         0.038
+</span><span class='line'>Merge Sort (sorted)             0.105
+</span><span class='line'>Quick Sort (sorted)             0.008
+</span><span class='line'>  
+</span><span class='line'>Bubble Sort (reverse)           0.094
+</span><span class='line'>Insertion Sort (reverse)        0.041
+</span><span class='line'>Selection Sort (reverse)        0.035
+</span><span class='line'>Merge Sort (reverse)            0.095
+</span><span class='line'>Quick Sort (reverse)            0.007
+</span><span class='line'>  
+</span><span class='line'>Bubble Sort (random)            0.083
+</span><span class='line'>Insertion Sort (random)         0.04
+</span><span class='line'>Selection Sort (random)         0.034
+</span><span class='line'>Merge Sort (random)             0.096
+</span><span class='line'>Quick Sort (random)             0.005</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For relatively small arrays, there doesn&#8217;t seem to be a huge difference in performance, but its clear that the quick sort is the most efficient method, which should come as no surprise since its the actual Ruby array#sort method. My sort algorithm implementations are no match for the Ruby sort algorithm.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>number = 2984579834759824759082347509823475098274509827409582745980274359872490
+</span><span class='line'>8572890457209384572908345790284570981374908274598027450923845092846738945729834
+</span><span class='line'>579873465934758923745897459083745890273490587246897234985739485634596394
+</span><span class='line'>
+</span><span class='line'>Sort Algorithm (input type)     Sort Time (ms)
+</span><span class='line'>----------------------------------------------
+</span><span class='line'>Bubble Sort (sorted)            0.075
+</span><span class='line'>Insertion Sort (sorted)         5.182
+</span><span class='line'>Selection Sort (sorted)         5.079
+</span><span class='line'>Merge Sort (sorted)             5.528
+</span><span class='line'>Quick Sort (sorted)             0.01
+</span><span class='line'>  
+</span><span class='line'>Bubble Sort (reverse)           22.589
+</span><span class='line'>Insertion Sort (reverse)        3.836
+</span><span class='line'>Selection Sort (reverse)        1.37
+</span><span class='line'>Merge Sort (reverse)            11.13
+</span><span class='line'>Quick Sort (reverse)            0.014
+</span><span class='line'>  
+</span><span class='line'>Bubble Sort (random)            17.069
+</span><span class='line'>Insertion Sort (random)         4.37
+</span><span class='line'>Selection Sort (random)         1.344
+</span><span class='line'>Merge Sort (random)             8.258
+</span><span class='line'>Quick Sort (random)             0.007</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For larger sets, the efficiency loss becomes much more evident for the non quick sort algorithms. The bubble sort, for example, performs very well for an already sorted list, but falls way behind for lists that are not well sorted (randomized or in reverse sort order). The insertion and selection sorts seem to perform relatively similarly, although it appears that the selection sort seems to be consistely better than the insertion sort. This further supports the notion that which sort algorithm is &#8220;best&#8221; is context-dependent and varies based on the complexity and size of the set to be sorted. That said, there are certain sort algorithms that are generally worse than others (e.g., the bubble sort is probably sub-optimal in most all cases).</p>
+
+<p>The main lesson I learned throughout trying to implement my own sort algorithms is to not try and implement my own sort algorithms. Ruby seems to have the sort method down pretty well, although I&#8217;ve read that there are some edge cases where the array#sort method lags behind custom sort algorithms. At this point in my programming career though, I can probably rely on array#sort for most all of my sorting needs.</p>
+
+<p>Needless to say though, implementing your own sort algorithm is a pretty interesting intellectual exercise. It forces you to use less abstract Ruby methods (I tried to just use for loops in my implementation), which helps you develop a better understanding and appreciation for more abstract Ruby methods like array#collect or array#inject.</p>
+
+<p><strong>Good Resources:</strong></p>
+
+<p>Here are a few good web resources about sorting algorithms. I actually found the Wikipedia entry about sort algorithms to be remarkably helpful, as well as a few of the links included within the page.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Sort_algorithm" target="_blank">https://en.wikipedia.org/wiki/Sort_algorithm</a></p>
+
+<p><a href="http://www.sorting-algorithms.com/" target="_blank" >http://www.sorting-algorithms.com/</a></p>
+
+<p><a href="http://atschool.eduweb.co.uk/mbaker/sorts.html" target="_blank">http://atschool.eduweb.co.uk/mbaker/sorts.html</a></p>
+
+<p><a href="http://blog.8thlight.com/will-warner/2013/03/26/stable-sorting-in-ruby.html" target="_blank">http://blog.8thlight.com/will-warner/2013/03/26/stable-sorting-in-ruby.html</a></p>
+
+<p><a href="http://philcrissman.com/2010/07/18/how-not-to-write-sorting-algorithms-in-ruby/" target="_blank">http://philcrissman.com/2010/07/18/how-not-to-write-sorting-algorithms-in-ruby/</a></p>
+
+<hr />
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Fixnum</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">array</span>
+</span><span class='line'>    <span class="n">array</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span><span class="o">.</span><span class="n">to_i</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">array</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bignum</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">array</span>
+</span><span class='line'>    <span class="n">array</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span><span class="o">.</span><span class="n">to_i</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">array</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Array</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">reverse_array</span>
+</span><span class='line'>    <span class="n">reversed_array</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="n">size</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">length</span>
+</span><span class='line'>    <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">reversed_array</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span><span class="o">[</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">reversed_array</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">sorted?</span>
+</span><span class='line'>    <span class="n">sorted</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="k">while</span> <span class="n">sorted</span> <span class="o">==</span> <span class="kp">true</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>        <span class="n">sorted</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">sorted</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bubble_sort</span>
+</span><span class='line'>    <span class="n">length</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>    <span class="k">until</span> <span class="nb">self</span><span class="o">.</span><span class="n">sorted?</span>
+</span><span class='line'>      <span class="c1"># puts self.join(&quot;&quot;)</span>
+</span><span class='line'>      <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">2</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">compare</span> <span class="o">=</span> <span class="o">[</span><span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">]]</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">compare</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">compare</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>          <span class="n">switch_num</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+</span><span class='line'>          <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>          <span class="nb">self</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">switch_num</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="nb">self</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">selection_sort</span>
+</span><span class='line'>    <span class="n">length</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>    <span class="n">sorted</span> <span class="o">=</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">1</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># puts sorted.join(&quot;&quot;)</span>
+</span><span class='line'>      <span class="n">search_array</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">[</span><span class="n">i</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">current_num</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">min_num</span> <span class="o">=</span> <span class="n">search_array</span><span class="o">.</span><span class="n">min</span>
+</span><span class='line'>      <span class="n">switch_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">search_array</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">min_num</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">sorted</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">min_num</span>
+</span><span class='line'>      <span class="n">sorted</span><span class="o">[</span><span class="n">switch_index</span><span class="o">]</span> <span class="o">=</span> <span class="n">current_num</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">sorted</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">insertion_sort</span>
+</span><span class='line'>    <span class="n">length</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>    <span class="n">sorted</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="n">sorted</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="nb">self</span><span class="o">[</span><span class="n">length</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">max</span><span class="p">)</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="nb">self</span><span class="o">[</span><span class="n">length</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="n">.length</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">min</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">2</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># puts sorted.join(&quot;&quot;)</span>
+</span><span class='line'>      <span class="n">num</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">insert_at</span> <span class="o">=</span> <span class="n">sorted</span><span class="o">.</span><span class="n">max</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="p">?</span> <span class="n">sorted</span><span class="o">.</span><span class="n">length</span> <span class="p">:</span> <span class="n">sorted</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">int</span><span class="o">|</span> <span class="n">int</span> <span class="o">-</span> <span class="n">num</span> <span class="p">}</span><span class="o">.</span><span class="n">index</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">sorted</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">insert_at</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">sorted</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">merge_sort</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># puts &quot;starting merge_sort&quot;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">first</span> <span class="o">&lt;</span> <span class="n">last</span>
+</span><span class='line'>      <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="n">last</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span class='line'>      <span class="c1"># puts &quot;starting first recursive loop: self: #{self}; first: #{first}; mid: #{mid}; last: #{last};&quot;</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">merge_sort</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">mid</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># puts &quot;starting second recursive loop: self: #{self}; first: #{first}, mid: #{mid+1}, last: #{last}&quot;</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">merge_sort</span><span class="p">(</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># puts &quot;start merge: self: #{self}; first: #{first}; mid: #{mid + 1}; last: #{last}&quot;</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># puts &quot;done&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="c1"># puts self[0..-2].join(&quot;&quot;)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">quick_sort</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">sort_benchmark</span>
+</span><span class='line'>    <span class="n">sorted_order</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">insertion_sort</span>
+</span><span class='line'>    <span class="n">sorted_reverse_order</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">insertion_sort</span><span class="o">.</span><span class="n">reverse_array</span>
+</span><span class='line'>    <span class="n">random_order</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">shuffle</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">Benchmark</span><span class="o">.</span><span class="n">bm</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Bubble Sort (sorted):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_order</span><span class="o">.</span><span class="n">bubble_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Insertion Sort (sorted):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_order</span><span class="o">.</span><span class="n">insertion_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Selection Sort (sorted):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_order</span><span class="o">.</span><span class="n">selection_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Merge Sort (sorted):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_order</span><span class="o">.</span><span class="n">merge_sort</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Bubble Sort (reverse):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_reverse_order</span><span class="o">.</span><span class="n">bubble_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Insertion Sort (reverse):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_reverse_order</span><span class="o">.</span><span class="n">insertion_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Selection Sort (reverse):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_reverse_order</span><span class="o">.</span><span class="n">selection_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Merge Sort (reverse):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">sorted_reverse_order</span><span class="o">.</span><span class="n">merge_sort</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Bubble Sort (random):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">random_order</span><span class="o">.</span><span class="n">bubble_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Insertion Sort (random):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">random_order</span><span class="o">.</span><span class="n">insertion_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Selection Sort (random):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">random_order</span><span class="o">.</span><span class="n">selection_sort</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;Merge Sort (random):&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="n">random_order</span><span class="o">.</span><span class="n">merge_sort</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">protected</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">left</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">first</span><span class="o">.</span><span class="n">.mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">right</span> <span class="o">=</span> <span class="nb">self</span><span class="o">[</span><span class="n">mid</span><span class="o">.</span><span class="n">.last</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">left</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">right</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="c1"># puts &quot;MERGE (before) - self: #{self}; left: #{left}; right: #{right}&quot;</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">first</span><span class="o">.</span><span class="n">.last</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">left</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="o">[</span><span class="n">j</span><span class="o">]</span>
+</span><span class='line'>        <span class="nb">self</span><span class="o">[</span><span class="n">n</span><span class="o">]</span> <span class="o">=</span> <span class="n">left</span><span class="o">[</span><span class="n">i</span><span class="o">]</span>
+</span><span class='line'>        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="nb">self</span><span class="o">[</span><span class="n">n</span><span class="o">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">[</span><span class="n">j</span><span class="o">]</span>
+</span><span class='line'>        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="c1"># puts &quot;MERGE (after) - self: #{self}; left: #{left}; right: #{right}&quot;</span>
+</span><span class='line'>    <span class="c1"># self[0..-2]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">binding</span><span class="o">.</span><span class="n">pry</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-22T11:20:00-04:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/04/22/sort-algorithms/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/04/22/sort-algorithms/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/" title="Previous Post: Of Science Fairs and Space Apps (Flatiron - Week 11)">&laquo; Of Science Fairs and Space Apps (Flatiron - Week 11)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang@flatironschool.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>My name is Eugene Wang, and I am currently a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City. This blog is about my 12-week journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.</p>
+    
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/04/22/sort-algorithms/">Not All Sort Algorithms Are Created Equal</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/">Of Science Fairs and Space Apps (Flatiron - Week 11)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/17/in-praise-of-project-euler/">In Praise of Project Euler</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/13/custom-activerecord-queries-in-rails/">TRUE Object-Oriented Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/07/building-viewfinder-flatiron-week-9/">Building ViewFinder (Flatiron - Week 9)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/04/22/sort-algorithms/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/04/22/sort-algorithms/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
