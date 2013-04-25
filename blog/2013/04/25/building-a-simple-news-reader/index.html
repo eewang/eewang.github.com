@@ -1,0 +1,597 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How To Build A Simple News Reader - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="A Flatiron TA (Blake Johnson) recently introduced us to the &#8216;say&#8217; command in the Mac terminal. The command does exactly what you think it &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How to Build a Simple News Reader</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-25T16:58:00-04:00" pubdate data-updated="true">Apr 25<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A Flatiron TA (Blake Johnson) recently introduced us to the &#8216;say&#8217; command in the Mac terminal. The command does exactly what you think it would - if you send in a string after the command, your computer will talk back to you! With this new-found coder superpower, I thought it would be interesting to try and build a simple news reading application. I&#8217;ve pasted the code below after the fold, or you can find my code <a href="https://github.com/eewang/automated-news-reader" target="_blank">here on Github</a>.</p>
+
+<!--more-->
+
+
+<p>I used to read the news constantly, checking my Google Reader feed or the New York Times several times an hour. Since starting at Flatiron, its been difficult for me to keep up with my regular news consumption. I try to read a number of newspapers and periodicals throughout the week, including the Economist, Atlantic, NY Mag and the NYT. With my deep-end dive into coding, however, traditional news reading has been difficult, so I&#8217;ve been trying to find new ways to get my news. For example, I started to get back into podcasts, which has been great as a way not only to get my news, but to take a break from constantly looking at screens.</p>
+
+<p>I wanted to build a simple script that could scrape the New York Times front page and read the news back to me. As I thought about the problem, I decided to create two classes to represent the page that I wanted to scrape and the actual story itself. The code itself is pretty simple; it uses Nokogiri to open up the NYTimes front page and extracts the stories using a the &#8220;story&#8221; class css selector. Using Nokogiri to scrape a webpage converts the HTML into Nokogiri nodes, to which methods like &#8216;text&#8217; or &#8216;value&#8217; can be used to get information about the specific Nokogiri node.</p>
+
+<p>The &#8220;front_page_stories&#8221; instance method in the Page class extracts all the stories from the front page. Then, the &#8220;create_stories&#8221; method goes through each story and creates a Story instance, on which it calls various methods to get the headline, byline and lede graph.</p>
+
+<p>To get the full text of the article, I extracted the link to the full story from the front page story node and passed that link into the Nokogiri HTML parser. Each story page includes the full body text in a paragraph tag with an &#8220;itemprop = articleBody&#8221; attribute, which makes it easy to access the body text of a given article. I then save each paragraph as a separate element in an array, which can then be iterated over for the terminal &#8216;say&#8217; command to read.</p>
+
+<p>One challenge that I had to address was the fact that the NYTimes uses different headline tags for the primary, secondary, tertiary, etc. stories. So what I did was write a Story instance method to check which headline tag was not empty for a given story. The script then takes the text value of the non-empty headline tag and applies it to the story headline attribute.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;net/http&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;nokogiri&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Page</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">:bylines</span><span class="p">,</span> <span class="ss">:stories</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@url</span> <span class="o">=</span> <span class="n">url</span>
+</span><span class='line'>    <span class="vi">@stories</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">document</span>
+</span><span class='line'>    <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="vi">@url</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">front_page_stories</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;.story&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create_stories</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">front_page_stories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">story</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;h6.byline&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>        <span class="n">s</span> <span class="o">=</span> <span class="no">Story</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_headline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_byline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_lede_graph</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>        <span class="vi">@stories</span> <span class="o">&lt;&lt;</span> <span class="n">s</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">read_stories</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">create_stories</span>
+</span><span class='line'>    <span class="vi">@stories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">story</span><span class="o">|</span>
+</span><span class='line'>      <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="n">story</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;Story </span><span class="si">#{</span><span class="vi">@stories</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">story</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="sb"> of </span><span class="si">#{</span><span class="vi">@stories</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="sb">&quot;`</span>
+</span><span class='line'>      <span class="n">story</span><span class="o">.</span><span class="n">speak_story</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Story</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:headline</span><span class="p">,</span> <span class="ss">:byline</span><span class="p">,</span> <span class="ss">:lede_graph</span><span class="p">,</span> <span class="ss">:link</span><span class="p">,</span> <span class="ss">:voice</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">VOICES</span> <span class="o">=</span> <span class="o">[</span>
+</span><span class='line'>    <span class="s2">&quot;Alex&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Bruce&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Fred&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Junior&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Ralph&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Agnes&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Kathy&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Princess&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Vicki&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;Victoria&quot;</span>
+</span><span class='line'>  <span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vi">@doc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="vi">@body_paragraphs</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="vi">@voice</span> <span class="o">=</span> <span class="no">VOICES</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1"># .shuffle[0]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">doc</span>
+</span><span class='line'>    <span class="vi">@doc</span> <span class="o">=</span> <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="vi">@link</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">get_byline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">byline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;h6.byline&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">get_lede_graph</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">lede_graph</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">get_headline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">attrs</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="s1">&#39;h3&#39;</span><span class="p">,</span> <span class="s1">&#39;h5&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">attrs</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">headline</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="n">headline</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>        <span class="nb">self</span><span class="o">.</span><span class="n">headline</span> <span class="o">||=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="n">headline</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">full_text</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">doc</span>
+</span><span class='line'>    <span class="vi">@doc</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s2">&quot;p[itemprop=articleBody]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</span><span class='line'>      <span class="vi">@body_paragraphs</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="vi">@body_paragraphs</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">speak_story</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">byline</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">byline</span><span class="si">}</span><span class="sb">&quot;`</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">headline</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">headline</span><span class="si">}</span><span class="sb">&quot;`</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">lede_graph</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">lede_graph</span><span class="si">}</span><span class="sb">&quot;`</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">full_text</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">p</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">p</span><span class="si">}</span><span class="sb">&quot;`</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">news</span> <span class="o">=</span> <span class="no">Page</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;http://www.nytimes.com&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">news</span><span class="o">.</span><span class="n">read_stories</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, I can theoretically wake up in the morning, fire up my terminal, run this script and get ready for the day as my computer reads the news to me. In practice, the computer voice isn&#8217;t all that sexy and it inaccurately pronounces some names or other proper nouns and generally has a lumpy, awkward quality to it. I&#8217;m sure there are programs out there that you can download to add custom voices to the computer that are better than the standard voices. Another feature I&#8217;d like to add would be a scrape for Twitter to add a news feed feature. Also, I&#8217;d like to add a cron job feature with the Twilio API to notify me when the NYTimes adds a banner breaking news headline to the site. I know that the NYT sends out e-mail alerts for breaking news already, but it never hurts to be the first to know!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-25T16:58:00-04:00" pubdate data-updated="true">Apr 25<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/22/sort-algorithms/" title="Previous Post: Not All Sort Algorithms Are Created Equal">&laquo; Not All Sort Algorithms Are Created Equal</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang@flatironschool.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>My name is Eugene Wang, and I am currently a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City. This blog is about my 12-week journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.</p>
+    
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/04/25/building-a-simple-news-reader/">How To Build A Simple News Reader</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/22/sort-algorithms/">Not All Sort Algorithms Are Created Equal</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/">Of Science Fairs and Space Apps (Flatiron - Week 11)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/17/in-praise-of-project-euler/">In Praise of Project Euler</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/13/custom-activerecord-queries-in-rails/">TRUE Object-Oriented Design</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
