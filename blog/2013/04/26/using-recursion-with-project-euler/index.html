@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Flatiron - Week 6 - eugenius</title>
+  <title>Using Recursion With Project Euler - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="Today marked the half-way point for the Flatiron program. This past week was heavy on Ruby on Rails instruction; Avi wanted to hammer into us the &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/03/17/flatiron-week-6/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/04/26/using-recursion-with-project-euler/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -78,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Flatiron - Week 6</h1>
+      <h1 class="entry-title">Using Recursion With Project Euler</h1>
     
     
       <p class="meta">
@@ -94,7 +95,7 @@
   
 
 
-<time datetime="2013-03-17T10:14:00-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2013</time>
+<time datetime="2013-04-26T08:27:00-04:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -103,20 +104,7 @@
   </header>
 
 
-<div class="entry-content"><p>Today marked the half-way point for the Flatiron program. This past week was heavy on Ruby on Rails instruction; Avi wanted to hammer into us the importance of understanding complex forms and working with multiple, associated models. On Monday, we brainstormed ideas for our final group projects and went through a planning session where we discussed ideas at a high-level - the features, technical obstacles and work sprints that we could tackle within the short timeframe for development.</p>
-
-<!--more-->
-
-
-<p>Throughout the week, I tried to implement the lecture content into my side project. Learning forms was challenging, and I&#8217;m glad that Avi and Bob spent a lot of time on the topic. The previous week, I had tried to implement a &#8220;favorites&#8221; form for users of my ticket tracker application, basically allowing users to tag sporting events or concerts as favorites. Eventually, I want this functionality to drive my API calls and analytics; rather than make a large number of unnecessary API calls, I want users to tell me what they want to look for and then enable the application to retrieve the data they want. Attempting to build out the form before covering the topic in class was difficult - I could never quite get the params hash working correctly, and I hadn&#8217;t made the proper inter-model associations. However, after much lecture and review this past week, I was finally able to get that functionality working in my application.</p>
-
-<p>In addition to working on forms this week, I also restructured my schema and models. In previous iterations of my application, I had been retrieving data on a periodic basis and saving all the data to a single table. This created considerable data duplication, as many attributes for a given concert or sporting event are not going to change on a daily basis (e.g., event date or venue). I came to the realization that a single API call for a given concert on a given day actually could be broken down into three tables - one for the actual concert, one for the concert listing and one for the concert listing quote for that specific day. Thus, I restarted my application with this in mind and broke up the process of saving data into a three-step waterfall so that I would get all necessary data, but nothing more.</p>
-
-<p>For example, say I make a call to the Stubhub API for event information about <a href="http://electricdaisycarnival.com/NewYork/" target="_blank">Electric Daisy Carnival - New York</a> (EDC). That API call actually returns to me information about 4 separate &#8220;events&#8221; - EDC 3-Day Pass, EDC Friday Only, EDC Saturday Only and EDC Sunday Only. The data is structured as JSON, and each hash has data fields that cover both daily static information - event date, venue, city, etc. - and daily dynamic information - minimum price, total tickets available, etc. Before, I had been saving all this information in the same table, but this past week, I broke it out into three tables, so that an API call for EDC will create 1 row in my concerts table, 4 rows in my concert_listings table and 4 rows in my concert_listing_quotes table. An API call tomorrow will create 4 new rows only in my concert_listing_quotes table, assuming that there are no new concert listings (an example might be EDC - NY After Party Tickets). I refactored my code so that each API call goes through a waterfall, checking for whether the relevant level of concert abstraction (a concert, concert listing or concert listing quote) already exists in the tables. If it does, great - move on. If it doesn&#8217;t, save a row to the database.</p>
-
-<p>Refactoring the code in this way plus adding in the proper associations (a concert has many concert listings, which have many concert listing quotes) made it much easier for me to traverse my models and move quickly from an individual user instance to what he or she favorited, through a FavoriteConcert model. My API calls take less time to run, and my application loads faster. All in all, I got a good lesson in the value of refactoring this past week and the benefit of adding reasonable layers of abstraction.</p>
-
-<p>In addition to coding, I&#8217;ve been reading Sandi Metz&#8217;s book on design - Practical Object Oriented Design in Ruby, or POODR. Going through POODR has been great in conceptualizing design best practices and taking a step back from coding to think through how to balance technical specificity with product flexibility. Sandi Metz has a great way of interjecting pithy, memorable statements about design that are great to keep in the back of your mind while designing an application. I&#8217;m hoping to finish up the book this week, at which point I&#8217;ll write a longer post with my review and thoughts on the book.</p>
+<div class="entry-content">
 </div>
 
 
@@ -139,7 +127,7 @@
   
 
 
-<time datetime="2013-03-17T10:14:00-04:00" pubdate data-updated="true">Mar 17<span>th</span>, 2013</time>
+<time datetime="2013-04-26T08:27:00-04:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
       
 
 
@@ -147,7 +135,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/03/17/flatiron-week-6/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/03/17/flatiron-week-6/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/04/26/using-recursion-with-project-euler/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/04/26/using-recursion-with-project-euler/" >Tweet</a>
   
   
   
@@ -158,10 +146,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/03/12/how-to-schedule-tasks-using-whenever/" title="Previous Post: How to Schedule Tasks Using 'Whenever'">&laquo; How to Schedule Tasks Using 'Whenever'</a>
+        <a class="basic-alignment left" href="/blog/2013/04/25/building-a-simple-news-reader/" title="Previous Post: How To Build A Simple News Reader">&laquo; How To Build A Simple News Reader</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/03/21/how-to-hack-lollapalooza-and-still-not-get-tickets/" title="Next Post: How to hack Lollapalooza and still not get tickets">How to hack Lollapalooza and still not get tickets &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/04/27/flatiron-graduation/" title="Next Post: Flatiron Graduation">Flatiron Graduation &raquo;</a>
       
     </p>
   </footer>
@@ -316,8 +304,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/03/17/flatiron-week-6/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/03/17/flatiron-week-6/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/04/26/using-recursion-with-project-euler/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/04/26/using-recursion-with-project-euler/';
         var disqus_script = 'embed.js';
       
     (function () {
