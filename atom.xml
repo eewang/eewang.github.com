@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-04-27T22:38:15-04:00</updated>
+  <updated>2013-04-27T22:38:55-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,15 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron Reflections]]></title>
-    <link href="http://eewang.github.com/blog/2013/04/27/flatiron-reflections/"/>
-    <updated>2013-04-27T21:34:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/04/27/flatiron-reflections</id>
-    <content type="html"><![CDATA[<p>Avi framed his commencement speech with his own career story.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flatiron Graduation]]></title>
@@ -6365,6 +6356,24 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <p>Avi spoke a lot about this concept of programming slowly and shortening the feedback loop in class today. As I mentioned in a previous post, one of the beauties of coding is that you get immediate gratification; I can write a few lines of code and instantly see the results. Beginners (myself included) often get lost in trying to solve a big problem without thinking through the concrete, small steps that a computer can understand. Personally, I tend to jump too quickly into coding and trying to solve the biggest problems first. I&#8217;ve realized over the past few days that I need to take my time, write more pseudo-code and start small.</p>
 
 <p>In addition to discussing coding best practices, we worked more on our scrapers and tried to refactor some of our code into more efficient class constructors. In the afternoon, Avi taught us about object orientation, recursion and directory/file access in Ruby. Each day I&#8217;m learning new components of my technical skill set, all of which build on top of each other and make what I&#8217;ve learned before even more powerful. Coding is a cumulative skill set; what I learned in the first seven days I used today, and what I&#8217;ve learned today I&#8217;ll use tomorrow, the next day and for the rest of my coding career. This is comforting, as it lessens the pressure to get it 100% right the first time, and its reassuring to know that since practice makes perfect and since we&#8217;ll be getting a lot of practice, we stand a solid chance of getting pretty good.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Semantics and Scrapers (Flatiron - Day 007)]]></title>
+    <link href="http://eewang.github.com/blog/2013/02/12/scrapers/"/>
+    <updated>2013-02-12T23:55:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/02/12/scrapers</id>
+    <content type="html"><![CDATA[<p>We covered a lot of material today, from the value of semantic mark-up in HTML to how to build web scrapers in Ruby. The day started with a review of our homework from the previous night, which was to recreate a song cataloging program that we had written using hash iteration. Using hashes rather than arrays to organize our song list enabled us to utilize metadata about the artist, album and song title that are accessible via hash keys.</p>
+
+<!--more-->
+
+
+<p>Later on in the day we went to work on our student profiles, and Avi taught us about the value of semantic markup along the way and other front-end best practices. Applying proper markup to an HTML document enables search engines to more effectively place content and generally aligns with the spirit of the Internet in writing web pages that are aware of the structure of their own content. In creating our student profiles, it was tempting to take semantic shortcuts and place content in the incorrect enclosing tags (e.g., list data in a table, which has a preset formatting). Avi emphasized, however, that the separation of content and style is a fundamental underpinning of the Web and should be respected. Content that is properly structured via HTML can be styled in an infinite number of ways, so we shouldn&#8217;t let our interest in maintaining beautiful design affect how we semantically define our content. A great example of this is the <a href="http://www.csszengarden.com/" target="_blank">CSS Zen Garden</a> project. Take a look at a few of the projects - you&#8217;ll realize that wildly different website designs can be based on the exact same HTML content.</p>
+
+<p>In the afternoon, we were tasked with building our very first web scraper, on the student profile page we had just created, in fact. Using Nokogiri, a Ruby gem, I was able to write a program that parsed the individual student profile pages from the central index page and return a hash of attributes, covering each student&#8217;s work history, education, favorite apps, etc. For those who don&#8217;t know, scrapers are pretty awesome. They allow you to collect and organize data in any way you want from web sites, so long as you know what you&#8217;re looking for. Using scrapers, I could quickly collect sports data, or find all fitness classes at my gym, or pull out information from Wikipedia. Scrapers essentially allow you to extract large amounts of data for your own use. This is pretty powerful, and I&#8217;m excited to try and build more complex scrapers, and even attach those to analytical engines to provide useful intelligence about a topic.</p>
+
+<p>In the evening, I made it over to an event on civic technology and public hacking with a fellow student. The talk focused on the state of civic technology, and included short speeches by politicians, city officials and active members of the civic tech community. Although it was all very interesting and exciting to know that this community is filled with passionate people who care about solving problems, I was exhausted after a long day at Flatiron, so I high-tailed it out of there when I got a chance and went back home to keep working on my scraper and watch the State of the Union.</p>
 ]]></content>
   </entry>
   
