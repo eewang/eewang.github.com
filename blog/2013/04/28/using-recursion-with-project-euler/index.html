@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Recursion With Project Euler - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using Recursion With Project Euler</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T08:00:00-04:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what with all the coding, reading and blogging that I&#8217;m trying to do on a day-to-day basis. However, I was able to work in a problem earlier this week that helped me get a better grasp of using recursion in Ruby.</p>
+
+<!--more-->
+
+
+<p>For those who don&#8217;t know, recursion is a computer science concept that seems simple on its face, but can mask considerable complexity. A recursive function is basically a function that calls itself. You know how when you go to a barbershop and your barber puts a mirror up to the back of your head after the haircut? The resulting mirror-on-mirror effect that looks like a never-ending pyramid of the same image in increasingly smaller size is an example of recursion. Applying recursion in a Ruby script can be a powerful and succinct way of moving programmatically applying a pattern to a given problem until the solution is found.</p>
+
+<p>However, using recursion can also lead to &#8220;call stack too deep&#8221; errors the same way that using a while loop without providing for some incrementor will lead to an infinite loop. Recursion can also be difficult to track mentally since each call to method is made within the execution of such method, just one &#8220;layer&#8221; above. This means that when the executing code finally reaches its terminating condition, it has to go &#8220;back&#8221; through all the previous calls to the same method. At school, we had explored recursion early on in the semester to solve the Tower of Hanoi problem, but I&#8217;ll admit that it was difficult for me to grasp and follow the logic. Thankfully, as I went through Project Euler problem 7 earlier this week, I was able to apply the principles of recursion to solve it and gain a better understanding of using recursion in the process.</p>
+
+<p>Problem 7 asks you to find the 10,001st prime number. My strategy for solving this problem was to take a starting number, pass in prime index that I would like to solve for, then move iteratively toward that index based on the starting index (i.e. the prime index of the closest prime number less than or equal to the starting number). To do this, I created an Integer#prime? method to check if a number is prime and metaprogrammed an Integer#next_prime and Integer#previous_prime method to find the closest prime number greater than and less than, respectively, the given number. I then created an Integer#find_prime method that would recursively call itself via the Integer#move_to_next_prime method that would eventually return the value of the prime_index that was initally passed to the #find_prime method.</p>
+
+<p>I think the code that I ended up with is okay, but I could have made other changes to make the search process of finding the n-th prime faster. For example, instead of having the script move incrementally to find the value of the n-th prime given a starting number, I could have written it so that based on the delta between the prime index of the starting number and the target prime index, the script could make a someone intelligent guess as to how much to add or subtract to the starting number to get closer to the target value. The difference between the value of the starting prime index of 10 (i.e., the 10th prime) and the 15th prime will be smaller than the difference between the 10th and 20th prime. This fact could be baked into the recursive function in order to find a better &#8220;ballpark&#8221; estimate of the target prime index value rather than just incrementing by one prime number each time the function is called.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># PROBLEM NUMBER 7</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># PROBLEM NAME</span>
+</span><span class='line'><span class="c1"># 10001st prime</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># PROBLEM DESCRIPTION</span>
+</span><span class='line'><span class="c1"># By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># What is the 10 001st prime number?</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># PROCESS</span>
+</span><span class='line'><span class="c1"># =&gt; I want to be able to determine a prime number by passing in the index for it within the prime number universe</span>
+</span><span class='line'><span class="c1"># =&gt; Find the pattern of determining prime numbers</span>
+</span><span class='line'>  <span class="c1"># =&gt; Look at factors for determining a prime number</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># ANSWER</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># =&gt; 104743</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prime?</span>
+</span><span class='line'>    <span class="n">prime</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">even?</span>
+</span><span class='line'>      <span class="n">prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">even_prime_check</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">odd_prime_check</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">prime</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">odd_prime_check</span>
+</span><span class='line'>    <span class="n">prime</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="n">divisor</span> <span class="o">=</span> <span class="mi">3</span>
+</span><span class='line'>    <span class="k">while</span> <span class="n">prime</span> <span class="o">==</span> <span class="kp">true</span> <span class="o">&amp;&amp;</span> <span class="n">divisor</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="nb">self</span><span class="o">**</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nb">self</span> <span class="o">%</span> <span class="n">divisor</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>        <span class="n">prime</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="n">divisor</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">prime</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">even_prime_check</span>
+</span><span class='line'>    <span class="nb">self</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">?</span> <span class="kp">true</span> <span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">check_for_primes</span>
+</span><span class='line'>    <span class="n">primes</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="n">.self</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">prime?</span>
+</span><span class='line'>        <span class="n">primes</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">primes</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">sum_all_primes</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">check_for_primes</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">result</span><span class="p">,</span> <span class="n">num</span><span class="o">|</span> <span class="n">result</span> <span class="o">+</span> <span class="n">num</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">which_prime?</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">check_for_primes</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">prime_search</span><span class="p">(</span><span class="o">*</span><span class="n">searches</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">searches</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">search</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">search</span><span class="si">}</span><span class="s2">_prime&quot;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">prime_test</span> <span class="o">=</span> <span class="nb">self</span>
+</span><span class='line'>        <span class="k">case</span> <span class="n">search</span>
+</span><span class='line'>        <span class="k">when</span> <span class="ss">:next</span>
+</span><span class='line'>          <span class="n">prime_test</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
+</span><span class='line'>          <span class="n">prime_test</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">until</span> <span class="n">prime_test</span><span class="o">.</span><span class="n">prime?</span>
+</span><span class='line'>        <span class="k">when</span> <span class="ss">:previous</span>
+</span><span class='line'>          <span class="n">prime_test</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
+</span><span class='line'>          <span class="n">prime_test</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">until</span> <span class="n">prime_test</span><span class="o">.</span><span class="n">prime?</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>        <span class="n">prime_test</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">prime_search</span> <span class="ss">:next</span><span class="p">,</span> <span class="ss">:previous</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">find_prime</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
+</span><span class='line'>      <span class="n">starting_prime</span> <span class="o">=</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">starting_prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">previous_prime</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">starting_prime</span><span class="o">.</span><span class="n">which_prime?</span><span class="si">}</span><span class="s2"> prime: </span><span class="si">#{</span><span class="n">starting_prime</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="n">starting_index</span> <span class="o">=</span> <span class="n">starting_prime</span><span class="o">.</span><span class="n">which_prime?</span>
+</span><span class='line'>    <span class="n">move_to_next_prime</span><span class="p">(</span><span class="n">starting_prime</span><span class="p">,</span> <span class="n">starting_index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">move_to_next_prime</span><span class="p">(</span><span class="n">start_prime</span><span class="p">,</span> <span class="n">start_index</span><span class="p">,</span> <span class="n">target_index</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">case</span>
+</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">==</span> <span class="n">target_index</span>
+</span><span class='line'>      <span class="n">start_prime</span>
+</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">&lt;</span> <span class="n">target_index</span>
+</span><span class='line'>      <span class="n">next_num</span> <span class="o">=</span> <span class="n">start_prime</span><span class="o">.</span><span class="n">next_prime</span>
+</span><span class='line'>      <span class="n">next_num</span><span class="o">.</span><span class="n">find_prime</span><span class="p">(</span><span class="n">target_index</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">&gt;</span> <span class="n">target_index</span>
+</span><span class='line'>      <span class="n">next_num</span> <span class="o">=</span> <span class="n">start_prime</span><span class="o">.</span><span class="n">previous_prime</span>
+</span><span class='line'>      <span class="n">next_num</span><span class="o">.</span><span class="n">find_prime</span><span class="p">(</span><span class="n">target_index</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">binding</span><span class="o">.</span><span class="n">pry</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As I&#8217;ve mentioned before, working on Project Euler problems has forced me to dust off the Ruby core documentation and practice applying concepts that I learned before but may have forgotten over time. Also, given that we&#8217;ve focused so much on the abstractions of Rails over the past two months, its great to have to go back to working with just Ruby. Its not easy to make time to do Project Euler problems, but I definitely recommend trying to work on at least a few of them (or similar logic problems) just to get more practice at writing Ruby scripts.</p>
+
+<p>Finally, I&#8217;ll leave you with some other good resources on recursion in Ruby in case you&#8217;re interested in learning more:</p>
+
+<p><a href="http://natashatherobot.com/recursion-factorials-fibonacci-ruby/" target="_blank">Recursion and Fibonacci in Ruby</a></p>
+
+<p><a href="http://kaibun.net/blog/2010/03/17/simple-thought-about-recursion-in-ruby/" target="_blank">Recursion in Ruby</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T08:00:00-04:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/27/flatiron-graduation/" title="Previous Post: Flatiron Graduation">&laquo; Flatiron Graduation</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang@flatironschool.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>My name is Eugene Wang, and I am currently a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City. This blog is about my 12-week journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.</p>
+    
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/04/28/using-recursion-with-project-euler/">Using Recursion With Project Euler</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/27/flatiron-graduation/">Flatiron Graduation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/25/building-a-simple-news-reader/">How To Build A Simple News Reader</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/22/sort-algorithms/">Not All Sort Algorithms Are Created Equal</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/">Of Science Fairs and Space Apps (Flatiron - Week 11)</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
