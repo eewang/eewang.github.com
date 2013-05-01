@@ -4,7 +4,7 @@ title: "Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)"
 date: 2013-04-29 15:03
 comments: true
 categories: 
-published: false
+published: true
 ---
 
 I recently finished reading two programming books in parallel - Metaprogramming Ruby and Rails Antipatterns. As Ruby/Rails books go, the two could not be further apart. Metaprogramming Ruby focuses on explaining the Ruby object model and how core Ruby is constructed in order to enable you as a Ruby programmer to unlock functionality that isn't immediately obvious. Conversely, Rails Antipatterns is more about focusing on the bad coding habits most new Rails developers experience and simple, tangible ways to avoid those  pitfalls. One book explains core Ruby (although also touches some on Rails), while the other applies specifically to Rails. One book goes as deep as possible into Ruby's construction as a language, while the other aims to hit developers in their day-to-day programming habits. Arguably, Rails Antipatterns is more "practical" and Metaprogramming Ruby is more "theoretical," as its generally easier to find more daily code applications of Rails Antipatterns than Metaprogramming Ruby. This post will focus on Metaprogramming Ruby and the next will focus on Rails Antipatterns.
