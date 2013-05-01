@@ -1,0 +1,678 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2) - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="I recently finished reading two programming books in parallel - Metaprogramming Ruby and Rails Antipatterns. As Ruby/Rails books go, the two could &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/04/29/antipatterns-in-rails/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-29T15:03:00-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I recently finished reading two programming books in parallel - Metaprogramming Ruby and Rails Antipatterns. As Ruby/Rails books go, the two could not be further apart. Metaprogramming Ruby focuses on explaining the Ruby object model and how core Ruby is constructed in order to enable you as a Ruby programmer to unlock functionality that isn&#8217;t immediately obvious. Conversely, Rails Antipatterns is more about focusing on the bad coding habits most new Rails developers experience and simple, tangible ways to avoid those  pitfalls. One book explains core Ruby (although also touches some on Rails), while the other applies specifically to Rails. One book goes as deep as possible into Ruby&#8217;s construction as a language, while the other aims to hit developers in their day-to-day programming habits. Arguably, Rails Antipatterns is more &#8220;practical&#8221; and Metaprogramming Ruby is more &#8220;theoretical,&#8221; as its generally easier to find more daily code applications of Rails Antipatterns than Metaprogramming Ruby. This post will focus on Metaprogramming Ruby and the next will focus on Rails Antipatterns.</p>
+
+<!--more-->
+
+
+<p>Reading the two books in tandem, however, has forced me to move quickly between Rails and Ruby. Its oftentimes easy to forget that Rails is just a Ruby library at its core and is constructed using many of the metaprogramming techniques described in Metaprogramming Ruby. While the two books are pretty different in their construction, they&#8217;ve helped me better understand how programming works generally along all levels of abstraction - from the Ruby core object model to the abstract class macros provided in Rails. In many ways, Metaprogramming Ruby picks up where Rails Antipatterns ends up. Reading the latter might inspire you to begin using the <a href="http://apidock.com/rails/Module/delegate" target="_blank">&#8220;delegate &#8230; to&#8221;</a> pattern in your Rails applications as a way to avoid long method chains, but Antipatterns won&#8217;t go into the nitty gritty of how Rails implements that class macro. Metaprogramming, however, will go pretty deep into how a macro like &#8220;delegate &#8230; to&#8221; is implemented and how it uses dynamic method definition to create methods in the class in which the &#8220;delegate&#8221; method is called.</p>
+
+<p>Metaprogramming is a great way to act on the mantra that good developers take complexity and deliver simplicity. A simple definition for metaprogramming is code that writes code. An application that actively uses metaprogramming seems simple on the outside (like magic!) but is quite complex on the inside. Arguably the best example for this in the Ruby community is the eponymous Ruby on Rails. Rails presents simplicity to users; for example, whenever you create model and corresponding table and call a finder method (e.g., #find_by_name()), these finder methods are generated dynamically by Rails. The internal source code for these finder methods use liberal doses of metaprogramming and thus are tough to decipher, but the benefit of designing the application in that way means that users can build quickly using a huge library of &#8220;free&#8221; methods provided by Rails (specifically ActiveRecord in this example) without thinking too much about the method implementation.</p>
+
+<p>I would definitely recommend reading Metaprogramming Ruby if you feel like you have a decent grasp of the language and would like to accelerate your learning. If you feel like you don&#8217;t fully understand the concepts the first time you read it, don&#8217;t worry, just read it again. Then read it a third time. Metaprogramming Ruby is one of those books that you could read it multiple times and keep learning new things from it each time, since the material is dense and the opportunities to apply the concepts are not always obvious in every Ruby script or application. Here&#8217;s a quote from the book that I think explains the value of metaprogramming and tradeoffs to consider when applying the technique.</p>
+
+<blockquote>
+If you use it sparingly, metaprogramming can make your code more readable for humans—but it will probably make it less readable for programs such as refactoring engines or code analysis tools. Ruby’s extremely dynamic nature makes life very hard for such tools, and that’s why some IDE features that work great for static languages (such as finding all the calls to a method, renaming a variable, or jumping from a method usage to its definition) are difficult to implement well in Ruby. Add metaprogramming to the mix, and your poor IDE will be even more confused. That’s one of the fundamental trade-offs of metaprogramming (and, to a point, of dynamic languages). You have the freedom to write expressive, terse code, but to read that code, you need a human brain.
+</blockquote>
+
+
+<p>I try to explain some of the topics included in Metaprogramming Ruby below, but its difficult to take each of these independent of the other. The most valuable part of the book for me was the in-depth explanation of the overall structure of the Ruby language and how objects and methods work. I&#8217;m someone who likes to have an understanding of the broad, high-level context in which I work, and Metaprogramming Ruby provides that context so that whenever I&#8217;m looking at a piece of code, I feel like I have a better understanding now of what&#8217;s going on (e.g., What variables are in scope? What is &#8216;self&#8217;? What methods can be accessed?).</p>
+
+<p><strong>Procs vs. Lambdas</strong></p>
+
+<p>At a high level, procs and lambdas define blocks of code that can be executed when called. They are somewhat analogous to anonymous functions in Javascript. Procs and lambdas are generally used for the same purpose, but they have subtle differences between them:</p>
+
+<p>1) Procs are more flexible when evaluating arguments vs. lambdas. For example, if you define 2 arguments for a proc and only call the proc with 1, the other will be considered nil, whereas for a lambda, the call will return an ArgumentError</p>
+
+<p>2) The return value for a proc comes from the scope in which the proc itself was defined, whereas the return value for a lambda comes from the lambda block.</p>
+
+<p>Lambdas tend to be the first choice for Rubyists because they&#8217;re more similar to methods in that they are strict about the number of methods they accept (the &#8216;arity&#8217; of a method) and exit when return is called. Both lambdas and Procs are part of the Proc class.</p>
+
+<p><strong>Dynamic Methods</strong></p>
+
+<p>Dynamic methods are a set of methods that can create or call methods when the actual name of the method is not known. I&#8217;ve listed out a few of the methods used to either create or call methods dynamically and apply them to the following example:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">toy</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="vi">@favorite_toy</span> <span class="o">=</span> <span class="n">toy</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">colors</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">args</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">define_method</span> <span class="n">arg</span> <span class="k">do</span>
+</span><span class='line'>        <span class="s2">&quot;I am </span><span class="si">#{</span><span class="n">arg</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">method_call</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Sorry, we don&#39;t recognize the color </span><span class="si">#{</span><span class="n">method_call</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">colors</span><span class="p">(</span><span class="ss">:green</span><span class="p">,</span> <span class="ss">:blue</span><span class="p">,</span> <span class="ss">:red</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">private_method</span>
+</span><span class='line'>    <span class="s2">&quot;You shouldn&#39;t be able to see me!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fido</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Fido&quot;</span><span class="p">,</span> <span class="s2">&quot;Ball&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>#send</em><br></p>
+
+<p>The #send method is useful for whenever you want to call a method dynamically and are not sure of the method name at runtime. In the example above, a user can input a color among the three available options, and the #send method will figure out which method to call in the Dog class. Another use case for #send is to call private methods:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">puts</span> <span class="s2">&quot;What color do you want your dog?&quot;</span>
+</span><span class='line'><span class="n">color</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">chomp</span> <span class="c1"># =&gt; blue</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fido</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="c1"># =&gt; I am blue</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">puts</span> <span class="n">fido</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;private_method&quot;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;You shouldn&#39;t be able to see me!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>#define_method and #define_singleton_method</em><br></p>
+
+<p>These two methods are used to define instance methods and class methods, respectively. They are methods that, when executed, create other methods that can then be called on either an instance or class object. In the code above, I call a class method called &#8220;colors&#8221; at runtime. This class method takes in an arbitrary number of arguments (in this instance, 3 colors) and creates a method for each argument. The methods that get created then return the name of the method. Admittedly, this example is a bit contrived as the same behavior could be achieved by just passing a color argument into a method that returns the value of the color. However, using #define_method and #define_singleton_method can help keep code DRY if you find a certain pattern used repeatedly in a number of different methods in your code. For me, I&#8217;ve used #define_method and #define_singleton_method whenever I notice that I&#8217;m repeating code in methods where the only difference is a reference to another object or column.</p>
+
+<p><em>#method_missing</em><br></p>
+
+<p>&#8220;#method_missing&#8221; acts as a catch-all method for intercepting method calls that an object doesn&#8217;t know how to interpret. If a method is called on an object that doesn&#8217;t know how to respond to the method after Ruby goes through the method lookup chain (i.e., first going into the immediate class, then upward into modules, parent classes, etc.), Ruby will call the #method_missing method that&#8217;s part of the Kernal module and mixed into every Ruby object. By creating a #method_missing method, you can hijack Ruby&#8217;s call stack and redefine what gets executed or returned whenever an unknown method is called on an object.</p>
+
+<p>In my example, I used #method_missing to serve as a catch-all for any colors that are not recognized by the Dog class. However, #method_missing can be used to define attributes dynamically:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vi">@attributes</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">attribute</span> <span class="o">=</span> <span class="nb">name</span><span class="o">.</span><span class="n">to_s</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">attribute</span> <span class="o">=~</span> <span class="sr">/=$/</span>
+</span><span class='line'>      <span class="vi">@attributes</span><span class="o">[</span><span class="n">attribute</span><span class="o">.</span><span class="n">chop</span><span class="o">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="vi">@attributes</span><span class="o">[</span><span class="n">attribute</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This allows me to create any attribute of a dog that I want on the fly and #method_missing will create both a setter and getter for the method. This is possible because in the below example, &#8220;fido.legs = 4&#8221; is equivalent to fido.legs=(4), where &#8220;legs=&#8221; is the name of the method called on &#8220;fido&#8221; and &#8220;4&#8221; is the sole argument. When this method is first called, the Dog class doesn&#8217;t know how to respond to the method since there is no method called &#8220;legs&#8221;. Thus, the method call is directed to #missing_method, which then sets the attribute to the name of the method and sets the value to the first argument that is passed in.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">fido</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Fido&quot;</span><span class="p">,</span> <span class="s2">&quot;Ball&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">legs</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">legs</span> <span class="c1"># =&gt; 4</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">bark</span> <span class="o">=</span> <span class="s2">&quot;BARK BARK&quot;</span>
+</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">bark</span> <span class="c1"># =&gt; &quot;BARK BARK&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Binding Module</strong></p>
+
+<p>One of my favorite gems in the Ruby universe is the <a href="https://github.com/pry/pry" target="_blank">Pry</a> gem. Pry is a debugging tool that allows you to enter into the local universe when code is run. Including &#8220;binding.pry&#8221; in a set of code will pry open the code at runtime and enable you to poke around and see how certain variables are defined or used. Its probably the gem I use the most - whenever I&#8217;m writing code, be it a full-blown Rails app or a simple Ruby script, Pry tends to be the first gem I include.</p>
+
+<p>But even though I use the gem quite often, I didn&#8217;t exactly realize how it worked. Metaprogramming Ruby explains that &#8220;binding&#8221; is actually a method in Ruby that converts a scope into an object that can then be called at a later moment. This can be an incredible tool, as the use of the &#8220;binding&#8221; method in a block of code makes that scope portable for future use, even to the point where &#8220;self&#8221; can change based on the binding context.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">toy</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="vi">@favorite_toy</span> <span class="o">=</span> <span class="n">toy</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">get_binding</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">binding</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fido</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Fido&quot;</span><span class="p">,</span> <span class="s2">&quot;Ball&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fido_scope</span> <span class="o">=</span> <span class="n">fido</span><span class="o">.</span><span class="n">get_binding</span>
+</span><span class='line'><span class="n">snuffles</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Snuffles&quot;</span><span class="p">,</span> <span class="s2">&quot;Stick&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">snuffles_scope</span> <span class="o">=</span> <span class="n">snuffles</span><span class="o">.</span><span class="n">get_binding</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;puts @name; puts @favorite_toy&quot;</span><span class="p">,</span> <span class="n">fido_scope</span><span class="p">)</span> <span class="c1"># =&gt; Fido Ball</span>
+</span><span class='line'><span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;puts @name; puts @favorite_toy&quot;</span><span class="p">,</span> <span class="n">snuffles_scope</span><span class="p">)</span> <span class="c1"># =&gt; Snuffles Stick</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the &#8220;binding&#8221; is helpful for accessing a scope in an object-oriented manner. The binding method is defined within the Kernal module, which is mixed into Ruby&#8217;s Object class, from which all objects inherit. This is why you can use the binding method in any class, since all classes inherit the Kernal module functionality. Pry essentially adds functionality to the binding method and literally prys open the scope and creates an IRB-like environment out of a scope, which makes testing and debugging considerably easier than if there was not a binding method.</p>
+
+<p><strong>Flat Scope</strong></p>
+
+<p>Flat scope is used to enable the use of variables and methods defined outside of a traditional scope gate (e.g., a method definition, class or module). Variables defined outside of a block can be accessed within a block, so a nifty technique is to define a class via a block rather than a using the &#8220;class&#8221; keyword, as in the following:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dog</span> <span class="o">=</span> <span class="s2">&quot;Fido&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Dog</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">define_method</span> <span class="s2">&quot;name&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">dog</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">myDog</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">myDog</span><span class="o">.</span><span class="n">name</span> <span class="c1"># =&gt; Fido</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is in contrast to the &#8220;normal&#8221; way of defining a class, which acts as a scope gate and prevents previously defined variables from being accessed within the class scope.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dog</span> <span class="o">=</span> <span class="s2">&quot;Fido&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">name</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="n">dog</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">myDog</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">myDog</span><span class="o">.</span><span class="n">name</span> <span class="c1"># =&gt; ERROR: undefined local variable or method &quot;name&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Using alias_method</strong></p>
+
+<p>The #alias method is a helpful way of changing method names while still maintaining the functionality of the old method name. It can also be used to modify programmer behavior; for example, #alias is used for deprecating functionality by providing warnings and advice on what other method to use instead of the called method, while still allowing users to call the old method.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Array</span>
+</span><span class='line'>  <span class="k">alias</span> <span class="ss">:size</span> <span class="ss">:length</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">length</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Please use #size to determine array element count from now on.&quot;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Metaprogramming in Rails</strong></p>
+
+<p>Rails makes heavy use of metaprogramming techniques to provide a huge amount of functionality out of the box whenever a new application is created. For example, one of the benefits of using Rails and ActiveRecord specifically is that ActiveRecord creates an array of attribute accessors and dynamic finder methods that match the columns in the database tables. If you have a User model that includes columns for name, date_of_birth and phone_number, ActiveRecord will create methods like User#find_by_name, User#find_all_by_date_of_birth and User#find_or_create_by_phone_number dynamically. How does ActiveRecord know what finder methods to create? Through metaprogramming, and specifically through the #method_missing method.</p>
+
+<p>Whenever you first make a call to a dynamic finder method in Rails, #method_missing will get triggered. If you look at the source code for ActiveRecord::Base, you&#8217;ll find a class method called #method_missing, which hijacks the method call chain for Ruby and create finder methods if the method you are calling follows the find_by pattern. The finder methods are based on the table columns in the database. In the first call to a finder method, #method_missing will create the necessary finder methods in your application, so that the second time you call that finder method, it will execute an actual block of code that corresponds with that method rather than make a call to a ghost method within #method_missing. This pattern seems to be a theme within the construction of Rails - active use of #method_missing and ghost methods to create the potential for a lot of functionality, but to not create that functionality until its actually called as adding all possible functionality at runtime could slow down the application. Rails wants to make sure that you&#8217;re going to use a dynamic finder method before it actually adds the code to your codebase. Thus, the first call to a dynamic finder generates the actual method via #method_missing.</p>
+
+<p>Its interesting to think about the design decisions that went into the construction of ActiveRecord. The first call to a dynamic finder method is to a ghost method within #method_missing. However, this first call is enough for Rails to infer that you probably want to use the ghost method again. At this point, Rails creates an actual method for you to use in the future. Accessing a real method is generally faster than accessing a ghost method. However, adding a ton of real methods can also make your application bloated, especially if you never use most of them. Knowing some more about metaprogramming has made me appreciate even more the construction of Rails and how it enables rapid application development.</p>
+
+<p>I particularly like this excerpt from Metaprogramming Ruby, as I think it explains well design decision for ActiveRecord as it relates to creating dynamic methods.</p>
+
+<blockquote>
+If you look at the current optimized source code [for Rails], you can try to guess some of the motivations behind it. Calling a real method is faster than calling a Ghost Method, so Rails chooses to define real methods to access attributes. On the other hand, defining a method also takes time, so Rails doesn’t do that until it’s sure that you really want to access at least one attribute on your ActiveRecord objects. Also, define_ method() is known to be slower than def on some Ruby implementations (but not on others!), and that might be one reason why the authors of Rails opted to use Strings of Code to define accessors.
+
+None of these considerations is obvious, however. As a rule, you should never optimize your code prematurely—whether it’s metaprogramming code or not.
+The source code behind dynamic attributes proves that metaprogramming can either impair your system’s performance or help you optimize it. For example, if you find out that you’re slowing down your system by calling too many Ghost Methods, you can get some performance back by defining Dynamic Methods. So, when it comes to metaprogramming, performance generally is no more of an issue than it is with any other code.
+</blockquote>
+
+
+<p>Overall, I&#8217;d recommend cracking open Metaprogramming Ruby if you have a decent grasp of Ruby and want to really delve into the inner workings. It&#8217;s probably not the most practical book, in that you may not use many of the metaprogramming recipes on a day-to-day basis, but its great for providing an overall understanding of how the Ruby method lookup chain works, how different classes and modules interact, etc. That said, its a dense book, and it took me a while to get through. I&#8217;ll likely try and read it again at some point, as it feels like one of those books where you can read over and over again and keep discovering new and interesting nuggets of wisdom.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-29T15:03:00-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/04/29/antipatterns-in-rails/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/04/29/antipatterns-in-rails/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/28/using-recursion-with-project-euler/" title="Previous Post: Using Recursion With Project Euler">&laquo; Using Recursion With Project Euler</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang@flatironschool.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>My name is Eugene Wang, and I am currently a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City. This blog is about my 12-week journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.</p>
+    
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/04/29/antipatterns-in-rails/">Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/28/using-recursion-with-project-euler/">Using Recursion With Project Euler</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/27/flatiron-graduation/">Flatiron Graduation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/25/building-a-simple-news-reader/">How To Build A Simple News Reader</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/22/sort-algorithms/">Not All Sort Algorithms Are Created Equal</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/04/29/antipatterns-in-rails/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/04/29/antipatterns-in-rails/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
