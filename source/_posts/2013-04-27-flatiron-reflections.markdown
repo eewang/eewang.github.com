@@ -8,3 +8,9 @@ published: false
 ---
 
 Avi framed his commencement speech with his own career story. 
+
+<strong>Code as Craft</strong>
+
+<strong>Good Developers Are More Than Good Coders</strong>
+
+<strong>Code Every Day But Not All Day</strong>
