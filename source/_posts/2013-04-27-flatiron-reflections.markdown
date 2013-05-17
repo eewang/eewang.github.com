@@ -13,4 +13,8 @@ Avi framed his commencement speech with his own career story.
 
 <strong>Good Developers Are More Than Good Coders</strong>
 
+Professional skills
+
 <strong>Code Every Day But Not All Day</strong>
+
+<strong>Learning Doesn't Stop With A Job</strong>
