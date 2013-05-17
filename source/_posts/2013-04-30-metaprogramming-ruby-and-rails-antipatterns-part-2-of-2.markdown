@@ -4,7 +4,6 @@ title: "Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)"
 date: 2013-05-17 08:45
 comments: true
 categories: 
-published: true
 ---
 
 I recently finished reading Rails Antipatterns, which is a great book that uses commonly abused patterns in Rails to illustrate refactoring opportunities. I was able to complete the book a few weeks back, but I've been keeping busy with the interview process (more on that in another post) and side projects such that I haven't been able to blog as much as I would have wanted. That's been one of the hardest parts of the interview process in that I just have less time to actually code, blog and read. Anyways, I figured that I'd write down some of my thoughts on Rails Antipatterns alongside Metaprogramming Ruby and the areas where Antipatterns helped me the most in structuring my Rails code.
