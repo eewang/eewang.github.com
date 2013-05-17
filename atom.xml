@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-04-30T22:45:28-04:00</updated>
+  <updated>2013-05-17T09:08:41-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,122 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)]]></title>
+    <link href="http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2/"/>
+    <updated>2013-05-17T08:45:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2</id>
+    <content type="html"><![CDATA[<p>I recently finished reading Rails Antipatterns, which is a great book that uses commonly abused patterns in Rails to illustrate refactoring opportunities. I was able to complete the book a few weeks back, but I&#8217;ve been keeping busy with the interview process (more on that in another post) and side projects such that I haven&#8217;t been able to blog as much as I would have wanted. That&#8217;s been one of the hardest parts of the interview process in that I just have less time to actually code, blog and read. Anyways, I figured that I&#8217;d write down some of my thoughts on Rails Antipatterns alongside Metaprogramming Ruby and the areas where Antipatterns helped me the most in structuring my Rails code.</p>
+
+<!--more-->
+
+
+<p>I recommend Rails Antipatterns as a great way to improve your &#8220;code smell.&#8221; It provides practical advice to how to structure your code and general best practices when developing a Rails application. Compared to Metaprogramming Ruby, you won&#8217;t get the same depth into Ruby&#8217;s object model and method dispatch process in Rails Antipatterns, but then again, that&#8217;s not the purpose of the book. Rails Antipatterns will tell you that you should use &#8220;delegate_to&#8221; as a way to reduce method chaining for your domain objects, whereas Metaprogramming Ruby will explain the fundamentals of how &#8220;delegate_to&#8221; actually works and less about the day-to-day use cases for the macro. One of my favorite parts of Metaprogramming Ruby is that it goes in depth in the second half of the book into how ActiveRecord creates its so-called &#8220;magical&#8221; finder methods dynamically using #method_missing. Conversely, Rails Antipatterns provides practical advice on when to use those macros and helper methods that Rails provides. Antipatterns explains what&#8217;s in the Rails toolkit and how to use it, while Metaprogramming explains how the toolkit works.</p>
+
+<p>I thought Antipatterns was overall a useful book, but at times I found it a bit disjointed. More like a compilation of various how-to guides rather than a coherent instruction flow. Whereas Metaprogramming has the core theme of the Ruby object model, Antipatterns is less grounded on an overriding programming construct and is driven more by observation of bad habits by the average Rails programmer (hence the title). Its still a useful book, but one that I think can be valuable even if you just skim to the sections that you struggle with the most and read the book in bits and parts. Here were a few of the sections that I found most useful to remind myself of a few overarching principles in application development - keep code DRY (don&#8217;t repeat yourself), minimize and manage dependencies and properly encapsulate logic.</p>
+
+<p><strong>Use view helpers</strong></p>
+
+<p>When I first started building applications with Rails, I tended to put logic in the first place where I could fit it in. Unfortunately, this often meant in my application views. Over time, my views would look like convoluted piles of mixed in HTML and ERb code with loops and conditionals alongside div tags and class attribute declarations. Antipatterns explains that one way to avoid this tendency is to move presentation logic into view helpers. Rails provides all sorts of helpful methods to mimic HTML markup in view helpers. For example, #content_tag is an instance method created by Rails that can be used to define a block of markup. The first argument is the HTML tag as a symbol, followed by any number of attributes structured as a hash that you want to appear in the markup (e.g., :class => &#8220;new_project&#8221;), followed by a block, like so:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">rss_link</span><span class="p">(</span><span class="n">project</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">content_tag</span> <span class="ss">:div</span><span class="p">,</span> <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s2">&quot;feed&quot;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">link_to</span> <span class="s2">&quot;Subscribe to these </span><span class="si">#{</span><span class="n">project</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">project</span><span class="si">}</span><span class="s2"> alerts.&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="n">alerts_rss_url</span><span class="p">(</span><span class="n">project</span><span class="p">),</span>
+</span><span class='line'>            <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s2">&quot;feed_link&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code does the same as the below HTML, but instead extracts the logic into a Ruby method that can then be applied elsewhere in your views. This makes the code easier to maintain by centralizing any updates into one file rather than having to wade through multiple ERb files to pick out the same block of code to fix.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;feed&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="err">&lt;</span>% if @project %&gt;
+</span><span class='line'>    <span class="err">&lt;</span>%= link_to &quot;Subscribe to #{@project.name} alerts.&quot;, project_alerts_url(@project, :format =&gt; :rss), :class =&gt; &quot;feed_link&quot; %&gt;
+</span><span class='line'>  <span class="err">&lt;</span>% else %&gt;
+</span><span class='line'>    <span class="err">&lt;</span>%= link_to &quot;Subscribe to these alerts.&quot;,
+</span><span class='line'>    alerts_url(format =&gt; :rss), :class =&gt; &quot;feed_link&quot; %&gt;
+</span><span class='line'>  <span class="err">&lt;</span>% end %&gt;
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In fact, the #rss_link helper method can be abstracted even more by replacing the #link_to macro with another #content_tag macro. #content_tag (documentation <a href="http://apidock.com/rails/ActionView/Helpers/TagHelper/content_tag" target="_blank">here</a>)is an abstracted method that can be used to define other view methods like link_to or image_tag. All you have to do is define the HTML tag in the first argument, the content in the second argument, then pass in all the other arguments as a hash after that. Its useful in structuring HTML in a friendly Ruby syntax, and can be especially helpful in creating view helpers that provide semantic method names to blocks of logic.</p>
+
+<p>This last point is why I like using view helpers so much. The larger an application becomes, the more difficult it is to look at code in views and understand what&#8217;s going on. For example, there may a block of ERb code that loops over a collection of objects and conditionally inserts a div element if a certain condition is met. Overtime, relying on this block of code can get cumbersome, especially as more conditionals are added, which further decreases the readability of code. View helpers provide a name to a block of logic so that people reading your code have insight into what that code is meant to do. They properly encapsulate logic and provide semantic meaning to what is at first glance just a bundle of HTML tags and Ruby code.</p>
+
+<p><strong>Organize finder methods into scopes</strong></p>
+
+<p>When I was building my TicketTracker side project during the first half of the Flatiron School, I quickly realized that I needed to have an easy way to query my database and organize / filter the results. ActiveRecord provides a helpful #scope class macro that can be used to chain together database query logic that you find yourself using regularly. For example, if you find yourself always retrieving objects from the database that are less than 5 days old, its easy in Rails to define a scope called &#8220;recent&#8221; that you can then apply as a class method to your model (e.g., Model.recent) rather than using (Model.where(:timestamp &lt; Time.now - 5.days) ). There&#8217;s a good deal of documentation on scopes in Rails, but at its core, scopes are just class methods. Here is a <a href="http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/" target="_blank">great blog post from Platformatec</a> about using scopes and class methods to organize your database queries.</p>
+
+<p><strong>Apply callback macros</strong></p>
+
+<p>Rails has a slew of useful class macros that are executed during the ActiveRecord saving process. Similar to how Ruby has a few built in methods that are automatically triggered when a module is included (#self.included) or a method is added (#method_added), methods which conveniently allow for some pretty cool metaprogramming techniques, Rails also has methods that it looks out for when saving to the database. These callback macros include #before_validation, #after_validation, #before_save and #after_save. You can find a full listing of them <a href="http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html" target="_blank">here</a>.</p>
+
+<p>For example, when building ViewFinder, we wanted to add the address of a  geotagged photo to the database immediately after the photo was saved. This way, we could always query the database by address as well as by coordinates rather than calculating the address at runtime. This was the result of decision that we had to make - do we save the address data to the database or calculate it whenever we need to use it? From a performance perspective, we figured that given that we were planning to make regular use of the address data (e.g., when displaying the actual location of a guessed photo), it would be more optimal to just retrieve static data from the database rather than using Geocoder each time to determine the address from the coordinates (which itself would make a Google Maps API call, so it would be slower than a database call).</p>
+
+<p>Here is what the method looks like to convert coordinates to address. This was part of the Locatable (Locateable?) module that was mixed into the photo and guess models to enable point mapping.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Locatable</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">generate_street_address</span>
+</span><span class='line'>    <span class="k">unless</span> <span class="n">latitude</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">longitude</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="no">Geocoder</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">latitude</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">longitude</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">address</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">save</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By using a callback macro, we could ensure that Rails would execute the #generate_street_address method whenever a new photo was deemed valid to our database by including the following into any model that included Locatable instance methods:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Photo</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="n">after_validation</span> <span class="ss">:generate_street_address</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Callback macros are useful for cleaning and validating data and ensuring that objects are saved to the database are properly vetted. If you&#8217;re saving the results of an API call as we were doing for ViewFinder, these callback macros can programmatically insert your application logic into the chain of events in converting the raw JSON result of an API call to application data.</p>
+
+<p>Overall, Antipatterns provides useful nuggets of advice when creating Rails applications. That said, its important to know what to expect when reading the book - you won&#8217;t get much in terms of explaining the inner workings of Rails or how Ruby code can generate all those dynamic finder and callback methods. Best go to Metaprogramming Ruby for a full walk-through of the Ruby object model. But, if you&#8217;re looking for immediate, practical advice on how to leave behind bad habits, Antipatterns is a useful guide. When I started reading Antipatterns, I would only have to read a few pages before I could apply what I was reading to an application I was building. Think of it as a what-not-to-do guide to Rails and you&#8217;ll be able to apply its instructions to an application right away.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)]]></title>
@@ -6913,26 +7029,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <p>I&#8217;ve realized that I need to train myself to be more methodical about refactoring and using methods as building blocks. I have a tendency to be overly verbose in my code and to encapsulate too much logic in a single method or block. I noticed this back in my previous job when I built models in Excel; the logic in my functions and macro code were hard to decipher and at times inefficiently written. Even though in the end, the models worked, I admit that they weren&#8217;t very elegant. As I go through the Flatiron program, I need to constantly remind myself that while its important to make the code I&#8217;m writing work, I need to make it right and make it fast (i.e., refactor and refactor again) to get to the next level.</p>
 
 <p>In the afternoon, we went to New York Health &amp; Racquet Club for a fitness bootcamp. Although the class was tough, it was great to get in some exercise; I realized that my exercise schedule has tapered off since starting Flatiron. I&#8217;ve been so consumed by learning and coding that I haven&#8217;t been getting as much sleep or exercise as I&#8217;m used to. My goal will be to try and go to the gym or for a run at least once during the work week - twice if its a good week. I&#8217;ll hopefully have my entire career to code and work on interesting problems; its important that I don&#8217;t burn out in the first 12 weeks.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[This is not a blog post (Flatiron - Day 009)]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/"/>
-    <updated>2013-02-14T11:58:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009</id>
-    <content type="html"><![CDATA[<p>This is an instance of a blog post. In object oriented programming languages, like Ruby, the existence of a class, in this case a &#8220;Blog Post,&#8221; is independent of an individual instance of such class (i.e., this blog post). Each blog post has similar attributes with different values, such as title, author and date. These are known as instance methods in Ruby. However, the &#8220;Blog Post&#8221; class may have class-level methods that are inaccesible by a single instance of a blog post.</p>
-
-<!--more-->
-
-
-<p>An example of this might be a count of blog posts. How many blog posts I&#8217;ve written is not a characteristic of a single blog post; rather, that data can only be found by accessing the &#8220;Blog Post&#8221; class and not a blog post instance. The &#8220;Blog Post&#8221; class has functionality that does not exist for an individual blog post, and vice versa. Confused? Good, now you know how we felt for much of the day.</p>
-
-<p>We spent most of the day covering class constructors and recreating a few of the programs we&#8217;ve already written into object-oriented programs. The lecture and class discussion around object-oriented design was dense and hard to digest. Although I came across <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/" target="_blank">this useful article</a> covering how class and instance methods differ, I&#8217;m still processing my understanding of classes, and how they fit into the broader Ruby universe.</p>
-
-<p>After lecture today, we focused on trying to take our scraper that we built yesterday, rewrite it using a class constructor and link it to a SQL database. This way, instead of our scraper returning a hash of student attributes as its data structure, we could have our scraper input data directly into a database, which is easier for querying and analyzing than a hash or array. Although its been a difficult task to combine a number of different tools and skills we&#8217;ve learned over the past week, I&#8217;m enjoying the challenge of trying to map out and code how data will flow from the page to the database.</p>
-
-<p>For homework, we continued to work on Ruby Koans and our scrapers. This weekend, I&#8217;m hoping to be able to spend some time starting a few scraper projects that I have in mind. Its funny, since starting this program I&#8217;ve been looking forward to weekends so that I can just spend time coding and trying new things in Ruby. Sounds super nerdy, but its true. That said, I know that I need to seek balance in my life so that I don&#8217;t get burnt out on coding. Hopefully, I&#8217;ll have many fruitful years ahead to keep learning and exploring new horizons in technology. With the frenetic pace of the class and my tendency to dive deep into the weeds of what I&#8217;m working on, my body has been tired and I haven&#8217;t been exercising much recently. However, I&#8217;ve learned more in the past two weeks than I have in quite awhile. And its pretty exhilirating.</p>
 ]]></content>
   </entry>
   
