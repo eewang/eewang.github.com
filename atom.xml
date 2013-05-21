@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-05-17T09:31:06-04:00</updated>
+  <updated>2013-05-21T11:42:48-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Landing the Dream Job]]></title>
+    <link href="http://eewang.github.com/blog/2013/05/18/landing-the-dream-job/"/>
+    <updated>2013-05-18T23:40:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/05/18/landing-the-dream-job</id>
+    <content type="html"><![CDATA[<p>I&#8217;m happy to announce that I will be joining the New York Times as a software developer this July. I&#8217;ll be working on the new Emerging Technologies team, which is a team tasked with building a new suite of web and mobile technologies for consuming NYT content. The small group consists of developers, designers, product folks and journalists/editors. I&#8217;m extremely excited to join the world&#8217;s newspaper of record and a talented developer team that will define the future of such a storied institution. I feel humbled and honored for the opportunity, and I&#8217;m eager to explore the opportunities to grow at an organization like the NYT.</p>
+
+<!--more-->
+
+
+<p>Throughout the last three weeks, I&#8217;ve had the opportunity to speak with a variety of start-ups and technology firms. While there are a ton of great start-ups out there doing amazing work, I couldn&#8217;t have asked for a better opportunity to learn more about the craft of code and work at the epicenter of a rapidly-changing journalism industry that continues to grapple with the effects of technology on its business and product model. I&#8217;ve been blessed to find a position that can combine my professional experience serving as an editor at the <a href="http://dukechronicle.com" target="_blank">Duke Chronicle</a> and working on investment products at <a href="http://www.blackstone.com/our-businesses/aam/hedge-fund-solutions-(baam)" target="_blank">Blackstone</a>. I&#8217;ll likely be coding mostly in Ruby and Javascript, and will have the chance to learn other languages and technologies, like Objective-C. I&#8217;m incredibly thankful to Avi &amp; Co. and my classmates at <a href="http://flatironschool.com/" target="_blank">the Flatiron School</a> for not only teaching me how to code, but showing me how code can be equal parts analytical and creative.</p>
+
+<p>The job will undoubtedly be challenging, having to build products for a newspaper that gets <a href="http://en.wikipedia.org/wiki/The_New_York_Times#Online_activity" target="_blank">30 million unique visitors per month</a>, but I&#8217;m eager for the challenge and excited for the growth potential at the NYT!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)]]></title>
@@ -7009,26 +7025,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <p>As you can see, the Googlecharts gem can be useful for quickly linking up a program with a data visualization tool. While it doesn&#8217;t appear to be the most powerful or most intuitive data graphing tool, its easy to install and the documentation is fairly straightforward, at least for basic functionality. I found it helpful to go through the code base for the Gchart class and try and follow the logic of each method whenever I got stuck. I found it to be a transparent gem in terms of figuring out what was going on &#8220;under the hood&#8221;.</p>
 
 <p>That said, I found the syntax to be finicky, unnecessarily so, in my opinion. Also, it seemed like some of the more advanced functionality that I was looking for, that I was used to from using Excel many times, wasn&#8217;t readily available. Next on my list of graphing tools to try out is <a href="http://www.highcharts.com/" target="_blank">High Charts</a>, a Javascript tool for interactive data graphics that also has an accompanying Ruby gem, <a href="http://github.com/michelson/lazy_high_charts/" target="_blank">Lazy High Charts</a>. Then, I can learn how to create awesome stuff like <a href="http://prafulla.net/interesting-contents/world-interesting-contents/us-presidential-election-2012-ohio-as-critical-state-spending-tv-adsinfographics/" target="_blank">this</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Day 010]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/18/flatiron-day-010-week-2-wrap-up/"/>
-    <updated>2013-02-18T18:07:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/18/flatiron-day-010-week-2-wrap-up</id>
-    <content type="html"><![CDATA[<p>When I look back on the past two weeks, its hard to believe how far the class has come. And while it seems like each day has been more challenging than the last, its clear that we&#8217;re moving forward and covering a lot of ground. Avi mentioned that coding is hard because you&#8217;re always at the edge of your knowledge; it doesn&#8217;t get less difficult, you just move onto more advanced stuff. My classmate Victoria put it well in her <a href="http://vicfriedman.github.com" target="_blank">blog</a> when she mentions that each day brings new frustrations, but only because we&#8217;re pushing ourselves and not resting on what we already know.</p>
-
-<!--more-->
-
-
-<p>Friday was a half-day, although in the morning we still had lecture and some groupwork. We continued working on our student scrapers and trying to build the scraper into a student class so that the data pulled from the site would populate a database rather than exist in a hash or array. During the lecture, Avi emphasized the importance of breaking down a complex block of code into multiple methods, each of which just perform one action. Each method should have one and only one responsibility - if your perform multiple calculations or actions in a single method, you can likely refactor that method into two or more methods.</p>
-
-<p>This is a coding best practice for a few reasons. First, the code is easier to debug as errors can be more effectively isolated. Second, the code is easier to read and follow along for other developers - rather than have to decipher the effects of multiple nested loops, its easier to trace the logic of a related set of short methods that are well organized and than one large method. Third, it makes your code more reusable. This came up when we were writing the class methods to save scraped student records to our database using SQL. Initially, I had written the code such that the various actions performed to initiate the database, create the tables and save the data to the tables were all in the same method. But as Avi showed us, you can actually break those out into separate methods that are each responsible for doing one action. This way, the methods are written more abstractly and can be used again to save different types of data in other situations to a SQL database.</p>
-
-<p>I&#8217;ve realized that I need to train myself to be more methodical about refactoring and using methods as building blocks. I have a tendency to be overly verbose in my code and to encapsulate too much logic in a single method or block. I noticed this back in my previous job when I built models in Excel; the logic in my functions and macro code were hard to decipher and at times inefficiently written. Even though in the end, the models worked, I admit that they weren&#8217;t very elegant. As I go through the Flatiron program, I need to constantly remind myself that while its important to make the code I&#8217;m writing work, I need to make it right and make it fast (i.e., refactor and refactor again) to get to the next level.</p>
-
-<p>In the afternoon, we went to New York Health &amp; Racquet Club for a fitness bootcamp. Although the class was tough, it was great to get in some exercise; I realized that my exercise schedule has tapered off since starting Flatiron. I&#8217;ve been so consumed by learning and coding that I haven&#8217;t been getting as much sleep or exercise as I&#8217;m used to. My goal will be to try and go to the gym or for a run at least once during the work week - twice if its a good week. I&#8217;ll hopefully have my entire career to code and work on interesting problems; its important that I don&#8217;t burn out in the first 12 weeks.</p>
 ]]></content>
   </entry>
   
