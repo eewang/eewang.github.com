@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-05-21T11:42:48-04:00</updated>
+  <updated>2013-05-26T14:29:35-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How I'm Learning Javascript]]></title>
+    <link href="http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/"/>
+    <updated>2013-05-24T07:45:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript</id>
+    <content type="html"><![CDATA[<p>For my job at the NYT that I&#8217;ll be starting in July, I&#8217;ll likely be working a lot in Ruby and Javascript. At the Flatiron School, the focus was on becoming a back-end Ruby developer, and while we learned our fair share of JavaScript and jQuery, it was always in the context of a Ruby or Rails application. Most of the front-end focus gravitated toward DOM manipulation and traversal using jQuery and less on the functionality of Javascript as a programming language (e.g., objects, closures, inheritance / composition, etc.).</p>
+
+<!--more-->
+
+
+<p>Given that I expect that Javascript will be a substantial component of my role at the NYT, I&#8217;m planning to spend much of the next 5 weeks or so until I start refining and building my Javascript skillset. I&#8217;ve been cruising the Web accumulating JS learning resources, and I think I put together a solid syllabus.</p>
+
+<p>I&#8217;m thinking of learning Javascript from three perspectives. First, Javascript is a full-fledged programming language and it should be learned as such. This means exploring data structures, iteration, objects, etc. in Javascript much the same way we did for Ruby. Second, Javascript is the language of the Web browser, which means learning DOM manipulation and front-end user interaction. Finally, Javascript has seen an explosion of front-end MVC frameworks in the past few years, the most well-known of which include <a href="http://backbonejs.org/" target="_blank">Backbone.js</a>, <a href="http://emberjs.com/" target="_blank">Ember.js</a> and <a href="http://angularjs.org/" target="_blank">Angular.js</a>. These frameworks help you structure and organize your Javascript, and generally improve the user&#8217;s experience as they can decrease the server communication overhead involved in any modern, database-driven application.</p>
+
+<p>Here are a few of the ways I&#8217;m planning to practice writing and understanding Javascript over the next few weeks:</p>
+
+<p><strong>Build Ruby Methods</strong></p>
+
+<p>One of the benefits of coding in Ruby is that it provides a lot of the Enumerable methods like #collect and #inject that abstract away the need to write a basic iterator like a for loop. While these abstract methods provide a considerable amount of functionality in a terse, human-readable syntax, its easy to take them for granted. Thus, I&#8217;m planning to practice Javascript by writing the JS equivalent of the Ruby methods I use most frequently but do not have parallels in core JS (not considering jQuery or other libraries). Hopefully, this will force me to dive deep into both the Ruby and Javascript documentation and build up my Javascript muscle memory.</p>
+
+<p><strong>Solve Project Euler</strong></p>
+
+<p>Completing <a href="http://projecteuler.net" target="_blank">Project Euler</a> problems using Ruby has been a great way for me to strengthen not only my Ruby scripting skills but also my software design understanding, as I always try to properly encapsulate my Project Euler solutions and make the solution object-oriented. I plan to use the same approach to learning Javascript. First, I&#8217;ll translate the Project Euler problems that I&#8217;ve already solved from Ruby into Javascript, if only as a way to get in the habit of building JS objects using the constructor and prototype patterns. Then, I&#8217;ll work on new Project Euler problems and do the reverse translation - Javascript to Ruby. This way, I&#8217;ll become better at moving seamlessly between JS and Ruby, which will undoubtedly help me in my role at the intersection of the front-end and back-end.</p>
+
+<p><strong>Read Books</strong></p>
+
+<p>I&#8217;ve solicited advice from a number of developers on what are the best Javascript books to read, and here&#8217;s the list that I&#8217;m planning to go through to learn JS:</p>
+
+<ul>
+<li>&#8220;Professional Javascript for Web Developers&#8221; by Nicholas Zakas</li>
+<li>&#8220;Developing Backbone.js Applications&#8221; by Addy Osmani</li>
+<li>&#8220;Javascript Patterns&#8221; by Stoyan Stefanov</li>
+<li>&#8220;Object Oriented Javascript&#8221; by Stoyan Stefanov</li>
+</ul>
+
+
+<p>These four books seem to be relatively accessible to developers first exploring Javascript, yet also are challenging enough to keep me engaged and constantly learning. I think these books focus more on software design and code patterns in Javascript, which I like, rather than just DOM manipulation. I learn best by understanding the core of a language so that I can use libraries like jQuery knowing full well how its implemented under the hood. Much like how the Flatiron School teaches Rails only after teaching Ruby, SQL, ORMs, etc., I&#8217;d like to be proficient in core Javascript as a prerequisite to becoming an expert in libraries/frameworks like jQuery or Backbone.</p>
+
+<p><strong>Complete Online Tutorials (Codecademy, Code School)</strong></p>
+
+<p>When I first started to learn how to code, I learned primarily through in Codecademy and Code School tutorials. Those were helpful in providing a general overview to Javascript, but with a lot of hand-holding. Also, neither Codecademy and Code School have perfect interpreters, so there are times when you write perfectly valid code, but you can&#8217;t pass the challenge because of some quirk or bug in the in-browser interpreter. This led to much frustration when I was first learning how to code, and the content I learned via Codecademy, while useful, felt somewhat disjointed as I was chained to working in the browser interpreter they provided.</p>
+
+<p>Now that I know how to code though, going back through Codecademy and Codeschool has been a great way to solidify core concepts. I still feel like they hold your hand too much when completing code challenges, but I can get more out of the tutorials now that I have a stronger foundation in code. Codecademy has a pretty solid Javascript course, and Code School offers tutorials in Backbone and jQuery that I&#8217;ve found useful.</p>
+
+<p><strong>Work on a Project</strong></p>
+
+<p>This is a bit of no-brainer as a learning technique. Completing a project will help me most with learning front-end frameworks. I am familiar with Angular, having used that in project, but I&#8217;m planning to turn my focus to Backbone, given that the NYT uses Backbone pretty heavily for its front-end code (perhaps because Jeremy Ashkenas, the creator of Backbone, used to be a developer on the NYT&#8217;s Interactive News team). I&#8217;m still tossing around a few ideas of what I could build, but this Backbone tutorial for an <a href="http://coenraets.org/blog/2011/12/backbone-js-wine-cellar-tutorial-part-1-getting-started/" target="_blank">interactive wine cellar</a> seems like a good project that I could translate to another domain.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Landing the Dream Job]]></title>
@@ -6537,494 +6587,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <p>In much the same way, web applications need to have a well-designed model for the database, intuitive and beautiful views and a controller that is able to transmit user requests effectively. If any one of those three breaks down, the whole system is damaged. However, each of the three does not need to know about the inner workings of any other - that&#8217;s where the modularity comes in. As a programmer, I can work in my application&#8217;s model and focus on writing clean, efficient code that reflects the data I want to gather and use while not caring about how that data is presented to users. Then, I can move onto the views and focus on making sure that people are presented with a beautiful interface and design when using my application. In each of the model, view or controller, the design pattern of modularity and composition is repeated, as individual methods and classes in a single model have responsibilities distinct from other methods and classes, yet also relate and depend on them as well.</p>
 
 <p>These concepts seem simple and intuitive, but can be difficult to implement in practice. I think of the process of refactoring as the hard work necessary to achieve more modularity and loose coupling - the &#8220;make it right&#8221; part of <a href="http://c2.com/cgi/wiki?MakeItWorkMakeItRightMakeItFast" target="_blank">&#8220;make it work, make it right, make it fast&#8221;</a> formulation that I like so much. Just like a restaurant could function with the wait staff both serving, cooking and decorating, a web application could work without the principles of MVC. However, it just wouldn&#8217;t be right and wouldn&#8217;t make much sense. Using modularity and composition as a guide to writing code and designing elegant yet powerful applications has made me appreciate the &#8220;black box&#8221; complexity of technology that we all interact with every day, yet also eager to explore and dive into the details as I come to realize that its not really magic at all, its just good design.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to Visualize Data With Google Charts For Ruby]]></title>
-    <link href="http://eewang.github.com/blog/2013/02/20/how-to-visualize-data-with-google-charts/"/>
-    <updated>2013-02-20T17:42:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/02/20/how-to-visualize-data-with-google-charts</id>
-    <content type="html"><![CDATA[<p>I love data. Specifically, I love data visualizations. Infographics, charts, whatever you call it, if it displays data visually, chances are I&#8217;ll want to take a look at it. Data graphics tightly integrate the creative and analytical elements that I find so appealing about programming to efficiently communicate information. If a picture is worth a thousand words, an infographic is worth a thousand pictures. Data graphics can take an array of different forms - charts, 3-D graphs, maps, etc., the possibilities are virtually endless. I wanted to explore data visualization tools in Ruby, starting with basic chart functionality.</p>
-
-<!--more-->
-
-
-<p>In learning how to code over the past few weeks, I&#8217;ve come to appreciate the flexibility of Ruby and the ability for pretty much anything to be structured as a dataset. Conceptually, I was looking for a tool that could take in a data as an array or hash and convert that data into a table or graph. In perusing <a href="http://www.ruby-toolbox.com/" target="_blank">Ruby Toolbox</a>, I came across the Googlecharts gem, which is basically a Ruby wrapper for the <a href="http://developers.google.com/chart/" target="_blank">Google Charts API</a>. In taking a look at the <a href="http://googlecharts.rubyforge.org/" target="_blank">documentation</a> and <a href="http://github.com/mattetti/googlecharts/" target="_blank">code base on GitHub</a>, the instructions seemed pretty straight forward, so I figured I&#8217;d give it a try.</p>
-
-<p><strong>1) Installing Googlecharts</strong></p>
-
-<p>Getting setup with the Googlecharts gem is pretty straightforward. Like other gems, you can install it straight from the command line by running:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install googlecharts
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once the installation command runs, you just need to be sure to require the gem at the top of your Ruby file by writing:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;gchart&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And that&#8217;s it! You&#8217;re ready to start using Googlecharts.</p>
-
-<p><strong>2) Let&#8217;s Chart Some Data!</strong></p>
-
-<p>The primary class that you interact with when using Googlecharts is the Gchart class. In looking at the source code on GitHub, this class has numerous attributes that can be used to define the data and formatting for bar charts, pie charts, line graphs and scatterplots (the gem also seems to support basic 3-D graphing). When you create a new Gchart, you can pass in a number of attributes as parameters to the new Gchart instance. My first time using this gem, my goal was just to create a simple bar chart with dummy data that would successfully save to my filesystem. So I added an array of a few integers as the data input for the chart:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">data_array</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">bar_chart</span> <span class="o">=</span> <span class="no">Gchart</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-</span><span class='line'>            <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s1">&#39;400x400&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:bar_colors</span> <span class="o">=&gt;</span> <span class="s2">&quot;000000&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:title</span> <span class="o">=&gt;</span> <span class="s2">&quot;My Title&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:bg</span> <span class="o">=&gt;</span> <span class="s1">&#39;EFEFEF&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:legend</span> <span class="o">=&gt;</span> <span class="s1">&#39;first data set label&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:data</span> <span class="o">=&gt;</span> <span class="n">data_array</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="s1">&#39;images/bar_chart.png&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">bar_chart</span><span class="o">.</span><span class="n">file</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Running the above code in my terminal (still with &#8220;require &#8216;gchart&#8217;&#8221; at the top) produced this:</p>
-
-<p><img src="http://eewang.github.com/images/post_images/bar_chart_1.png"></img></p>
-
-<p>It gets the job done, but its not too exciting for a few reasons. First, there aren&#8217;t any y-axis labels; I have no sense of scale or measurement. Second, there are no labels on my data bars. Third, only one set of data is displayed; what if I wanted to compare two related datasets next to each other? In order to address these issues, I passed a few more initial values to the Gchart instantiation:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">data_array_1</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
-</span><span class='line'><span class="n">data_array_2</span> <span class="o">=</span> <span class="o">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">bar_chart</span> <span class="o">=</span> <span class="no">Gchart</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-</span><span class='line'>            <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s1">&#39;600x400&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:bar_colors</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;000000&#39;</span><span class="p">,</span> <span class="s1">&#39;0088FF&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:title</span> <span class="o">=&gt;</span> <span class="s2">&quot;My Title&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:bg</span> <span class="o">=&gt;</span> <span class="s1">&#39;EFEFEF&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:legend</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;first data set label&#39;</span><span class="p">,</span> <span class="s1">&#39;second data set label&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:data</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">data_array_1</span><span class="p">,</span> <span class="n">data_array_2</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="s1">&#39;images/bar_chart.png&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:stacked</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:legend_position</span> <span class="o">=&gt;</span> <span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:axis_with_labels</span> <span class="o">=&gt;</span> <span class="o">[[</span><span class="s1">&#39;x&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="s1">&#39;y&#39;</span><span class="o">]]</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:max_value</span> <span class="o">=&gt;</span> <span class="mi">15</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:min_value</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>            <span class="ss">:axis_labels</span> <span class="o">=&gt;</span> <span class="o">[[</span><span class="s2">&quot;A|B|C|D|E&quot;</span><span class="o">]]</span><span class="p">,</span>
-</span><span class='line'>            <span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">bar_chart</span><span class="o">.</span><span class="n">file</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Specifically, I added six new attributes compared to the first chart. These new attributes include:</p>
-
-<ul>
-  <li><strong>:stacked</strong> - indicates if the bars are to be stacked one on top the other (:stacked => &#8216;true&#8217;; this is the default setting for bar charts) or if they should be side-by-side (:stacked => &#8216;false&#8217;)</li>
-  <li><strong>:legend_position</strong> - indicates where the legend will be placed relative to the chart. Options are: &#8216;bottom&#8217;, &#8216;bottom_vertical&#8217;, &#8216;top&#8217;, &#8216;top_vertical&#8217;, &#8216;right&#8217;, and &#8216;left&#8217;.</li>
-  <li><strong>:axis_with_labels</strong> - indicates which axis you want to add labels to. I added the primary x-axis and y-axis (left and bottom), but I could have also added &#8216;r&#8217; and &#8216;t&#8217; for &#8216;right&#8217; and &#8216;top&#8217; for the secondary vertical and horizontal axes, respectively</li>
-  <li><strong>:max_value</strong> - indicates the maximum value for the x-axis. In tinkering with this attribute, it seems like this max value needs to be set in order to scale the data bars to the y-axis; otherwise they seem to get detached (i.e., you can change the y-axis scale without affecting the relative size of the bars).</li>
-  <li><strong>:min_value</strong> - similar to the above, this attribute indicates the starting point of the bar chart.</li>
-  <li><strong>:axis_labels</strong> - indicates the labels for the x-axis, separated by pipes (&#8220;|&#8221;). Note the formatting here - the labels in aggregate are a single string but are each delineated by pipes. If you want to replace this value with variable (e.g., if the data you want to chart may have dynamic x-axis labels), you may need to do some intermediate object transformation in order to get the appropriate syntax for Googlecharts. </li>
-</ul>
-
-
-<p>I also added a second array of data at the top to see how my cluster, non-stacked bar chart looks. Note too that the HEX codes for the background (&#8220;bg&#8221;) and bar colors do not need the leading &#8220;#&#8221; symbol as they do in CSS. After updating the code with additional attributes, this is my bar chart:</p>
-
-<p><img src="http://eewang.github.com/images/post_images/bar_chart_2.png"></img></p>
-
-<p>One thing to note is that whenever you have multiple values for a single hash key, you need to wrap them in an array, otherwise the code won&#8217;t properly execute.</p>
-
-<p>This is the same data, except applied to a line chart (I just replaced :type => &#8216;bar&#8217; with :type => &#8216;line&#8217;):</p>
-
-<p><img src="http://eewang.github.com/images/post_images/line_chart_1.png"></img></p>
-
-<p>And here it is again, except with just the first data set and applied to a pie chart:</p>
-
-<p><img src="http://eewang.github.com/images/post_images/pie_chart_1.png"></img></p>
-
-<p>As you can see, its pretty easy to switch between graph/chart types. What&#8217;s more important is to think through the purpose of the graphic and choose the appropriate type. For example, if the data you are presenting is along a continuum (e.g., stock prices, demographic distributions, etc.), line graphs may make the most sense. But if you&#8217;re showing discrete datasets, you may want to use a bar chart.</p>
-
-<p><strong>3) Applying Object Orientation</strong></p>
-
-<p>Playing around with Googlecharts was fun, but ultimately, I wanted to use the gem in the context of a broader application. A typical use case may be wanting to display dynamic content that a user can request and format. I figured that this would be a good chance to extend a scraper for StubHub that I&#8217;ve been building on the side. Basically, this scraper goes through StubHub&#8217;s NBA ticket listings and saves the information about each event (home/away team, date of game, venue, minimum price and number of tickets available, etc.) into a SQLite3 database. I wrote the scraper to be object-oriented, so I thought it would make sense to build in the functionality to auto-generate bar charts using Googlecharts.</p>
-
-<p>For the sake of brevity, I won&#8217;t post all of the code for the scraper and classes here, but you can find the <a href="https://github.com/eewang/tickets/" target="_blank">repository</a> on my <a href="https://github.com/eewang/" target="_blank">GitHub page</a>. The code below spells out the Team class, which houses the functionality to call a &#8220;search_team&#8221; class method and pass it a team name. This method will then create a bar chart dynamically using attributes of the team name that the user specifies. The method calls instance methods that perform actions like querying the database for price (&#8220;price for sql&#8221;), ticket (&#8220;tix_for_sql&#8221;), opposing team (&#8220;away_teams_for_sql&#8221;) and event date (&#8220;date_for_sql&#8221;) data. Additionally, I added in the ability for the class to search a hash of team colors to match the requested team against its primary and secondary team colors to format the chart dynamically. The underlying data map for team colors is housed as a constant in the &#8220;Baller&#8221; module, which is not reflected below. I scaled the y-axis based on the highest price in the price data array for the remaining home games. This way, I could make sure that I wouldn&#8217;t get data that fell outside of my chart&#8217;s range. Unfortunately, I wasn&#8217;t able to disconnect the scale of the primary y-axis (left side) from the secondary y-axis (right side), so the &#8220;Number of Tickets&#8221; bars look a little squished.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-<span class='line-number'>115</span>
-<span class='line-number'>116</span>
-<span class='line-number'>117</span>
-<span class='line-number'>118</span>
-<span class='line-number'>119</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Team</span>
-</span><span class='line'>  <span class="kp">extend</span> <span class="no">Baller</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:url</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vc">@@color_hash</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'>  <span class="vc">@@db</span> <span class="o">=</span> <span class="ss">SQLite3</span><span class="p">:</span><span class="ss">:Database</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;tickets_3.db&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">team_list</span>
-</span><span class='line'>    <span class="ss">Baller</span><span class="p">:</span><span class="ss">:TEAMS</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">team_colors_list</span>
-</span><span class='line'>    <span class="nb">Array</span><span class="p">(</span><span class="ss">Baller</span><span class="p">:</span><span class="ss">:COLORS</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
-</span><span class='line'>      <span class="vc">@@color_hash</span><span class="o">[</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">||=</span> <span class="o">[]</span>
-</span><span class='line'>      <span class="vc">@@color_hash</span><span class="o">[</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">gsub</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="vc">@@color_hash</span><span class="o">[</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">[-</span><span class="mi">2</span><span class="o">].</span><span class="n">gsub</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="vc">@@color_hash</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vc">@@teams</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
-</span><span class='line'>    <span class="vi">@name_for_sql</span> <span class="o">=</span> <span class="vi">@name</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="s2">&quot; Tickets&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span>
-</span><span class='line'>    <span class="vi">@url</span> <span class="o">=</span> <span class="n">url</span>
-</span><span class='line'>    <span class="vi">@away_teams</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>    <span class="vi">@away_team_labels</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>    <span class="vc">@@teams</span> <span class="o">&lt;&lt;</span> <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">url</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">count_teams</span>
-</span><span class='line'>    <span class="vc">@@teams</span><span class="o">.</span><span class="n">size</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">name_teams</span>
-</span><span class='line'>    <span class="vc">@@teams</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">date_for_sql</span>
-</span><span class='line'>    <span class="vc">@@db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT event_date FROM events WHERE team_home == &#39;</span><span class="si">#{</span><span class="vi">@name_for_sql</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">date</span><span class="o">|</span> <span class="n">date</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">1</span><span class="o">].</span><span class="n">strip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">2</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">price_for_sql</span>
-</span><span class='line'>    <span class="vc">@@db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT min_price FROM events WHERE team_home == &#39;</span><span class="si">#{</span><span class="vi">@name_for_sql</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">tix_for_sql</span>
-</span><span class='line'>    <span class="vc">@@db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT tix FROM events WHERE team_home == &#39;</span><span class="si">#{</span><span class="vi">@name_for_sql</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="o">.</span><span class="n">collect</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
-</span><span class='line'>        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">is_a?</span> <span class="nb">Integer</span>
-</span><span class='line'>          <span class="n">item</span> <span class="o">/</span> <span class="mi">100</span>
-</span><span class='line'>        <span class="k">else</span>
-</span><span class='line'>          <span class="n">item</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_i</span> <span class="o">/</span> <span class="mi">100</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">away_teams_for_sql</span>
-</span><span class='line'>    <span class="vc">@@db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT team_away FROM events WHERE team_home == &#39;</span><span class="si">#{</span><span class="vi">@name_for_sql</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">x_labels</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">team_list</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">combo</span><span class="o">|</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">combo</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">==</span> <span class="n">item</span>
-</span><span class='line'>        <span class="vi">@away_teams</span> <span class="o">&lt;&lt;</span> <span class="n">combo</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">x_labels_abbr</span>
-</span><span class='line'>    <span class="n">away_teams_for_sql</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">team</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">x_labels</span><span class="p">(</span><span class="n">team</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="vi">@away_teams</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">away_team_x_labels_abbr</span>
-</span><span class='line'>    <span class="vi">@away_team_labels</span> <span class="o">=</span> <span class="n">x_labels_abbr</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">date_for_sql</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">array</span><span class="o">|</span> <span class="n">array</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)</span> <span class="p">}</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">team_color_primary</span>
-</span><span class='line'>    <span class="no">Team</span><span class="o">.</span><span class="n">team_colors_list</span><span class="o">[</span><span class="vi">@name_for_sql</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">2</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">team_color_secondary</span>
-</span><span class='line'>    <span class="no">Team</span><span class="o">.</span><span class="n">team_colors_list</span><span class="o">[</span><span class="vi">@name_for_sql</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">2</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">chart_filename</span>
-</span><span class='line'>    <span class="vi">@name</span><span class="o">.</span><span class="n">downcase</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;nba_charts/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">search_team</span><span class="p">(</span><span class="n">team_name</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">nba_team</span> <span class="o">=</span> <span class="no">Team</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">team_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">word</span><span class="o">|</span> <span class="n">word</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="p">)</span>
-</span><span class='line'>    <span class="n">bar_chart</span> <span class="o">=</span> <span class="no">Gchart</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-</span><span class='line'>                <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:size</span> <span class="o">=&gt;</span> <span class="s1">&#39;1000x300&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:encoding</span> <span class="o">=&gt;</span> <span class="s1">&#39;extended&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:bar_colors</span> <span class="o">=&gt;</span> <span class="o">[[</span><span class="n">nba_team</span><span class="o">.</span><span class="n">team_color_primary</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="n">nba_team</span><span class="o">.</span><span class="n">team_color_secondary</span><span class="o">]]</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:title</span> <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="vi">@name_for_sql</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:bg</span> <span class="o">=&gt;</span> <span class="s1">&#39;FAFAFA&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:legend</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;Minimum Price (LHS)&#39;</span><span class="p">,</span> <span class="s1">&#39;Number of Tickets (RHS)&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:legend_position</span> <span class="o">=&gt;</span> <span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:data</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">nba_team</span><span class="o">.</span><span class="n">price_for_sql</span><span class="p">,</span> <span class="n">nba_team</span><span class="o">.</span><span class="n">tix_for_sql</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:stacked</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:axis_with_labels</span> <span class="o">=&gt;</span> <span class="o">[[</span><span class="s1">&#39;x&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="s1">&#39;y&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="s1">&#39;r&#39;</span><span class="o">]]</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:axis_labels</span> <span class="o">=&gt;</span> <span class="o">[[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">nba_team</span><span class="o">.</span><span class="n">away_team_x_labels_abbr</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">]]</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:bar_width_and_spacing</span> <span class="o">=&gt;</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:axis_range</span> <span class="o">=&gt;</span> <span class="o">[[</span><span class="kp">nil</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="mi">25</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="mi">25</span><span class="o">]</span><span class="p">,</span> <span class="kp">nil</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:max_value</span> <span class="o">=&gt;</span> <span class="n">nba_team</span><span class="o">.</span><span class="n">price_for_sql</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">25</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:orientation</span> <span class="o">=&gt;</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span>
-</span><span class='line'>                <span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">nba_team</span><span class="o">.</span><span class="n">chart_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span class='line'>                <span class="p">)</span>
-</span><span class='line'>    <span class="n">bar_chart</span><span class="o">.</span><span class="n">file</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Creating file... Done&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When I call &#8220;Team.search_team(&lt;&#8221;input team name&#8221;>)&#8221;, the program creates a file labeled with the appropriate team name in a sub-directory called &#8220;nba_charts&#8221;. As you can see, Googlecharts can be used to create charts dynamically based on variable user input.</p>
-
-<p><strong>4) Adding User Interaction</strong></p>
-
-<p>In order to create charts quickly, I added a command line interface for the program. This code allows users to specify which team they want to see ticket data for and it will create bar charts using the gchart gem and save them to the local filesystem. I went ahead and created four bar charts for the Knicks, Lakers, Thunder and Nuggets. I wanted to create a chart for my beloved Chicago Bulls as well, but the red-and-white combination didn&#8217;t show up very well on an off-white background, so I kept that chart out of this example.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">response</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="k">until</span> <span class="n">response</span><span class="o">.</span><span class="n">downcase</span> <span class="o">==</span> <span class="s2">&quot;done&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;What team do you want to search for? (&#39;Done&#39; to exit) &quot;</span>
-</span><span class='line'>  <span class="n">response</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">chomp</span>
-</span><span class='line'>  <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">downcase</span> <span class="o">!=</span> <span class="s2">&quot;done&quot;</span>
-</span><span class='line'>    <span class="no">Team</span><span class="o">.</span><span class="n">search_team</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">else</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Thanks for using my program!&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here is the code when execute it in the terminal:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby tickets.rb
-</span><span class='line'>What team do you want to search for? ('Done' to exit)
-</span><span class='line'>New York Knicks
-</span><span class='line'>Creating file... Done
-</span><span class='line'>What team do you want to search for? ('Done' to exit)
-</span><span class='line'>Los Angeles Lakers
-</span><span class='line'>Creating file... Done
-</span><span class='line'>What team do you want to search for? ('Done' to exit)
-</span><span class='line'>Oklahoma City Thunder
-</span><span class='line'>Creating file... Done
-</span><span class='line'>What team do you want to search for? ('Done' to exit)
-</span><span class='line'>Denver Nuggets
-</span><span class='line'>Creating file... Done
-</span><span class='line'>What team do you want to search for? ('Done' to exit)
-</span><span class='line'>Done
-</span><span class='line'>Thanks for using my program!</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And here are the bar charts that are created by the program:</p>
-
-<h6>New York Knicks Tickets - Remaining Home Games</h6>
-
-
-<p><img src="http://eewang.github.com/images/post_images/new_york_knicks_tickets.png"></img></p>
-
-<h6>Los Angeles Lakers Tickets - Remaining Home Games</h6>
-
-
-<p><img src="http://eewang.github.com/images/post_images/los_angeles_lakers_tickets.png"></img></p>
-
-<h6>Oklahoma City Thunder Tickets - Remaining Home Games</h6>
-
-
-<p><img src="http://eewang.github.com/images/post_images/oklahoma_city_thunder_tickets.png"></img></p>
-
-<h6>Denver Nuggets - Remaining Home Games</h6>
-
-
-<p><img src="http://eewang.github.com/images/post_images/denver_nuggets_tickets.png"></img></p>
-
-<p>The left-hand y-axis refers to the price in dollars of the cheapest ticket, since StubHub&#8217;s primary event page indicates where ticket prices start from (i.e., the lowest price), and the right-hand y-axis refers to the number of tickets remaining in hundreds. I was having difficulty disconnecting the primary and secondary y-axes from each other, so the scale for the remaining tickets is not ideal (the primary y-axis determined the scale).</p>
-
-<p><strong>5) Final Thoughts</strong></p>
-
-<p>As you can see, the Googlecharts gem can be useful for quickly linking up a program with a data visualization tool. While it doesn&#8217;t appear to be the most powerful or most intuitive data graphing tool, its easy to install and the documentation is fairly straightforward, at least for basic functionality. I found it helpful to go through the code base for the Gchart class and try and follow the logic of each method whenever I got stuck. I found it to be a transparent gem in terms of figuring out what was going on &#8220;under the hood&#8221;.</p>
-
-<p>That said, I found the syntax to be finicky, unnecessarily so, in my opinion. Also, it seemed like some of the more advanced functionality that I was looking for, that I was used to from using Excel many times, wasn&#8217;t readily available. Next on my list of graphing tools to try out is <a href="http://www.highcharts.com/" target="_blank">High Charts</a>, a Javascript tool for interactive data graphics that also has an accompanying Ruby gem, <a href="http://github.com/michelson/lazy_high_charts/" target="_blank">Lazy High Charts</a>. Then, I can learn how to create awesome stuff like <a href="http://prafulla.net/interesting-contents/world-interesting-contents/us-presidential-election-2012-ohio-as-critical-state-spending-tv-adsinfographics/" target="_blank">this</a>.</p>
 ]]></content>
   </entry>
   

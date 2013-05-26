@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>eugenius</title>
+  <title>How I'm Learning Javascript - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="This morning, we started with a review of the SQL homework and ventured into the wide world of SQL joins, followed by the start of our Ruby learning &hellip;">
+  <meta name="description" content="For my job at the NYT that I&#8217;ll be starting in July, I&#8217;ll likely be working a lot in Ruby and Javascript. At the Flatiron School, the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/page/4/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -73,15 +73,12 @@
 </nav> -->
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/02/07/flatiron-day-004/">Flatiron - Day 004</a></h1>
+      <h1 class="entry-title">How I'm Learning Javascript</h1>
     
     
       <p class="meta">
@@ -97,81 +94,68 @@
   
 
 
-<time datetime="2013-02-07T10:56:00-05:00" pubdate data-updated="true">Feb 7<span>th</span>, 2013</time>
+<time datetime="2013-05-24T07:45:00-04:00" pubdate data-updated="true">May 24<span>th</span>, 2013</time>
         
-         | <a href="/blog/2013/02/07/flatiron-day-004/#disqus_thread">Comments</a>
+         | <a href="#disqus_thread">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>This morning, we started with a review of the SQL homework and ventured into the wide world of SQL joins, followed by the start of our Ruby learning in the afternoon. Regarding SQL, I struggled a bit with the homework last night, but after I read up a bit more on joins, the confusion lessened and I was able to create a working quiz database. Our task was to (i) design a database schema, (ii) populate the database, (iii) query the database and (iv) determine quiz scores. I&#8217;ve published the SQL code I wrote to accomplish this task after the jump.</p>
+<div class="entry-content"><p>For my job at the NYT that I&#8217;ll be starting in July, I&#8217;ll likely be working a lot in Ruby and Javascript. At the Flatiron School, the focus was on becoming a back-end Ruby developer, and while we learned our fair share of JavaScript and jQuery, it was always in the context of a Ruby or Rails application. Most of the front-end focus gravitated toward DOM manipulation and traversal using jQuery and less on the functionality of Javascript as a programming language (e.g., objects, closures, inheritance / composition, etc.).</p>
 
+<!--more-->
+
+
+<p>Given that I expect that Javascript will be a substantial component of my role at the NYT, I&#8217;m planning to spend much of the next 5 weeks or so until I start refining and building my Javascript skillset. I&#8217;ve been cruising the Web accumulating JS learning resources, and I think I put together a solid syllabus.</p>
+
+<p>I&#8217;m thinking of learning Javascript from three perspectives. First, Javascript is a full-fledged programming language and it should be learned as such. This means exploring data structures, iteration, objects, etc. in Javascript much the same way we did for Ruby. Second, Javascript is the language of the Web browser, which means learning DOM manipulation and front-end user interaction. Finally, Javascript has seen an explosion of front-end MVC frameworks in the past few years, the most well-known of which include <a href="http://backbonejs.org/" target="_blank">Backbone.js</a>, <a href="http://emberjs.com/" target="_blank">Ember.js</a> and <a href="http://angularjs.org/" target="_blank">Angular.js</a>. These frameworks help you structure and organize your Javascript, and generally improve the user&#8217;s experience as they can decrease the server communication overhead involved in any modern, database-driven application.</p>
+
+<p>Here are a few of the ways I&#8217;m planning to practice writing and understanding Javascript over the next few weeks:</p>
+
+<p><strong>Build Ruby Methods</strong></p>
+
+<p>One of the benefits of coding in Ruby is that it provides a lot of the Enumerable methods like #collect and #inject that abstract away the need to write a basic iterator like a for loop. While these abstract methods provide a considerable amount of functionality in a terse, human-readable syntax, its easy to take them for granted. Thus, I&#8217;m planning to practice Javascript by writing the JS equivalent of the Ruby methods I use most frequently but do not have parallels in core JS (not considering jQuery or other libraries). Hopefully, this will force me to dive deep into both the Ruby and Javascript documentation and build up my Javascript muscle memory.</p>
+
+<p><strong>Solve Project Euler</strong></p>
+
+<p>Completing <a href="http://projecteuler.net" target="_blank">Project Euler</a> problems using Ruby has been a great way for me to strengthen not only my Ruby scripting skills but also my software design understanding, as I always try to properly encapsulate my Project Euler solutions and make the solution object-oriented. I plan to use the same approach to learning Javascript. First, I&#8217;ll translate the Project Euler problems that I&#8217;ve already solved from Ruby into Javascript, if only as a way to get in the habit of building JS objects using the constructor and prototype patterns. Then, I&#8217;ll work on new Project Euler problems and do the reverse translation - Javascript to Ruby. This way, I&#8217;ll become better at moving seamlessly between JS and Ruby, which will undoubtedly help me in my role at the intersection of the front-end and back-end.</p>
+
+<p><strong>Read Books</strong></p>
+
+<p>I&#8217;ve solicited advice from a number of developers on what are the best Javascript books to read, and here&#8217;s the list that I&#8217;m planning to go through to learn JS:</p>
+
+<ul>
+<li>&#8220;Professional Javascript for Web Developers&#8221; by Nicholas Zakas</li>
+<li>&#8220;Developing Backbone.js Applications&#8221; by Addy Osmani</li>
+<li>&#8220;Javascript Patterns&#8221; by Stoyan Stefanov</li>
+<li>&#8220;Object Oriented Javascript&#8221; by Stoyan Stefanov</li>
+</ul>
+
+
+<p>These four books seem to be relatively accessible to developers first exploring Javascript, yet also are challenging enough to keep me engaged and constantly learning. I think these books focus more on software design and code patterns in Javascript, which I like, rather than just DOM manipulation. I learn best by understanding the core of a language so that I can use libraries like jQuery knowing full well how its implemented under the hood. Much like how the Flatiron School teaches Rails only after teaching Ruby, SQL, ORMs, etc., I&#8217;d like to be proficient in core Javascript as a prerequisite to becoming an expert in libraries/frameworks like jQuery or Backbone.</p>
+
+<p><strong>Complete Online Tutorials (Codecademy, Code School)</strong></p>
+
+<p>When I first started to learn how to code, I learned primarily through in Codecademy and Code School tutorials. Those were helpful in providing a general overview to Javascript, but with a lot of hand-holding. Also, neither Codecademy and Code School have perfect interpreters, so there are times when you write perfectly valid code, but you can&#8217;t pass the challenge because of some quirk or bug in the in-browser interpreter. This led to much frustration when I was first learning how to code, and the content I learned via Codecademy, while useful, felt somewhat disjointed as I was chained to working in the browser interpreter they provided.</p>
+
+<p>Now that I know how to code though, going back through Codecademy and Codeschool has been a great way to solidify core concepts. I still feel like they hold your hand too much when completing code challenges, but I can get more out of the tutorials now that I have a stronger foundation in code. Codecademy has a pretty solid Javascript course, and Code School offers tutorials in Backbone and jQuery that I&#8217;ve found useful.</p>
+
+<p><strong>Work on a Project</strong></p>
+
+<p>This is a bit of no-brainer as a learning technique. Completing a project will help me most with learning front-end frameworks. I am familiar with Angular, having used that in project, but I&#8217;m planning to turn my focus to Backbone, given that the NYT uses Backbone pretty heavily for its front-end code (perhaps because Jeremy Ashkenas, the creator of Backbone, used to be a developer on the NYT&#8217;s Interactive News team). I&#8217;m still tossing around a few ideas of what I could build, but this Backbone tutorial for an <a href="http://coenraets.org/blog/2011/12/backbone-js-wine-cellar-tutorial-part-1-getting-started/" target="_blank">interactive wine cellar</a> seems like a good project that I could translate to another domain.</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/07/flatiron-day-004/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/06/flatiron-day-003/">Flatiron - Day 003</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
 
-<time datetime="2013-02-06T11:30:00-05:00" pubdate data-updated="true">Feb 6<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/02/06/flatiron-day-003/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/06/flatiron-day-003/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/05/flatiron-day-002/">Flatiron - Day 002</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -183,79 +167,40 @@
   
 
 
-<time datetime="2013-02-05T17:10:00-05:00" pubdate data-updated="true">Feb 5<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/02/05/flatiron-day-002/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Day 2 of The Flatiron School was a success. Today&#8217;s main focus was to set up our Octopress blogs (the result of which is on your screen) and set up our development environments. Its remarkable to think about all of the stuff that goes on &#34;under the hood&#34; when developing software - before today I didn&#8217;t really know what dot files were, and now I realize how fundamental they are to a smooth development experience (case in point, I screwed up my .bash_profile yesterday and that nearly forced me to reformat my machine).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/05/flatiron-day-002/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2013-05-24T07:45:00-04:00" pubdate data-updated="true">May 24<span>th</span>, 2013</time>
       
-  <header>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2013/02/04/flatiron-day-001/">Flatiron - Day 001</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
 
-
-<time datetime="2013-02-04T20:00:00-05:00" pubdate data-updated="true">Feb 4<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/02/04/flatiron-day-001/#disqus_thread">Comments</a>
-        
-      </p>
     
-  </header>
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/05/18/landing-the-dream-job/" title="Previous Post: Landing the Dream Job">&laquo; Landing the Dream Job</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-  <div class="entry-content"><p>Day 1 of Winter/Spring 2013 of <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> is in the books! Today, Avi applied the philosophy of &#8220;deploy on day 1&#8221; and required us all to create student profile pages and merge the various branches of the base files using git. Most of the morning was spent establishing a basic working environment (Avi promised that we&#8217;d go through environment configuration in Day 2), forking the Github Flatiron student profile page and modifying the HTML, CSS and JavaScript files to match our content.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/04/flatiron-day-001/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -309,7 +254,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/05/24/how-im-learning-javascript/">How I&#8217;m Learning Javascript</a>
+        <a href="/blog/2013/05/24/how-im-learning-javascript/">How I'm Learning Javascript</a>
       </li>
     
       <li class="post">
@@ -334,7 +279,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/eewang">@eewang</a> on GitHub
@@ -364,7 +309,7 @@
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -381,6 +326,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -395,7 +341,10 @@
       var disqus_shortname = 'eugenewang';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
