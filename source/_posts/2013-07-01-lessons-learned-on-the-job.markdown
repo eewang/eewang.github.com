@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Five Lessons Learned On The Job"
-date: 2013-07-01 04:52
+date: 2013-07-14 04:52
 comments: true
 categories: 
 ---
