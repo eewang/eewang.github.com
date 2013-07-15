@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-06-12T10:02:56-05:00</updated>
+  <updated>2013-07-15T08:49:06-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -14,9 +14,49 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Five Lessons Learned On The Job]]></title>
+    <link href="http://eewang.github.com/blog/2013/07/01/lessons-learned-on-the-job/"/>
+    <updated>2013-07-01T04:52:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/07/01/lessons-learned-on-the-job</id>
+    <content type="html"><![CDATA[<p>Last week I started my job at the New York Times. And while I&#8217;ve learned a lot over my first week, I feel it necessary to write a post on what I learned working at 8to18 for four weeks. As my first actual developer gig, working at 8to18 has helped me grasp what it means to be a professional developer, and while I undoubtedly still have a lot to learn, I felt better prepared going into my job at the NYT having worked at a start-up for a short period of time. Here are a few lessons that I&#8217;ve learned now that I&#8217;ve had a chance to explore an existing code base for a non-trivial web application that has an active userbase.</p>
+
+<!--more-->
+
+
+<p><strong>1) Make git commits informative</strong></p>
+
+<p>Git commits should communicate your intent as a developer through both the code changed within a given commit and the associated commit message. I&#8217;ll try to include active verbs in my commit messages and separate sub-units of work by semi colons (e.g., something like &#8220;adds functional tests, refactors model code&#8221;). At 8to18, Jira was the primary tool for workflow management, so every code commit reflected a specific Jira issue. Adding the Jira issue number to my commit messages and specific language preceded by a hashmark allowed for tighter integration between Github and Jira. Initially, this was difficult for me as I had admittedly been sloppy with my commits at Flatiron, where I would fix whatever I saw that was wrong rather than noting it in Trello or Github issues and reverting back to fix it later in a different git branch. Working in a professional development environment has shown me the communicative value of tight, focused git commits with informative messages.</p>
+
+<p><strong>2) Its (almost) all about forms</strong></p>
+
+<p>A wise teacher (i.e., Avi) once said, &#8220;90% of web development is just building forms.&#8221; I found this to be especially true in the work I did for 8to18, which consisted primarily of bug fixes and feature developement for their registration application. Used by parents and school administrators to register students for extracurriculars and sports, the registration app has easily been the most complex set of forms that I&#8217;ve worked with. And I say &#8220;set of forms&#8221; rather than just &#8220;forms&#8221;, because the app has an added twist by enabling admins to create their own forms on the fly - adding and removing form steps depending on the particular sport or activity in question. Furthermore, the app had to address idiosyncratic use cases  specific to certain schools (e.g., schools in North Carolina require prospective athletes to note their felony conviction history before registering whereas other states do not have that requirement).</p>
+
+<p>Building this app in a modular way required the use of not just the domain models that contain the core business logic but a set of support modules to perform specific tasks like validate, present or format data. Form workflow follows a certain pattern - users input information, information is checked and validated, then that information is used elsewhere in the application. This pattern isn&#8217;t inherently difficult to implement in Rails as the framework provides a lot of helpers and guidance to get forms up and running quickly. Yet knowing which components of the workflow can be abstracted into a module or class to enable user flexibility and minimize the added work needed when requirements change (as they most certainly will), therein lies the challenge of building usable, scalable forms and seems to come with just more experience.</p>
+
+<p><strong>3) Testing is like eating your vegetables</strong></p>
+
+<p>Learning to write test code before implementation code has not been easy. Admittedly, I&#8217;m not quite at full test-driven development; I&#8217;m closer to test-and-implement-at-the-same-time development. Writing tests can be frustrating - I&#8217;ve spent a good chunk of time banging my head against the wall trying to write meaningful tests. And while its not always fun to write tests, you have to do it, and you generally feel better after writing meaningful, passing tests.</p>
+
+<p>Also, I&#8217;ve learned that not all tests are made equal. I&#8217;m more willing to write unit tests rather than functional or integration tests, as my frustration level rises when I&#8217;m faced with a number of preconditions just to get certain controller actions to be triggered (e.g., before filters, login requirements, etc.). Unit tests are generally easier for me to write - the universe of dependencies is smaller and the model layer is the business logic of the application. Coming in to work on an existing application, much of the model code had already been written, so I worked a lot in the controllers - utilizing existing model methods to produce new functionality. Over the course of the 4 weeks at 8to18, however, I&#8217;ve come to appreciate the value of good tests in building a resilient application. They&#8217;ve also come in handy as documentation - when I&#8217;m not sure what a model or controller is intended to do, I&#8217;d revert to the tests to provide clues.</p>
+
+<p><strong>4) Metaprogramming isn&#8217;t always the answer</strong></p>
+
+<p>In my zeal to try new programming techniques that I&#8217;ve learned, I&#8217;ve tended to see metaprogramming techniques as the end goal when writing code - good practice regardless of the context. However, I&#8217;ve learned that while metaprogramming can reduce the absolute number of lines of code in your application, it can come at the expense of readibility for other developers on your team. In some instances, this is unavoidable. Whenever I&#8217;ve explored the Rails source code, for example, the sheer amount of metaprogramming makes it difficult for me to grasp what&#8217;s going on. At the same time, that code gives Rails the out-of-the-box functionality that makes it so easy to get apps up and running. I can imagine that writing that customizable functionality into Rails without using metaprogramming would be practically impossible.</p>
+
+<p>What matters the most is balancing the readibility of normal code with the power and flexibility of metaprogramming. Like anything in the world of programming, its all about the right tool for the job. For a framework like Rails, with a core group of contributors and a wide universe of use cases, metaprogramming is essential. However, for a smaller team with new developers and a more defined set of uses cases, metaprogramming could be more detrimental than helpful.</p>
+
+<p><strong>5) Commercial concerns trump all</strong></p>
+
+<p>While clean, beautiful code is an ideal worth aspiring to, at the end of the day, its still subordinate to the commercial needs of the product or business. For example, usage of the registration app that I&#8217;m working tends to be lumpy and clustered in certain months of the year (e.g., August, right before the start of the school year). Spending weeks to write perfect code for a feature could actually be detrimental if that means its release is pushed beyond the period of peak usage.</p>
+
+<p>Knowing when to focus on great code versus just get something working and out the door is something I think Flatiron positioned me well to understand. Coming from a non-traditional coding background (i.e., didn&#8217;t take a computer science class in college), I feel like I have a good sense of commerciality when it comes to building products for actual customers. Working at 8to18 just reinforced my understanding of code as a tool to solve real world problems; when writing beautiful code rather than finding a solution to the problem at hand becomes the end goal, that&#8217;s when you need to recalibrate.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Developing Web Applications with 8to18 Media]]></title>
     <link href="http://eewang.github.com/blog/2013/06/11/developing-web-applications-with-8to18-media/"/>
-    <updated>2013-06-11T20:49:00-05:00</updated>
+    <updated>2013-06-11T20:49:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/06/11/developing-web-applications-with-8to18-media</id>
     <content type="html"><![CDATA[<p>I&#8217;ll admit it - I&#8217;ve been slacking the past few weeks about blogging. Most of what I&#8217;ve been doing since mid-May since my job search concluded has been enjoying NYC, hanging out with friends and doing a some Javascript learning. Its tough to keep up the pace of Flatiron after the end of the program. While I&#8217;ve still be trying to code every day and spend quality time learning Javascript and Backbone, I&#8217;ve taken time to relax and enjoy myself since I&#8217;ll have many more years of working ahead of me and increasingly less time to just live and enjoy the city.</p>
 
@@ -32,13 +72,16 @@
 <p>Speaking of testing, another habit that I&#8217;m learning is being more vigorous about writing tests. 8to18 emphasizes test-driven development, so I&#8217;m learning a ton about how to think about the implementation code I&#8217;m writing through the lens of Rspec tests. Yesterday, I wrote about 5 lines of code in a Rails controller that I had to support with approximately 20 lines of test code to confirm expected behavior in edge case situations. While it took me more time to wrap up the bug fix, I came out more confident in my code because I had tests to support the functionality.</p>
 
 <p>My contract work at 8to18 will end around July 4 for a total of four weeks, after which I&#8217;ll start my job at the NYT. I&#8217;m happy to have the opportunity to code in a professional work environment and learn more about developer best practices at 8to18 before starting my full time job later this summer.</p>
+
+<p>&#8211;
+<em>Correction: 8to18 uses the default Rails testing framework (TestCase) rather than Rspec</em></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[How I'm Learning Javascript]]></title>
     <link href="http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/"/>
-    <updated>2013-05-24T07:45:00-05:00</updated>
+    <updated>2013-05-24T07:45:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript</id>
     <content type="html"><![CDATA[<p>For my job at the NYT that I&#8217;ll be starting in July, I&#8217;ll likely be working a lot in Ruby and Javascript. At the Flatiron School, the focus was on becoming a back-end Ruby developer, and while we learned our fair share of JavaScript and jQuery, it was always in the context of a Ruby or Rails application. Most of the front-end focus gravitated toward DOM manipulation and traversal using jQuery and less on the functionality of Javascript as a programming language (e.g., objects, closures, inheritance / composition, etc.).</p>
 
@@ -88,7 +131,7 @@
   <entry>
     <title type="html"><![CDATA[Landing the Dream Job]]></title>
     <link href="http://eewang.github.com/blog/2013/05/18/landing-the-dream-job/"/>
-    <updated>2013-05-18T23:40:00-05:00</updated>
+    <updated>2013-05-18T23:40:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/05/18/landing-the-dream-job</id>
     <content type="html"><![CDATA[<p>I&#8217;m happy to announce that I will be joining the New York Times as a software developer this July. I&#8217;ll be working on the new Emerging Technologies team, which is a team tasked with building a new suite of web and mobile technologies for consuming NYT content. The small group consists of developers, designers, product folks and journalists/editors. I&#8217;m extremely excited to join the world&#8217;s newspaper of record and a talented developer team that will define the future of such a storied institution. I feel humbled and honored for the opportunity, and I&#8217;m eager to explore the opportunities to grow at an organization like the NYT.</p>
 
@@ -104,7 +147,7 @@
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)]]></title>
     <link href="http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2/"/>
-    <updated>2013-05-17T08:45:00-05:00</updated>
+    <updated>2013-05-17T08:45:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2</id>
     <content type="html"><![CDATA[<p>I wrapped up Rails Antipatterns about a week ago shortly after reading Metaprogramming Ruby. Reading both books side-by-side has helped me better understand the relationship between Ruby and Rails and how Ruby&#8217;s metaprogramming capabilities provide the &#8220;magic&#8221; that Rails is often associated with. Rails Antipatterns is a great book that uses commonly abused patterns in Rails to illustrate refactoring opportunities. I was able to complete the book a few weeks back, but I&#8217;ve been keeping busy with the interview process (more on that in another post) and side projects such that I haven&#8217;t been able to blog as much as I would have wanted. That&#8217;s been one of the hardest parts of the interview process in that I just have less time to actually code, blog and read. Anyways, I figured that I&#8217;d write down some of my thoughts on Rails Antipatterns alongside Metaprogramming Ruby and the areas where Antipatterns helped me the most in structuring my Rails code.</p>
 
@@ -220,7 +263,7 @@
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails/"/>
-    <updated>2013-04-29T15:03:00-05:00</updated>
+    <updated>2013-04-29T15:03:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails</id>
     <content type="html"><![CDATA[<p>I recently finished reading two programming books in parallel - Metaprogramming Ruby and Rails Antipatterns. As Ruby/Rails books go, the two could not be further apart. Metaprogramming Ruby focuses on explaining the Ruby object model and how core Ruby is constructed in order to enable you as a Ruby programmer to unlock functionality that isn&#8217;t immediately obvious. Conversely, Rails Antipatterns is more about focusing on the bad coding habits most new Rails developers experience and simple, tangible ways to avoid those  pitfalls. One book explains core Ruby (although also touches some on Rails), while the other applies specifically to Rails. One book goes as deep as possible into Ruby&#8217;s construction as a language, while the other aims to hit developers in their day-to-day programming habits. Arguably, Rails Antipatterns is more &#8220;practical&#8221; and Metaprogramming Ruby is more &#8220;theoretical,&#8221; as its generally easier to find more daily code applications of Rails Antipatterns than Metaprogramming Ruby. This post will focus on Metaprogramming Ruby and the next will focus on Rails Antipatterns.</p>
 
@@ -562,7 +605,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Using Recursion With Project Euler]]></title>
     <link href="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/"/>
-    <updated>2013-04-28T08:00:00-05:00</updated>
+    <updated>2013-04-28T08:00:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler</id>
     <content type="html"><![CDATA[<p>I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what with all the coding, reading and blogging that I&#8217;m trying to do on a day-to-day basis. However, I was able to work in a problem earlier this week that helped me get a better grasp of using recursion in Ruby.</p>
 
@@ -821,7 +864,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Flatiron Graduation]]></title>
     <link href="http://eewang.github.com/blog/2013/04/27/flatiron-graduation/"/>
-    <updated>2013-04-27T07:57:00-05:00</updated>
+    <updated>2013-04-27T07:57:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/27/flatiron-graduation</id>
     <content type="html"><![CDATA[<p>Yesterday was the final day of the Flatiron School semester. I&#8217;ll write a longer blog post hopefully next week with my reflections and thoughts on the 3 month program, but I just wanted to say that its been an awesome experience. I&#8217;ve met some amazing people and I&#8217;m so happy to have a skill set now that I can continue to cultivate for the rest of my life. I used to have a lot of ideas for applications or programs that could never reach fruition without knowing how to code; now, I can have an idea and write a simple exploratory Rails app or script to see if its feasible. The skill of being able to ideate and execute simultaneously is a true blessing, and I&#8217;m thankful to have had the opportunity to build it at the Flatiron School.</p>
 
@@ -847,7 +890,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[How To Build A Simple News Reader]]></title>
     <link href="http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/"/>
-    <updated>2013-04-25T16:58:00-05:00</updated>
+    <updated>2013-04-25T16:58:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader</id>
     <content type="html"><![CDATA[<p>A Flatiron TA (Blake Johnson) recently introduced us to the &#8216;say&#8217; command in the Mac terminal. The command does exactly what you think it would - if you send in a string after the command, your computer will talk back to you! With this new-found coder superpower, I thought it would be interesting to try and build a simple news reading application. I&#8217;ve pasted the code below after the fold, or you can find my code <a href="https://github.com/eewang/automated-news-reader" target="_blank">here on Github</a>.</p>
 
@@ -1108,7 +1151,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Not All Sort Algorithms Are Created Equal]]></title>
     <link href="http://eewang.github.com/blog/2013/04/22/sort-algorithms/"/>
-    <updated>2013-04-22T11:20:00-05:00</updated>
+    <updated>2013-04-22T11:20:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/22/sort-algorithms</id>
     <content type="html"><![CDATA[<p>Yesterday we explored a few computer science topics, such as sort algorithms, Big O notation, linked lists and binary search nodes. I was tasked with learning more about sort algorithms, which is something I typically take for granted when coding, since Ruby has a built in #sort method (which, incidentally, uses the quick sort algorithm that I&#8217;ll go into later). At a high level, a sort algorithm is a set of instructions to follow to sort a collection (e.g., an array) based on one or multiple criterion.</p>
 
@@ -1827,7 +1870,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Of Science Fairs and Space Apps (Flatiron - Week 11)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/"/>
-    <updated>2013-04-21T21:56:00-05:00</updated>
+    <updated>2013-04-21T21:56:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11</id>
     <content type="html"><![CDATA[<p>I can hardly believe that there is only one week left in the Flatiron School. This past week we had our Science Fair where we showed off the applications that we had been building for most of the second half of the semester. I talked about <a href="http://handrai.se" target="_blank">HandRaise</a> and <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, the two apps that I&#8217;ve spent the most time building. We had a strong showing from the NYC tech community; I was definitely exhausted by the end of the four-hour long event.</p>
 
@@ -1853,7 +1896,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[In Praise of Project Euler]]></title>
     <link href="http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler/"/>
-    <updated>2013-04-17T16:39:00-05:00</updated>
+    <updated>2013-04-17T16:39:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler</id>
     <content type="html"><![CDATA[<p>On the suggestion of my Flatiron classmates <a href="http://chickenriceplatter.github.io/" target="_blank">David</a> and <a href="http://andrewcallahan.github.io" target="_blank">Andrew</a>, I started trying out <a href="http://projecteuler.net/" target="_blank">Project Euler</a> recently. For the uninitiated, Project Euler is a series of math problems aptly named after the famed mathemetician Leonhard Euler, known for such learned things like fluid dynamics, number theory and calculus. Project Euler is effectively a database of math problems that are intended to be solved using code (any language can be used; I&#8217;m using Ruby). The questions test your logical thinking skills, and while they&#8217;re named after a mathemetician, the actual math necessary is more along the lines of high school math (e.g., prime numbers, factoring, etc.). This is not to diminish the difficulty of these problems - some of them are quite challenging - but rather to distinguish between the problem solving skills, which Project Euler helps build, versus pure math skill, which is more the province of a graduate school program. I&#8217;ve also throw my efforts to solve these problems on Github if you want to <a href="https://github.com/eewang/project-euler" target="_blank">check them out</a>.</p>
 
@@ -2258,7 +2301,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[TRUE Object-Oriented Design]]></title>
     <link href="http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails/"/>
-    <updated>2013-04-13T11:23:00-05:00</updated>
+    <updated>2013-04-13T11:23:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails</id>
     <content type="html"><![CDATA[<p>Avi always stresses that being a good developer is about more than just being a good coder. Like all professions, coding is only part of the job. What&#8217;s arguably more important than coding are the soft skills that transcend any individual profession. Skills like communication, empathy, diligence and hard work. All good professional jobs help build these skills, and software development is no different.</p>
 
@@ -2319,7 +2362,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[Building ViewFinder (Flatiron - Week 9)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9/"/>
-    <updated>2013-04-07T14:42:00-05:00</updated>
+    <updated>2013-04-07T14:42:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9</id>
     <content type="html"><![CDATA[<p>The majority of this past week was spent building <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, which is a Rails app that leverages the Instagram API to enable users to guess where photos were taken and gamefies Instagram photo feeds. Building ViewFinder along with <a href="http://www.erinandcode.com" target="_blank">Erin Lee</a> and <a href="http://jlarusso.github.io" target="_blank">Jesse LaRusso</a> has been a pretty great experience; we got way farther than I had expected initially for the NYC on Rails presentation. Looking back at our Trello board, we defined our MVP for the presentation as an app where users could browse tagged photos and write in the address or intersection where they think the photo was taken. What we ended up with was much more than that, and more visually appealing than I could have imagined initially.</p>
 
@@ -2486,7 +2529,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[Agile Product Development (Flatiron - Week 7)]]></title>
     <link href="http://eewang.github.com/blog/2013/03/23/flatiron-week-7/"/>
-    <updated>2013-03-23T22:56:00-05:00</updated>
+    <updated>2013-03-23T22:56:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/03/23/flatiron-week-7</id>
     <content type="html"><![CDATA[<p>We spent this past week focused mostly on getting our group projects off the ground. We didn&#8217;t really have lecture this week; each day was spent pair programming and building our applications using agile development best practices. My group, which consists of myself, <a href="http://janeeats.github.com" target="_blank">Jane Vora</a>, <a href="http://anthonywijnen.com" target="_blank">Anthony Wijnen</a> and <a href="http://ei-lene.github.com" target="_blank">Ei-lene Heng</a>, is building an app to structure and streamline the process of asking questions in class during group work. The current process of just raising your hand and hoping that a teacher is free is pretty inefficient and awards the lucky students rather than students who have an especially urgent question or have been waiting a long time.</p>
 
@@ -2524,7 +2567,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[How to hack Lollapalooza and still not get tickets]]></title>
     <link href="http://eewang.github.com/blog/2013/03/21/how-to-hack-lollapalooza-and-still-not-get-tickets/"/>
-    <updated>2013-03-21T17:50:00-05:00</updated>
+    <updated>2013-03-21T17:50:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/03/21/how-to-hack-lollapalooza-and-still-not-get-tickets</id>
     <content type="html"><![CDATA[<p>As a Chicago native (and by &#8220;native&#8221; I mean a resident of a leafy suburb about 45 minutes away), my secret shame is that I&#8217;ve never been to <a href="http://www.lollapalooza.com" target="_blank">Lollapalooza</a>. Whenever I talk to people not from Chicago about Chicago, they always seem to mention that one time they went to Lolla and had a blast rocking out all night along Lake Shore Drive just a stone&#8217;s throw away from the Sears (that&#8217;s right, Sears) Tower. Conversations like these tend to end awkwardly when I can&#8217;t match their enthusiasm for the premier music festival in my home city.</p>
 
@@ -6188,7 +6231,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[Flatiron - Week 6]]></title>
     <link href="http://eewang.github.com/blog/2013/03/17/flatiron-week-6/"/>
-    <updated>2013-03-17T10:14:00-05:00</updated>
+    <updated>2013-03-17T10:14:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/03/17/flatiron-week-6</id>
     <content type="html"><![CDATA[<p>Today marked the half-way point for the Flatiron program. This past week was heavy on Ruby on Rails instruction; Avi wanted to hammer into us the importance of understanding complex forms and working with multiple, associated models. On Monday, we brainstormed ideas for our final group projects and went through a planning session where we discussed ideas at a high-level - the features, technical obstacles and work sprints that we could tackle within the short timeframe for development.</p>
 
@@ -6210,7 +6253,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[How to Schedule Tasks Using 'Whenever']]></title>
     <link href="http://eewang.github.com/blog/2013/03/12/how-to-schedule-tasks-using-whenever/"/>
-    <updated>2013-03-12T20:49:00-05:00</updated>
+    <updated>2013-03-12T20:49:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/03/12/how-to-schedule-tasks-using-whenever</id>
     <content type="html"><![CDATA[<p>In building out my ticket tracker application, I realized that I needed to be able to automatically run scripts at certain intervals throughout the week. I wanted my application to execute a call to Stubhub&#8217;s API and pull data on events periodically so that I didn&#8217;t have to do it myself each day. In looking on <a href="http://ruby-toolbox.org" target="_blank">Ruby Toolbox</a>, I came across a gem called <a href="https://github.com/javan/whenever" target="_blank">Whenever</a> that allows you to quickly and easily schedule tasks using a nifty tool called a cron log.</p>
 
@@ -6381,7 +6424,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[How (and When) to Use Single Table Inheritance in Rails]]></title>
     <link href="http://eewang.github.com/blog/2013/03/12/how-and-when-to-use-single-table-inheritance-in-rails/"/>
-    <updated>2013-03-12T00:04:00-05:00</updated>
+    <updated>2013-03-12T00:04:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/03/12/how-and-when-to-use-single-table-inheritance-in-rails</id>
     <content type="html"><![CDATA[<p>Last week as I was developing an application to track and analyze ticket and event postings, I came across a design problem. I had first started working on my ticket tracker application as a way to parallel the learning that we were doing in class. I started with a simple scraper that pulled data out of the Stubhub&#8217;s client-facing HTML documents, then moved on to writing a simple ORM that saved the data to a SQLite database, then moved the application into Sinatra and finally into Rails.</p>
 
@@ -6545,7 +6588,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[Flatiron - Week 5]]></title>
     <link href="http://eewang.github.com/blog/2013/03/09/flatiron-week-5/"/>
-    <updated>2013-03-09T09:02:00-06:00</updated>
+    <updated>2013-03-09T09:02:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/03/09/flatiron-week-5</id>
     <content type="html"><![CDATA[<p>When I started at Flatiron, I set myself a goal of trying to blog every day. That goal pretty quickly fell to the wayside, as I realized how much work would be involved just coding and learning alone. Also, after the first few days, the lessons began to group together in longer, multi-day themes - e.g., Rails. This week, the theme was Javascript/jQuery, which controls front-end user interaction and serves as an intermediate, client-side programming language between the user and the back-end (Ruby on Rails, in our case). Learning JS brought together the whole concept of web development, and it really helped coalesce my understanding of how users interact with web applications and send data to and retrieve data from the application&#8217;s back-end.</p>
 
@@ -6563,26 +6606,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <p>This next week we&#8217;ll be turning back to Rails for a few days before starting work on our group projects. I&#8217;m excited about what comes next, for the opportunity to take all that we&#8217;ve learned and combine it into a coherent and engaging product. Creating a black box, in a sense, but knowing exactly what goes into it and how it works. I know the next few weeks will be tiring, frustrating and challenging, but its great to know that I&#8217;m building a new skill set and finally starting to create cool stuff.</p>
 
 <p>Oh, also, in case you haven&#8217;t noticed, I changed the design theme of my blog. I realized that the other theme got to be a little clunky, and I didn&#8217;t quite master the responsiveness of it, so the dynamic card-flip animation that I implemented ended up being more of a hindrance to readers than a cool design element. I got some feedback on the design - some people thought the animation was nice, but more people found it unnecessary and distracting from the actual blog content. And in the end, you&#8217;ve got to give the users what they want!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Week 4]]></title>
-    <link href="http://eewang.github.com/blog/2013/03/02/flatiron-week-3/"/>
-    <updated>2013-03-02T09:20:00-06:00</updated>
-    <id>http://eewang.github.com/blog/2013/03/02/flatiron-week-3</id>
-    <content type="html"><![CDATA[<p>As I begin the fifth week of Flatiron School, I&#8217;m feeling pretty good about where things stand. I&#8217;ve been challenged, frustrated and exhausted throughout the previous month, but its been an amazing experience, as I&#8217;ve learned more in the past four weeks than I have since college (and probably before college). The workload has been heavy, and I&#8217;ve been trying to take on some personal projects on the side. Last week was Rails week, and this week we&#8217;re starting to explore front-end web development via JavaScript/jQuery.</p>
-
-<!--more-->
-
-
-<p>We have a guest lecturer this week, <a href="http://www.slideshare.net/jonathangrover1" target="_blank">Jonathan Grover</a>, who is a front-end specialist. I&#8217;ve been working on a few Rails projects that look pretty bare bones at the moment, so it will be great to add some stylings and a dynamic user interface to the apps. Although this week is front-end focused, I hope to keep learning Rails - both during work time in class and after class - through online tutorials and working on my own projects. Given that I&#8217;ll likely be working with Rails for the foreseeable future, I really want to be fluent in the framework.</p>
-
-<p>Learning Rails last week was challenging, especially to start, since so much of the Rails application building process seems to go on beyond the view of the programmer. Simply starting a new Rails app creates numerous directories and stub files, which can be intimidating to new developers like myself. Compared to Rails, Django starts programmers off with much less scaffolding and support. Django also seems more transparent, as there don&#8217;t seem to be nearly as many helper methods as in Rails. I can see the benefits of working with both frameworks - it was easier for me to grasp what Django was doing when I first starting using it, but I can definitely see how Rails enables rapid prototyping and efficient development of new apps.</p>
-
-<p>As we enter the second month of the Flatiron program, one of my classmates raised the question of jobs and careers post-Flatiron last Friday. Avi mentioned that its probably still too early to think too much about jobs, and I tend to agree with him. I&#8217;m focused right now on building a skill set - learning as much as I can and knowing how to create products. But I&#8217;d be lying if I said that the thought of what will happen post-Flatiron hasn&#8217;t crossed my mind. I&#8217;ve realized that long term, I&#8217;d like to use technology and coding as the lens through which I explore and learn about other industries and professions. All professions and industries have processes and data, some common across industries and some idiosyncratic to specific sectors. I think many of the shared processes have been addressed using technology - e.g., e-mail, scheduling software, project management, note-taking - but many of the idiosyncratic ones have not. Certain industries like tech or consumer goods have had their idiosyncratic data and processes transformed by technology, but other industries have not - e.g., energy is one that comes to mind. I&#8217;m hoping to use technology to explore the data and processes of all industries.</p>
-
-<p>Another thing that I&#8217;ve realized through the program is that balance is critical. Not just work-life balance but even work-work balance. This past week, I spent one night coding until 3:00 am - most of the hours post-midnight were spent in frustration trying to debug a Sinatra app. I hope that I don&#8217;t get into a habit of coding so late into the night. Avi mentioned that you shouldn&#8217;t code for more than 8 hours a day - if you want to keep working after 8 hours, then do some reading, or blogging, or talk to someone about coding. There are ways to keep learning and engaging without actually coding. After hours, read a book or write a blog post. Approaching the same subject in different ways will only help solidify and deepen your understanding. It will help your understanding coalesce more effectively and the mental connections between different technologies to strengthen. While its easy for me to focus on something I enjoy doing, I need to know when to stop so that I don&#8217;t get burnt out or lose efficiency.</p>
 ]]></content>
   </entry>
   

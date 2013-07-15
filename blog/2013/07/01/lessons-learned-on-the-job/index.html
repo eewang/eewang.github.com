@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>This is not a blog post (Flatiron - Day 009) - eugenius</title>
+  <title>Five Lessons Learned On The Job - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="This is an instance of a blog post. In object oriented programming languages, like Ruby, the existence of a class, in this case a &#8220;Blog Post,&# &hellip;">
+  <meta name="description" content="Last week I started my job at the New York Times. And while I&#8217;ve learned a lot over my first week, I feel it necessary to write a post on what &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/07/01/lessons-learned-on-the-job/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">This Is Not a Blog Post (Flatiron - Day 009)</h1>
+      <h1 class="entry-title">Five Lessons Learned on the Job</h1>
     
     
       <p class="meta">
@@ -94,7 +94,7 @@
   
 
 
-<time datetime="2013-02-14T11:58:00-05:00" pubdate data-updated="true">Feb 14<span>th</span>, 2013</time>
+<time datetime="2013-07-01T04:52:00-04:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -103,18 +103,38 @@
   </header>
 
 
-<div class="entry-content"><p>This is an instance of a blog post. In object oriented programming languages, like Ruby, the existence of a class, in this case a &#8220;Blog Post,&#8221; is independent of an individual instance of such class (i.e., this blog post). Each blog post has similar attributes with different values, such as title, author and date. These are known as instance methods in Ruby. However, the &#8220;Blog Post&#8221; class may have class-level methods that are inaccesible by a single instance of a blog post.</p>
+<div class="entry-content"><p>Last week I started my job at the New York Times. And while I&#8217;ve learned a lot over my first week, I feel it necessary to write a post on what I learned working at 8to18 for four weeks. As my first actual developer gig, working at 8to18 has helped me grasp what it means to be a professional developer, and while I undoubtedly still have a lot to learn, I felt better prepared going into my job at the NYT having worked at a start-up for a short period of time. Here are a few lessons that I&#8217;ve learned now that I&#8217;ve had a chance to explore an existing code base for a non-trivial web application that has an active userbase.</p>
 
 <!--more-->
 
 
-<p>An example of this might be a count of blog posts. How many blog posts I&#8217;ve written is not a characteristic of a single blog post; rather, that data can only be found by accessing the &#8220;Blog Post&#8221; class and not a blog post instance. The &#8220;Blog Post&#8221; class has functionality that does not exist for an individual blog post, and vice versa. Confused? Good, now you know how we felt for much of the day.</p>
+<p><strong>1) Make git commits informative</strong></p>
 
-<p>We spent most of the day covering class constructors and recreating a few of the programs we&#8217;ve already written into object-oriented programs. The lecture and class discussion around object-oriented design was dense and hard to digest. Although I came across <a href="http://www.railstips.org/blog/archives/2009/05/11/class-and-instance-methods-in-ruby/" target="_blank">this useful article</a> covering how class and instance methods differ, I&#8217;m still processing my understanding of classes, and how they fit into the broader Ruby universe.</p>
+<p>Git commits should communicate your intent as a developer through both the code changed within a given commit and the associated commit message. I&#8217;ll try to include active verbs in my commit messages and separate sub-units of work by semi colons (e.g., something like &#8220;adds functional tests, refactors model code&#8221;). At 8to18, Jira was the primary tool for workflow management, so every code commit reflected a specific Jira issue. Adding the Jira issue number to my commit messages and specific language preceded by a hashmark allowed for tighter integration between Github and Jira. Initially, this was difficult for me as I had admittedly been sloppy with my commits at Flatiron, where I would fix whatever I saw that was wrong rather than noting it in Trello or Github issues and reverting back to fix it later in a different git branch. Working in a professional development environment has shown me the communicative value of tight, focused git commits with informative messages.</p>
 
-<p>After lecture today, we focused on trying to take our scraper that we built yesterday, rewrite it using a class constructor and link it to a SQL database. This way, instead of our scraper returning a hash of student attributes as its data structure, we could have our scraper input data directly into a database, which is easier for querying and analyzing than a hash or array. Although its been a difficult task to combine a number of different tools and skills we&#8217;ve learned over the past week, I&#8217;m enjoying the challenge of trying to map out and code how data will flow from the page to the database.</p>
+<p><strong>2) Its (almost) all about forms</strong></p>
 
-<p>For homework, we continued to work on Ruby Koans and our scrapers. This weekend, I&#8217;m hoping to be able to spend some time starting a few scraper projects that I have in mind. Its funny, since starting this program I&#8217;ve been looking forward to weekends so that I can just spend time coding and trying new things in Ruby. Sounds super nerdy, but its true. That said, I know that I need to seek balance in my life so that I don&#8217;t get burnt out on coding. Hopefully, I&#8217;ll have many fruitful years ahead to keep learning and exploring new horizons in technology. With the frenetic pace of the class and my tendency to dive deep into the weeds of what I&#8217;m working on, my body has been tired and I haven&#8217;t been exercising much recently. However, I&#8217;ve learned more in the past two weeks than I have in quite awhile. And its pretty exhilirating.</p>
+<p>A wise teacher (i.e., Avi) once said, &#8220;90% of web development is just building forms.&#8221; I found this to be especially true in the work I did for 8to18, which consisted primarily of bug fixes and feature developement for their registration application. Used by parents and school administrators to register students for extracurriculars and sports, the registration app has easily been the most complex set of forms that I&#8217;ve worked with. And I say &#8220;set of forms&#8221; rather than just &#8220;forms&#8221;, because the app has an added twist by enabling admins to create their own forms on the fly - adding and removing form steps depending on the particular sport or activity in question. Furthermore, the app had to address idiosyncratic use cases  specific to certain schools (e.g., schools in North Carolina require prospective athletes to note their felony conviction history before registering whereas other states do not have that requirement).</p>
+
+<p>Building this app in a modular way required the use of not just the domain models that contain the core business logic but a set of support modules to perform specific tasks like validate, present or format data. Form workflow follows a certain pattern - users input information, information is checked and validated, then that information is used elsewhere in the application. This pattern isn&#8217;t inherently difficult to implement in Rails as the framework provides a lot of helpers and guidance to get forms up and running quickly. Yet knowing which components of the workflow can be abstracted into a module or class to enable user flexibility and minimize the added work needed when requirements change (as they most certainly will), therein lies the challenge of building usable, scalable forms and seems to come with just more experience.</p>
+
+<p><strong>3) Testing is like eating your vegetables</strong></p>
+
+<p>Learning to write test code before implementation code has not been easy. Admittedly, I&#8217;m not quite at full test-driven development; I&#8217;m closer to test-and-implement-at-the-same-time development. Writing tests can be frustrating - I&#8217;ve spent a good chunk of time banging my head against the wall trying to write meaningful tests. And while its not always fun to write tests, you have to do it, and you generally feel better after writing meaningful, passing tests.</p>
+
+<p>Also, I&#8217;ve learned that not all tests are made equal. I&#8217;m more willing to write unit tests rather than functional or integration tests, as my frustration level rises when I&#8217;m faced with a number of preconditions just to get certain controller actions to be triggered (e.g., before filters, login requirements, etc.). Unit tests are generally easier for me to write - the universe of dependencies is smaller and the model layer is the business logic of the application. Coming in to work on an existing application, much of the model code had already been written, so I worked a lot in the controllers - utilizing existing model methods to produce new functionality. Over the course of the 4 weeks at 8to18, however, I&#8217;ve come to appreciate the value of good tests in building a resilient application. They&#8217;ve also come in handy as documentation - when I&#8217;m not sure what a model or controller is intended to do, I&#8217;d revert to the tests to provide clues.</p>
+
+<p><strong>4) Metaprogramming isn&#8217;t always the answer</strong></p>
+
+<p>In my zeal to try new programming techniques that I&#8217;ve learned, I&#8217;ve tended to see metaprogramming techniques as the end goal when writing code - good practice regardless of the context. However, I&#8217;ve learned that while metaprogramming can reduce the absolute number of lines of code in your application, it can come at the expense of readibility for other developers on your team. In some instances, this is unavoidable. Whenever I&#8217;ve explored the Rails source code, for example, the sheer amount of metaprogramming makes it difficult for me to grasp what&#8217;s going on. At the same time, that code gives Rails the out-of-the-box functionality that makes it so easy to get apps up and running. I can imagine that writing that customizable functionality into Rails without using metaprogramming would be practically impossible.</p>
+
+<p>What matters the most is balancing the readibility of normal code with the power and flexibility of metaprogramming. Like anything in the world of programming, its all about the right tool for the job. For a framework like Rails, with a core group of contributors and a wide universe of use cases, metaprogramming is essential. However, for a smaller team with new developers and a more defined set of uses cases, metaprogramming could be more detrimental than helpful.</p>
+
+<p><strong>5) Commercial concerns trump all</strong></p>
+
+<p>While clean, beautiful code is an ideal worth aspiring to, at the end of the day, its still subordinate to the commercial needs of the product or business. For example, usage of the registration app that I&#8217;m working tends to be lumpy and clustered in certain months of the year (e.g., August, right before the start of the school year). Spending weeks to write perfect code for a feature could actually be detrimental if that means its release is pushed beyond the period of peak usage.</p>
+
+<p>Knowing when to focus on great code versus just get something working and out the door is something I think Flatiron positioned me well to understand. Coming from a non-traditional coding background (i.e., didn&#8217;t take a computer science class in college), I feel like I have a good sense of commerciality when it comes to building products for actual customers. Working at 8to18 just reinforced my understanding of code as a tool to solve real world problems; when writing beautiful code rather than finding a solution to the problem at hand becomes the end goal, that&#8217;s when you need to recalibrate.</p>
 </div>
 
 
@@ -137,7 +157,7 @@
   
 
 
-<time datetime="2013-02-14T11:58:00-05:00" pubdate data-updated="true">Feb 14<span>th</span>, 2013</time>
+<time datetime="2013-07-01T04:52:00-04:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
       
 
 
@@ -145,7 +165,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/07/01/lessons-learned-on-the-job/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/07/01/lessons-learned-on-the-job/" >Tweet</a>
   
   
   
@@ -156,10 +176,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/13/coding/" title="Previous Post: Coding, Fast and Slow (Flatiron - Day 008)">&laquo; Coding, Fast and Slow (Flatiron - Day 008)</a>
+        <a class="basic-alignment left" href="/blog/2013/06/11/developing-web-applications-with-8to18-media/" title="Previous Post: Developing Web Applications with 8to18 Media">&laquo; Developing Web Applications with 8to18 Media</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/02/18/flatiron-day-010-week-2-wrap-up/" title="Next Post: Flatiron - Day 010">Flatiron - Day 010 &raquo;</a>
       
     </p>
   </footer>
@@ -314,8 +332,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/02/14/this-is-not-a-blog-post-flatiron-day-009/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/07/01/lessons-learned-on-the-job/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/07/01/lessons-learned-on-the-job/';
         var disqus_script = 'embed.js';
       
     (function () {
