@@ -163,15 +163,21 @@
         <lastmod>2013-07-15T08:50:17-04:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/
+        </loc>
+        <lastmod>2013-07-23T19:19:28-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://eewang.github.com/archives/</loc>
-        <lastmod>2013-07-15T08:50:17-04:00</lastmod>
+        <lastmod>2013-07-23T19:19:28-04:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/archives/</loc>
-        <lastmod>2013-07-15T08:50:17-04:00</lastmod>
+        <lastmod>2013-07-23T19:19:28-04:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/</loc>
-        <lastmod>2013-07-15T08:50:17-04:00</lastmod>
+        <lastmod>2013-07-23T19:19:28-04:00</lastmod>
     </url>
 </urlset>

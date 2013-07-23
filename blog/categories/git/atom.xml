@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-07-15T08:50:41-04:00</updated>
+  <updated>2013-07-23T19:20:06-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -25,29 +25,19 @@
 
 <p>I wrote a short script to automate the process of deploying the blog ("rake deploy"), staging files on git ("git add ."), commiting files ("git commit -am 'message'") and pushing files to a remote repository on Github. Its pretty simple and permits users to add in a commit message. Here is the code to put in your Rakefile:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Add files to github, commit and deploy&quot;</span>
-</span><span class='line'><span class="n">task</span> <span class="ss">:gen_deploy_push</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>  <span class="no">STDOUT</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;What is your commit message? &quot;</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="no">STDIN</span><span class="o">.</span><span class="n">gets</span><span class="o">.</span><span class="n">chomp</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;rake gen_deploy&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git add .&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git commit -am &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git push&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;commit message was &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:ruby %}
+desc "Add files to github, commit and deploy"
+task :gen_deploy_push do
+  msg = ''
+  STDOUT.puts "What is your commit message? "
+  msg = STDIN.gets.chomp
+  system "rake gen_deploy"
+  system "git add ."
+  system "git commit -am '#{msg}'"
+  system "git push"
+  puts "commit message was '#{msg}'"
+end
+{% endcodeblock %}</p>
 
 <p>I think the code is fairly straightforward - basically the user inputs a commit message and then the command will deploy the site while commiting the code to Github.</p>
 

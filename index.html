@@ -9,7 +9,7 @@
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="Last week I started my job at the New York Times. And while I&#8217;ve learned a lot over my first week, I feel it necessary to write a post on what &hellip;">
+  <meta name="description" content="I recently started exploring iOS development. 1) What&#8217;s with the &#8216;@&#8217; sign everywhere? Contrary to my Ruby sense, the use of &#8216 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +75,242 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/20/learning-objective-c-as-a-rubyist/">Learning Objective-C as a Rubyist</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-20T09:31:00-04:00" pubdate data-updated="true">Jul 20<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/07/20/learning-objective-c-as-a-rubyist/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently started exploring iOS development.</p>
+
+<p>1) What&#8217;s with the &#8216;@&#8217; sign everywhere?</p>
+
+<p>Contrary to my Ruby sense, the use of &#8216;@&#8217; signs in Objective-C do not indicate instance variables (instead, those are prefaced with an &#8216;_&#8217; underscore), but rather illustrate something else entirely.</p>
+
+<p>2) Interface vs. implementation</p>
+
+<p>3) Defining variable types</p>
+
+<p>4) Method calls vs. attribute accessors
+- Use of dot notation for specified properties and bracket notation to call methods of an object. However, array.count and [array count] will yield the same thing even though count is technically a method and not a property since it has to calculate the size of the array. Properties shouldn&#8217;t be things that require calculations.</p>
+
+<p>5) Getters / Setters</p>
+
+<p>6) Strong vs. Weak variables</p>
+
+<p>7) Public vs. Private (interface vs. implementation)</p>
+
+<ul>
+<li>Implement the card game in Objective-C, Ruby, Javascript and Backbone</li>
+</ul>
+
+
+<p>What&#8217;s the role of @synthesize, which is used when I custom define my setter and getter?</p>
+
+<p>When do I have to specify a pointer to a stated data type, and when can I just use the &#8216;@&#8217; sign to create a variable&#8217;?</p>
+
+<p>What is general best practice for organizing code? Do all class methods get grouped together and same with instance methods?</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &quot;PlayingCard.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@implementation</span> <span class="nc">PlayingCard</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="nf">match:</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">otherCards</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">([</span><span class="n">otherCards</span> <span class="n">count</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">PlayingCard</span> <span class="o">*</span><span class="n">otherCard</span> <span class="o">=</span> <span class="p">[</span><span class="n">otherCards</span> <span class="n">lastObject</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">([</span><span class="n">otherCard</span><span class="p">.</span><span class="n">suit</span> <span class="nl">isEqualToString:</span><span class="n">self</span><span class="p">.</span><span class="n">suit</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">score</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>   <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">otherCard</span><span class="p">.</span><span class="n">rank</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">rank</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">score</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">score</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">contents</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">NSArray</span> <span class="o">*</span><span class="n">rankStrings</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlayingCard</span> <span class="n">rankStrings</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">rankStrings</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">rank</span><span class="p">]</span> <span class="nl">stringByAppendingString:</span><span class="n">self</span><span class="p">.</span><span class="n">suit</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@synthesize</span> <span class="n">suit</span> <span class="o">=</span> <span class="n">_suit</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">validSuits</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="err">@</span><span class="p">[</span><span class="s">@&quot;♠&quot;</span><span class="p">,</span> <span class="s">@&quot;♣&quot;</span><span class="p">,</span> <span class="s">@&quot;♥&quot;</span><span class="p">,</span> <span class="s">@&quot;♦&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setSuit:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">suit</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">([[</span><span class="n">PlayingCard</span> <span class="n">validSuits</span><span class="p">]</span> <span class="nl">containsObject:</span><span class="n">suit</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">_suit</span> <span class="o">=</span> <span class="n">suit</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">suit</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">_suit</span> <span class="o">?</span> <span class="n">_suit</span> <span class="o">:</span> <span class="s">@&quot;?&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">rankStrings</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="err">@</span><span class="p">[</span><span class="s">@&quot;?&quot;</span><span class="p">,</span> <span class="s">@&quot;A&quot;</span><span class="p">,</span> <span class="s">@&quot;2&quot;</span><span class="p">,</span> <span class="s">@&quot;3&quot;</span><span class="p">,</span> <span class="s">@&quot;4&quot;</span><span class="p">,</span> <span class="s">@&quot;5&quot;</span><span class="p">,</span> <span class="s">@&quot;6&quot;</span><span class="p">,</span> <span class="s">@&quot;7&quot;</span><span class="p">,</span> <span class="s">@&quot;8&quot;</span><span class="p">,</span> <span class="s">@&quot;9&quot;</span><span class="p">,</span> <span class="s">@&quot;10&quot;</span><span class="p">,</span> <span class="s">@&quot;J&quot;</span><span class="p">,</span> <span class="s">@&quot;Q&quot;</span><span class="p">,</span> <span class="s">@&quot;K&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">+</span> <span class="p">(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nf">maxRank</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">self</span> <span class="n">rankStrings</span><span class="p">].</span><span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setRank:</span><span class="p">(</span><span class="n">NSUInteger</span><span class="p">)</span><span class="nv">rank</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">rank</span> <span class="o">&lt;=</span> <span class="p">[</span><span class="n">PlayingCard</span> <span class="n">maxRank</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">_rank</span> <span class="o">=</span> <span class="n">rank</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/">Using ActiveModel Serializers to Build Great JSON Interfaces</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-14T14:07:00-04:00" pubdate data-updated="true">Jul 14<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been at the New York Times on the New Digital Products team for a little over two weeks now. Thus far, its been an awesome experience. I&#8217;ve had the opportunity to jump right in and commit code, primarily helping build the Rails backend interface for a mobile application. I&#8217;ve been spending time trying to get up to speed on the various internal software tools that the NYT provides, and I&#8217;ve come to appreciate that from a technical perspective, the NYT is an API-driven organization.</p>
+
+<p>Most of the APIs I dealt with at Flatiron were for public consumption (e.g., Viewfinder leveraged the Instagram API pretty heavily), so its been interesting to see how the NYT develops internal APIs to decrease inter-team dependencies while reducing the potential for overlapping responsibilities. With so many teams (e.g., internal CMS, user-generated content, video, etc.) working together to build a single journalistic product, I&#8217;ve learned that necessary to have public, internal JSON interfaces for different teams to work with. As such, I&#8217;ve had the chance to use a Rails module called ActiveModel::Serializers that helps developers build a sensible JSON interface in an object-oriented manner that&#8217;s pretty intuitive.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -156,6 +392,49 @@
   
     <footer>
       <a rel="full-article" href="/blog/2013/06/11/developing-web-applications-with-8to18-media/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/28/debugging-javascript-with-node-dot-js/">Debugging Javascript With Node.js</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-28T17:40:00-04:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/05/28/debugging-javascript-with-node-dot-js/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently discovered an easy way to debug Javascript code in the terminal using Node.js. Previously, I had been using the browser to load up my Javascript (as part of a skeleton HTML file) and use a lot of &#8220;console.log()&#8221; statements to get feedback from my code. This is akin to just using &#8220;puts&#8221; statements in Ruby to debug and determine scope, local variable assignment, etc. Looking for a better way to debug my code, I came across the handy <a href="http://www.nodejs.org/api/debugger.html" target="_blank">Node debugger tool</a>. This tool is part of the core Node API, so if you have Node installed, you have access to the debugger. Using the debugger tool was like discovering the &#8216;pry&#8217; equivalent for Javascript. As someone who lives in the pry console when writing Ruby, discovering the Node debugger has greatly enhanced my understanding of how Javascript operates.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/28/debugging-javascript-with-node-dot-js/">Read on &rarr;</a>
     </footer>
   
 
@@ -296,6 +575,58 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/05/13/building-an-admin-interface/">Building an Admin Interface</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-13T21:58:00-04:00" pubdate data-updated="true">May 13<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/05/13/building-an-admin-interface/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A classmate and I recently had the opportunity to work with Warby Parker to create an admin interface for Instagram data related to Warby. The basic service we were trying to provide was to enable Warby to better engage with people in Instagram and analyze the resulting data. People love Warby Parker on Instagram (think self portraits of people trying to decide which frame to buy), and we were tasked with building a tool to help collect and interpret that data in real time.</p>
+
+<p><strong>Using a front-end framework like AngularJS</strong></p>
+
+<p><strong>Building an object-oriented Instagram application</strong></p>
+
+<p><strong>Applying Active Admin</strong></p>
+
+<p><strong>Regular expressions</strong></p>
+
+<p>One challenge we faced was figuring out how to cut out the noise that emerges when doing regular expression text searches. We were fortunate that Warby Parker is a pretty unique brand, and many of its frames are named after literary characters and have names like &#8220;Ainsworth&#8221; that aren&#8217;t commonly used our everday vernacular. Nevertheless, there were some instances where we had to come up with more creative ways to exclude syntactic references to &#8220;warby&#8221; but not semantic references to Warby Parker. For example, there is a ranch in Montana called the Warby Range, and we inadvertantly pulled in photos tagged with #warbyrange in our Instagram calls that have nothing to do with Warby Parker. Similarly, there is a clothing line called War By Ticarmo (i.e. #warbyticarmo) that also presented some difficulties. I couldn&#8217;t think of a clean way of filtering out all of these semantic irregularities programmatically (e.g., #warbyrange is not outside the realm of possible Warby Parker references), so we just included an array of names to exclude when conducting our search. Even then, doing it this way opens up the possibility that if a #warbyrange hashtag is introduced that actually does relate to Warby Parker at some point, we would have to revisit our filtering system.</p>
+
+<p><strong>Dealing with the Instagram API</strong></p>
+
+<p>A big consideration for Warby was to collect photos that mentioned warbyparker (i.e., &#8220;@warbyparker&#8221;) but did not use a #warbyparker hashtag. As of today, Instagram does not have a public API endpoint that allows users to collect @mentions.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails/">Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)</a></h1>
     
     
@@ -328,178 +659,6 @@
   
     <footer>
       <a rel="full-article" href="/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/28/using-recursion-with-project-euler/">Using Recursion With Project Euler</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-28T08:00:00-04:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/04/28/using-recursion-with-project-euler/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what with all the coding, reading and blogging that I&#8217;m trying to do on a day-to-day basis. However, I was able to work in a problem earlier this week that helped me get a better grasp of using recursion in Ruby.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/28/using-recursion-with-project-euler/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/27/flatiron-graduation/">Flatiron Graduation</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-27T07:57:00-04:00" pubdate data-updated="true">Apr 27<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/04/27/flatiron-graduation/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Yesterday was the final day of the Flatiron School semester. I&#8217;ll write a longer blog post hopefully next week with my reflections and thoughts on the 3 month program, but I just wanted to say that its been an awesome experience. I&#8217;ve met some amazing people and I&#8217;m so happy to have a skill set now that I can continue to cultivate for the rest of my life. I used to have a lot of ideas for applications or programs that could never reach fruition without knowing how to code; now, I can have an idea and write a simple exploratory Rails app or script to see if its feasible. The skill of being able to ideate and execute simultaneously is a true blessing, and I&#8217;m thankful to have had the opportunity to build it at the Flatiron School.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/27/flatiron-graduation/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/25/building-a-simple-news-reader/">How to Build a Simple News Reader</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-25T16:58:00-04:00" pubdate data-updated="true">Apr 25<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/04/25/building-a-simple-news-reader/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A Flatiron TA (Blake Johnson) recently introduced us to the &#8216;say&#8217; command in the Mac terminal. The command does exactly what you think it would - if you send in a string after the command, your computer will talk back to you! With this new-found coder superpower, I thought it would be interesting to try and build a simple news reading application. I&#8217;ve pasted the code below after the fold, or you can find my code <a href="https://github.com/eewang/automated-news-reader" target="_blank">here on Github</a>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/25/building-a-simple-news-reader/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/22/sort-algorithms/">Not All Sort Algorithms Are Created Equal</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-22T11:20:00-04:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2013</time>
-        
-         | <a href="/blog/2013/04/22/sort-algorithms/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Yesterday we explored a few computer science topics, such as sort algorithms, Big O notation, linked lists and binary search nodes. I was tasked with learning more about sort algorithms, which is something I typically take for granted when coding, since Ruby has a built in #sort method (which, incidentally, uses the quick sort algorithm that I&#8217;ll go into later). At a high level, a sort algorithm is a set of instructions to follow to sort a collection (e.g., an array) based on one or multiple criterion.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/22/sort-algorithms/">Read on &rarr;</a>
     </footer>
   
 
@@ -567,6 +726,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/20/learning-objective-c-as-a-rubyist/">Learning Objective-C As a Rubyist</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/">Using ActiveModel Serializers to Build Great JSON Interfaces</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/07/14/lessons-learned-on-the-job/">Five Lessons Learned On The Job</a>
       </li>
     
@@ -575,15 +742,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2013/05/24/how-im-learning-javascript/">How I&#8217;m Learning Javascript</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/18/landing-the-dream-job/">Landing the Dream Job</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2/">Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)</a>
+        <a href="/blog/2013/05/28/debugging-javascript-with-node-dot-js/">Debugging Javascript with Node.js</a>
       </li>
     
   </ul>
