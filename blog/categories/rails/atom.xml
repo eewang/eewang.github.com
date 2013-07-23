@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-07-23T19:20:06-04:00</updated>
+  <updated>2013-07-23T19:24:40-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -39,25 +39,25 @@
 
 <p>STI enables you to use all the typical model methods in Rails, like .new, .create or any of the .find helper methods that make Rails so awesome, to both the super-class and the sub-classes within a single table. For example, using STI enables me to write code like this:</p>
 
-<p>{% codeblock lang:ruby %}
-ProBasketball.where(:act_primary => "New York Knicks")
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ProBasketball</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:act_primary</span> <span class="o">=&gt;</span> <span class="s2">&quot;New York Knicks&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>The above code triggers the following SQL code. Notice that ActiveRecord automatically knows that I'm looking for data from the sports table where the type is equal to ProBasketball.</p>
 
-<p>{% codeblock lang:sql %}
-SELECT "sports".* FROM "sports" WHERE "sports"."type" IN ('ProBasketball') AND "sports"."act_primary" = 'New York Knicks'
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="ss">&quot;sports&quot;</span> <span class="k">WHERE</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;type&quot;</span> <span class="k">IN</span> <span class="p">(</span><span class="s1">&#39;ProBasketball&#39;</span><span class="p">)</span> <span class="k">AND</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;act_primary&quot;</span> <span class="o">=</span> <span class="s1">&#39;New York Knicks&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>What Rails is doing underneath the hood is that its going into the sports table and finding all records where the type is ProBasketball and the value in act_primary (i.e. the home team in the sports example) is the New York Knicks. This makes the above Rails/SQL command equivalent to the following:</p>
 
-<p>{% codeblock lang:ruby %}
-Sport.where(:type => "ProBasketball", :act_primary => "New York Knicks")
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Sport</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:type</span> <span class="o">=&gt;</span> <span class="s2">&quot;ProBasketball&quot;</span><span class="p">,</span> <span class="ss">:act_primary</span> <span class="o">=&gt;</span> <span class="s2">&quot;New York Knicks&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>{% codeblock lang:sql %}
-SELECT "sports".* FROM "sports" WHERE "sports"."type" = 'ProBasketball' AND "sports"."act_primary" = 'New York Knicks'
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="ss">&quot;sports&quot;</span> <span class="k">WHERE</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;type&quot;</span> <span class="o">=</span> <span class="s1">&#39;ProBasketball&#39;</span> <span class="k">AND</span> <span class="ss">&quot;sports&quot;</span><span class="p">.</span><span class="ss">&quot;act_primary&quot;</span> <span class="o">=</span> <span class="s1">&#39;New York Knicks&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>A word of warning when using STI - don't use STI just because objects seem similar. Make sure that there is an object-oriented relationship between them. STI is a way to apply a higher-level abstraction to your schema and models, but don't get carried away. For example, it wouldn't make sense to just have a single table called "Objects" that uses STI to manage many relationships among unrelated models, each of which just happen to be an instance of an "object" (which everything is in Ruby anyways). A more practical example might be whether to use STI manage a table called "Vehicles," which relate to "Car", "Bicycle" and "Tank" sub-classes.</p>
 
@@ -67,69 +67,115 @@ SELECT "sports".* FROM "sports" WHERE "sports"."type" = 'ProBasketball' AND "spo
 
 <p>To get started with STI from a database perspective, all you need to do is add a field called "type" to the table. Rails takes this type field and applies the name of the sub-classes that inherit from the class for which the table is named as the value for a row of data.</p>
 
-<p>{% codeblock lang:ruby %}
-class CreateSports &lt; ActiveRecord::Migration
-  def change</p>
-
-<pre><code>create_table :sports do |t|
-  t.string :type
-  t.string :act_primary
-  t.string :act_secondary
-  # ... more column fields #
-  t.timestamps
-end
-</code></pre>
-
-<p>  end
-end
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreateSports</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;create_table :sports do |t|</span>
+</span><span class='line'><span class="sr">  t.string :type</span>
+</span><span class='line'><span class="sr">  t.string :act_primary</span>
+</span><span class='line'><span class="sr">  t.string :act_secondary</span>
+</span><span class='line'><span class="sr">  # ... more column fields #</span>
+</span><span class='line'><span class="sr">  t.timestamps</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Once the schema is set up, the next step is to get the models set up and the proper inheritance tree established. But, before you do that, make sure to add any subfolders in your app/models folder to the autoload path in the application.rb file. This will ensure that Rails knows to look at subfolders, which may be good to use to effectively organize your model files.</p>
 
-<p>{% codeblock lang:ruby %}</p>
-
-<h1>/config/application.rb</h1>
-
-<p>config.autoload_paths += %W(#{config.root}/app/models/sports)
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">config</span><span class="o">/</span><span class="n">application</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;config.autoload_paths += %W(</span><span class="si">#{</span><span class="n">config</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="sr">/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Next, you can write out the structure of the models. STI in Rails presumes that there is one "super-class" that takes on the name of the schema table and inherits from ActiveRecord::Base. In my example, this is the "Sport" class. Here is where I keep any variables or methods that relate to sports generally - e.g., the API call requests, for example. Then, you can create separate sub-classes for objects that will inherit the super-class functionality, yet also enable you to write sub-class-specific methods. For example, each individual sport has its own teams that I want to get data for, so I keep the constants (an array of NBA teams, for example) relevant to only one sport in that sport's sub-class.</p>
 
-<p>{% codeblock lang:ruby %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">sport</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class Sport &amp;lt; ActiveRecord::Base</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<h1>/app/models/sports/sport.rb</h1>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">probasketball</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class ProBasketball &amp;lt; Sport</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>class Sport &lt; ActiveRecord::Base
-  # Methods, variables and constants
-end
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">profootball</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class ProFootball &amp;lt; Sport</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>{% codeblock lang:ruby %}</p>
-
-<h1>/app/models/sports/probasketball.rb</h1>
-
-<p>class ProBasketball &lt; Sport
-  # Methods, variables and constants
-end
-{% endcodeblock %}</p>
-
-<p>{% codeblock lang:ruby %}</p>
-
-<h1>/app/models/sports/profootball.rb</h1>
-
-<p>class ProFootball &lt; Sport
-  # Methods, variables and constants
-end
-{% endcodeblock %}</p>
-
-<p>{% codeblock lang:ruby %}</p>
-
-<h1>/app/models/sports/baseball.rb</h1>
-
-<p>class Baseball &lt; Sport
-  # Methods, variables and constants
-end
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;/</span><span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">sports</span><span class="o">/</span><span class="n">baseball</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class Baseball &amp;lt; Sport</span>
+</span><span class='line'><span class="sr">  # Methods, variables and constants</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p><strong>4) What are some drawbacks of STI?</strong></p>
 

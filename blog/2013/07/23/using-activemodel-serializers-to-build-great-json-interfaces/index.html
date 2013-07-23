@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -94,7 +94,7 @@
   
 
 
-<time datetime="2013-07-14T14:07:00-04:00" pubdate data-updated="true">Jul 14<span>th</span>, 2013</time>
+<time datetime="2013-07-23T14:07:00-04:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -123,16 +123,16 @@
 
 <p>For example, say you&#8217;re responsible for building the backend for a football statistics application. The NFL wants to create a mobile app for delivering useful analytics to users and in order to do so, needs to be able to get statistics for individual players and teams. However, the data requirements can vary from week-to-week and by use case - for example, international apps built off the stats API require &#8216;receiving yards&#8217; to be in meters whereas domestic apps display such stats as yards. By adding in serializer support, you can deliver a different data structure to each client application even if the underlying data is the same. Another example might be timestamps, which are saved in the database as a Unix timestamp but may need to be delivered to client apps in a human readable form, adjusted for each user&#8217;s time zone.</p>
 
-<p>This is admittedly a contrived example, but I think it gets the point across. Serializers make it easy to further separate the presentation layer of your application from the underlying model layer, even though by &#8220;presentation&#8221; I&#8217;m referring to the JSON representation of model objects rather than actual HTML files. This way, other applications can access the underlying data by virtue of a public API while you continue to tinker around with the backend. So long as your API remains consistent (or changes are properly documented), other teams or applications that depend on your API can continue developing without worrying about every change you make to the underlying code.</p>
+<p>This is admittedly a contrived example, but it gets the point across. Serializers make it easy to further separate the presentation layer of your application from the underlying model layer, even though by &#8220;presentation&#8221; I&#8217;m referring to the JSON representation of model objects rather than actual HTML files. This way, other applications can access the underlying data by virtue of a public API while you continue to tinker around with the backend. So long as your API remains consistent (or changes are properly documented), other teams or applications that depend on your API can continue developing without worrying about every change you make to the underlying code.</p>
 
-<p>To get started, just use the build in Rails generate command to create a serializer:</p>
+<p>To get started, just use a Rails generator to create a serializer:</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>rails generate serializer team
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Imagine I have a Team class (i.e., model) to represent a football team. A single team has many games (16 regular season, in the case of the NFL) and many players. In the serializer, I specify which attributes I want available in the JSON object, which may correspond to the methods in the body of the class. If I have a custom defined attribute (e.g., an attribute that is not the same as an attribute in my model), I need to write out a method with the same signature so that Rails knows how to interpret my serialized attribute.</p>
+<p>Imagine I have a Team class (i.e., model) to represent a football team. A single team has many games (16 regular season, in the case of the NFL) and many players. In the serializer, I specify which attributes I want available in the JSON object, which typically will correspond to the methods in the body of the class or the attributes of the model. If I have a custom defined attribute (e.g., an attribute that is not the same as an attribute in my model), I need to write out a method with the same signature so that Rails knows how to interpret my serialized attribute.</p>
 
 <p>I can also specify associations and customize how those associations appear in my JSON. Each team has many players, which is a separate model that has data about a player&#8217;s height, weight, jersey number, etc. In this example, I don&#8217;t need all of that information - all I need is the player&#8217;s name, jersey number and age. So I can override the typical association dispatch call (which would embed the JSON representation of each player associated with the team under the :players key) by writing a custom method.</p>
 
@@ -221,7 +221,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>In the controller, make sure that you add a respond_to block that specifies a json format.</p>
+<p>In the controller, make sure that you add a respond_to block that specifies a json format.JSON responses to requests that hit the &#8216;#show&#8217; action will be translated by the TeamSerializer class and formatted accordingly.</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -250,7 +250,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Notice too that I use the &#8216;current_user&#8217; helper method to restrict the access level to a team&#8217;s financial data only to team administrators. In order to have access to this method, I need to delegate the current_user method call to the scope object, which I can specify in my application controller like so:</p>
+<p>Notice too that I use the &#8216;current_user&#8217; helper method (a method that I would typically define in my application controller to reference the currently logged in user) to restrict the access level to a team&#8217;s financial data only to team administrators. In order to have access to this method, I need to delegate the current_user method call to the scope object, which I can specify in my application controller like so:</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -259,7 +259,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Rails will automatically look for a TeamSerializer file when it publishes JSON, but if you want to specify a customized serializer, you can indicate it in your model file, like so:</p>
+<p>Rails will automatically look for a TeamSerializer file when it publishes JSON, but if you want to specify a customized serializer, you can indicate it in your model file, like so, assuming you also change the serializer name to match:</p>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -287,9 +287,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>I&#8217;ve posted a few useful links below that go over how to start using serializers in your application (surprise surprise, there&#8217;s even a Railscast on ActiveModel::Serializers).</p>
+<p>I&#8217;ve posted a few useful links below that go over how to start using serializers in your application (surprise surprise, there&#8217;s even a RailsCast on ActiveModel::Serializers).</p>
 
-<p>As for tests, I&#8217;ve been testing my serializer classes using model specs with Rspec. I&#8217;ve used OpenStruct to create mock objects within the spec, just to make sure that the resulting JSON is correctly formatted. I&#8217;ve also been meaning to add integration tests so that the full request-response cycle is validated, not just the JSON API endpoint.</p>
+<p>As for testing these serializers, I&#8217;ve been testing my serializer classes using model specs with Rspec. I&#8217;ve used OpenStruct to create mock objects within the spec, just to make sure that the resulting JSON is correctly formatted. I&#8217;ve also been meaning to add integration tests so that the full request-response cycle is validated, not just the JSON API endpoint.</p>
 
 <p>If you&#8217;re looking for more information, here are some helpful links that explain further the benefit of using ActiveModel::Serializers in building well-structured JSON for your API.</p>
 
@@ -324,7 +324,7 @@
   
 
 
-<time datetime="2013-07-14T14:07:00-04:00" pubdate data-updated="true">Jul 14<span>th</span>, 2013</time>
+<time datetime="2013-07-23T14:07:00-04:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2013</time>
       
 
 
@@ -332,7 +332,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/" >Tweet</a>
   
   
   
@@ -345,8 +345,6 @@
       
         <a class="basic-alignment left" href="/blog/2013/07/14/lessons-learned-on-the-job/" title="Previous Post: Five Lessons Learned On The Job">&laquo; Five Lessons Learned On The Job</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/07/20/learning-objective-c-as-a-rubyist/" title="Next Post: Learning Objective-C As a Rubyist">Learning Objective-C As a Rubyist &raquo;</a>
       
     </p>
   </footer>
@@ -413,11 +411,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/07/20/learning-objective-c-as-a-rubyist/">Learning Objective-C As a Rubyist</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/">Using ActiveModel Serializers to Build Great JSON Interfaces</a>
+        <a href="/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/">Using ActiveModel Serializers to Build Great JSON Interfaces</a>
       </li>
     
       <li class="post">
@@ -429,7 +423,11 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2013/05/28/debugging-javascript-with-node-dot-js/">Debugging Javascript with Node.js</a>
+        <a href="/blog/2013/05/24/how-im-learning-javascript/">How I'm Learning Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/18/landing-the-dream-job/">Landing the Dream Job</a>
       </li>
     
   </ul>
@@ -501,8 +499,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/07/14/using-activemodel-serializers-to-build-great-json-interfaces/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/';
         var disqus_script = 'embed.js';
       
     (function () {

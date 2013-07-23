@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Flatiron, | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/flatiron-/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-07-23T19:20:06-04:00</updated>
+  <updated>2013-07-23T19:24:40-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -29,9 +29,9 @@
 
 <p>For the rest of the afternoon, Avi lectured about Ruby and we broke off on occasion to work on practice problems. We covered variables, methods and basic control structures. All of the stuff we covered today was part of the class pre-work, but it was good to solidify my understanding, and I realized that there a few quirks of Ruby that I would have taken for granted if we had just skipped over the basic foundations of Ruby. For example, did you know that if you run a command like:</p>
 
-<p>{% codeblock lang:ruby %}
-true || x = 3
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="kp">true</span> <span class="o">||</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>And then try to print the value of x, you won't be returned 3? That's because Ruby, in evaluating the expression, first saw that the left side of the "OR" statement (indicated by ||) was true and so it automatically knew that the entire expression was true (at least one side was true). Thus, Ruby didn't even assign the number 3 to the variable x. I hadn't considered that behavior for Ruby before, so it was good to go through some of the more nuanced aspects of the language.</p>
 
@@ -43,140 +43,253 @@ true || x = 3
 
 <p>This SQL code serves as the database schema and creates five tables - 'users', 'quizzes', 'questions', 'choices' and 'answers'. Each quiz has multiple questions, each of which have multiple choices. Users take quizzes and select choices as their answers, which then populates the 'answers' table.</p>
 
-<p>{% codeblock lang:sql %}</p>
-
-<p>-- CREATES DATABASE SCHEMA FOR QUIZ.DB</p>
-
-<p>CREATE TABLE users (
-  id integer primary key autoincrement,
-  fname varchar(20) NOT NULL,
-  lname varchar(50) NOT NULL
-);</p>
-
-<p>CREATE TABLE quizzes (
-  id integer primary key autoincrement,
-  name varchar(100) NOT NULL
-);</p>
-
-<p>CREATE TABLE questions (
-  id integer primary key autoincrement,
-  description varchar(200) NOT NULL,
-  quiz_id integer,
-  FOREIGN KEY(quiz_id) REFERENCES quizzes(quiz_id)
-);</p>
-
-<p>CREATE TABLE choices (
-  id integer primary key autoincrement,
-  content varchar(200),
-  correct integer,
-  question_id integer,
-  FOREIGN KEY(question_id) REFERENCES questions(question_id)
-);</p>
-
-<p>CREATE TABLE answers (
-  id integer primary key autoincrement,
-  user_id integer,
-  question_id integer,
-  choice_id integer,
-  FOREIGN KEY(user_id) REFERENCES users(user_id),
-  FOREIGN KEY(question_id) REFERENCES questions(question_id),
-  FOREIGN KEY(choice_id) REFERENCES choices(choice_id)
-);</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">-- CREATES DATABASE SCHEMA FOR QUIZ.DB&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">users</span> <span class="p">(</span>
+</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">fname</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">lname</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
+</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">quizzes</span> <span class="p">(</span>
+</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
+</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">questions</span> <span class="p">(</span>
+</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">description</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">quiz_id</span> <span class="nb">integer</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">quiz_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">quizzes</span><span class="p">(</span><span class="n">quiz_id</span><span class="p">)</span>
+</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">choices</span> <span class="p">(</span>
+</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">content</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>
+</span><span class='line'>  <span class="n">correct</span> <span class="nb">integer</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">question_id</span> <span class="nb">integer</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">questions</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span>
+</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">answers</span> <span class="p">(</span>
+</span><span class='line'>  <span class="n">id</span> <span class="nb">integer</span> <span class="k">primary</span> <span class="k">key</span> <span class="n">autoincrement</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">user_id</span> <span class="nb">integer</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">question_id</span> <span class="nb">integer</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">choice_id</span> <span class="nb">integer</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">users</span><span class="p">(</span><span class="n">user_id</span><span class="p">),</span>
+</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">questions</span><span class="p">(</span><span class="n">question_id</span><span class="p">),</span>
+</span><span class='line'>  <span class="k">FOREIGN</span> <span class="k">KEY</span><span class="p">(</span><span class="n">choice_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">choices</span><span class="p">(</span><span class="n">choice_id</span><span class="p">)</span>
+</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>In creating the database, Avi made a few good points about efficient nomenclature. When I first created my database, I had redundant field names for my tables (e.g., "id" in the "choices" table was labeled "choice_id"). The prefix of "choice" for "id" is redundant, since the inclusion of the field in the "choices" table automatically associates "id" with "choices" and differentiates it from the "id" field in the other tables. Its not a huge deal to include the table prefix in the field name, but its unnecessary and the elimination of the prefix is an example of DRY (Don't Repeat Yourself).</p>
 
 <p>After creating the schema, we had to write SQL that would populate the database. The below SQL script adds data into the "users", "quizzes", "choices" and "questions" tables. As you'll notice, there are 2 quizzes, each with 5 questions, each with 4 choices, for a total of 40 choices (2 * 5 * 4), hence the number of rows in the "choices" table. I used a "multi-insert" statement here rather than having INSERT INTO ... VALUES surrounding each of my entries. This saves time and makes the code look cleaner. Also, I added the corresponding field names after the table name in each of the insert blocks - I don't think this is necessary, as SQL will read the entries and assume that the first value goes into the first column, labeled "id", and same with the other columns, but I figure that its best practice to be explicit with the field names so that there's no ambiguity (for example, if you add fields in the future).</p>
 
-<p>{% codeblock lang:sql %}</p>
-
-<p>-- INSERTS INITIAL VALUES INTO QUIZ.DB</p>
-
-<p>INSERT INTO users (id, fname, lname) VALUES
-  (1, "Derrick", "Rose"),
-  (2, "Kevin", "Durant"),
-  (3, "Lebron", "James");</p>
-
-<p>INSERT INTO quizzes (id, name) VALUES
-  (1, "Ruby on Rails"),
-  (2, "SQLite3");</p>
-
-<p>INSERT INTO questions (id, description, quiz_id) VALUES
-  (1, "What is Ruby on Rails?", 1),
-  (2, "Who created Ruby on Rails?", 1),
-  (3, "Why is Ruby on Rails so awesome?", 1),
-  (4, "Who uses Ruby on Rails?", 1),
-  (5, "What are some Ruby on Rails competitors?", 1),
-  (6, "What is SQLite3?", 2),
-  (7, "Why is SQLite3 better or worse than other databases?", 2),
-  (8, "How does SQLite3 vary from MySQL?", 2),
-  (9, "Is MongoDB better than SQLite3?", 2),
-  (10, "Why should you not use SQLite3 for large applications?", 2);</p>
-
-<p>INSERT INTO choices (id, content, correct, question_id) VALUES
-  (1, "Choice A", 1, 1),
-  (2, "Choice B", 0, 1),
-  (3, "Choice C", 0, 1),
-  ...
-  (40, "Choice D", 0, 10);
-  {% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">-- INSERTS INITIAL VALUES INTO QUIZ.DB&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">users</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">lname</span><span class="p">)</span> <span class="k">VALUES</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Derrick&quot;</span><span class="p">,</span> <span class="ss">&quot;Rose&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Kevin&quot;</span><span class="p">,</span> <span class="ss">&quot;Durant&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Lebron&quot;</span><span class="p">,</span> <span class="ss">&quot;James&quot;</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">quizzes</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">VALUES</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Ruby on Rails&quot;</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;SQLite3&quot;</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">questions</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">quiz_id</span><span class="p">)</span> <span class="k">VALUES</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;What is Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Who created Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Why is Ruby on Rails so awesome?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="ss">&quot;Who uses Ruby on Rails?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="ss">&quot;What are some Ruby on Rails competitors?&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="ss">&quot;What is SQLite3?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="ss">&quot;Why is SQLite3 better or worse than other databases?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="ss">&quot;How does SQLite3 vary from MySQL?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="ss">&quot;Is MongoDB better than SQLite3?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="ss">&quot;Why should you not use SQLite3 for large applications?&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">choices</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">correct</span><span class="p">,</span> <span class="n">question_id</span><span class="p">)</span> <span class="k">VALUES</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="ss">&quot;Choice A&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="ss">&quot;Choice B&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="ss">&quot;Choice C&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="ss">&quot;Choice D&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>This SQL command populates the "answers" table with data. I purposefully populated the data such that Derrick Rose got all questions right (he's the best of the 3, after all), Kevin Durant got 3 questions right in each quiz and Lebron got only 1 question right per quiz (I'm still bitter over the 2011 Eastern Conference Finals).</p>
 
-<p>{% codeblock lang:sql %}
-  -- INSERTS RESULTS OF 3 USERS EACH TAKING 2 TESTS
-  -- WITH 5 QUESTIONS INTO THE ANSWERS TABLE OF QUIZ.DB</p>
-
-<p>INSERT INTO answers (id, user_id, question_id, choice_id) VALUES
-  (1, 1, 1, 1),
-  (2, 1, 2, 5),
-  (3, 1, 3, 9),
-  ...
-  (30, 3, 10, 39);</p>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="c1">-- INSERTS RESULTS OF 3 USERS EACH TAKING 2 TESTS</span>
+</span><span class='line'>  <span class="c1">-- WITH 5 QUESTIONS INTO THE ANSWERS TABLE OF QUIZ.DB&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">answers</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">choice_id</span><span class="p">)</span> <span class="k">VALUES</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">39</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>This SQL command analyzes the resulting answers. In designing this query, I wanted to get back a table of six rows - one for each user-quiz pairing for 3 users, each taking 2 quizzes - with the user name, quiz name and total correct answers. I started the "answers" table, as I figured that "answers" would be my primary source for the scores; how could you determine a correct score without knowing the quiz takers' answers?. From there, I joined the table against other tables that included useful information.</p>
 
 <p>The "answers" table includes what each user selected as a choice for a given question, but not whether that choice is correct (including such data in this table would be de-normalizing the "correct answer" data, which lives in the "choices" table), so I joined the "answers" table against "choices" to determine which choices selected by users were correct. Then, I continued joining against "questions", "users" and "quizzes" to get the necessary information. Finally, I grouped the results by user_id and quiz_id, which collapses the return table into the 6 row table for each user-quiz pair that I was looking for.</p>
 
-<p>{% codeblock lang:sql %}
--- CREATES A TABLE FOR EACH USER-QUIZ SET AND
--- RETURNS THE SCORE EACH USER GOT ON A GIVEN QUIZ</p>
-
-<p>SELECT
-  u.fname AS 'first name',
-  u.lname AS 'last name',
-  u.id AS 'user id',
-  qz.name AS 'quiz name',
-  SUM(correct) AS 'raw score'
-FROM ((((
-  answers a INNER JOIN choices c ON a.choice_id = c.id)
-  INNER JOIN questions qu ON a.question_id = qu.id)
-  INNER JOIN users u ON a.user_id = u.id)
-  INNER JOIN quizzes qz ON qu.quiz_id = qz.id)
-GROUP BY a.user_id, qu.quiz_id;
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- CREATES A TABLE FOR EACH USER-QUIZ SET AND</span>
+</span><span class='line'><span class="c1">-- RETURNS THE SCORE EACH USER GOT ON A GIVEN QUIZ&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">SELECT</span>
+</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">fname</span> <span class="k">AS</span> <span class="s1">&#39;first name&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">lname</span> <span class="k">AS</span> <span class="s1">&#39;last name&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="s1">&#39;user id&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">qz</span><span class="p">.</span><span class="n">name</span> <span class="k">AS</span> <span class="s1">&#39;quiz name&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="k">AS</span> <span class="s1">&#39;raw score&#39;</span>
+</span><span class='line'><span class="k">FROM</span> <span class="p">((((</span>
+</span><span class='line'>  <span class="n">answers</span> <span class="n">a</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">choices</span> <span class="k">c</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">choice_id</span> <span class="o">=</span> <span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">questions</span> <span class="n">qu</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">question_id</span> <span class="o">=</span> <span class="n">qu</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">users</span> <span class="n">u</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">quizzes</span> <span class="n">qz</span> <span class="k">ON</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span> <span class="o">=</span> <span class="n">qz</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Finally, I wrote some SQL to do some basic analytics on database. This basically is very similar to the above query, but adds the percentage score.</p>
 
-<p>{% codeblock lang:sql %}
--- CALCULATES PERCENTAGE CORRECT FOR A USER-QUIZ SET</p>
-
-<p>SELECT
-  u.fname AS 'first name',
-  u.lname AS 'last name',
-  qz.name AS 'quiz name',
-  SUM(correct) AS 'raw score',
-  SUM(correct) * 100 / 5 || '%' AS 'score percentage'
-FROM ((((
-  answers a INNER JOIN choices c ON a.choice_id = c.id)
-  INNER JOIN questions qu ON a.question_id = qu.id)
-  INNER JOIN users u ON a.user_id = u.id)
-  INNER JOIN quizzes qz ON qu.quiz_id = qz.id)
-GROUP BY a.user_id, qu.quiz_id;
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- CALCULATES PERCENTAGE CORRECT FOR A USER-QUIZ SET&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">SELECT</span>
+</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">fname</span> <span class="k">AS</span> <span class="s1">&#39;first name&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">u</span><span class="p">.</span><span class="n">lname</span> <span class="k">AS</span> <span class="s1">&#39;last name&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">qz</span><span class="p">.</span><span class="n">name</span> <span class="k">AS</span> <span class="s1">&#39;quiz name&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="k">AS</span> <span class="s1">&#39;raw score&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">SUM</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">||</span> <span class="s1">&#39;%&#39;</span> <span class="k">AS</span> <span class="s1">&#39;score percentage&#39;</span>
+</span><span class='line'><span class="k">FROM</span> <span class="p">((((</span>
+</span><span class='line'>  <span class="n">answers</span> <span class="n">a</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">choices</span> <span class="k">c</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">choice_id</span> <span class="o">=</span> <span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">questions</span> <span class="n">qu</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">question_id</span> <span class="o">=</span> <span class="n">qu</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">users</span> <span class="n">u</span> <span class="k">ON</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">quizzes</span> <span class="n">qz</span> <span class="k">ON</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span> <span class="o">=</span> <span class="n">qz</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span> <span class="n">qu</span><span class="p">.</span><span class="n">quiz_id</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Avi said that we wouldn't be actively writing many SQL queries, since Rails abstracts so much of the database interaction. However, there will undoubtedly be times when Rails isn't sufficient for complex data queries, and we'll have to write our own SQL. Even if we don't use SQL that often, its critical to know, and I think its pretty cool, despite the at times frustrating syntax and poor debugging feedback for the sqlite3 shell. I would like to eventually explore more advanced data analysis tools, software like Hadoop or Cassandra, so knowing SQL is going to be invaluable moving forward.</p>
 ]]></content>
