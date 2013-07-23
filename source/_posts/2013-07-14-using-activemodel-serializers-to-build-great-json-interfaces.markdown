@@ -28,7 +28,7 @@ This is admittedly a contrived example, but it gets the point across. Serializer
 
 To get started, just use a Rails generator to create a serializer:
 
-{% codeblock lang:shell %}
+{% codeblock lang:bash %}
 rails generate serializer team
 {% endcodeblock %}
 

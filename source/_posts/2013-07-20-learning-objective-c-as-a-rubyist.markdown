@@ -3,7 +3,7 @@ layout: post
 title: "Learning Objective-C As a Rubyist"
 date: 2013-07-20 09:31
 comments: true
-categories: 
+categories:
 published: false
 ---
 I recently started exploring iOS development.
