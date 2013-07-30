@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-07-29T21:34:25-04:00</updated>
+  <updated>2013-07-29T21:35:47-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[How to Use Rake Tasks to Generate Migration SQL]]></title>
+    <title type="html"><![CDATA[How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations]]></title>
     <link href="http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/"/>
     <updated>2013-07-29T19:26:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql</id>
