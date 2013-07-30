@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to Use Rake Tasks to Generate Migration SQL"
-date: 2013-07-23 19:26
+date: 2013-07-29 19:26
 comments: true
 categories: 
 published: true
