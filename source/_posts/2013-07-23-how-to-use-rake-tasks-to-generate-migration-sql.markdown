@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How to Use Rake Tasks to Generate Migration SQL"
+title: "How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations"
 date: 2013-07-29 19:26
 comments: true
 categories: 
