@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-07-29T21:33:00-04:00</updated>
+  <updated>2013-07-29T21:34:25-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[How to Use Rake Tasks to Generate Migration SQL]]></title>
-    <link href="http://eewang.github.com/blog/2013/07/23/how-to-use-rake-tasks-to-generate-migration-sql/"/>
-    <updated>2013-07-23T19:26:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/07/23/how-to-use-rake-tasks-to-generate-migration-sql</id>
+    <link href="http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/"/>
+    <updated>2013-07-29T19:26:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql</id>
     <content type="html"><![CDATA[<p>Recently at the NYT on the product I&#8217;m working on, we came across the problem of having to convert ActiveRecord migrations into raw SQL in order to be processed on our production database. Our infrastructure/systems team needs SQL in order to generate migrations; since not all teams at the NYT use Rails, ActiveRecord&#8217;s migrations cannot be automatically applied to the production database.</p>
 
 <!--more-->
@@ -257,10 +257,10 @@
     <id>http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been at the New York Times on the New Digital Products team for a little over two weeks now. Thus far, its been an awesome experience. I&#8217;ve had the opportunity to jump right in and commit code, primarily helping build the Rails backend interface for a mobile application. I&#8217;ve been spending time trying to get up to speed on the various internal software tools that the NYT provides, and I&#8217;ve come to appreciate that from a technical perspective, the NYT is an API-driven organization.</p>
 
-<p>Most of the APIs I dealt with at Flatiron were for public consumption (e.g., Viewfinder leveraged the Instagram API pretty heavily), so its been interesting to see how the NYT develops internal APIs to decrease inter-team dependencies while reducing the potential for overlapping responsibilities. With so many teams (e.g., internal CMS, user-generated content, video, etc.) working together to build a single journalistic product, I&#8217;ve learned that necessary to have public, internal JSON interfaces for different teams to work with. As such, I&#8217;ve had the chance to use a Rails module called ActiveModel::Serializers that helps developers build a sensible JSON interface in an object-oriented manner that&#8217;s pretty intuitive.</p>
-
 <!--more-->
 
+
+<p>Most of the APIs I dealt with at Flatiron were for public consumption (e.g., Viewfinder leveraged the Instagram API pretty heavily), so its been interesting to see how the NYT develops internal APIs to decrease inter-team dependencies while reducing the potential for overlapping responsibilities. With so many teams (e.g., internal CMS, user-generated content, video, etc.) working together to build a single journalistic product, I&#8217;ve learned that necessary to have public, internal JSON interfaces for different teams to work with. As such, I&#8217;ve had the chance to use a Rails module called ActiveModel::Serializers that helps developers build a sensible JSON interface in an object-oriented manner that&#8217;s pretty intuitive.</p>
 
 <p>ActiveModel::Serializers is a component of the Rails API that enables an object-oriented approach to serializing ActiveRecord objects. The module can also be used to provide customized JSON objects depending on the requester. Serializers know about both a model and the environment in which it is being accessed, so if an admin user accesses the API you as the developer can provide one level of access to the underlying data, while providing a less detailed view to a non-admin user. To get this functionality, you can just add the &#8216;active_model_serializers&#8217; gem to your Gemfile.</p>
 

@@ -105,10 +105,10 @@
 
 <div class="entry-content"><p>I&#8217;ve been at the New York Times on the New Digital Products team for a little over two weeks now. Thus far, its been an awesome experience. I&#8217;ve had the opportunity to jump right in and commit code, primarily helping build the Rails backend interface for a mobile application. I&#8217;ve been spending time trying to get up to speed on the various internal software tools that the NYT provides, and I&#8217;ve come to appreciate that from a technical perspective, the NYT is an API-driven organization.</p>
 
-<p>Most of the APIs I dealt with at Flatiron were for public consumption (e.g., Viewfinder leveraged the Instagram API pretty heavily), so its been interesting to see how the NYT develops internal APIs to decrease inter-team dependencies while reducing the potential for overlapping responsibilities. With so many teams (e.g., internal CMS, user-generated content, video, etc.) working together to build a single journalistic product, I&#8217;ve learned that necessary to have public, internal JSON interfaces for different teams to work with. As such, I&#8217;ve had the chance to use a Rails module called ActiveModel::Serializers that helps developers build a sensible JSON interface in an object-oriented manner that&#8217;s pretty intuitive.</p>
-
 <!--more-->
 
+
+<p>Most of the APIs I dealt with at Flatiron were for public consumption (e.g., Viewfinder leveraged the Instagram API pretty heavily), so its been interesting to see how the NYT develops internal APIs to decrease inter-team dependencies while reducing the potential for overlapping responsibilities. With so many teams (e.g., internal CMS, user-generated content, video, etc.) working together to build a single journalistic product, I&#8217;ve learned that necessary to have public, internal JSON interfaces for different teams to work with. As such, I&#8217;ve had the chance to use a Rails module called ActiveModel::Serializers that helps developers build a sensible JSON interface in an object-oriented manner that&#8217;s pretty intuitive.</p>
 
 <p>ActiveModel::Serializers is a component of the Rails API that enables an object-oriented approach to serializing ActiveRecord objects. The module can also be used to provide customized JSON objects depending on the requester. Serializers know about both a model and the environment in which it is being accessed, so if an admin user accesses the API you as the developer can provide one level of access to the underlying data, while providing a less detailed view to a non-admin user. To get this functionality, you can just add the &#8216;active_model_serializers&#8217; gem to your Gemfile.</p>
 
@@ -346,7 +346,7 @@
         <a class="basic-alignment left" href="/blog/2013/07/14/lessons-learned-on-the-job/" title="Previous Post: Five Lessons Learned On The Job">&laquo; Five Lessons Learned On The Job</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/07/23/how-to-use-rake-tasks-to-generate-migration-sql/" title="Next Post: How to Use Rake Tasks to Generate Migration SQL">How to Use Rake Tasks to Generate Migration SQL &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/" title="Next Post: How to Use Rake Tasks to Generate Migration SQL">How to Use Rake Tasks to Generate Migration SQL &raquo;</a>
       
     </p>
   </footer>
@@ -413,7 +413,7 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/07/23/how-to-use-rake-tasks-to-generate-migration-sql/">How to Use Rake Tasks to Generate Migration SQL</a>
+        <a href="/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/">How to Use Rake Tasks to Generate Migration SQL</a>
       </li>
     
       <li class="post">
