@@ -169,15 +169,21 @@
         <lastmod>2013-07-23T19:24:19-04:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://eewang.github.com/blog/2013/07/23/how-to-use-rake-tasks-to-generate-migration-sql/
+        </loc>
+        <lastmod>2013-07-29T21:32:24-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://eewang.github.com/archives/</loc>
-        <lastmod>2013-07-23T19:24:19-04:00</lastmod>
+        <lastmod>2013-07-29T21:32:24-04:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/archives/</loc>
-        <lastmod>2013-07-23T19:24:19-04:00</lastmod>
+        <lastmod>2013-07-29T21:32:24-04:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/</loc>
-        <lastmod>2013-07-23T19:24:19-04:00</lastmod>
+        <lastmod>2013-07-29T21:32:24-04:00</lastmod>
     </url>
 </urlset>
