@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Flatiron - Day 003 - eugenius</title>
+  <title>Navigating the Job Search - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was &hellip;">
+  <meta name="description" content="Last Friday was graduation day for the most recent cohort of Flatiron School students, and today is the first official day of the post-school job &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/08/26/navigating-the-job-search/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Flatiron - Day 003</h1>
+      <h1 class="entry-title">Navigating the Job Search</h1>
     
     
       <p class="meta">
@@ -94,7 +94,7 @@
   
 
 
-<time datetime="2013-02-06T11:30:00-05:00" pubdate data-updated="true">Feb 6<span>th</span>, 2013</time>
+<time datetime="2013-08-26T07:24:00-04:00" pubdate data-updated="true">Aug 26<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -103,45 +103,33 @@
   </header>
 
 
-<div class="entry-content"><p>On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.</p>
+<div class="entry-content"><p>Last Friday was graduation day for the most recent cohort of Flatiron School students, and today is the first official day of the post-school job search process. I&#8217;m reminded of the my first day after the last day of Flatiron, when I went back into school just out of habit and a desire to continue the accelerated learning process that I had become so accustomed to. In light of that and with an eye toward helping out the newly-minted Flatiron graduates, here are a few thoughts that I hope can be useful to those who are enduring the frustration, anxiety and, ultimately and hopefully, joy of looking for a junior-level developer gig.</p>
 
 <!--more-->
 
 
-<p>I wrote a short script to automate the process of deploying the blog (&#8220;rake deploy&#8221;), staging files on git (&#8220;git add .&#8221;), commiting files (&#8220;git commit -am &#8216;message&#8217;&#8221;) and pushing files to a remote repository on Github. Its pretty simple and permits users to add in a commit message. Here is the code to put in your Rakefile:</p>
+<p><strong>Don&#8217;t stress out about it!</strong>
+Its easy for me to say this from the perch of employment, but anxiety about finding a job can be counter productive. If you find joy in what you&#8217;re doing so much so that you continue to do it in your free time or practice it now that school is done, the job offers will inevitably come. Stress should be a motivating factor to seek out opportunities and explore the start-up landscape; it shouldn&#8217;t devolve into worry and anxiety about where your career will go or whether or not you&#8217;ll go hungry. The best careers seem to progress in a non-linear fashion - every other step seems to be sideways and sometimes even backwards. So don&#8217;t worry if it doesn&#8217;t seem like things are going your way early on, just pursue opportunities to learn new things, continue to write and blog and be as vocal about what you don&#8217;t know and want to learn as you are about what you already can accomplish.</p>
 
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Add files to github, commit and deploy&quot;</span>
-</span><span class='line'><span class="n">task</span> <span class="ss">:gen_deploy_push</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>  <span class="no">STDOUT</span><span class="o">.</span><span class="n">puts</span> <span class="s2">&quot;What is your commit message? &quot;</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="no">STDIN</span><span class="o">.</span><span class="n">gets</span><span class="o">.</span><span class="n">chomp</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;rake gen_deploy&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git add .&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git commit -am &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;git push&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;commit message was &#39;</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+<p><strong>Know what you&#8217;re looking for</strong>
+Granted, that&#8217;s not especially useful advice. Knowing what your looking for seems to be an oxymoron - if I already know what I&#8217;m looking for, why would I need to be looking for it? What I mean here is not to have in mind already what the ideal job is, but rather know what you want to be characteristics of that ideal job. Are you passionate about something other than code? Go find a music startup or media company to work at. Are you looking to build rock-solid fundamentals in test-driven development and pair program daily? Go seek out a reputable dev shop. Coming out of a school like Flatiron you have a lot of opportunities, and as all sectors of the economy rapidly digitize and incorporate technology into their products and services, the demand is outpacing the supply of new engineers and developers. And even though positive churn (i.e., developers frequently changing companies for better opportunities) seems common in the technology space, your first job as a developer will invariably have an indelible impact on your future career in technology.</p>
 
+<p><strong>There&#8217;s a whole lot more out there than Ruby&#8230;</strong>
+Its clear that Ruby is the lingua franca at Flatiron, as well as many of the other new development schools that are popping up. In the real world though, its just one of many languages that are used to solve engineering problems. At the New York Times, I encounter engineers who are skilled across a range of languages and frameworks, and many do not have Ruby experience. The NYT is a truly polyglot organization - everything from Python to C to Javascript to Go are used to solve the technical challenges of the NYT. Although its great to be an unabashed Rubyist, at the same time its important to understand the criticisms of Ruby and the benefits of a more statically typed language like C or Java. For me, I&#8217;ve learned how different languages really are built for different problems, even if a scripting language like Ruby has applications beyond the web development purposes that so many people use it for today.</p>
 
-<p>I think the code is fairly straightforward - basically the user inputs a commit message and then the command will deploy the site while commiting the code to Github.</p>
+<p><strong>&#8230;Yet if you&#8217;re applying for a Rails job, know your Ruby</strong>
+One thing the TAs at Flatiron really emphasized that stuck with me was the importance of knowing core Ruby rather than just Rails. Understanding Ruby will help you better understand Rails, but the opposite isn&#8217;t always true. A mature framework like Rails can sometimes make it feel like you&#8217;re just configuring a system or adding magical keywords into your classes rather than actual programming. But at its core, Rails is just Ruby code - it can be extended, modified, pushed and pulled. The more you understand Ruby, the easier it will be to understand how gems or other bits of code can integrate into a piece of software.</p>
 
-<p>After a morning spent working through the intricacies of the Gemfile and Rakefile in the Octopress application (it looks intimidating, but I found it very helpful to examine the code underlying a command before executing it - makes coding seem less like magic and more like an intricate sequence of interconnected logic), we broke for lunch. In the afternoon, we shifted gears to databases, specifically learning Structured Query Language (SQL). I first learned SQL a few years back when I interned at KPMG. I was part of the Forensic Advisory group, which used Microsoft SQL Server to comb through millions of rows of data and run pricing analyses for pharmaceutical companies. However, even though I learned the syntax and general structure of SQL at KPMG, a lot of it was more copying pre-written SQL queries and modifying them at the margins, rather than writing my own from scratch, so the exercises today were pretty helpful.</p>
+<p>Plus, knowing Ruby is good just for job interviews. Most of my technical interviews were focused on Ruby rather than Rails. And if they were focused on Rails, they were typically more high-level, software design questions that happened to use Rails as the development framework. In other words, I would either get questions like, &#8220;How would you sort this array and extract just every third word in Ruby?&#8221; or, &#8220;How would you build a software platform like Kickstarter?&#8221; Knowing Ruby is instrumental (and Rails pretty useless) to answering the former. Yet the latter can be reasoned through by understanding model associations and software design, rather than knowing how to apply specific macros in Rails. Obviously, understanding Rails will be critical for building software if you go to a Rails shop, but in the interview process, its better to walk in as a confident Rubyist rather than as someone who can just program in Rails.</p>
 
-<p>After a brief lecture on SQL by Avi, we broke up into our groups and designed a schema for a simple quiz app. This app would have users, quizzes, questions, choices and answers, and the challenge for us was to determine the optimal database design to address the immediate use cases while also leaving room to hypothetically scale the database. Once we created a schema, we then practice writing SQL queries to create, manipulate and access that database. For the rest of the afternoon, we worked as a class to build the quiz app database, with each group contributing a piece of the database structure and Avi using the differences between our schemas to comment on the pros and cons of schema designs.</p>
+<p>What I did when I left Flatiron to prepare for job interviews mostly focused on Ruby. I worked on <a href="http://www.projecteuler.net">Project Euler</a> problems and tried building multi-class command line programs, which helped me structure my code and think from an object-oriented perspective. Tasks like trying to build a restaurant bill-splitting tool or a sports draft room via the command line can help you think about the fundamental business logic of an application and how to model your schema, rather than focusing on how the front-end looks. While building software requires an understanding of both back and front-end technologies, the core of any good engineer is being able to break down a problem into its constituent parts and to understand how those parts can be composed to build a coherent whole. These skills can be end-agnostic; the effective use of both back-end frameworks like Rails or front-end tools like Backbone.js requires an ability to structure data and process user input.</p>
 
-<p>For me, the class has been moving along at a brisk but manageable pace. In the course of three days, it seems like we&#8217;ve covered a boatload of material related to git, environment setup and databases, but I know that that&#8217;s just the beginning of the journey. We haven&#8217;t even systematically delved into Javascript, Ruby or Rails yet! Its exciting to think of all the stuff that&#8217;s out there to learn - I just need to be diligent and purposeful in completing the homework and grabbing every opportunity to learn something new or contribute to a project, no matter how small.</p>
+<p><strong>Being a developer is pretty damn fun</strong>
+Sometimes I go to work thinking that its unfair to others that I get to do what I do. Learning to code and working as a developer has been an amazing and fun experience, and I&#8217;ve thus far thoroughly enjoyed working at the NYT. Yet at the same time, coding has a certain escapist quality to it. I can easily zone out for hours at a time, put on my music and just see where my creativity takes me. I&#8217;m a firm believer that the work we do should be service-oriented, despite being a profit-seeking enterprise. Developers have this great skill of solving modern problems, many of which can be addressed by using the powerful connective capabilities of the Internet and accessibility of distribution platforms like smartphones. Solving these problems (which are most often outside the strict domain of an engineer) requires not just technical abilities, but also an empathetic understanding of why those are problems in the first place.</p>
+
+<p>I&#8217;ve always thought that the most fascinating problems developers are meant to solve with software are problems outside the traditional realm of software. This means that to effectively solve problems, knowing who you&#8217;re solving problems for is as important as being technically able to solve those problems. Avi talks a lot about empathy as a developer, and I think he&#8217;s really right about it. I work on a daily basis with editors who are the end users of the product I&#8217;m currently building. Empathy for the needs and interests of my clients (i.e., users) is critical to prioritizing my development tasks and knowing when to hone in on the annoying details and when to back out of a rabbit hole. While solving problems is objectively fun, it can be a fruitless exercise if those problems are not actually the problems faced by the people you&#8217;re tasked to serve in your work. Empathy, understanding, communication - these are all the soft skills that connect you back to the real world as a developer, rather than just zoning out, donning your headphones and coding away at a fantasy world problem.</p>
+
+<p>Hope that was useful for anyone out there looking for a developer job. Best of luck!</p>
 </div>
 
 
@@ -164,21 +152,15 @@
   
 
 
-<time datetime="2013-02-06T11:30:00-05:00" pubdate data-updated="true">Feb 6<span>th</span>, 2013</time>
+<time datetime="2013-08-26T07:24:00-04:00" pubdate data-updated="true">Aug 26<span>th</span>, 2013</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/flatiron/'>Flatiron</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/coding/'>coding</a>, <a class='category' href='/blog/categories/git/'>git</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/08/26/navigating-the-job-search/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/08/26/navigating-the-job-search/" >Tweet</a>
   
   
   
@@ -189,10 +171,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/05/flatiron-day-002/" title="Previous Post: Flatiron - Day 002">&laquo; Flatiron - Day 002</a>
+        <a class="basic-alignment left" href="/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/" title="Previous Post: How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations">&laquo; How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/02/07/flatiron-day-004/" title="Next Post: Flatiron - Day 004">Flatiron - Day 004 &raquo;</a>
       
     </p>
   </footer>
@@ -347,8 +327,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/02/06/flatiron-day-003/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/02/06/flatiron-day-003/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/08/26/navigating-the-job-search/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/08/26/navigating-the-job-search/';
         var disqus_script = 'embed.js';
       
     (function () {
