@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Using Vector Bitmasks in Rails"
+title: "Applying Vector Bitmask Fields in Rails"
 date: 2013-08-31 12:49
 comments: true
 categories: 
@@ -9,7 +9,7 @@ I've been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" 
 recently. In addition to being a wonderfully (and aptly) named gem,
 FlagShihTzu makes it super simple to add bit mask fields, or Boolean
 indicators, without having to run additional migrations. In other
-words, it allows you to flag shit.
+words, it allows you to flag shit on your models and makes it easier to avoid technical debt when there is little certainty of an application's trajectory.
 
 <!--more-->
 
