@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-01T13:44:15-04:00</updated>
+  <updated>2013-09-01T13:47:23-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using Vector Bitmasks in Rails]]></title>
+    <title type="html"><![CDATA[Applying Vector Bitmask Fields in Rails]]></title>
     <link href="http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/"/>
     <updated>2013-08-31T12:49:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails</id>
@@ -22,7 +22,7 @@
 recently. In addition to being a wonderfully (and aptly) named gem,
 FlagShihTzu makes it super simple to add bit mask fields, or Boolean
 indicators, without having to run additional migrations. In other
-words, it allows you to flag shit.</p>
+words, it allows you to flag shit on your models and makes it easier to avoid technical debt when there is little certainty of an application&#8217;s trajectory.</p>
 
 <!--more-->
 
