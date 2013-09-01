@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-01T13:47:23-04:00</updated>
+  <updated>2013-09-01T13:49:47-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Applying Vector Bitmask Fields in Rails]]></title>
-    <link href="http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/"/>
+    <link href="http://eewang.github.com/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/"/>
     <updated>2013-08-31T12:49:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails</id>
+    <id>http://eewang.github.com/blog/2013/08/31/applying-vector-bitmask-fields-in-rails</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" target="_blank">Flag Shih-Tzu</a> in a number of my projects
 recently. In addition to being a wonderfully (and aptly) named gem,
 FlagShihTzu makes it super simple to add bit mask fields, or Boolean
