@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-08-26T08:47:11-04:00</updated>
+  <updated>2013-09-01T13:44:15-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,240 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Vector Bitmasks in Rails]]></title>
+    <link href="http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/"/>
+    <updated>2013-08-31T12:49:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" target="_blank">Flag Shih-Tzu</a> in a number of my projects
+recently. In addition to being a wonderfully (and aptly) named gem,
+FlagShihTzu makes it super simple to add bit mask fields, or Boolean
+indicators, without having to run additional migrations. In other
+words, it allows you to flag shit.</p>
+
+<!--more-->
+
+
+<p>When I first heard about <a href="http://en.wikipedia.org/wiki/Bit_array" target="_blank">vector bit fields</a> at 8to18 Media, I&#8217;ll admit that they sounded intimidating. Its a pretty computer scienc-ey sounding term - vectors! bits! technology! But in reality, they&#8217;re pretty much just an array of zeroes and ones, and the position of those bits in an array map to a vector legend. Imagine you have a 1 or 0 in each position of an array of size 3. A &#8216;1&#8217; in the first position indicates 2 ^ 0, a &#8216;1&#8217; in the second position is equal to 2 ^ 1, and a &#8216;1&#8217; in the third position is 2 ^ 2. That way, an array of [1, 0, 1] is equal to 2 ^ 0 + 2 ^ 2, or 5. Similarly, an array of [1, 1, 0] is equal to 3, and an array of [0, 1, 0] is equal to 2. Vector bitmasks (a.k.a. bit arrays) are a fairly elegant way to keep track of boolean, on-off switch attributes. <a href="http://devblog.xing.com/ruby-on-rails/a-rails-plugin-to-store-a-collection-of-boolean-values-as-a-single-bit-field/" target="_blank">Here&#8217;s</a> a helpful short blog post explaining bit fields.</p>
+
+<p>What the FlagShihTzu gem does is basically convert an integer field in your
+database table to a vector of bit masks. Based on the mapping
+structure that you define in the relevant model, FlagShihTzu will
+set and get the necessary bit fields and give you a bunch if useful
+helper methods to enable you to plan effectively for horizontal scale
+in your schema. Without this gem and without rolling your own similar
+functionality, adding Boolean indicators means running a new migration
+and getting methods set up for each new field. This can be mitigated
+by using define_method or method_missing, but adding in a gem provides
+the useful functionality without adding unwieldy dependencies.</p>
+
+<p>Getting set-up with the gem is pretty standard - set up a Rails app and add it to the Gemfile. I&#8217;ve had to think a lot about apartments and housing in general in the last few weeks (searching for an apartment in the East Village and helping friends move will do that), so I figured I could use the domain of apartment and housing search for my example app. The more I&#8217;ve thought about it, the more I think the real estate area is a pretty good domain model - its something everyone is familiar with, and especially in the case of explaining bit fields, has a slew of reasonable use cases for boolean attributes.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails new nyc_apts
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Gemfile</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;flag_shih_tzu&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After running bundle install, add a model and create your database table. FlagShihTzu will automatically look for a column named &#8216;flags&#8217; unless you explicitly tell it to use a different column for the vector bitmask. In my project, I set the :columns option in my Building model to &#8216;amenities&#8217;. This way, FlagShihTzu will change the value of my &#8216;amenities&#8217; integer field as I set my boolean attributes.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails generate model apartment
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># in db/migrate</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">CreateBuildings</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:buildings</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">integer</span>  <span class="ss">:amenities</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:address</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:building_structure</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:leasing_company</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:description</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>  <span class="ss">:phone_number</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:year_built</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After running rake db:migrate, I can add the following code to my building.rb file to tell it to use the FlagShihTzu functionality in my Building model.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/building.rb</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Building</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">FlagShihTzu</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">has_flags</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="ss">:pets_allowed</span><span class="p">,</span>
+</span><span class='line'>                      <span class="mi">2</span> <span class="o">=&gt;</span> <span class="ss">:doorman</span><span class="p">,</span>
+</span><span class='line'>                      <span class="mi">3</span> <span class="o">=&gt;</span> <span class="ss">:elevator</span><span class="p">,</span>
+</span><span class='line'>                      <span class="mi">4</span> <span class="o">=&gt;</span> <span class="ss">:laundry</span><span class="p">,</span>
+</span><span class='line'>                      <span class="ss">:column</span> <span class="o">=&gt;</span> <span class="s1">&#39;amenities&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that once you choose an order for your flags, you cannot change them. Because the gem converts an integer into an array of bits, changing the mapping of the bit positions will yield different results for the same integer value.</p>
+
+<p>That&#8217;s all you need to add to your model in order to start playing around with the gem. In the background, FlagShihTzu adds an slew of useful methods for setting, getting and checking your boolean attributes. Specifically, these are the ones I find most useful. The documentation on Github has more instance methods, but I haven&#8217;t found much use for them so far in my projects.</p>
+
+<ul>
+<li>Building#doorman</li>
+<li>Building#doorman?</li>
+<li>Building#doorman=</li>
+<li>Building#doorman_changed?</li>
+</ul>
+
+
+<p>In my rails console, I can execute the following commands to quickly set my amenities column value using semantic setters for my boolean attributes.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>001:0 &gt; <span class="nv">building</span> <span class="o">=</span> Building.new
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;Building id: nil, amenities: nil, address: nil, building_structure: nil, leasing_company: nil, description: nil, phone_number: nil, year_built: nil, created_at: nil, updated_at: nil&gt;</span>
+</span><span class='line'>002:0 &gt; building.doorman?
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">false</span>
+</span><span class='line'>003:0 &gt; building.pets_allowed?
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">false</span>
+</span><span class='line'>004:0 &gt; building.doorman <span class="o">=</span> <span class="nb">true</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">true</span>
+</span><span class='line'>005:0 &gt; building.amenities
+</span><span class='line'><span class="o">=</span>&gt; 2
+</span><span class='line'>006:0 &gt; building.pets_allowed <span class="o">=</span> <span class="nb">true</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">true</span>
+</span><span class='line'>007:0 &gt; building.amenities
+</span><span class='line'><span class="o">=</span>&gt; 3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, calling &#8216;has_flags&#8217; within your model produces class scopes that are useful for getting all instances of a Building that have doormen, for example. These method scopes are pretty straight forward - Building#doorman and Building#not_doorman, for example, will return an ActiveRecord Relation of all model instances that do or do not have the #doorman attribute set to true.</p>
+
+<p>Although FlagShihTzu provides useful methods for setting and getting individual boolean attributes, I&#8217;ve been adding additional methods to set multiple attributes. For example, here are methods that allow for setting and getting attributes in bulk.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/building.rb</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Building</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">set_building_flags</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="n">list_name</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">flag_bits</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">flag</span><span class="o">|</span> <span class="no">Building</span><span class="o">.</span><span class="n">flags</span><span class="p">(</span><span class="n">list_name</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">flag</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)}</span>
+</span><span class='line'>    <span class="n">list_bitmask</span> <span class="o">=</span> <span class="n">flag_bits</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">sum</span><span class="p">,</span> <span class="n">item</span><span class="o">|</span> <span class="n">sum</span> <span class="o">+</span> <span class="mi">2</span><span class="o">**</span><span class="n">item</span> <span class="p">}</span>
+</span><span class='line'>    <span class="nb">send</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">list_name</span><span class="si">}</span><span class="s2">=&quot;</span><span class="p">,</span> <span class="n">list_bitmask</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">flags</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+</span><span class='line'>    <span class="no">Building</span><span class="o">.</span><span class="n">flag_mapping</span><span class="o">[</span><span class="n">column</span><span class="o">.</span><span class="n">to_s</span><span class="o">].</span><span class="n">keys</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">flag_setting</span><span class="p">(</span><span class="n">setting</span><span class="p">,</span> <span class="n">list</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">list</span><span class="o">.</span><span class="n">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="p">((</span><span class="n">setting</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">2</span><span class="o">**</span><span class="n">list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a</span><span class="p">))</span><span class="o">.</span><span class="n">zero?</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">amenities_list</span>
+</span><span class='line'>      <span class="n">flag_setting</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">amenities</span><span class="p">,</span> <span class="no">Building</span><span class="o">.</span><span class="n">flags</span><span class="p">(</span><span class="ss">:amenities</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The #set_building_flags accepts an array of flags and an integer bitmask column in your database table and will set column appropriately. Similarly, #amenities_list takes advantage of the #flag_setting method to return the list of amenities a building instance has rather than just the integer value of the bitmask field.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>001:0 &gt; <span class="nv">a</span> <span class="o">=</span> Building.new
+</span><span class='line'>002:0 &gt; a.set_building_flags<span class="o">([</span>:elevator, :laundry<span class="o">]</span>, :amenities<span class="o">)</span>
+</span><span class='line'><span class="o">=</span>&gt; 12
+</span><span class='line'>003:0 &gt; a.amenities_list
+</span><span class='line'><span class="o">=</span>&gt; <span class="o">[</span>:elevator, :laundry<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, the #flags class method extends the #flag_mapping class method provided by the gem by checking the hash that gets returned by the #flag_mapping method and returning the list of possible boolean indicators for the given column.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>001:0 &gt; Building.flags<span class="o">(</span>:amenities<span class="o">)</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="o">[</span>:pets_allowed, :doorman, :elevator, :laundry<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty straightforward stuff. Using FlagShihTzu in my projects has been a pretty lightweight way to add functionality that is easy to extend as my project grows. This way, adding new boolean indicators only requires one extra line of code in my model files, rather than running a new migration each time, which can quickly get unwiedly, especially for a young project that has not fully been fleshed out.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Navigating the Job Search]]></title>
@@ -6724,28 +6958,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 </span><span class='line'>Message sent!
 </span><span class='line'>Site changed! 'SOON' was at 764 before, now at 797.</span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron - Week 6]]></title>
-    <link href="http://eewang.github.com/blog/2013/03/17/flatiron-week-6/"/>
-    <updated>2013-03-17T10:14:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/03/17/flatiron-week-6</id>
-    <content type="html"><![CDATA[<p>Today marked the half-way point for the Flatiron program. This past week was heavy on Ruby on Rails instruction; Avi wanted to hammer into us the importance of understanding complex forms and working with multiple, associated models. On Monday, we brainstormed ideas for our final group projects and went through a planning session where we discussed ideas at a high-level - the features, technical obstacles and work sprints that we could tackle within the short timeframe for development.</p>
-
-<!--more-->
-
-
-<p>Throughout the week, I tried to implement the lecture content into my side project. Learning forms was challenging, and I&#8217;m glad that Avi and Bob spent a lot of time on the topic. The previous week, I had tried to implement a &#8220;favorites&#8221; form for users of my ticket tracker application, basically allowing users to tag sporting events or concerts as favorites. Eventually, I want this functionality to drive my API calls and analytics; rather than make a large number of unnecessary API calls, I want users to tell me what they want to look for and then enable the application to retrieve the data they want. Attempting to build out the form before covering the topic in class was difficult - I could never quite get the params hash working correctly, and I hadn&#8217;t made the proper inter-model associations. However, after much lecture and review this past week, I was finally able to get that functionality working in my application.</p>
-
-<p>In addition to working on forms this week, I also restructured my schema and models. In previous iterations of my application, I had been retrieving data on a periodic basis and saving all the data to a single table. This created considerable data duplication, as many attributes for a given concert or sporting event are not going to change on a daily basis (e.g., event date or venue). I came to the realization that a single API call for a given concert on a given day actually could be broken down into three tables - one for the actual concert, one for the concert listing and one for the concert listing quote for that specific day. Thus, I restarted my application with this in mind and broke up the process of saving data into a three-step waterfall so that I would get all necessary data, but nothing more.</p>
-
-<p>For example, say I make a call to the Stubhub API for event information about <a href="http://electricdaisycarnival.com/NewYork/" target="_blank">Electric Daisy Carnival - New York</a> (EDC). That API call actually returns to me information about 4 separate &#8220;events&#8221; - EDC 3-Day Pass, EDC Friday Only, EDC Saturday Only and EDC Sunday Only. The data is structured as JSON, and each hash has data fields that cover both daily static information - event date, venue, city, etc. - and daily dynamic information - minimum price, total tickets available, etc. Before, I had been saving all this information in the same table, but this past week, I broke it out into three tables, so that an API call for EDC will create 1 row in my concerts table, 4 rows in my concert_listings table and 4 rows in my concert_listing_quotes table. An API call tomorrow will create 4 new rows only in my concert_listing_quotes table, assuming that there are no new concert listings (an example might be EDC - NY After Party Tickets). I refactored my code so that each API call goes through a waterfall, checking for whether the relevant level of concert abstraction (a concert, concert listing or concert listing quote) already exists in the tables. If it does, great - move on. If it doesn&#8217;t, save a row to the database.</p>
-
-<p>Refactoring the code in this way plus adding in the proper associations (a concert has many concert listings, which have many concert listing quotes) made it much easier for me to traverse my models and move quickly from an individual user instance to what he or she favorited, through a FavoriteConcert model. My API calls take less time to run, and my application loads faster. All in all, I got a good lesson in the value of refactoring this past week and the benefit of adding reasonable layers of abstraction.</p>
-
-<p>In addition to coding, I&#8217;ve been reading Sandi Metz&#8217;s book on design - Practical Object Oriented Design in Ruby, or POODR. Going through POODR has been great in conceptualizing design best practices and taking a step back from coding to think through how to balance technical specificity with product flexibility. Sandi Metz has a great way of interjecting pithy, memorable statements about design that are great to keep in the back of your mind while designing an application. I&#8217;m hoping to finish up the book this week, at which point I&#8217;ll write a longer post with my review and thoughts on the book.</p>
 ]]></content>
   </entry>
   

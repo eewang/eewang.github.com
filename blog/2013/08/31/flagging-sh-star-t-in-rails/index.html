@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Vector Bitmasks in Rails - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="I&#8217;ve been using a gem called Flag Shih-Tzu in a number of my projects
+recently. In addition to being a wonderfully (and aptly) named gem, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using Vector Bitmasks in Rails</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-31T12:49:00-04:00" pubdate data-updated="true">Aug 31<span>st</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;ve been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" target="_blank">Flag Shih-Tzu</a> in a number of my projects
+recently. In addition to being a wonderfully (and aptly) named gem,
+FlagShihTzu makes it super simple to add bit mask fields, or Boolean
+indicators, without having to run additional migrations. In other
+words, it allows you to flag shit.</p>
+
+<!--more-->
+
+
+<p>When I first heard about <a href="http://en.wikipedia.org/wiki/Bit_array" target="_blank">vector bit fields</a> at 8to18 Media, I&#8217;ll admit that they sounded intimidating. Its a pretty computer scienc-ey sounding term - vectors! bits! technology! But in reality, they&#8217;re pretty much just an array of zeroes and ones, and the position of those bits in an array map to a vector legend. Imagine you have a 1 or 0 in each position of an array of size 3. A &#8216;1&#8217; in the first position indicates 2 ^ 0, a &#8216;1&#8217; in the second position is equal to 2 ^ 1, and a &#8216;1&#8217; in the third position is 2 ^ 2. That way, an array of [1, 0, 1] is equal to 2 ^ 0 + 2 ^ 2, or 5. Similarly, an array of [1, 1, 0] is equal to 3, and an array of [0, 1, 0] is equal to 2. Vector bitmasks (a.k.a. bit arrays) are a fairly elegant way to keep track of boolean, on-off switch attributes. <a href="http://devblog.xing.com/ruby-on-rails/a-rails-plugin-to-store-a-collection-of-boolean-values-as-a-single-bit-field/" target="_blank">Here&#8217;s</a> a helpful short blog post explaining bit fields.</p>
+
+<p>What the FlagShihTzu gem does is basically convert an integer field in your
+database table to a vector of bit masks. Based on the mapping
+structure that you define in the relevant model, FlagShihTzu will
+set and get the necessary bit fields and give you a bunch if useful
+helper methods to enable you to plan effectively for horizontal scale
+in your schema. Without this gem and without rolling your own similar
+functionality, adding Boolean indicators means running a new migration
+and getting methods set up for each new field. This can be mitigated
+by using define_method or method_missing, but adding in a gem provides
+the useful functionality without adding unwieldy dependencies.</p>
+
+<p>Getting set-up with the gem is pretty standard - set up a Rails app and add it to the Gemfile. I&#8217;ve had to think a lot about apartments and housing in general in the last few weeks (searching for an apartment in the East Village and helping friends move will do that), so I figured I could use the domain of apartment and housing search for my example app. The more I&#8217;ve thought about it, the more I think the real estate area is a pretty good domain model - its something everyone is familiar with, and especially in the case of explaining bit fields, has a slew of reasonable use cases for boolean attributes.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails new nyc_apts
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Gemfile</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;flag_shih_tzu&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After running bundle install, add a model and create your database table. FlagShihTzu will automatically look for a column named &#8216;flags&#8217; unless you explicitly tell it to use a different column for the vector bitmask. In my project, I set the :columns option in my Building model to &#8216;amenities&#8217;. This way, FlagShihTzu will change the value of my &#8216;amenities&#8217; integer field as I set my boolean attributes.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rails generate model apartment
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># in db/migrate</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">CreateBuildings</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:buildings</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">integer</span>  <span class="ss">:amenities</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:address</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:building_structure</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:leasing_company</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>   <span class="ss">:description</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">string</span>  <span class="ss">:phone_number</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">integer</span> <span class="ss">:year_built</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After running rake db:migrate, I can add the following code to my building.rb file to tell it to use the FlagShihTzu functionality in my Building model.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/building.rb</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Building</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">FlagShihTzu</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">has_flags</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="ss">:pets_allowed</span><span class="p">,</span>
+</span><span class='line'>                      <span class="mi">2</span> <span class="o">=&gt;</span> <span class="ss">:doorman</span><span class="p">,</span>
+</span><span class='line'>                      <span class="mi">3</span> <span class="o">=&gt;</span> <span class="ss">:elevator</span><span class="p">,</span>
+</span><span class='line'>                      <span class="mi">4</span> <span class="o">=&gt;</span> <span class="ss">:laundry</span><span class="p">,</span>
+</span><span class='line'>                      <span class="ss">:column</span> <span class="o">=&gt;</span> <span class="s1">&#39;amenities&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that once you choose an order for your flags, you cannot change them. Because the gem converts an integer into an array of bits, changing the mapping of the bit positions will yield different results for the same integer value.</p>
+
+<p>That&#8217;s all you need to add to your model in order to start playing around with the gem. In the background, FlagShihTzu adds an slew of useful methods for setting, getting and checking your boolean attributes. Specifically, these are the ones I find most useful. The documentation on Github has more instance methods, but I haven&#8217;t found much use for them so far in my projects.</p>
+
+<ul>
+<li>Building#doorman</li>
+<li>Building#doorman?</li>
+<li>Building#doorman=</li>
+<li>Building#doorman_changed?</li>
+</ul>
+
+
+<p>In my rails console, I can execute the following commands to quickly set my amenities column value using semantic setters for my boolean attributes.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>001:0 &gt; <span class="nv">building</span> <span class="o">=</span> Building.new
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;Building id: nil, amenities: nil, address: nil, building_structure: nil, leasing_company: nil, description: nil, phone_number: nil, year_built: nil, created_at: nil, updated_at: nil&gt;</span>
+</span><span class='line'>002:0 &gt; building.doorman?
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">false</span>
+</span><span class='line'>003:0 &gt; building.pets_allowed?
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">false</span>
+</span><span class='line'>004:0 &gt; building.doorman <span class="o">=</span> <span class="nb">true</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">true</span>
+</span><span class='line'>005:0 &gt; building.amenities
+</span><span class='line'><span class="o">=</span>&gt; 2
+</span><span class='line'>006:0 &gt; building.pets_allowed <span class="o">=</span> <span class="nb">true</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="nb">true</span>
+</span><span class='line'>007:0 &gt; building.amenities
+</span><span class='line'><span class="o">=</span>&gt; 3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, calling &#8216;has_flags&#8217; within your model produces class scopes that are useful for getting all instances of a Building that have doormen, for example. These method scopes are pretty straight forward - Building#doorman and Building#not_doorman, for example, will return an ActiveRecord Relation of all model instances that do or do not have the #doorman attribute set to true.</p>
+
+<p>Although FlagShihTzu provides useful methods for setting and getting individual boolean attributes, I&#8217;ve been adding additional methods to set multiple attributes. For example, here are methods that allow for setting and getting attributes in bulk.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># app/models/building.rb</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Building</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">set_building_flags</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="n">list_name</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">flag_bits</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">flag</span><span class="o">|</span> <span class="no">Building</span><span class="o">.</span><span class="n">flags</span><span class="p">(</span><span class="n">list_name</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">flag</span><span class="o">.</span><span class="n">to_sym</span><span class="p">)}</span>
+</span><span class='line'>    <span class="n">list_bitmask</span> <span class="o">=</span> <span class="n">flag_bits</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">sum</span><span class="p">,</span> <span class="n">item</span><span class="o">|</span> <span class="n">sum</span> <span class="o">+</span> <span class="mi">2</span><span class="o">**</span><span class="n">item</span> <span class="p">}</span>
+</span><span class='line'>    <span class="nb">send</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">list_name</span><span class="si">}</span><span class="s2">=&quot;</span><span class="p">,</span> <span class="n">list_bitmask</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">flags</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+</span><span class='line'>    <span class="no">Building</span><span class="o">.</span><span class="n">flag_mapping</span><span class="o">[</span><span class="n">column</span><span class="o">.</span><span class="n">to_s</span><span class="o">].</span><span class="n">keys</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">flag_setting</span><span class="p">(</span><span class="n">setting</span><span class="p">,</span> <span class="n">list</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">list</span><span class="o">.</span><span class="n">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">a</span><span class="o">|</span> <span class="p">((</span><span class="n">setting</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">2</span><span class="o">**</span><span class="n">list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">a</span><span class="p">))</span><span class="o">.</span><span class="n">zero?</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">amenities_list</span>
+</span><span class='line'>      <span class="n">flag_setting</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">amenities</span><span class="p">,</span> <span class="no">Building</span><span class="o">.</span><span class="n">flags</span><span class="p">(</span><span class="ss">:amenities</span><span class="p">))</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The #set_building_flags accepts an array of flags and an integer bitmask column in your database table and will set column appropriately. Similarly, #amenities_list takes advantage of the #flag_setting method to return the list of amenities a building instance has rather than just the integer value of the bitmask field.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>001:0 &gt; <span class="nv">a</span> <span class="o">=</span> Building.new
+</span><span class='line'>002:0 &gt; a.set_building_flags<span class="o">([</span>:elevator, :laundry<span class="o">]</span>, :amenities<span class="o">)</span>
+</span><span class='line'><span class="o">=</span>&gt; 12
+</span><span class='line'>003:0 &gt; a.amenities_list
+</span><span class='line'><span class="o">=</span>&gt; <span class="o">[</span>:elevator, :laundry<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, the #flags class method extends the #flag_mapping class method provided by the gem by checking the hash that gets returned by the #flag_mapping method and returning the list of possible boolean indicators for the given column.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>001:0 &gt; Building.flags<span class="o">(</span>:amenities<span class="o">)</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="o">[</span>:pets_allowed, :doorman, :elevator, :laundry<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty straightforward stuff. Using FlagShihTzu in my projects has been a pretty lightweight way to add functionality that is easy to extend as my project grows. This way, adding new boolean indicators only requires one extra line of code in my model files, rather than running a new migration each time, which can quickly get unwiedly, especially for a young project that has not fully been fleshed out.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-31T12:49:00-04:00" pubdate data-updated="true">Aug 31<span>st</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/08/26/navigating-the-job-search/" title="Previous Post: Navigating the Job Search">&laquo; Navigating the Job Search</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang@flatironschool.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>My name is Eugene Wang, and I am currently a software developer at the New York Times on the New Products team. Formerly, I was a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City from January to April 2013. This blog is about my ongoing journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.</p>
+    
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/31/flagging-sh-star-t-in-rails/">Using Vector Bitmasks in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/26/navigating-the-job-search/">Navigating the Job Search</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/">How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/">Using ActiveModel Serializers to Build Great JSON Interfaces</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/14/lessons-learned-on-the-job/">Five Lessons Learned On The Job</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/08/31/flagging-sh-star-t-in-rails/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
