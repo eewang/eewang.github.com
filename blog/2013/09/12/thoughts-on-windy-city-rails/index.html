@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Thoughts on Windy City Rails, Day 1 - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="I have the good fortune to be in Chicago today and tomorrow for the Windy City Rails conference. The NYT was kind enough to pay for me to fly here &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Thoughts on Windy City Rails, Day 1</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T20:06:00-05:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I have the good fortune to be in Chicago today and tomorrow for the <a href="http://www.windycityrails.org/" target="_blank">Windy City Rails</a> conference. The NYT was kind enough to pay for me to fly here and attend the conferece, and I&#8217;m sure it helps that I can crash with my brother in the south Loop rather than get a hotel room.</p>
+
+<p>Here are some thoughts on the most interesting talks I heard today.</p>
+
+<!--more-->
+
+
+<h4><strong>&#8220;Functional Principles for Ruby Developers&#8221;</strong> by <a href="https://twitter.com/jessitron" target="_blank">Jessica Kerr</a></h4>
+
+<p>Functional programming is pretty much a black box to me. I&#8217;ve heard a lot about it and know about the languages that implement it, but don&#8217;t quite understand how it works or what the tradeoffs are compared to the more familiar object-oriented programming paradigm. As a Scala and Ruby developer, Jessica spoke about the core tenets of functional programming, and how they can be applied to Ruby and Rails.</p>
+
+<p><em>Data In, Data Out</em></p>
+
+<p>This seems to be the fundamental aspect of <a href="http://en.wikipedia.org/wiki/Functional_programming" target="_blank">functional programming</a>. Functions are intended to be black boxes that take in data, do some awesome calculations, then return some other data. Personally, I need to see more code examples / translations into functional programming in order to fully grasp what&#8217;s going on, but I get how functional programming can help improve the predictability of an application&#8217;s behavior by removing or minimizing state dependency and the impact within a function on the outside environment. Pat Shaughnessy gave a <a href="http://www.youtube.com/watch?v=5ZjwEPupybw" target="_blank">great talk</a> on functional programming and Ruby using Haskell as a foil at GORUCO 2013. Jessica&#8217;s talk helps solidify some of my understanding of functional programming after hearing about it (and having it fly over my head) at GORUCO.</p>
+
+<p><em>Functions are data</em></p>
+
+<p>Lambdas in Ruby serve as first-class functions, not blocks or procs. Functions that are first-class can be stored as variables, passed around as parameters and set as the return value from other functions. An example of this is in how lambdas handle return or break statements. Return in a lambda exits the immediately executing scope to the parent environment, whereas blocks and procs exit out of the scope above them. Functions in a functional programming context are intended to be complete black boxes - data comes in, something happens, and data comes out. Lambdas are more accurate reflections of this functional programming construct than the other pseudo-function elements like blocks or procs.</p>
+
+<p><em>Errors are data too</em></p>
+
+<p>This relates with the item below - basically, that the more information you have about why your program isn&#8217;t working, the more likely you&#8217;ll be able to get your program to work. Standard error messages include stack traces and specific indications of why your code is broken (NoMethodError, for example, pretty succinctly tells you that you&#8217;re calling a method that doesn&#8217;t apply). Coders should try and add in their own custom error messages to describe why their program doesn&#8217;t work. In Jessica&#8217;s example, instead of trusting the program to sum up all the prices of the books, adding custom error messages helps in debugging and indicating whether the program didn&#8217;t work properly because the book didn&#8217;t have an ISBN number or that it didn&#8217;t have a price.</p>
+
+<p><em>Nil is not data</em></p>
+
+<p>Nil means a lot of things in Ruby - it&#8217;s pretty much the catch-all return value for whenever something doesn&#8217;t go according to plan. You search for a non-existent key in a hash (nil!). You have an if-statement without an explicit else block (nil!). You try to access an array index greater than the size of the array itself (nil!). All of these use cases demonstrate the ubiquity of nil so much so that if nil means everything, it also means nothing.</p>
+
+<p>Jessica demonstrated a way to convert nil values into meaningful messages that specify what exactly happened. For example, adding custom error messages and returing those as the script is running is more informative than just returning nil. This way, you know where your data is dirty and how you can further address it. She goes into more detail in her Github repo with the presentation (which I defintely recommend checking out).</p>
+
+<p><em>Functional composition</em></p>
+
+<p>Composition in functional programming refers to a &#8216;fits together with&#8217; type whereas composition in object-oriented programming is a &#8216;has a relationship with&#8217; type. For example, in order to print useful tracing messages, try and wrap functions in a helper method that prints out an error message and then calls the function itself. This is easier and DRYer than going into each of your methods and writing out messages, since if you want to change how you print the message, you only have to modify the body of one function rather than several.</p>
+
+<p><em>Be Lazy</em></p>
+
+<p>This goes without saying in general, but in this example speciically, the #lazy method in the Enumerable class helps evaluate one book. Without laziness, the process goes - import all book lists, check all prices, get all validly formatted books, then summing all the prices. With laziness, each book is processed end-to-end at a time. This way, the memory imprint of the process is minimized, and the sum builds up incrementally rather than being calculated all at once at the very end of the process. I liken the laziness aspect to scaling vertically rather than horizontally - its generally smarter (and much easier) to do the former than the latter.</p>
+
+<p>I had not known previously about the <a href="https://github.com/yhara/enumerable-lazy" target="_blank">#lazy</a> Enumerable method, and it looks like a nifty component added in Ruby 2.0, so I&#8217;ll definitely be sure to try and play around with it wherever I can.</p>
+
+<p>Here are a few helpful links - Jessica&#8217;s Github repo about the example she used is pretty descriptive of the benefits of functional programming with Ruby coming from a non-Rubyist perspective.</p>
+
+<p><a href="https://github.com/jessitron/fp4rd" target="_blank">Why should a Rubyist care about functional programming?</a></p>
+
+<p><a href="http://www.confreaks.com/videos/2382-rmw2013-functional-principles-for-oo-development" target="_blank">Functional Principles for OO Development (Ruby Midwest)</a></p>
+
+<h4><strong>&#8220;Devs and Depression&#8221;</strong> by <a href="https://twitter.com/greggyb">Greg Baugues</a></h4>
+
+<p>This talk by Greg Baugues was probably the most unique talk I heard all day, largely because it didn&#8217;t deal directly with code. Greg shared his personal struggle with bipolar disorder and ADD, and spoke about how certain qualities like intense focus and grandiose thoughts displayed by developers can actually reflect a deeper, unhealthy state. As someone with loved ones who have been afflicted by depression, I appreciated the honest look Greg provided into how mental health issues can debilitate one&#8217;s capacity for creativity and productivity. Go check out <a href="http://www.devsanddepression.com/" target="_blank">this site</a> about his depression.</p>
+
+<h4><strong>&#8220;Keeping Your Massive Rails App From Turning Into a S#!t Show&#8221;</strong> by <a href="https://twitter.com/benjamin_smith" target="_blank">Benjamin Smith</a></h4>
+
+<p>Service-oriented architecture seems to be all the rage these days, and Ben (of Pivotal Labs) described the process they used to build a complex social networking application using self-contained Rails engines. By breaking out the circular dependencies that are common across Rails (e.g., User has many Posts; Posts belongs to User), they were able to avoid having a monolithic User model and instead bolt-on added functionality (e.g., comments, likes, photos, etc.) in a discrete and loosely coupled manner without adding unwieldly dependencies.</p>
+
+<p>I haven&#8217;t used <a href="http://edgeguides.rubyonrails.org/engines.html" target="_blank">Rails engines</a> before, but they seem like nifty structural components to keeping code self-contained and modular so that separate teams can work on sub-sections of an application in relative isolation. One of the drawbacks of this technique, though, was that the initial velocity of the project was low, as they were focusing a lot on ensuring structural efficiency. However, this more than paid off as the project scaled, because they could add features incrementally without having to worry about dependencies across the project.</p>
+
+<h4><strong>&#8220;Hardware Integration with Rails&#8221;</strong> by <a href="https://twitter.com/too_mitch" target="_blank">Mitch Lloyd</a></h4>
+
+<p>Mitch, who works at a development shop out of Pittsburgh called Gaslight, covered the basics of dealing with hardware using Ruby. He walked the group through converting Ruby messages into binary using basic &#8216;to_i&#8217; commands with varying bases (default is base 10) to send the proper messages to the hardware receiver. Having never worked with hardware before, I appreciated his zero-baseline approach to teaching hardware programming, but I frankly got a little lost when he moved on to managing asynchronous tasks between software sender and hardware receiver and multi-threading. These are topics that I need more experience in - don&#8217;t worry though, they&#8217;re on my list of technical areas to explore.</p>
+
+<p>Having gone to a grand total of two technical programming conferences (GORUCO 2013!), I&#8217;m starting to get a feel for what I like and don&#8217;t like in technical talks.</p>
+
+<p><strong>Likes:</strong> Small, self-contained code sample or example application that demonstrates the main themes of the talk. Coherent presentation structure (bulleted &#8216;takeaways&#8217; are an easy way to accomplish this). Description of both anti-pattern and pro-pattern (e.g., &#8220;this is what y&#8217;all are doing&#8230; but this is how y&#8217;all should be doing it&#8221;). Keep presentations to 30 minutes, max. Maybe 45 minutes, but you&#8217;re really pushing it then.</p>
+
+<p><strong>Dislikes:</strong> Presenters who are too abstract and don&#8217;t deal with code implementation details about what they&#8217;re advocating. Presenters who are too detailed and don&#8217;t convert the code they&#8217;re writing to broader abstract themes. Bad jokes that fall flat on the audience.</p>
+
+<p>I&#8217;ll see what today brings, but overall I&#8217;ve enjoyed my time at Windy City Rails. The talks have covered a wide swath of topics - from testing, to functional programming, to mental health issues. One downside of the conference, though, was that it held at the South Shore Convention Center, south of the University of Chicago. For those not familiar with Windy City geography, that&#8217;s like holding GORUCO out in Pelham Bay Park in the Bronx - a beautiful area with natural scenery and fresh air, but a bit away from the bustling city center. I wish Windy City Rails were held right in the Loop, not only for my own commuting convenience but more so for those who haven&#8217;t really seen Chicago and want to explore the great city I call home (disclaimer: I&#8217;m actually from Naperville, a suburb of Chicago, but no one needs to mention that :)).</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T20:06:00-05:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/" title="Previous Post: Applying Vector Bitmask Fields in Rails">&laquo; Applying Vector Bitmask Fields in Rails</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang@flatironschool.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>My name is Eugene Wang, and I am currently a software developer at the New York Times on the New Products team. Formerly, I was a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City from January to April 2013. This blog is about my ongoing journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.</p>
+    
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/12/thoughts-on-windy-city-rails/">Thoughts on Windy City Rails, Day 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/">Applying Vector Bitmask Fields in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/26/navigating-the-job-search/">Navigating the Job Search</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/">How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/">Using ActiveModel Serializers to Build Great JSON Interfaces</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-01T13:49:47-04:00</updated>
+  <updated>2013-09-13T10:36:02-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[How to hack Lollapalooza and still not get tickets]]></title>
     <link href="http://eewang.github.com/blog/2013/03/21/how-to-hack-lollapalooza-and-still-not-get-tickets/"/>
-    <updated>2013-03-21T17:50:00-04:00</updated>
+    <updated>2013-03-21T17:50:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/03/21/how-to-hack-lollapalooza-and-still-not-get-tickets</id>
     <content type="html"><![CDATA[<p>As a Chicago native (and by "native" I mean a resident of a leafy suburb about 45 minutes away), my secret shame is that I've never been to <a href="http://www.lollapalooza.com" target="_blank">Lollapalooza</a>. Whenever I talk to people not from Chicago about Chicago, they always seem to mention that one time they went to Lolla and had a blast rocking out all night along Lake Shore Drive just a stone's throw away from the Sears (that's right, Sears) Tower. Conversations like these tend to end awkwardly when I can't match their enthusiasm for the premier music festival in my home city.</p>
 
@@ -3843,7 +3843,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Week 4]]></title>
     <link href="http://eewang.github.com/blog/2013/03/02/flatiron-week-3/"/>
-    <updated>2013-03-02T09:20:00-05:00</updated>
+    <updated>2013-03-02T09:20:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/03/02/flatiron-week-3</id>
     <content type="html"><![CDATA[<p>As I begin the fifth week of Flatiron School, I'm feeling pretty good about where things stand. I've been challenged, frustrated and exhausted throughout the previous month, but its been an amazing experience, as I've learned more in the past four weeks than I have since college (and probably before college). The workload has been heavy, and I've been trying to take on some personal projects on the side. Last week was Rails week, and this week we're starting to explore front-end web development via JavaScript/jQuery.</p>
 
@@ -3863,7 +3863,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 005]]></title>
     <link href="http://eewang.github.com/blog/2013/02/08/flatiron-day-005/"/>
-    <updated>2013-02-08T23:44:00-05:00</updated>
+    <updated>2013-02-08T23:44:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/02/08/flatiron-day-005</id>
     <content type="html"><![CDATA[<p>In grade school, snow days meant building snowmen, tossing snow balls and going sledding. At the Flatiron School, snow days mean 6 hours of lecture via video conference. Avi and Co "cancelled" class today in advance of Snowmageddon 2013, but only in the sense that we weren't expected to physically be in class. Instead, Avi set up a videoconference and hosted virtual class where we continued exploring Ruby.</p>
 
@@ -4069,7 +4069,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 003]]></title>
     <link href="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/"/>
-    <updated>2013-02-06T11:30:00-05:00</updated>
+    <updated>2013-02-06T11:30:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/02/06/flatiron-day-003</id>
     <content type="html"><![CDATA[<p>On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.</p>
 
