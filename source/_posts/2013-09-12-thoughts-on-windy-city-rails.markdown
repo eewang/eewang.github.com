@@ -6,15 +6,15 @@ comments: true
 categories: 
 ---
 
-I have the good fortune to be in Chicago today and tomorrow for the <a href="http://www.windycityrails.org/" target="_blank">Windy City Rails</a> conference. The NYT was kind enough to pay for me to fly here and attend the conferece, and I'm sure it helps that I can crash with my brother in the south Loop rather than get a hotel room.
+I have the good fortune to be in Chicago today and tomorrow for the <a href="http://www.windycityrails.org/" target="_blank">Windy City Rails</a> conference. The NYT was kind enough to pay for me to fly here and attend the conferece, and I'm sure it helps that I can crash with my brother in the south Loop rather than get a hotel room. Whenever I can get the chance to come back home and see my family and friends, I try to jump at the opportunity.
 
-Here are some thoughts on the most interesting talks I heard today.
+Here are some thoughts on the most interesting talks I heard on WCR Day 1.
 
 <!--more-->
 
 #### <strong>"Functional Principles for Ruby Developers"</strong> by <a href="https://twitter.com/jessitron" target="_blank">Jessica Kerr</a>
 
-Functional programming is pretty much a black box to me. I've heard a lot about it and know about the languages that implement it, but don't quite understand how it works or what the tradeoffs are compared to the more familiar object-oriented programming paradigm. As a Scala and Ruby developer, Jessica spoke about the core tenets of functional programming, and how they can be applied to Ruby and Rails. 
+Functional programming is pretty much a black box to me. I've heard a lot about it and know about the languages that implement it, but don't quite understand how it works or what the tradeoffs are compared to the more familiar object-oriented programming paradigm. As a Scala and Ruby developer, Jessica spoke about the core tenets of functional programming, and how they can be applied to Ruby and Rails. Her talk was the one I found most insightful and helpful for me personally on Day 1, and I liked how she used a simple, self-contained example (a Ruby script to calculate the total price of a set of data on books in .csv format) that demonstrated in code the broad themes she touched on.
 
 <em>Data In, Data Out</em>
 
@@ -64,7 +64,7 @@ I haven't used <a href="http://edgeguides.rubyonrails.org/engines.html" target="
 
 Mitch, who works at a development shop out of Pittsburgh called Gaslight, covered the basics of dealing with hardware using Ruby. He walked the group through converting Ruby messages into binary using basic 'to_i' commands with varying bases (default is base 10) to send the proper messages to the hardware receiver. Having never worked with hardware before, I appreciated his zero-baseline approach to teaching hardware programming, but I frankly got a little lost when he moved on to managing asynchronous tasks between software sender and hardware receiver and multi-threading. These are topics that I need more experience in - don't worry though, they're on my list of technical areas to explore.
 
-Having gone to a grand total of two technical programming conferences (GORUCO 2013!), I'm starting to get a feel for what I like and don't like in technical talks. 
+Having gone to a grand total of two technical programming conferences (represent GORUCO 2013!), I'm starting to get a feel for what I like and don't like in technical talks. 
 
 <strong>Likes:</strong> Small, self-contained code sample or example application that demonstrates the main themes of the talk. Coherent presentation structure (bulleted 'takeaways' are an easy way to accomplish this). Description of both anti-pattern and pro-pattern (e.g., "this is what y'all are doing... but this is how y'all should be doing it"). Keep presentations to 30 minutes, max. Maybe 45 minutes, but you're really pushing it then.
 
