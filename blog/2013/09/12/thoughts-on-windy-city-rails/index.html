@@ -110,7 +110,7 @@
 <!--more-->
 
 
-<h4><strong>&#8220;Functional Principles for Ruby Developers&#8221;</strong> by <a href="https://twitter.com/jessitron" target="_blank">Jessica Kerr</a></h4>
+<h4>&#8220;Functional Principles for Ruby Developers&#8221; by <a href="https://twitter.com/jessitron" target="_blank">Jessica Kerr</a></h4>
 
 <p>Functional programming is pretty much a black box to me. I&#8217;ve heard a lot about it and know about the languages that implement it, but don&#8217;t quite understand how it works or what the tradeoffs are compared to the more familiar object-oriented programming paradigm. As a Scala and Ruby developer, Jessica spoke about the core tenets of functional programming, and how they can be applied to Ruby and Rails. Her talk was the one I found most insightful and helpful for me personally on Day 1, and I liked how she used a simple, self-contained example (a Ruby script to calculate the total price of a set of data on books in .csv format) that demonstrated in code the broad themes she touched on.</p>
 
@@ -148,17 +148,17 @@
 
 <p><a href="http://www.confreaks.com/videos/2382-rmw2013-functional-principles-for-oo-development" target="_blank">Functional Principles for OO Development (Ruby Midwest)</a></p>
 
-<h4><strong>&#8220;Devs and Depression&#8221;</strong> by <a href="https://twitter.com/greggyb">Greg Baugues</a></h4>
+<h4>&#8220;Devs and Depression&#8221; by <a href="https://twitter.com/greggyb">Greg Baugues</a></h4>
 
 <p>This talk by Greg Baugues was probably the most unique talk I heard all day, largely because it didn&#8217;t deal directly with code. Greg shared his personal struggle with bipolar disorder and ADD, and spoke about how certain qualities like intense focus and grandiose thoughts displayed by developers can actually reflect a deeper, unhealthy state. As someone with loved ones who have been afflicted by depression, I appreciated the honest look Greg provided into how mental health issues can debilitate one&#8217;s capacity for creativity and productivity. Go check out <a href="http://www.devsanddepression.com/" target="_blank">this site</a> about his depression.</p>
 
-<h4><strong>&#8220;Keeping Your Massive Rails App From Turning Into a S#!t Show&#8221;</strong> by <a href="https://twitter.com/benjamin_smith" target="_blank">Benjamin Smith</a></h4>
+<h4>&#8220;Keeping Your Massive Rails App From Turning Into a S#!t Show&#8221; by <a href="https://twitter.com/benjamin_smith" target="_blank">Benjamin Smith</a></h4>
 
 <p>Service-oriented architecture seems to be all the rage these days, and Ben (of Pivotal Labs) described the process they used to build a complex social networking application using self-contained Rails engines. By breaking out the circular dependencies that are common across Rails (e.g., User has many Posts; Posts belongs to User), they were able to avoid having a monolithic User model and instead bolt-on added functionality (e.g., comments, likes, photos, etc.) in a discrete and loosely coupled manner without adding unwieldly dependencies.</p>
 
 <p>I haven&#8217;t used <a href="http://edgeguides.rubyonrails.org/engines.html" target="_blank">Rails engines</a> before, but they seem like nifty structural components to keeping code self-contained and modular so that separate teams can work on sub-sections of an application in relative isolation. One of the drawbacks of this technique, though, was that the initial velocity of the project was low, as they were focusing a lot on ensuring structural efficiency. However, this more than paid off as the project scaled, because they could add features incrementally without having to worry about dependencies across the project.</p>
 
-<h4><strong>&#8220;Hardware Integration with Rails&#8221;</strong> by <a href="https://twitter.com/too_mitch" target="_blank">Mitch Lloyd</a></h4>
+<h4>&#8220;Hardware Integration with Rails&#8221; by <a href="https://twitter.com/too_mitch" target="_blank">Mitch Lloyd</a></h4>
 
 <p>Mitch, who works at a development shop out of Pittsburgh called Gaslight, covered the basics of dealing with hardware using Ruby. He walked the group through converting Ruby messages into binary using basic &#8216;to_i&#8217; commands with varying bases (default is base 10) to send the proper messages to the hardware receiver. Having never worked with hardware before, I appreciated his zero-baseline approach to teaching hardware programming, but I frankly got a little lost when he moved on to managing asynchronous tasks between software sender and hardware receiver and multi-threading. These are topics that I need more experience in - don&#8217;t worry though, they&#8217;re on my list of technical areas to explore.</p>
 
