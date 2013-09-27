@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-13T11:27:14-05:00</updated>
+  <updated>2013-09-26T22:32:25-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -14,9 +14,212 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Presenting the Rails Presenter Pattern]]></title>
+    <link href="http://eewang.github.com/blog/2013/09/26/presenting-the-rails-presenter-pattern/"/>
+    <updated>2013-09-26T20:58:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2013/09/26/presenting-the-rails-presenter-pattern</id>
+    <content type="html"><![CDATA[<p>The past few weeks have been pretty busy for me in terms of work. My team&#8217;s product schedule has been ramping up, and we&#8217;re right in the middle of rapidly prototyping both the customer-facing product and our editorial interface. Also, we recently added Backbone.js to our project, so I&#8217;ve been getting up to speed on how to integrate a client-side Javascript framework into a Rails application.</p>
+
+<!--more-->
+
+
+<p>I find adding Backbone to this project particularly exciting because I wrote most of the client-side functionality of our editorial interface in raw Javascript, so I&#8217;m more than happy to have the opportunity now to use Backbone to provide structure and cleaner interactivity. Much like how at Flatiron learning Ruby, SQL and Sinatra before turning to Rails made me appreciate all the work Rails does behind the scenes, implementing Backbone after having written less-than-stellar Javascript to create the same functionality makes me appreciate the value front-end frameworks like Backbone, Ember or Angular provide.</p>
+
+<p>Outside of work, my development time has been mostly focused on <a href="http://www.litcharts.com" target="_blank">Litcharts</a> - a web and mobile platform for reviews and analysis of classic literature that was co-founded by a former fellow Flatironer and current NYTimes colleague, <a href="https://github.com/meowist" target="_blank">Justin Kestler</a>. My particular task has been to create a tool that builds newspaper-layout-like PDF versions of litcharts using HTML, CSS and Javascript. What seemed like a simple task - I initially thought I could just use CSS3 columns and a gem like Prawn or Wicked PDF - quickly turned complicated for a variety of reasons that I won&#8217;t go into at the moment. Needless to say, the past month or so has been quite busy for me with NYT and Litcharts work.</p>
+
+<p>Consequently, the time available for me to blog has rapidly dwindled. I set a goal for myself to write one blog post a week as a way to motivate myself to keep learning code and exploring technology. What I&#8217;ve learned, though, is that after a program like Flatiron, where you&#8217;re immersed in code and laser focused on rapidly building an entirely new skill set, I&#8217;ve hit my stride with code in that its become a familiar extension of myself, like writing or reading. This means I can keep learning about code while living a more balanced lifestyle than I did at Flatiron; I can&#8217;t imagine that the countless hours spent writing, reading and talking about code in school is particularly sustainable in the long run.</p>
+
+<p>But now back to the code. I recently implemented the Presenter pattern in my team&#8217;s Rails application. For those not familiar with the Presenter pattern, its a way to keep your view and controller logic as clean as possible by having a Ruby class serve as the interface between your model and the view/controller. Another way to think of a Presenter in Rails is as a serializer for your Views. And much like how ActiveModel::Serializers enable you to build a clean API and encapsulate API logic within methods that are easily testable, Presenters keep your model-specific view logic in one class that you can test like you would any other Rails model.</p>
+
+<p>Imagine you have an Article class that represents a newspaper article. Articles each have associated multimedia elements, which can vary from an image, video or slideshow. For the sake of this post, an article is a stripped down model that just stores a serialized hash to represent the associated multimedia assets.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Article</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">serialize</span> <span class="ss">:multimedia</span><span class="p">,</span> <span class="no">Hash</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The multimedia attribute looks something like this when serialized.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="ss">:caption</span> <span class="o">=&gt;</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">:credit</span> <span class="o">=&gt;</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">:images</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">:small</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://nytimes.com/image-small.jpg&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:dimensions</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">:height</span> <span class="o">=&gt;</span> <span class="mi">500</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:width</span> <span class="o">=&gt;</span> <span class="mi">500</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="ss">:large</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:url</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://nytimes.com/image-large.jpg&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:dimensions</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">:height</span> <span class="o">=&gt;</span> <span class="mi">500</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:width</span> <span class="o">=&gt;</span> <span class="mi">500</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="ss">:videos</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">:small</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">:preview</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://nytimes.com/video.m4v&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:dimensions</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="ss">:height</span> <span class="o">=&gt;</span> <span class="mi">300</span><span class="p">,</span>
+</span><span class='line'>        <span class="ss">:width</span> <span class="o">=&gt;</span> <span class="mi">400</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In my views and controllers, I need to be able to access the urls and dimensions of each multimedia asset to render a preview of the asset. One option to get these attributes is to do a whole bunch of type checking within my views and access the url of an image as follows:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="vi">@article</span><span class="o">.</span><span class="n">multimedia</span><span class="o">[</span><span class="ss">:images</span><span class="o">][</span><span class="ss">:small</span><span class="o">][</span><span class="ss">:url</span><span class="o">]</span> <span class="c1"># =&gt; http://nytimes.com/image-small.jpg</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rather than have the logic in the controller or view, the Presenter pattern provides a Ruby class that wraps a Rails model in order to create a simple API to the underlying object. Rather than going through the hash in my view, what I want to be able to do is just call #url or #caption on my article instance and get back the necessary information. I can add methods to my ArticlePresenter class to semantically access multimedia urls in my controllers and views rather than constantly checking a key-value pair in a deep nested hash.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ArticlePresenter</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">DEFAULT_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;small&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">FORMAT_TYPES</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:small</span><span class="p">,</span> <span class="ss">:large</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">article</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@article</span> <span class="o">=</span> <span class="n">article</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">FORMAT_TYPES</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">format</span><span class="si">}</span><span class="s2">_image_url&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="vi">@article</span><span class="o">.</span><span class="n">multimedia</span><span class="o">[</span><span class="ss">:images</span><span class="o">][</span><span class="nb">format</span><span class="o">][</span><span class="ss">:url</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">format</span><span class="si">}</span><span class="s2">_video_url&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="vi">@article</span><span class="o">.</span><span class="n">multimedia</span><span class="o">[</span><span class="ss">:videos</span><span class="o">][</span><span class="nb">format</span><span class="o">][</span><span class="ss">:url</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="n">type</span> <span class="o">=</span> <span class="ss">:image</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@article</span><span class="o">.</span><span class="n">multimedia</span><span class="o">[</span><span class="n">type</span><span class="o">][</span><span class="no">DEFAULT_FORMAT</span><span class="o">][</span><span class="ss">:url</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">caption</span>
+</span><span class='line'>    <span class="vi">@article</span><span class="o">.</span><span class="n">caption</span> <span class="o">||</span> <span class="s2">&quot;No caption&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># ... Other presenter methods</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">method</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@article</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">method</span><span class="p">)</span> <span class="k">rescue</span> <span class="kp">nil</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This way, in my controller I can wrap each article in a collection in an ArticlePresenter instance, so that in my views I just need to call @article.small_image_url or @article.large_video_url to get what I need rather than checking the multimedia hash. Both ways get the same result, but using a Presenter provides a testable object-oriented interface for view-specific logic relevant to a Rails model.</p>
+
+<p>And like ActiveModel::Serializers, I can set default values for nil return without having to change the underlying data. In this example, if an article multimedia item doesn&#8217;t have a caption, instead of returning nil to the view, I can instead return a string, &#8220;No caption&#8221;. This helps tailor your model instance to specific views without adding unwiedly logic to your ERB/HAML templates.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ArticleController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>    <span class="vi">@articles</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">article</span><span class="o">|</span> <span class="no">ArticlePresenter</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">article</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One question I had when exploring the Presenter pattern was how it differed from plain old Rails helpers. I think Presenters are useful when you have logic specific to your models that you need encapsulated, whereas Rails view helpers are intended for more generic logic that is model agnostic, like converting dates or measurements. Of course, you could probably use view helpers to accomplish the same function as Presenters, but having a one-to-one relationship between a Presenter and its model feels cleaner to me.</p>
+
+<p>Here are a few links that I found helpful while implementing the Presenter pattern.</p>
+
+<p><a href="http://blog.jayfields.com/2007/03/rails-presenter-pattern.html" target="_blank">Jay Fields on the Presenter Pattern</a></p>
+
+<p><a href="http://www.derekhammer.com/2012/11/06/a-pattern-for-rails-presenters" target="_blank">A Pattern for Rails Presenters</a></p>
+
+<p><a href="http://www.tamingthemindmonkey.com/2012/04/10/exploring-the-presenter-pattern" target="_blank">Exploring the Presenter Pattern</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Thoughts on Windy City Rails, Day 1]]></title>
     <link href="http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails/"/>
-    <updated>2013-09-12T20:06:00-05:00</updated>
+    <updated>2013-09-12T20:06:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails</id>
     <content type="html"><![CDATA[<p>I have the good fortune to be in Chicago today and tomorrow for the <a href="http://www.windycityrails.org/" target="_blank">Windy City Rails</a> conference. The NYT was kind enough to pay for me to fly here and attend the conferece, and I&#8217;m sure it helps that I can crash with my brother in the south Loop rather than get a hotel room. Whenever I can get the chance to come back home and see my family and friends, I try to jump at the opportunity.</p>
 
@@ -90,7 +293,7 @@
   <entry>
     <title type="html"><![CDATA[Applying Vector Bitmask Fields in Rails]]></title>
     <link href="http://eewang.github.com/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/"/>
-    <updated>2013-08-31T12:49:00-05:00</updated>
+    <updated>2013-08-31T12:49:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/08/31/applying-vector-bitmask-fields-in-rails</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" target="_blank">Flag Shih-Tzu</a> in a number of my projects
 recently. In addition to being a wonderfully (and aptly) named gem,
@@ -324,7 +527,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Navigating the Job Search]]></title>
     <link href="http://eewang.github.com/blog/2013/08/26/navigating-the-job-search/"/>
-    <updated>2013-08-26T07:24:00-05:00</updated>
+    <updated>2013-08-26T07:24:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/08/26/navigating-the-job-search</id>
     <content type="html"><![CDATA[<p>Last Friday was graduation day for the most recent cohort of Flatiron School students, and today is the first official day of the post-school job search process. I&#8217;m reminded of the my first day after the last day of Flatiron, when I went back into school just out of habit and a desire to continue the accelerated learning process that I had become so accustomed to. In light of that and with an eye toward helping out the newly-minted Flatiron graduates, here are a few thoughts that I hope can be useful to those who are enduring the frustration, anxiety and, ultimately and hopefully, joy of looking for a junior-level developer gig.</p>
 
@@ -379,7 +582,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations]]></title>
     <link href="http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/"/>
-    <updated>2013-07-29T19:26:00-05:00</updated>
+    <updated>2013-07-29T19:26:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql</id>
     <content type="html"><![CDATA[<p>Recently at the NYT on the product I&#8217;m working on, we came across the problem of having to convert ActiveRecord migrations into raw SQL in order to be processed on our production database. Our infrastructure/systems team needs SQL in order to generate migrations; since not all teams at the NYT use Rails, ActiveRecord&#8217;s migrations cannot be automatically applied to the production database.</p>
 
@@ -616,7 +819,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Using ActiveModel Serializers to Build Great JSON Interfaces]]></title>
     <link href="http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/"/>
-    <updated>2013-07-23T14:07:00-05:00</updated>
+    <updated>2013-07-23T14:07:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been at the New York Times on the New Digital Products team for a little over two weeks now. Thus far, its been an awesome experience. I&#8217;ve had the opportunity to jump right in and commit code, primarily helping build the Rails backend interface for a mobile application. I&#8217;ve been spending time trying to get up to speed on the various internal software tools that the NYT provides, and I&#8217;ve come to appreciate that from a technical perspective, the NYT is an API-driven organization.</p>
 
@@ -823,7 +1026,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Five Lessons Learned On The Job]]></title>
     <link href="http://eewang.github.com/blog/2013/07/14/lessons-learned-on-the-job/"/>
-    <updated>2013-07-14T04:52:00-05:00</updated>
+    <updated>2013-07-14T04:52:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/07/14/lessons-learned-on-the-job</id>
     <content type="html"><![CDATA[<p>Last week I started my job at the New York Times. And while I&#8217;ve learned a lot over my first week, I feel it necessary to write a post on what I learned working at 8to18 for four weeks. As my first actual developer gig, working at 8to18 has helped me grasp what it means to be a professional developer, and while I undoubtedly still have a lot to learn, I felt better prepared going into my job at the NYT having worked at a start-up for a short period of time. Here are a few lessons that I&#8217;ve learned now that I&#8217;ve had a chance to explore an existing code base for a non-trivial web application that has an active userbase.</p>
 
@@ -863,7 +1066,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Developing Web Applications with 8to18 Media]]></title>
     <link href="http://eewang.github.com/blog/2013/06/11/developing-web-applications-with-8to18-media/"/>
-    <updated>2013-06-11T20:49:00-05:00</updated>
+    <updated>2013-06-11T20:49:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/06/11/developing-web-applications-with-8to18-media</id>
     <content type="html"><![CDATA[<p>I&#8217;ll admit it - I&#8217;ve been slacking the past few weeks about blogging. Most of what I&#8217;ve been doing since mid-May since my job search concluded has been enjoying NYC, hanging out with friends and doing a some Javascript learning. Its tough to keep up the pace of Flatiron after the end of the program. While I&#8217;ve still be trying to code every day and spend quality time learning Javascript and Backbone, I&#8217;ve taken time to relax and enjoy myself since I&#8217;ll have many more years of working ahead of me and increasingly less time to just live and enjoy the city.</p>
 
@@ -888,7 +1091,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[How I'm Learning Javascript]]></title>
     <link href="http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/"/>
-    <updated>2013-05-24T07:45:00-05:00</updated>
+    <updated>2013-05-24T07:45:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript</id>
     <content type="html"><![CDATA[<p>For my job at the NYT that I&#8217;ll be starting in July, I&#8217;ll likely be working a lot in Ruby and Javascript. At the Flatiron School, the focus was on becoming a back-end Ruby developer, and while we learned our fair share of JavaScript and jQuery, it was always in the context of a Ruby or Rails application. Most of the front-end focus gravitated toward DOM manipulation and traversal using jQuery and less on the functionality of Javascript as a programming language (e.g., objects, closures, inheritance / composition, etc.).</p>
 
@@ -938,7 +1141,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Landing the Dream Job]]></title>
     <link href="http://eewang.github.com/blog/2013/05/18/landing-the-dream-job/"/>
-    <updated>2013-05-18T23:40:00-05:00</updated>
+    <updated>2013-05-18T23:40:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/05/18/landing-the-dream-job</id>
     <content type="html"><![CDATA[<p>I&#8217;m happy to announce that I will be joining the New York Times as a software developer this July. I&#8217;ll be working on the new Emerging Technologies team, which is a team tasked with building a new suite of web and mobile technologies for consuming NYT content. The small group consists of developers, designers, product folks and journalists/editors. I&#8217;m extremely excited to join the world&#8217;s newspaper of record and a talented developer team that will define the future of such a storied institution. I feel humbled and honored for the opportunity, and I&#8217;m eager to explore the opportunities to grow at an organization like the NYT.</p>
 
@@ -954,7 +1157,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)]]></title>
     <link href="http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2/"/>
-    <updated>2013-05-17T08:45:00-05:00</updated>
+    <updated>2013-05-17T08:45:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2</id>
     <content type="html"><![CDATA[<p>I wrapped up Rails Antipatterns about a week ago shortly after reading Metaprogramming Ruby. Reading both books side-by-side has helped me better understand the relationship between Ruby and Rails and how Ruby&#8217;s metaprogramming capabilities provide the &#8220;magic&#8221; that Rails is often associated with. Rails Antipatterns is a great book that uses commonly abused patterns in Rails to illustrate refactoring opportunities. I was able to complete the book a few weeks back, but I&#8217;ve been keeping busy with the interview process (more on that in another post) and side projects such that I haven&#8217;t been able to blog as much as I would have wanted. That&#8217;s been one of the hardest parts of the interview process in that I just have less time to actually code, blog and read. Anyways, I figured that I&#8217;d write down some of my thoughts on Rails Antipatterns alongside Metaprogramming Ruby and the areas where Antipatterns helped me the most in structuring my Rails code.</p>
 
@@ -1070,7 +1273,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails/"/>
-    <updated>2013-04-29T15:03:00-05:00</updated>
+    <updated>2013-04-29T15:03:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails</id>
     <content type="html"><![CDATA[<p>I recently finished reading two programming books in parallel - Metaprogramming Ruby and Rails Antipatterns. As Ruby/Rails books go, the two could not be further apart. Metaprogramming Ruby focuses on explaining the Ruby object model and how core Ruby is constructed in order to enable you as a Ruby programmer to unlock functionality that isn&#8217;t immediately obvious. Conversely, Rails Antipatterns is more about focusing on the bad coding habits most new Rails developers experience and simple, tangible ways to avoid those  pitfalls. One book explains core Ruby (although also touches some on Rails), while the other applies specifically to Rails. One book goes as deep as possible into Ruby&#8217;s construction as a language, while the other aims to hit developers in their day-to-day programming habits. Arguably, Rails Antipatterns is more &#8220;practical&#8221; and Metaprogramming Ruby is more &#8220;theoretical,&#8221; as its generally easier to find more daily code applications of Rails Antipatterns than Metaprogramming Ruby. This post will focus on Metaprogramming Ruby and the next will focus on Rails Antipatterns.</p>
 
@@ -1412,7 +1615,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Using Recursion With Project Euler]]></title>
     <link href="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/"/>
-    <updated>2013-04-28T08:00:00-05:00</updated>
+    <updated>2013-04-28T08:00:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler</id>
     <content type="html"><![CDATA[<p>I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what with all the coding, reading and blogging that I&#8217;m trying to do on a day-to-day basis. However, I was able to work in a problem earlier this week that helped me get a better grasp of using recursion in Ruby.</p>
 
@@ -1671,7 +1874,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Flatiron Graduation]]></title>
     <link href="http://eewang.github.com/blog/2013/04/27/flatiron-graduation/"/>
-    <updated>2013-04-27T07:57:00-05:00</updated>
+    <updated>2013-04-27T07:57:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/27/flatiron-graduation</id>
     <content type="html"><![CDATA[<p>Yesterday was the final day of the Flatiron School semester. I&#8217;ll write a longer blog post hopefully next week with my reflections and thoughts on the 3 month program, but I just wanted to say that its been an awesome experience. I&#8217;ve met some amazing people and I&#8217;m so happy to have a skill set now that I can continue to cultivate for the rest of my life. I used to have a lot of ideas for applications or programs that could never reach fruition without knowing how to code; now, I can have an idea and write a simple exploratory Rails app or script to see if its feasible. The skill of being able to ideate and execute simultaneously is a true blessing, and I&#8217;m thankful to have had the opportunity to build it at the Flatiron School.</p>
 
@@ -1697,7 +1900,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[How To Build A Simple News Reader]]></title>
     <link href="http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/"/>
-    <updated>2013-04-25T16:58:00-05:00</updated>
+    <updated>2013-04-25T16:58:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader</id>
     <content type="html"><![CDATA[<p>A Flatiron TA (Blake Johnson) recently introduced us to the &#8216;say&#8217; command in the Mac terminal. The command does exactly what you think it would - if you send in a string after the command, your computer will talk back to you! With this new-found coder superpower, I thought it would be interesting to try and build a simple news reading application. I&#8217;ve pasted the code below after the fold, or you can find my code <a href="https://github.com/eewang/automated-news-reader" target="_blank">here on Github</a>.</p>
 
@@ -1958,7 +2161,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Not All Sort Algorithms Are Created Equal]]></title>
     <link href="http://eewang.github.com/blog/2013/04/22/sort-algorithms/"/>
-    <updated>2013-04-22T11:20:00-05:00</updated>
+    <updated>2013-04-22T11:20:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/22/sort-algorithms</id>
     <content type="html"><![CDATA[<p>Yesterday we explored a few computer science topics, such as sort algorithms, Big O notation, linked lists and binary search nodes. I was tasked with learning more about sort algorithms, which is something I typically take for granted when coding, since Ruby has a built in #sort method (which, incidentally, uses the quick sort algorithm that I&#8217;ll go into later). At a high level, a sort algorithm is a set of instructions to follow to sort a collection (e.g., an array) based on one or multiple criterion.</p>
 
@@ -2677,7 +2880,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Of Science Fairs and Space Apps (Flatiron - Week 11)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/"/>
-    <updated>2013-04-21T21:56:00-05:00</updated>
+    <updated>2013-04-21T21:56:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11</id>
     <content type="html"><![CDATA[<p>I can hardly believe that there is only one week left in the Flatiron School. This past week we had our Science Fair where we showed off the applications that we had been building for most of the second half of the semester. I talked about <a href="http://handrai.se" target="_blank">HandRaise</a> and <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, the two apps that I&#8217;ve spent the most time building. We had a strong showing from the NYC tech community; I was definitely exhausted by the end of the four-hour long event.</p>
 
@@ -2703,7 +2906,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[In Praise of Project Euler]]></title>
     <link href="http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler/"/>
-    <updated>2013-04-17T16:39:00-05:00</updated>
+    <updated>2013-04-17T16:39:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler</id>
     <content type="html"><![CDATA[<p>On the suggestion of my Flatiron classmates <a href="http://chickenriceplatter.github.io/" target="_blank">David</a> and <a href="http://andrewcallahan.github.io" target="_blank">Andrew</a>, I started trying out <a href="http://projecteuler.net/" target="_blank">Project Euler</a> recently. For the uninitiated, Project Euler is a series of math problems aptly named after the famed mathemetician Leonhard Euler, known for such learned things like fluid dynamics, number theory and calculus. Project Euler is effectively a database of math problems that are intended to be solved using code (any language can be used; I&#8217;m using Ruby). The questions test your logical thinking skills, and while they&#8217;re named after a mathemetician, the actual math necessary is more along the lines of high school math (e.g., prime numbers, factoring, etc.). This is not to diminish the difficulty of these problems - some of them are quite challenging - but rather to distinguish between the problem solving skills, which Project Euler helps build, versus pure math skill, which is more the province of a graduate school program. I&#8217;ve also throw my efforts to solve these problems on Github if you want to <a href="https://github.com/eewang/project-euler" target="_blank">check them out</a>.</p>
 
@@ -3108,7 +3311,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[TRUE Object-Oriented Design]]></title>
     <link href="http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails/"/>
-    <updated>2013-04-13T11:23:00-05:00</updated>
+    <updated>2013-04-13T11:23:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails</id>
     <content type="html"><![CDATA[<p>Avi always stresses that being a good developer is about more than just being a good coder. Like all professions, coding is only part of the job. What&#8217;s arguably more important than coding are the soft skills that transcend any individual profession. Skills like communication, empathy, diligence and hard work. All good professional jobs help build these skills, and software development is no different.</p>
 
@@ -3169,7 +3372,7 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
   <entry>
     <title type="html"><![CDATA[Building ViewFinder (Flatiron - Week 9)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9/"/>
-    <updated>2013-04-07T14:42:00-05:00</updated>
+    <updated>2013-04-07T14:42:00-04:00</updated>
     <id>http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9</id>
     <content type="html"><![CDATA[<p>The majority of this past week was spent building <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, which is a Rails app that leverages the Instagram API to enable users to guess where photos were taken and gamefies Instagram photo feeds. Building ViewFinder along with <a href="http://www.erinandcode.com" target="_blank">Erin Lee</a> and <a href="http://jlarusso.github.io" target="_blank">Jesse LaRusso</a> has been a pretty great experience; we got way farther than I had expected initially for the NYC on Rails presentation. Looking back at our Trello board, we defined our MVP for the presentation as an app where users could browse tagged photos and write in the address or intersection where they think the photo was taken. What we ended up with was much more than that, and more visually appealing than I could have imagined initially.</p>
 
@@ -3330,44 +3533,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <p>On the technical side, there is a certain amount of technical debt that got built up with the rush to deploy before the NYC on Rails presentation. I don&#8217;t think the debt is insurmountable, but the app can definitely benefit from some refactoring. Using view helpers more effectively, moving some code into modules for shared functionality and making gameplay more object-oriented are all changes that I think would make the codebase cleaner and the user experience more fluid.</p>
 
 <p>I definitely would like to continue developing ViewFinder and building out new features. I&#8217;ve enjoyed the process of designing the product, working in a team and writing code. There&#8217;s an undefinable joy in having an idea and being able to execute on that idea and see the results. Like many creative ventures, coding is hard enough so that its always challenging, but its also accessible and progress is possible with concerted effort. And to steal a phrase from Avi, coding is all about taking complexity and delivering simplicity. A simple, sensible user interface hides the complexity within a codebase, and now being able to understand how that complexity creates simplicity has been fantastic.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Agile Product Development (Flatiron - Week 7)]]></title>
-    <link href="http://eewang.github.com/blog/2013/03/23/flatiron-week-7/"/>
-    <updated>2013-03-23T22:56:00-05:00</updated>
-    <id>http://eewang.github.com/blog/2013/03/23/flatiron-week-7</id>
-    <content type="html"><![CDATA[<p>We spent this past week focused mostly on getting our group projects off the ground. We didn&#8217;t really have lecture this week; each day was spent pair programming and building our applications using agile development best practices. My group, which consists of myself, <a href="http://janeeats.github.com" target="_blank">Jane Vora</a>, <a href="http://anthonywijnen.com" target="_blank">Anthony Wijnen</a> and <a href="http://ei-lene.github.com" target="_blank">Ei-lene Heng</a>, is building an app to structure and streamline the process of asking questions in class during group work. The current process of just raising your hand and hoping that a teacher is free is pretty inefficient and awards the lucky students rather than students who have an especially urgent question or have been waiting a long time.</p>
-
-<!--more-->
-
-
-<p>Since this was the first week at Flatiron devoted to building applications, I learned a lot about how to work effectively in a group and maintain an agile approach to building web products. Here are a few lessons I learned this past week:</p>
-
-<p><strong>1) Design a good group workflow that holds people accountable</strong></p>
-
-<p>Our team this past week developed a pretty solid workflow. Each day, we pair programming with a different teammate. This enabled us to get an understanding of how each person codes, while switching roles periodically such that whomever was coding in the morning became the person giving instructions in the afternoon. Also, we established a rule such that every code commit to Github must be to a feature branch with a pull request to the master branch. This way, the team submitting the pull request would have to walk the other pair through the changes so that the other pair could ask questions, understand the code changes and ultimately be responsible for approving the request.</p>
-
-<p>I think this is an effective group workflow because it forces developers to explain and clearly articulate the purpose of the code they wrote. It helps the entire team spot patterns and refactoring opportunities, while holding individual team members accountable for the code they write. Oftentimes in the process of reviewing the other pair&#8217;s pull request, we would find opportunities to more efficiently merge code or enter into a discussion of how a feature will actually behave. While I&#8217;ve come to appreciate the Git/Github process and workflow (after much wall head-banging, no doubt), it doesn&#8217;t replace actual in-person communication, which is how features are flushed out and errors spotted.</p>
-
-<p><strong>2) Explore rabbit holes but don&#8217;t dive in</strong></p>
-
-<p>Avi often talks about the notion of a programming &#8220;rabbit hole&#8221; - a non-core path in building an application that lead to great frustration without actual productive learning opportunities. These are often littered throughout the application building process - using gems, for example, can become a rabbit hole when trying to properly configure a gem or customize its functionality in a certain way. I don&#8217;t think rabbit holes should be avoided entirely; often, you don&#8217;t know something is a rabbit hole until you&#8217;ve started going down it. Rather, what&#8217;s more important is to have discipline and perception in recognizing what is a rabbit hole, knowing how far to go down it and establishing a clear path out.</p>
-
-<p>An example of a rabbit hole I encountered this past week was in using <a href="https://github.com/intridea/omniauth-github" target="_blank">OmniAuth for Github</a>. OmniAuth enables applications to permit users to authenticate using third-party applications, like Facebook, Twitter or Github. This allows developers to build off the Facebook platform, for example, and extend its functionality using Facebook data. OmniAuth is an incredibly useful tool and streamlines login/logout functionality shared by nearly every application.</p>
-
-<p>However, OmniAuth does its magic by working in the Rack middleware in Rails, which is an area that I don&#8217;t feel particularly strong in. Also, after learning authentication just over a week ago, we&#8217;ve been working mostly on building our own simple authentication systems rather than applying a third-party auth system. Needless to say, trying to implement OmniAuth for Github this past week was a challenge. I had to improve my understanding of authentication generally while also implementing the OmniAuth gem and exploring the Github API. It felt a bit overwhelming. As I tried to implement OmniAuth for Github, error messages kept popping up and it seemed like I was going nowhere with it. I had come across a rabbit hole, at least for the moment. Eventually, Github integration will be a necessary component of our application (so that users can create gists and share code snippets when asking questions through the app), but its not necessarily a core feature. By putting off the implementation of OmniAuth for Github until I have a better understanding of OmniAuth generally (i.e., this week, hopefully), I can be more efficient in building my app by focusing on the MVP functionality.</p>
-
-<p>Knowing when exploration turns into a rabbit hole and being disciplined about turning back is hard. My natural tendency is to just plow through and try and solve the problem, regardless of how much time I spent on it and even if taking a step back and learning more about the underlying problem before is the more efficient strategy in the long-run. You get that nagging feeling that you just can&#8217;t step away from the code, even if you know you should stop going down the rabbit hole. That&#8217;s how I&#8217;ll end up coding late into the night, by trying to climb out of a rabbit hole - an exercise in futility at 3 am in the morning.</p>
-
-<p>I&#8217;ve come to realize that its better to just take a step back, calm down, re-evaluate and pick it back up in the morning. A good night&#8217;s sleep helps refocus the mind. But having that discipline to stop working is often as hard to develop as the motivation to begin work.</p>
-
-<p><strong>3) Embrace the uncertainty that comes with agile development</strong></p>
-
-<p>With this past week being our first extended experience with an agile development process, I learned not to be too beholden to individual features or processes, but rather to maintain flexibility and get comfortable with not knowing. Early on in the development process, not only do you not know what the end product will look like, you don&#8217;t even know what you don&#8217;t know about the obstacles, challenges and opportunities along the way. Thus, instead of writing out long, detailed specs about every feature of the product, its better to work iteratively with tight, short feedback loops to boost software responsiveness.</p>
-
-<p>In our daily work, we&#8217;ve tried to work in short sprints using <a href="http://www.trello.com" target="_blank">Trello</a> as our project management tool. Checking in regularly with the other team also enabled us to keep moving in the right direction while avoiding rabbit holes. I appreciate the iterative process of software development, as it emphasizes flexibility, testing and product feedback rather than grand design and extensive planning before actual coding. This next week we&#8217;ll go back to splitting up the day between lecture and groupwork; I&#8217;m eager to get into some more advanced Rails topics that we can hopefully apply immediately to our projects.</p>
 ]]></content>
   </entry>
   

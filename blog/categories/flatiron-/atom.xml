@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Flatiron, | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/flatiron-/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-13T11:27:14-05:00</updated>
+  <updated>2013-09-26T22:32:25-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 004]]></title>
     <link href="http://eewang.github.com/blog/2013/02/07/flatiron-day-004/"/>
-    <updated>2013-02-07T10:56:00-06:00</updated>
+    <updated>2013-02-07T10:56:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/02/07/flatiron-day-004</id>
     <content type="html"><![CDATA[<p>This morning, we started with a review of the SQL homework and ventured into the wide world of SQL joins, followed by the start of our Ruby learning in the afternoon. Regarding SQL, I struggled a bit with the homework last night, but after I read up a bit more on joins, the confusion lessened and I was able to create a working quiz database. Our task was to (i) design a database schema, (ii) populate the database, (iii) query the database and (iv) determine quiz scores. I've published the SQL code I wrote to accomplish this task after the jump.</p>
 

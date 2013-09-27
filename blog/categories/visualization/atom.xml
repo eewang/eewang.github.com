@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Visualization | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/visualization/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-13T11:27:14-05:00</updated>
+  <updated>2013-09-26T22:32:25-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[How to Visualize Data With Google Charts For Ruby]]></title>
     <link href="http://eewang.github.com/blog/2013/02/20/how-to-visualize-data-with-google-charts/"/>
-    <updated>2013-02-20T17:42:00-06:00</updated>
+    <updated>2013-02-20T17:42:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/02/20/how-to-visualize-data-with-google-charts</id>
     <content type="html"><![CDATA[<p>I love data. Specifically, I love data visualizations. Infographics, charts, whatever you call it, if it displays data visually, chances are I'll want to take a look at it. Data graphics tightly integrate the creative and analytical elements that I find so appealing about programming to efficiently communicate information. If a picture is worth a thousand words, an infographic is worth a thousand pictures. Data graphics can take an array of different forms - charts, 3-D graphs, maps, etc., the possibilities are virtually endless. I wanted to explore data visualization tools in Ruby, starting with basic chart functionality.</p>
 
