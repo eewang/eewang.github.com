@@ -4,7 +4,7 @@
   <title><![CDATA[Category: coding | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/coding/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-26T22:32:25-04:00</updated>
+  <updated>2013-10-04T13:59:57-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Week 4]]></title>
     <link href="http://eewang.github.com/blog/2013/03/02/flatiron-week-3/"/>
-    <updated>2013-03-02T09:20:00-05:00</updated>
+    <updated>2013-03-02T09:20:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/03/02/flatiron-week-3</id>
     <content type="html"><![CDATA[<p>As I begin the fifth week of Flatiron School, I'm feeling pretty good about where things stand. I've been challenged, frustrated and exhausted throughout the previous month, but its been an amazing experience, as I've learned more in the past four weeks than I have since college (and probably before college). The workload has been heavy, and I've been trying to take on some personal projects on the side. Last week was Rails week, and this week we're starting to explore front-end web development via JavaScript/jQuery.</p>
 
@@ -36,7 +36,7 @@
   <entry>
     <title type="html"><![CDATA[5 Reasons Everyone Should Learn How to Code]]></title>
     <link href="http://eewang.github.com/blog/2013/02/11/5-reasons-everyone-should-learn-how-to-code/"/>
-    <updated>2013-02-11T18:33:00-05:00</updated>
+    <updated>2013-02-11T18:33:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/02/11/5-reasons-everyone-should-learn-how-to-code</id>
     <content type="html"><![CDATA[<p>You should learn how to code. Even if you don't want to be a programmer, coding is the new literacy. Don't worry if you don't have a technical background and never touched code in your life. I came to Flatiron having only taken one programming course ever. I worried that I was too old to learn this stuff; it seemed like everyone was either a computer science major or had been coding since they were kids. However, I've learned that the technology has become much more accessible to beginners in the past few years.</p>
 
@@ -80,7 +80,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Week 1 Redux]]></title>
     <link href="http://eewang.github.com/blog/2013/02/10/flatiron-week-1-redux/"/>
-    <updated>2013-02-10T14:00:00-05:00</updated>
+    <updated>2013-02-10T14:00:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/02/10/flatiron-week-1-redux</id>
     <content type="html"><![CDATA[<p>Flatiron is now 1/12 the way done. The first week has been pretty great; after lecture on Friday I felt physically exhausted, but mentally I was running a mile a minute, thinking of all the stuff that's out there to learn. My schedule has generally been to get into school around 9 am, morning lecture, lunch, afternoon lecture, group work, then wrap up around 6 pm, after which I'll stay until 7:30/8:00. I realize that it's only been one week, but I've already learned a ton.</p>
 
@@ -129,7 +129,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 005]]></title>
     <link href="http://eewang.github.com/blog/2013/02/08/flatiron-day-005/"/>
-    <updated>2013-02-08T23:44:00-05:00</updated>
+    <updated>2013-02-08T23:44:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/02/08/flatiron-day-005</id>
     <content type="html"><![CDATA[<p>In grade school, snow days meant building snowmen, tossing snow balls and going sledding. At the Flatiron School, snow days mean 6 hours of lecture via video conference. Avi and Co "cancelled" class today in advance of Snowmageddon 2013, but only in the sense that we weren't expected to physically be in class. Instead, Avi set up a videoconference and hosted virtual class where we continued exploring Ruby.</p>
 
@@ -335,7 +335,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 004]]></title>
     <link href="http://eewang.github.com/blog/2013/02/07/flatiron-day-004/"/>
-    <updated>2013-02-07T10:56:00-05:00</updated>
+    <updated>2013-02-07T10:56:00-06:00</updated>
     <id>http://eewang.github.com/blog/2013/02/07/flatiron-day-004</id>
     <content type="html"><![CDATA[<p>This morning, we started with a review of the SQL homework and ventured into the wide world of SQL joins, followed by the start of our Ruby learning in the afternoon. Regarding SQL, I struggled a bit with the homework last night, but after I read up a bit more on joins, the confusion lessened and I was able to create a working quiz database. Our task was to (i) design a database schema, (ii) populate the database, (iii) query the database and (iv) determine quiz scores. I've published the SQL code I wrote to accomplish this task after the jump.</p>
 

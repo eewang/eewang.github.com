@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-09-26T22:32:25-04:00</updated>
+  <updated>2013-10-04T13:59:57-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -14,9 +14,59 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Journalism, technology and high school]]></title>
+    <link href="http://eewang.github.com/blog/2013/09/26/notes-on-a-talk-to-high-schoolers/"/>
+    <updated>2013-09-26T23:45:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/09/26/notes-on-a-talk-to-high-schoolers</id>
+    <content type="html"><![CDATA[<p>I had the opportunity to speak to a class of high school journalism students today since I&#8217;m back in Chicagoland for my cousin&#8217;s wedding. Actually, the wedding will be in Urbana-Champaign, but I&#8217;m back in my hometown for a few days before heading south tomorrow. My former high school journalism teacher and advisor for the North Star recently connected back with me and asked if I could speak to her students on working at the NYTimes and technology and journalism in general, and I was more than happy to oblige.</p>
+
+<!--more-->
+
+
+<p><a href="http://nnhsnorthstar.com/" target="_blank">This year, the North Star</a> at my alma mater <a href="http://schools.naperville203.org/north/" target="_blank">Naperville North High School</a> underwent a switch from a physical paper to a digital-only publication. When I was working at the paper as a Sports Editor in 2005-2006, we barely had a web presence and instead our monthly editorial process was geared toward printing all our stories at the same time. This made it a struggle to produce timely, hard news content since no one reads a basketball game recap if the game was played two weeks ago.</p>
+
+<p>A digital-first (and only) approach sharpens the mind and forces editors to keep busy and produce content on a daily basis. That said, one of the greatest inventions to produce great writing was print word counts. Mark Twain famously said that he always wrote long letters since he never had time to write a short one. Editing for a print paper forces space constraints and requires writers to think critically of each word and sentence they write since it consumes valuable paper real estate. The Web doesn&#8217;t have the same constraints, which can be empowering yet lacking in the discipline print constraints provide.</p>
+
+<p>Anyways, here&#8217;s a rundown on what I touched on today:</p>
+
+<h4><em>Think of technology as the intersection between the artistic and the analytical&#8230;</em></h4>
+
+<p>One of the flaws in my thinking when it came to programming and engineering earlier in my life was the belief that technology equaled mathematics and science. I come from an engineering family - my mom is a database architect, my dad is a networking professor and my brother is a software developer - and most of my life I figured that I would go a different route. I was always really into history and social studies, loved discussing philosophy and politics/policy, and reflexively opposed going into engineering. This was in large part because I didn&#8217;t want to go the corporate route working for a large technology company that my parents went down. All that they did just seemed boring to me as an idealistic teenager interested in solving the world&#8217;s problems.</p>
+
+<p>In that light, the irony is rich now that I&#8217;m working in software.</p>
+
+<p>Looking back, I unreasonably discarded engineering as a career path when I was younger. I had thought that exploring the humanities and pursuing technology were mutually exclusive endeavors, that I could either try and solve the world&#8217;s problems (the defacto motivation for a social studies geek like me) or work for some faceless corporate conglomerate as a boring but financially stable engineer.</p>
+
+<p>Since my youth, my understanding of technology has deepened, and I now appreciate technology for how it can bridge the intellectual divide between art, design and other traditionally creative fields and data-driven fields like finance, engineering or the hard sciences. Working in a product-focused group at the NYT has shown me how design, content and engineering can work together to build something both functionally useful and aesthetically pleasing.</p>
+
+<h4><em>&#8230;and realize that technology doesn&#8217;t replace your passions, it enhances them</em></h4>
+
+<p>This goes in line with my first point, mainly that you shouldn&#8217;t think of career opportunities as necessarily either/or. When I was younger, I thought that I could do journalism or I could do engineering or I could become a doctor. Once I got older, however, I realized that less black-and-white than that, and more of an &#8216;and&#8217; proposition than I had thought - technology and journalism, for example. Sure, you can do journalism without the help of technology, but technology enhances the journalistic experience and enables a much wider audience. In many ways, this is an exciting fact. No longer did I have to clearly choose between well-delineated fields like I thought I had to when I was younger, but now I can apply elements of various skills or topics that I like into a single job. The siloed nature of my education started to unravel in and after college as I realized that what I thought of as monolithic career paths were actually much more complex, interconnected and diverse than I had thought. That said, this fact also raises the bar for success, since the best opportunities to bridge the gap between fields tends to accrue to those with a wide range of skills.</p>
+
+<p>Therefore, I told the students to focus on building skills when you&#8217;re young, even if you can&#8217;t immediately see the connection between those experiences and what you eventually want to do in life. Learn to enjoy being a constant beginner and place a lot of small bets on different skills, for a few reasons. First, few people really know what they want to do early on in their life, even those who seem to be on a clear professional path (e.g., doctors or lawyers), so you never know when or what skills will be useful. Second, your brain is better at building procedural memory (i.e., skills) compared to declarative memory (i.e., facts) early on in life. This is why its best to learn Spanish or how to play the trumpet when you&#8217;re young, and leave the memorization of people, places and things for later. As you get older, you&#8217;ll naturally learn to focus and develop a specialization on a subset of skills, but having a broad base will help you recognize opportunities for innovation and creativity in different sectors that you wouldn&#8217;t have seen otherwise.</p>
+
+<p>Likewise, creativity and innovation abounds at the intersection of seemingly disparate skills and industries. Steve Jobs&#8217; greatest innovation at Apple was integrating design with engineering, such that today we look at iPhones as artistic objects with beauty in their own right and not just functional tools that get the job done. Technology is a great tool for deepening your understanding of whatever it is you&#8217;re passionate about - there are few industries or topics that have not been overturned by technology. For me, that passion centers around journalism and public policy. But the same is true for music (Spotify, Soundcloud) or retail (Gilt, Etsy) or any other industry.</p>
+
+<h4><em>A globalized and connected society needs great journalism&#8230;</em></h4>
+
+<p>As the world has become more globalized and interconnected, there are countless more stories to be uncovered and connections to be explored by journalists. Technology creates relationships and links between people and institutions that previously did not exist. Software companies like Twitter or Facebook can emerge within a mere few years to command tremendous mindshare and influence. Journalism, at its core, is about exploring these relationships and structures of influence. The abundance of technology-enabled relationships and connections makes for a ripe environment for good journalism to shed light on these linkages.</p>
+
+<p>Its mind-boggling to think about how many different companies and products I interact with on a daily basis. This morning alone in the span of a few hours I used products from the following companies or organizations: Toyota, Starbucks, Apple, ExxonMobil, Spotify, Evernote, Github, NYTimes, UnderArmor, Uniqlo, Procter &amp; Gamble, Armani, Nike, 37Signals, Kikkoman, Bausch &amp; Lomb and Google. The world is connected like never before, and because of that, there are abundant opportunities for journalists to probe the nodes of influence that operate below the surface yet affect the everyday lives of ordinary people.</p>
+
+<h4><em>&#8230;and great journalism needs great software</em></h4>
+
+<p>Data and technology can serve journalism well as a complement to traditional reporting and writing. Technology can benefit every part of the journalistic process, from research and data gathering to writing to editing. Broadly, technology helps journalism from both the front-end and the back-end, meaning that both creation (e.g., reporting tools) and distribution (e.g., interactive graphics, news applications, etc.) of journalistic content can be enhanced by technology. And I&#8217;m speaking about technology broadly defined, not just web development. Stories like this one on <a href="http://www.nytimes.com/2013/10/03/health/millions-of-poor-are-left-uncovered-by-health-law.html" target="_blank">how millions of poor people are not covered by Obamacare</a> are enabled by an understanding of data and delivered using code, which can produce cool graphics like<a href="http://www.nytimes.com/interactive/2013/10/02/us/uninsured-americans-map.html?ref=health" target="_blank">this one</a> using Javascript.</p>
+
+<p>The Internet is the world&#8217;s greatest distribution platform ever invented. And while many lament the damage the advent of the Internet has done on media company balance sheets, great content can circulate the globe in a matter of minutes, expanding the reach of journalism beyond what paper media could provide. At the Times, I&#8217;m working every day to determine how to best deliver journalism across the Internet and on mobile platforms. Its still unclear to me how the integration of technology and journalism will  play out when its all said and done, and that&#8217;s the exciting part. Journalism, and media more broadly, is at this turning point where some of the hemmoraghing of ad dollars from the mid-2000s has been stanched somewhat by the advent of the online pay wall (at least for the NYT). Technology is fast becoming a way to further distinguish good journalism from bad journalism, just witness the use of data-driven graphics and interactive news applications that the NYT has put out in the past 12 months (see <a href="http://www.nytimes.com/newsgraphics/2013/09/13/fashion-week-editors-picks/?ref=fashion" target="_blank">here</a>, <a href="http://www.nytimes.com/newsgraphics/2013/08/18/reshaping-new-york/" target="_blank">here</a>, and <a href="http://www.nytimes.com/interactive/2013/07/01/us/firefighter-map.html" target="_blank">here</a>).</p>
+
+<p>Regardless of how technology ends up transforming journalism, I&#8217;m just thankful and humbled that I get to be a part of it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Presenting the Rails Presenter Pattern]]></title>
     <link href="http://eewang.github.com/blog/2013/09/26/presenting-the-rails-presenter-pattern/"/>
-    <updated>2013-09-26T20:58:00-04:00</updated>
+    <updated>2013-09-26T20:58:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/09/26/presenting-the-rails-presenter-pattern</id>
     <content type="html"><![CDATA[<p>The past few weeks have been pretty busy for me in terms of work. My team&#8217;s product schedule has been ramping up, and we&#8217;re right in the middle of rapidly prototyping both the customer-facing product and our editorial interface. Also, we recently added Backbone.js to our project, so I&#8217;ve been getting up to speed on how to integrate a client-side Javascript framework into a Rails application.</p>
 
@@ -219,7 +269,7 @@
   <entry>
     <title type="html"><![CDATA[Thoughts on Windy City Rails, Day 1]]></title>
     <link href="http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails/"/>
-    <updated>2013-09-12T20:06:00-04:00</updated>
+    <updated>2013-09-12T20:06:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/09/12/thoughts-on-windy-city-rails</id>
     <content type="html"><![CDATA[<p>I have the good fortune to be in Chicago today and tomorrow for the <a href="http://www.windycityrails.org/" target="_blank">Windy City Rails</a> conference. The NYT was kind enough to pay for me to fly here and attend the conferece, and I&#8217;m sure it helps that I can crash with my brother in the south Loop rather than get a hotel room. Whenever I can get the chance to come back home and see my family and friends, I try to jump at the opportunity.</p>
 
@@ -293,7 +343,7 @@
   <entry>
     <title type="html"><![CDATA[Applying Vector Bitmask Fields in Rails]]></title>
     <link href="http://eewang.github.com/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/"/>
-    <updated>2013-08-31T12:49:00-04:00</updated>
+    <updated>2013-08-31T12:49:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/08/31/applying-vector-bitmask-fields-in-rails</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" target="_blank">Flag Shih-Tzu</a> in a number of my projects
 recently. In addition to being a wonderfully (and aptly) named gem,
@@ -527,7 +577,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Navigating the Job Search]]></title>
     <link href="http://eewang.github.com/blog/2013/08/26/navigating-the-job-search/"/>
-    <updated>2013-08-26T07:24:00-04:00</updated>
+    <updated>2013-08-26T07:24:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/08/26/navigating-the-job-search</id>
     <content type="html"><![CDATA[<p>Last Friday was graduation day for the most recent cohort of Flatiron School students, and today is the first official day of the post-school job search process. I&#8217;m reminded of the my first day after the last day of Flatiron, when I went back into school just out of habit and a desire to continue the accelerated learning process that I had become so accustomed to. In light of that and with an eye toward helping out the newly-minted Flatiron graduates, here are a few thoughts that I hope can be useful to those who are enduring the frustration, anxiety and, ultimately and hopefully, joy of looking for a junior-level developer gig.</p>
 
@@ -582,7 +632,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[How to Use Rake Tasks to Generate Raw SQL From ActiveRecord Migrations]]></title>
     <link href="http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql/"/>
-    <updated>2013-07-29T19:26:00-04:00</updated>
+    <updated>2013-07-29T19:26:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/07/29/how-to-use-rake-tasks-to-generate-migration-sql</id>
     <content type="html"><![CDATA[<p>Recently at the NYT on the product I&#8217;m working on, we came across the problem of having to convert ActiveRecord migrations into raw SQL in order to be processed on our production database. Our infrastructure/systems team needs SQL in order to generate migrations; since not all teams at the NYT use Rails, ActiveRecord&#8217;s migrations cannot be automatically applied to the production database.</p>
 
@@ -819,7 +869,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Using ActiveModel Serializers to Build Great JSON Interfaces]]></title>
     <link href="http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces/"/>
-    <updated>2013-07-23T14:07:00-04:00</updated>
+    <updated>2013-07-23T14:07:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/07/23/using-activemodel-serializers-to-build-great-json-interfaces</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been at the New York Times on the New Digital Products team for a little over two weeks now. Thus far, its been an awesome experience. I&#8217;ve had the opportunity to jump right in and commit code, primarily helping build the Rails backend interface for a mobile application. I&#8217;ve been spending time trying to get up to speed on the various internal software tools that the NYT provides, and I&#8217;ve come to appreciate that from a technical perspective, the NYT is an API-driven organization.</p>
 
@@ -1026,7 +1076,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Five Lessons Learned On The Job]]></title>
     <link href="http://eewang.github.com/blog/2013/07/14/lessons-learned-on-the-job/"/>
-    <updated>2013-07-14T04:52:00-04:00</updated>
+    <updated>2013-07-14T04:52:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/07/14/lessons-learned-on-the-job</id>
     <content type="html"><![CDATA[<p>Last week I started my job at the New York Times. And while I&#8217;ve learned a lot over my first week, I feel it necessary to write a post on what I learned working at 8to18 for four weeks. As my first actual developer gig, working at 8to18 has helped me grasp what it means to be a professional developer, and while I undoubtedly still have a lot to learn, I felt better prepared going into my job at the NYT having worked at a start-up for a short period of time. Here are a few lessons that I&#8217;ve learned now that I&#8217;ve had a chance to explore an existing code base for a non-trivial web application that has an active userbase.</p>
 
@@ -1066,7 +1116,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Developing Web Applications with 8to18 Media]]></title>
     <link href="http://eewang.github.com/blog/2013/06/11/developing-web-applications-with-8to18-media/"/>
-    <updated>2013-06-11T20:49:00-04:00</updated>
+    <updated>2013-06-11T20:49:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/06/11/developing-web-applications-with-8to18-media</id>
     <content type="html"><![CDATA[<p>I&#8217;ll admit it - I&#8217;ve been slacking the past few weeks about blogging. Most of what I&#8217;ve been doing since mid-May since my job search concluded has been enjoying NYC, hanging out with friends and doing a some Javascript learning. Its tough to keep up the pace of Flatiron after the end of the program. While I&#8217;ve still be trying to code every day and spend quality time learning Javascript and Backbone, I&#8217;ve taken time to relax and enjoy myself since I&#8217;ll have many more years of working ahead of me and increasingly less time to just live and enjoy the city.</p>
 
@@ -1091,7 +1141,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[How I'm Learning Javascript]]></title>
     <link href="http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript/"/>
-    <updated>2013-05-24T07:45:00-04:00</updated>
+    <updated>2013-05-24T07:45:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/05/24/how-im-learning-javascript</id>
     <content type="html"><![CDATA[<p>For my job at the NYT that I&#8217;ll be starting in July, I&#8217;ll likely be working a lot in Ruby and Javascript. At the Flatiron School, the focus was on becoming a back-end Ruby developer, and while we learned our fair share of JavaScript and jQuery, it was always in the context of a Ruby or Rails application. Most of the front-end focus gravitated toward DOM manipulation and traversal using jQuery and less on the functionality of Javascript as a programming language (e.g., objects, closures, inheritance / composition, etc.).</p>
 
@@ -1141,7 +1191,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Landing the Dream Job]]></title>
     <link href="http://eewang.github.com/blog/2013/05/18/landing-the-dream-job/"/>
-    <updated>2013-05-18T23:40:00-04:00</updated>
+    <updated>2013-05-18T23:40:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/05/18/landing-the-dream-job</id>
     <content type="html"><![CDATA[<p>I&#8217;m happy to announce that I will be joining the New York Times as a software developer this July. I&#8217;ll be working on the new Emerging Technologies team, which is a team tasked with building a new suite of web and mobile technologies for consuming NYT content. The small group consists of developers, designers, product folks and journalists/editors. I&#8217;m extremely excited to join the world&#8217;s newspaper of record and a talented developer team that will define the future of such a storied institution. I feel humbled and honored for the opportunity, and I&#8217;m eager to explore the opportunities to grow at an organization like the NYT.</p>
 
@@ -1157,7 +1207,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)]]></title>
     <link href="http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2/"/>
-    <updated>2013-05-17T08:45:00-04:00</updated>
+    <updated>2013-05-17T08:45:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2</id>
     <content type="html"><![CDATA[<p>I wrapped up Rails Antipatterns about a week ago shortly after reading Metaprogramming Ruby. Reading both books side-by-side has helped me better understand the relationship between Ruby and Rails and how Ruby&#8217;s metaprogramming capabilities provide the &#8220;magic&#8221; that Rails is often associated with. Rails Antipatterns is a great book that uses commonly abused patterns in Rails to illustrate refactoring opportunities. I was able to complete the book a few weeks back, but I&#8217;ve been keeping busy with the interview process (more on that in another post) and side projects such that I haven&#8217;t been able to blog as much as I would have wanted. That&#8217;s been one of the hardest parts of the interview process in that I just have less time to actually code, blog and read. Anyways, I figured that I&#8217;d write down some of my thoughts on Rails Antipatterns alongside Metaprogramming Ruby and the areas where Antipatterns helped me the most in structuring my Rails code.</p>
 
@@ -1273,7 +1323,7 @@ the useful functionality without adding unwieldy dependencies.</p>
   <entry>
     <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails/"/>
-    <updated>2013-04-29T15:03:00-04:00</updated>
+    <updated>2013-04-29T15:03:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails</id>
     <content type="html"><![CDATA[<p>I recently finished reading two programming books in parallel - Metaprogramming Ruby and Rails Antipatterns. As Ruby/Rails books go, the two could not be further apart. Metaprogramming Ruby focuses on explaining the Ruby object model and how core Ruby is constructed in order to enable you as a Ruby programmer to unlock functionality that isn&#8217;t immediately obvious. Conversely, Rails Antipatterns is more about focusing on the bad coding habits most new Rails developers experience and simple, tangible ways to avoid those  pitfalls. One book explains core Ruby (although also touches some on Rails), while the other applies specifically to Rails. One book goes as deep as possible into Ruby&#8217;s construction as a language, while the other aims to hit developers in their day-to-day programming habits. Arguably, Rails Antipatterns is more &#8220;practical&#8221; and Metaprogramming Ruby is more &#8220;theoretical,&#8221; as its generally easier to find more daily code applications of Rails Antipatterns than Metaprogramming Ruby. This post will focus on Metaprogramming Ruby and the next will focus on Rails Antipatterns.</p>
 
@@ -1615,7 +1665,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Using Recursion With Project Euler]]></title>
     <link href="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/"/>
-    <updated>2013-04-28T08:00:00-04:00</updated>
+    <updated>2013-04-28T08:00:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler</id>
     <content type="html"><![CDATA[<p>I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what with all the coding, reading and blogging that I&#8217;m trying to do on a day-to-day basis. However, I was able to work in a problem earlier this week that helped me get a better grasp of using recursion in Ruby.</p>
 
@@ -1874,7 +1924,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Flatiron Graduation]]></title>
     <link href="http://eewang.github.com/blog/2013/04/27/flatiron-graduation/"/>
-    <updated>2013-04-27T07:57:00-04:00</updated>
+    <updated>2013-04-27T07:57:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/27/flatiron-graduation</id>
     <content type="html"><![CDATA[<p>Yesterday was the final day of the Flatiron School semester. I&#8217;ll write a longer blog post hopefully next week with my reflections and thoughts on the 3 month program, but I just wanted to say that its been an awesome experience. I&#8217;ve met some amazing people and I&#8217;m so happy to have a skill set now that I can continue to cultivate for the rest of my life. I used to have a lot of ideas for applications or programs that could never reach fruition without knowing how to code; now, I can have an idea and write a simple exploratory Rails app or script to see if its feasible. The skill of being able to ideate and execute simultaneously is a true blessing, and I&#8217;m thankful to have had the opportunity to build it at the Flatiron School.</p>
 
@@ -1900,7 +1950,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[How To Build A Simple News Reader]]></title>
     <link href="http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/"/>
-    <updated>2013-04-25T16:58:00-04:00</updated>
+    <updated>2013-04-25T16:58:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader</id>
     <content type="html"><![CDATA[<p>A Flatiron TA (Blake Johnson) recently introduced us to the &#8216;say&#8217; command in the Mac terminal. The command does exactly what you think it would - if you send in a string after the command, your computer will talk back to you! With this new-found coder superpower, I thought it would be interesting to try and build a simple news reading application. I&#8217;ve pasted the code below after the fold, or you can find my code <a href="https://github.com/eewang/automated-news-reader" target="_blank">here on Github</a>.</p>
 
@@ -2161,7 +2211,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Not All Sort Algorithms Are Created Equal]]></title>
     <link href="http://eewang.github.com/blog/2013/04/22/sort-algorithms/"/>
-    <updated>2013-04-22T11:20:00-04:00</updated>
+    <updated>2013-04-22T11:20:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/22/sort-algorithms</id>
     <content type="html"><![CDATA[<p>Yesterday we explored a few computer science topics, such as sort algorithms, Big O notation, linked lists and binary search nodes. I was tasked with learning more about sort algorithms, which is something I typically take for granted when coding, since Ruby has a built in #sort method (which, incidentally, uses the quick sort algorithm that I&#8217;ll go into later). At a high level, a sort algorithm is a set of instructions to follow to sort a collection (e.g., an array) based on one or multiple criterion.</p>
 
@@ -2880,7 +2930,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[Of Science Fairs and Space Apps (Flatiron - Week 11)]]></title>
     <link href="http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/"/>
-    <updated>2013-04-21T21:56:00-04:00</updated>
+    <updated>2013-04-21T21:56:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11</id>
     <content type="html"><![CDATA[<p>I can hardly believe that there is only one week left in the Flatiron School. This past week we had our Science Fair where we showed off the applications that we had been building for most of the second half of the semester. I talked about <a href="http://handrai.se" target="_blank">HandRaise</a> and <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, the two apps that I&#8217;ve spent the most time building. We had a strong showing from the NYC tech community; I was definitely exhausted by the end of the four-hour long event.</p>
 
@@ -2906,7 +2956,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[In Praise of Project Euler]]></title>
     <link href="http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler/"/>
-    <updated>2013-04-17T16:39:00-04:00</updated>
+    <updated>2013-04-17T16:39:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/17/in-praise-of-project-euler</id>
     <content type="html"><![CDATA[<p>On the suggestion of my Flatiron classmates <a href="http://chickenriceplatter.github.io/" target="_blank">David</a> and <a href="http://andrewcallahan.github.io" target="_blank">Andrew</a>, I started trying out <a href="http://projecteuler.net/" target="_blank">Project Euler</a> recently. For the uninitiated, Project Euler is a series of math problems aptly named after the famed mathemetician Leonhard Euler, known for such learned things like fluid dynamics, number theory and calculus. Project Euler is effectively a database of math problems that are intended to be solved using code (any language can be used; I&#8217;m using Ruby). The questions test your logical thinking skills, and while they&#8217;re named after a mathemetician, the actual math necessary is more along the lines of high school math (e.g., prime numbers, factoring, etc.). This is not to diminish the difficulty of these problems - some of them are quite challenging - but rather to distinguish between the problem solving skills, which Project Euler helps build, versus pure math skill, which is more the province of a graduate school program. I&#8217;ve also throw my efforts to solve these problems on Github if you want to <a href="https://github.com/eewang/project-euler" target="_blank">check them out</a>.</p>
 
@@ -3311,7 +3361,7 @@ The source code behind dynamic attributes proves that metaprogramming can either
   <entry>
     <title type="html"><![CDATA[TRUE Object-Oriented Design]]></title>
     <link href="http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails/"/>
-    <updated>2013-04-13T11:23:00-04:00</updated>
+    <updated>2013-04-13T11:23:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/04/13/custom-activerecord-queries-in-rails</id>
     <content type="html"><![CDATA[<p>Avi always stresses that being a good developer is about more than just being a good coder. Like all professions, coding is only part of the job. What&#8217;s arguably more important than coding are the soft skills that transcend any individual profession. Skills like communication, empathy, diligence and hard work. All good professional jobs help build these skills, and software development is no different.</p>
 
@@ -3366,173 +3416,6 @@ In POODR (her own acronym), Sandi Metz expresses these design patterns in a pith
 <p>A lot of being a more experienced developer seems to revolve around this spidey sense about coding design patterns. Avi demonstrates this regularly when he&#8217;ll spend just a few minutes flying between levels of abstraction that take us beginners hours to implement ourselves. In fact, experience in most any profession or skillset can be reflected in the &#8220;sixth sense&#8221; someone has about recognizing patterns. An experienced trader can front-run the market because he or she &#8220;senses&#8221; that prices will move in a certain direction. A branding expert can quickly conceptualize a marketing campaign because he or she can immediately grasp the underlying nature of the message a client wants to convey. In the same way, experience as a developer means that you get better at spotting patterns in code. POODR aims to provide beginners with a jumpstart in finding those patterns.</p>
 
 <p>Two other Ruby/Rails books that I&#8217;m reading are &#8220;Rails Antipatterns&#8221; by Chad Pytel and Tammer Saleh and &#8220;Metaprogramming Ruby&#8221; by Paolo Perrotta. I&#8217;m hoping to write a post on those books as well in the coming week or two, so stay tuned.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Building ViewFinder (Flatiron - Week 9)]]></title>
-    <link href="http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9/"/>
-    <updated>2013-04-07T14:42:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/04/07/building-viewfinder-flatiron-week-9</id>
-    <content type="html"><![CDATA[<p>The majority of this past week was spent building <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, which is a Rails app that leverages the Instagram API to enable users to guess where photos were taken and gamefies Instagram photo feeds. Building ViewFinder along with <a href="http://www.erinandcode.com" target="_blank">Erin Lee</a> and <a href="http://jlarusso.github.io" target="_blank">Jesse LaRusso</a> has been a pretty great experience; we got way farther than I had expected initially for the NYC on Rails presentation. Looking back at our Trello board, we defined our MVP for the presentation as an app where users could browse tagged photos and write in the address or intersection where they think the photo was taken. What we ended up with was much more than that, and more visually appealing than I could have imagined initially.</p>
-
-<!--more-->
-
-
-<p><strong>1) Brainstorming and ideation</strong></p>
-
-<p>The idea for ViewFinder came from the View From Your Window (VFYW) game that the blogger Andrew Sullivan has on his blog, <a href="http://dish.andrewsullivan.com/" target="_blank">The Daily Dish</a>. If you haven&#8217;t read the Daily Dish, you should start (and pay for the privilege!). Sully is a coherent and reasoned blogger, and his writing covers a large swath of topics, from public policy and politics, to business, to arts and literature. For his VFYW game, readers will send him photos of their view outside their window and since his readership spans the globe, the photos tend to be from far-flung regions like Japan, Indonesia or Estonia. I&#8217;ve never played the game, because the amount of context clues provided by a VFYW photo are not enough for me to have a reasoned guess of where the photo was taken, given the global scope. However, I&#8217;ve always thought that the concept of the game was fun, and that it could be made more accessible to the average person by adding context, localizing the game and making it social.</p>
-
-<p>I had initially planned to pursue this as a side project during the Flatiron program. Separately, Jesse, Erin and I were considering doing a project for The Disruptor Cup, which is a NYC hackathon that focuses on emergency preparedness. We had discussed an idea centered on analyzing government spending data in the aftermath of Hurricane Sandy and using the d3 Javascript library for data visualization as the interface for users to interact with the data. However, that idea didn&#8217;t get too far, as just getting up to speed with the d3 library such that we could build complex data visualizations presented a pretty steep learning curve. And given the timing of the Disruptor Cup (early/mid-April) relative to our actual class projects, we decided to punt on the hackathon. We figured that there will always be other hackathons to participate in (and civic data is a particular passion for Jesse and I), and we didn&#8217;t want to get too bogged down such that our in-class work quality would fall.</p>
-
-<p>We explored a few other data visualization ideas for the NYC on Rails presentation. Most of these centered on using the NYC Open Data API to build a data visualization or map. However, we couldn&#8217;t quite figure out what we could build that would be a great learning experience, be a functional product and, most importantly, actually be fun to build. We knew that we wanted to work with data and APIs in some form, do something with maps and build an the end product with a well-designed front end.</p>
-
-<p>In the end, I proposed ViewFinder as our NYC on Rails presentation. Erin and Jesse seemed to warm up to the idea pretty quickly, and we brainstormed a lot of ideas and features that we could build. We ended up agreeing to focus on building out a location-based game, where users could guess where Instagram photos were taken by geographic area in New York. Initially, we had Union Square, Times Square and 30 Rock as our main areas, but those gradually evolved into Midtown Manhattan, Downtown Manhattan and Downtown Brooklyn.</p>
-
-<p><strong>2) Schema, design and gameplay</strong></p>
-
-<p>I was happy that I was able to apply various programming techniques and tools that Avi/Bob/Blake have covered over the past few weeks. The two that come most clearly to mind are metaprogramming and asynchronous background job processing. Metaprogramming is a really useful technique to write methods that write their own methods. They are most applicable to code abstract patterns that vary by the data they accept rather than the actual methods that are applied to the data.</p>
-
-<p>The area where I used metaprogramming most actively was in designing the Instagram API calls and connecting that to the gameplay. For the Instagram API calls, there are a few different ways to access the API - you can search by tag, by geographic location, by user or by popular media. For each of these calls, I needed to filter the data to remove any images that were not geotagged, as non-geotagged photos would be useless in a location guessing game. Thus, in my Instagram wrapper class - which wraps the Instagram gem, which itself directly accesses the Instagram API - I have the following code:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># instagram_wrapper.rb</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">acts_as_locatable</span><span class="p">(</span><span class="o">*</span><span class="n">queries</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">queries</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">query</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">define_method</span> <span class="s2">&quot;filter_</span><span class="si">#{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">options</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">location_images</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">delete_if</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">nil?</span><span class="p">}</span>
-</span><span class='line'>      <span class="n">location_images</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">acts_as_locatable</span> <span class="ss">:tag_recent_media</span><span class="p">,</span> <span class="ss">:media_search</span><span class="p">,</span> <span class="ss">:user_recent_media</span><span class="p">,</span> <span class="ss">:media_popular</span><span class="p">,</span> <span class="ss">:user_media_feed</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>&#8220;acts_as_locatable&#8221; at the end of the above code block is a class method that takes in an arbitrary number of arguments and is executed at runtime. For each argument, it creates a method with the name of the argument prefixed with &#8220;filter_&#8221;. Each of these filter methods strip away the non-geotagged results of any of the Instagram API queries defined by the parameters passed to the acts_as_locatable class method. These methods flow into the photo model, which then takes the results of the filtered Instagram query and saves them to the database.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">acts_as_instagrammable</span><span class="p">(</span><span class="o">*</span><span class="n">queries</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">queries</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">query</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">define_singleton_method</span> <span class="s2">&quot;instagram_</span><span class="si">#{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">options</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">i</span> <span class="o">=</span> <span class="no">InstagramWrapper</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'>      <span class="n">filtered_images</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;filter_</span><span class="si">#{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">filtered_images</span><span class="o">.</span><span class="n">collect</span> <span class="k">do</span> <span class="o">|</span><span class="n">pic</span><span class="o">|</span>
-</span><span class='line'>        <span class="no">Photo</span><span class="o">.</span><span class="n">save_instagram_photos</span><span class="p">(</span><span class="n">pic</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">acts_as_instagrammable</span> <span class="ss">:media_search</span><span class="p">,</span> <span class="ss">:tag_recent_media</span><span class="p">,</span> <span class="ss">:media_popular</span><span class="p">,</span> <span class="ss">:user_media_feed</span><span class="p">,</span> <span class="ss">:user_recent_media</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Like in the first code block, &#8220;acts_as_instagrammable&#8221; is a class method that creates a new instance of the Instagram wrapper, calls the relevant filtered Instagram API call and saves the photos to the database. This way, I know that whenever I want to get photos from Instagram, I can use their method names (e.g., tag_recent_media) and know that what I ultimately get back are instances of my photo database, which will only include geotagged items.</p>
-
-<p>Finally, the below meta-method is the crux of the gameplay, and queries the database for photos while simultaneously initiating a background processing job via Sidekiq to get more data from Instagram.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">location_games</span><span class="p">(</span><span class="o">*</span><span class="n">games</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">games</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">game</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">game</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="vi">@game</span> <span class="o">=</span> <span class="n">game</span>
-</span><span class='line'>      <span class="vi">@coordinates</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:coordinates</span><span class="o">]</span>
-</span><span class='line'>      <span class="n">radius</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:radius</span><span class="o">]</span>
-</span><span class='line'>      <span class="n">size</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:size</span><span class="o">]</span>
-</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="n">current_user</span>
-</span><span class='line'>      <span class="vi">@photos</span> <span class="o">=</span> <span class="no">Photo</span><span class="o">.</span><span class="n">game_photos_random</span><span class="p">(</span><span class="vi">@coordinates</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-</span><span class='line'>      <span class="vi">@photos</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
-</span><span class='line'>        <span class="nb">p</span><span class="o">.</span><span class="n">locale_lat</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:coordinates</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span>
-</span><span class='line'>        <span class="nb">p</span><span class="o">.</span><span class="n">locale_lon</span> <span class="o">=</span> <span class="no">LOCATION_GAMES</span><span class="o">[</span><span class="n">game</span><span class="o">.</span><span class="n">to_sym</span><span class="o">][</span><span class="ss">:coordinates</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span>
-</span><span class='line'>        <span class="nb">p</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">create_game</span><span class="p">({</span><span class="ss">:game</span> <span class="o">=&gt;</span> <span class="vi">@game</span><span class="p">,</span> <span class="ss">:coordinates</span> <span class="o">=&gt;</span> <span class="vi">@coordinates</span><span class="p">,</span> <span class="ss">:photos</span> <span class="o">=&gt;</span> <span class="vi">@photos</span><span class="p">})</span>
-</span><span class='line'>      <span class="vi">@start_photo</span> <span class="o">=</span> <span class="n">session</span><span class="o">[</span><span class="n">game</span><span class="o">][</span><span class="ss">:photos</span><span class="o">].</span><span class="n">empty?</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="no">Photo</span><span class="o">.</span><span class="n">first_unguessed_photo</span><span class="p">(</span><span class="n">session</span><span class="o">[</span><span class="n">game</span><span class="o">][</span><span class="ss">:photos</span><span class="o">]</span><span class="p">,</span> <span class="n">current_user</span><span class="p">)</span>
-</span><span class='line'>      <span class="vi">@guessed_count</span> <span class="o">=</span> <span class="vi">@photos</span><span class="o">.</span><span class="n">count</span> <span class="p">{</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span> <span class="nb">p</span><span class="o">.</span><span class="n">guessed_by?</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>      <span class="no">InstagramWorker</span><span class="o">.</span><span class="n">perform_async</span><span class="p">(</span><span class="vi">@coordinates</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">render</span> <span class="s2">&quot;index&quot;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">location_games</span> <span class="ss">:downtown</span><span class="p">,</span> <span class="ss">:midtown</span><span class="p">,</span> <span class="ss">:downtown_brooklyn</span> <span class="c1">#, :world_trade, :dumbo</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The above block does a number of things, and is admittedly probably a decent candidate for additional refactoring. This meta-method creates a method for each game that is created. Initially, we just defined three games in a hash (not shown here) called LOCATION_GAMES, but eventually we think it would be cool for users to create their own games. For example, someone who is really into architecture or beautiful aboreal landscapes can tag photos on Instagram with #viewfinder and another tag and basically create themed games. Additionally, we imagine that this game can be replicated across most any geography, so we wanted to have a flexible design where you could quickly define the parameters of a game and have that flow into the application. Currently, games are defined within the context of a photo, but I think we are looking to break out games into their own game model and make ViewFinder more solidly object-oriented.</p>
-
-<p>Anyways, the above code is activated when a user clicks on a location-based game on the ViewFinder landing page. For each game, the method will determine the game parameters (i.e., coordinates, radius and photo set size), go to the database and get a random set of photos that have not been guesesd by the logged in user, are tagged with #viewfinder or #vfyw and are within the defined radius of the coordinates. Simultaneously, the method will set off a background job to get more data from Instagram within the location parameters of the game. This way, as more people play and demand for a given game scales, the application should theoretically make more API calls and thus get more real-time data from Instagram, all without impacting the user experience as the arduous task of accessing the Instagram API and saving photos to the database is disassociated from the photos that are loaded on the front-end.</p>
-
-<p>There are definitely many areas where we can do additional refactoring and clean up the code. One place specifically where I think we can do better is in using view helper methods more actively, as well as moving more logic to our controllers. With the NYC on Rails presentation coming up on Thursday, I&#8217;ll admit that we took a few shortcuts in the middle of the week just to get stuff working. In the next few weeks, I hope to go back through the code from start to finish and refactor extensively.</p>
-
-<p>In terms of the front-end design of the application, we wanted to make the user interface highly visual and intuitive for new users to quickly get up to speed on the game. We went through several iterations of design that used various photo carousel options. We eventually rotated back to Twitter Bootstrap&#8217;s carousel, and I&#8217;m pretty happy with how the design ended up.</p>
-
-<p><strong>3) Technical challenges</strong></p>
-
-<p>Probably the biggest technical challenge that we faced was in figuring out how to use the Google Maps API to drag and drop a map marker that then posts to our guesses controller to create a photo location guess. We had to delve deeper into Javascript than we had previously in class, and we also learned how to use AJAX in the process. The map that is displayed when a user decides to guess on a photo is centered on the game that the user is playing. When a user decides to play the Midtown game, for example, the photos that get loaded into the game are tagged with the coordinates of the game origin. This way, when the guess map is loaded, the map is centered and zoomed in accordingly.</p>
-
-<p>After figuring out how to load the map correctly, we needed to be able to post the coordinates of the map marker to create a guess. To do this, we used Javascript to recalculate the map marker coordinates whenever the map changed (the map marker automatically moves to the center of the map) and AJAX to create a guess with the respective coordinates when the user pressed &#8220;GUESS&#8221;. Then, when the next page is loaded (i.e., the guesses show page), the map contains a marker for each guess that has been made on that photo. Figuring out how to make Rails and Javascript play nice in terms of transferring data between the two was challenging, but now that we were able to do that successfully, it&#8217;s a great feeling to know that I now have that skill in my toolbelt.</p>
-
-<p>Another challenge we faced was working with Instagram authentication and enabling users to sign-in via Instagram and display their user feed and friend feeds. This challenge tied in with the difficulty of designing a clean, intuitive user flow - from choosing a game all the way to viewing the results after making a guess. The first thing I tried to do actually when working on ViewFinder was to try and set up Instagram authentication. I used the Omniauth gem to do this, but it was a frustrating experience. I learned eventually that I was over-programming, in a sense, and needed to just let Omniauth take care of the authentication process. Building an intuitive user experience with Instagram authentication is still something we&#8217;re working on, and I think that making the gameplay more object-oriented will help in that regard.</p>
-
-<p><strong>4) Future extensions</strong></p>
-
-<p>I think it would be great to enable users to create their own games. Eventually, I&#8217;d like it for people passionate about sculptures, for example, to be able to take pictures across the globe and tag their pics with #sculpture and #viewfinder and have the application pick that up for their followers to guess where they&#8217;ve been. In general, I like the notion of themed games as a way to enable people that are passionate about whatever to better express that passion.</p>
-
-<p>Also, it would be really cool if users could play timed games on ViewFinder, or challenge their friends to see who can best guess a set of 10 photos in a fixed amount of time. Another feature that I&#8217;d like to work on is to build out the analytics of the game and tap into the competitive nature of people. I&#8217;m a bit of a data analytics geek, and it would be super cool if we could use user data from the game to create cool data visualizations.</p>
-
-<p>On the technical side, there is a certain amount of technical debt that got built up with the rush to deploy before the NYC on Rails presentation. I don&#8217;t think the debt is insurmountable, but the app can definitely benefit from some refactoring. Using view helpers more effectively, moving some code into modules for shared functionality and making gameplay more object-oriented are all changes that I think would make the codebase cleaner and the user experience more fluid.</p>
-
-<p>I definitely would like to continue developing ViewFinder and building out new features. I&#8217;ve enjoyed the process of designing the product, working in a team and writing code. There&#8217;s an undefinable joy in having an idea and being able to execute on that idea and see the results. Like many creative ventures, coding is hard enough so that its always challenging, but its also accessible and progress is possible with concerted effort. And to steal a phrase from Avi, coding is all about taking complexity and delivering simplicity. A simple, sensible user interface hides the complexity within a codebase, and now being able to understand how that complexity creates simplicity has been fantastic.</p>
 ]]></content>
   </entry>
   
