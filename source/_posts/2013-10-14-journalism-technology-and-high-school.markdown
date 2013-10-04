@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Journalism, technology and high school"
-date: 2013-09-26 23:45
+date: 2013-10-04 14:14
 comments: true
 categories: 
 ---
