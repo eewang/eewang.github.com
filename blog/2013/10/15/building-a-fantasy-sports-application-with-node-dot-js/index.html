@@ -1,0 +1,572 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Setting up a Node app with Express and Mongo - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="Lately, I&#8217;ve been interested in branching beyond the traditional Rails web stack. Node has always seemed interesting to me - not only is it &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/10/15/building-a-fantasy-sports-application-with-node-dot-js/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Setting Up a Node App With Express and Mongo</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-15T20:49:00-04:00" pubdate data-updated="true">Oct 15<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Lately, I&#8217;ve been interested in branching beyond the traditional Rails web stack. Node has always seemed interesting to me - not only is it fast and built for concurrency, the notion of using Javascript to structure the back-end seems like a natural next step to me given the language&#8217;s ubiquity in web browsers (check out <a href="http://stackoverflow.com/questions/1884724/what-is-node-js#6782438" target="_blank">this great Stack Overflow post on why you might want to consider Node</a>). Last Friday was the second 100% day at the NYT since I started back in July, so I figured that it would be a good opportunity to explore the Node stack and get myself out of always approaching the web from a Ruby/Rails perspective.</p>
+
+<!--more-->
+
+
+<p>In thinking of projects that could help me learn Node, I was reminded of Avi&#8217;s maxim that you&#8217;re generally better off building your own project (and thus, solving your own problems) than building someone else&#8217;s. And given that there are countless tutorials on how to build a blog using X, Y or Z framework, I don&#8217;t think I could be engaged in learning Node just by building a blog that I don&#8217;t really care about.</p>
+
+<p>Those who know me know that I&#8217;m a big football fan. I played two years in high school as a strong safety, and I&#8217;ve played intramural football in NYC since I moved here in 2010 (with a recent hiatus to spend time focused on my career shift from finance to technology). Hailing from Chicago, I grew up watching the Bears - names like David Terrell, Anthony Thomas and Shane Matthews still bring a cringed look to my face as I recall the painful memories of so many wasted seasons (except for the 2006-2007 Super Bowl season - that was a fun ride). Thankfully, it looks like the addition of Marc Trestman, the Cutler-Marshall connection and the emergence of Alshon Jeffrey as a viable second receiver seems to be moving the Bears in the right direction offensively, even if the defense continues its rebuilding phase in the post-Urlacher era.</p>
+
+<p>But I digress. Like many football fans, I&#8217;m involved in a few fantasy football leagues that require me to set lineups, add/drop players and attempt trades if I have any hope of getting to the playoffs. My general process is to check some player and matchup research on a weekly basis and make lineup changes accordingly, but that process can be a bit laborious, since I find myself performing this weekly ritual where I check player rankings, then cross-reference those against the available free agents and waiver wire players in my respective leagues.</p>
+
+<p>Conceptually, this should be done programmatically. The data provided by the player rankings should feed an API search query against my fantasy football league database, so that I can get a report that shows who is available for me to pick-up in my league among the players that are ranked higher than those I currently have on my team (thus indicating a potential up-market action for me to take). At a more advanced level, I could expand this program to take in multiple ranking sources or look beyond the free agent market to suggest trade possibilities, but that&#8217;s all beyond the scope of the MVP, so to speak. I want to build an application that can take in data from my fantasy football leagues, mix that with research and analysis from an external site and build me an set of suggested actions that I can take to improve my team.</p>
+
+<p>The stack I&#8217;m exploring to do this is centered on the Express framework, built on Node, with MongoDB as the database and Mongoose as the ODM (Object Document Mapper). On the client-side, I&#8217;m using Jade as the templating engine, Stylus for CSS pre-processing and (hopefully) Backbone as the client-side framework. For now, I plan to just stick with normal browser Javascript plus jQuery, since my short-term goal is to get familiar with Node and MongoDB. Then, once I set the foundation, I&#8217;ll try to move onto building a more UI-focused, client-side application.</p>
+
+<p><em>Node</em></p>
+
+<p>Node is a fast, scalable server-side architecture built using Javascript. I consider its Ruby equivalent to be the Rack framework. To install Node, just use Homebrew (brew install node). Also, you&#8217;ll need to install <a href="https://npmjs.org/" target="_blank">npm</a> (Node Package Manager) to handle Node plugins. Npm is similar to Ruby Gems; it serves as a registry for libraries like Underscore, Mocha and Express.</p>
+
+<p><em>Express</em></p>
+
+<p>Express is a web framework built using Javascript on a Node server. Express is database-agnostic and is relatively lightweight, similar to Sinatra in the Ruby community. I chose Express primarily because of the fact that there are a number of online tutorials about how to build web applications using Express, and Express makes it pretty simple to fire up a Node server and add a few routes.</p>
+
+<p><em>Mongoose (and MongoDB)</em></p>
+
+<p>In this web stack, Mongoose serves as the application&#8217;s interface to Mongo - it provides structure and access to the database. Mongoose is similar to ActiveRecord in that you can make database reads and writes, but its specifically designed to work with a document-store database like MongoDB.</p>
+
+<p><em>Jade</em></p>
+
+<p>Jade is a HAML-like templating language that allows for logic structures like each loops and if statements to determine HTML structure. Jade syntax is incredibly terse and does not have closing tags and, much like HAML, indentation matters.</p>
+
+<p><em>Stylus</em></p>
+
+<p>Stylus is SASS-like CSS preprocessor that is backwards-compatible with normal CSS. Mixins, variables and interpolation are all components of Stylus, which also emphasizes minimalist syntax (e.g., no curly braces).</p>
+
+<p>There&#8217;s a number of solid Express/Node/Mongoose tutorials online, so I won&#8217;t reproduce what those blog posts have already done well. Here are a few of the best ones that I&#8217;ve come across:</p>
+
+<p><a href="http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/" target="_blank">Simple tutorial with Node, Express and Mongo</a><br>
+<a href="http://howtonode.org/express-mongodb" target="_blank">Create a blog with Node/Express/Mongo</a><br>
+<a href="http://blog.ijasoneverett.com/2013/03/a-sample-app-with-node-js-express-and-mongodb-part-1/" target="_blank">Sample Node/Express application</a></p>
+
+<p>Setting up the application was surprisingly simple, and the above tutorials do a great job of walking through the necessary steps (e.g., install node, install npm, set up Mongo, initiate an Express app). Taking my app beyond the basic tutorial, however, required me to set up a directory structure that could handle multiple models, controllers and routes. Given my familiarity with Rails, I tried to set up my application in a Rails-ian fashion, with an app folder that consists of sub-folders for my models, controllers and views. Here&#8217;s a few links that I found useful when setting up my Express file structure:</p>
+
+<p><a href="http://madhums.me/2012/07/19/breaking-down-app-js-file-nodejs-express-mongoose/" target="_blank">Directory structure of a Node application</a><br>
+<a href="http://rycole.com/2013/01/28/organizing-nodejs-express.html" target="_blank">Organizing a Node/Express app</a></p>
+
+<p>And so I set up my application like this:</p>
+
+<ul>
+<li>app
+
+<ul>
+<li>controllers</li>
+<li>models</li>
+<li>routes</li>
+<li>views</li>
+</ul>
+</li>
+<li>config
+
+<ul>
+<li>settings.js</li>
+</ul>
+</li>
+<li>lib</li>
+<li>public
+
+<ul>
+<li>images</li>
+<li>javascript</li>
+<li>stylesheets</li>
+</ul>
+</li>
+<li>app.js</li>
+<li>package.json</li>
+</ul>
+
+
+<p>The folders are pretty self-explanatory, and the package.json file acts as a Gemfile of sorts in that when you run the &#8216;npm install&#8217;, npm will install the relevant libraries so that you can use them in your application.</p>
+
+<p>To actually run the application, I can run the command &#8216;node app.js&#8217;, which executes the app.js file:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// app.js</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">mongo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongodb&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">mongoose</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">passport</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;passport&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">jsdom</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jsdom&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">YahooStrategy</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;passport-yahoo&#39;</span><span class="p">).</span><span class="nx">Strategy</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">connection</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;mongodb://localhost/fantasy_football&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// require(&#39;./settings&#39;)(app)</span>
+</span><span class='line'><span class="c1">// all environments</span>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;views&#39;</span><span class="p">,</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/views&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;view engine&#39;</span><span class="p">,</span> <span class="s1">&#39;jade&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">favicon</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">logger</span><span class="p">(</span><span class="s1">&#39;dev&#39;</span><span class="p">));</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">bodyParser</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">methodOverride</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">cookieParser</span><span class="p">(</span><span class="s1">&#39;your secret here&#39;</span><span class="p">));</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">session</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">passport</span><span class="p">.</span><span class="nx">initialize</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">passport</span><span class="p">.</span><span class="nx">session</span><span class="p">());</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">&#39;public&#39;</span><span class="p">)));</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// development only</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="s1">&#39;development&#39;</span> <span class="o">==</span> <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">errorHandler</span><span class="p">());</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Models</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">models_path</span> <span class="o">=</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/app/models&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">model_files</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">models_path</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">model_files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">require</span><span class="p">(</span><span class="nx">models_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Routes</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">controllers</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./app/controllers&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">routes_path</span> <span class="o">=</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/app/routes&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">route_files</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">routes_path</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">route_files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">require</span><span class="p">(</span><span class="nx">routes_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">)(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">controllers</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Controllers</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">controllers_path</span> <span class="o">=</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/app/controllers&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">controller_files</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">controllers_path</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">controller_files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
+</span><span class='line'>  <span class="nx">require</span><span class="p">(</span><span class="nx">controllers_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">).</span><span class="nx">listen</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;port&#39;</span><span class="p">),</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Express server listening on port &#39;</span> <span class="o">+</span> <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;port&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The file starts by loading the module dependencies for use in the application. Then, it instantiates the application, sets up the database connection via Mongoose, configures the app to use an array of Express middleware modules and libraries and points the application to port 3000. Finally, app.js requires the files in the app folder to the application so that the router, models and controllers can be linked together.</p>
+
+<p>Express seems to be a pretty flexible framework in terms of how the file structure is set up. Like Sinatra and unlike Rails, Express doesn&#8217;t have opinions as to how to organize your application and while there are countless ways to organize your application using Express, the framework comes ready to use out of the box if you just want to quickly set up some routes and get something on your screen. For me, I decided to establish an app structure that&#8217;s both familiar to me and able to handle multiple resources in a RESTful manner before I got too deep in the business logic while relying on a harder-to-scale structure. Now that I have the app set up, The next step is to write out my models, routes and controllers, which I&#8217;ll save for another blog post.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-15T20:49:00-04:00" pubdate data-updated="true">Oct 15<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/10/15/building-a-fantasy-sports-application-with-node-dot-js/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/10/15/building-a-fantasy-sports-application-with-node-dot-js/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/04/journalism-technology-and-high-school/" title="Previous Post: Journalism, technology and high school">&laquo; Journalism, technology and high school</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang@flatironschool.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>
+  	My name is Eugene Wang, and I am currently a software developer at the New York Times on the New Products team, primarily using Ruby and Javascript. It should go without saying that the thoughts and opinions expressed here are my own and not representative of my employer.
+  </p>
+	<p>
+		Formerly, I was a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City from January to April 2013. This blog is about my ongoing journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.
+	</p>  
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/15/building-a-fantasy-sports-application-with-node-dot-js/">Setting up a Node app with Express and Mongo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/04/journalism-technology-and-high-school/">Journalism, technology and high school</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/26/presenting-the-rails-presenter-pattern/">Presenting the Rails Presenter Pattern</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/12/thoughts-on-windy-city-rails/">Thoughts on Windy City Rails, Day 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/">Applying Vector Bitmask Fields in Rails</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/10/15/building-a-fantasy-sports-application-with-node-dot-js/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/10/15/building-a-fantasy-sports-application-with-node-dot-js/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

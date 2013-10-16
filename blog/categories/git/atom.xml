@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | eugenius]]></title>
   <link href="http://eewang.github.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-10-04T14:15:00-05:00</updated>
+  <updated>2013-10-15T20:43:51-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Flatiron - Day 003]]></title>
     <link href="http://eewang.github.com/blog/2013/02/06/flatiron-day-003/"/>
-    <updated>2013-02-06T11:30:00-06:00</updated>
+    <updated>2013-02-06T11:30:00-05:00</updated>
     <id>http://eewang.github.com/blog/2013/02/06/flatiron-day-003</id>
     <content type="html"><![CDATA[<p>On Day 3 of The Flatiron School, we continued setting up our Octopress blogs. Avi walked through the rake commands and how each one works, which was helpful in demystifying the commands and directory structure. He reassured us that all of the commands that we execute to create new posts, deploy the site, etc., could themselves be found in files in our application. We examined the Gemfile and Rakefile, making small manipulations and running test code to make sure that they worked.</p>
 
