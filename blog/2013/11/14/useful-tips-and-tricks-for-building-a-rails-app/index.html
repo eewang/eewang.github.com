@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Exploring the Black Box (Flatiron - Day 015) - eugenius</title>
+  <title>Favorite (Rails) developer tips and tricks - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="Technology is often perceived as a black box, an opaque, mysterious tool that somehow performs magic. We take out our phones, press a few buttons, &hellip;">
+  <meta name="description" content="As I&#8217;ve grown as a developer, I often find myself using a set of useful commands, tips and tricks both within Rails applications and more &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/02/26/flatiron-day-015/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Exploring the Black Box (Flatiron - Day 015)</h1>
+      <h1 class="entry-title">Favorite (Rails) Developer Tips and Tricks</h1>
     
     
       <p class="meta">
@@ -94,7 +94,7 @@
   
 
 
-<time datetime="2013-02-26T08:04:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2013</time>
+<time datetime="2013-11-14T20:47:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -103,24 +103,62 @@
   </header>
 
 
-<div class="entry-content"><p>Technology is often perceived as a black box, an opaque, mysterious tool that somehow performs magic. We take out our phones, press a few buttons, and suddenly we&#8217;re able to converse with friends, read books, buy food and learn about pretty much anything. However, as I&#8217;ve learned over the past few weeks at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a>, technology is anything but a mysterious process; its just really good at hiding what its doing. The process of learning how to code is all about not being intimidated or frustrated by the black box, but rather excited to learn about how the black box can seem so magical.</p>
+<div class="entry-content"><p>As I&#8217;ve grown as a developer, I often find myself using a set of useful commands, tips and tricks both within Rails applications and more broadly. If you find yourself regularly coming across a pretty generic problem or pattern when coding, the development community has probably found a way to address it. I find this especially true in Rails, where there seems to be a slew of methods geared especially toward humans (e.g., Rails text formatters).</p>
 
 <!--more-->
 
 
-<p>Avi talks a lot about design concepts of modularity and composition. Modularity in code means that individual methods should have one responsibility and objects should be separated into classes that each describe a discrete entity. Composition, on the other hand, serves as a complement to modularity, as it enables us to take discrete, atomistic elements in code and link them together to create what appears to the outside world to be a black box. This design concept of taking a series of distinct but related building blocks and chaining them together is remarkable because it seems so simple in its conception, so complex in its execution and so elegant in its operation.</p>
+<p><strong>The &#8216;presence&#8217; method:</strong> <code>@object.presence</code></p>
 
-<p>The past few days at Flatiron we&#8217;ve been learning about the Web and how applications interact with clients (i.e., the browser) and servers. As I&#8217;ve mentioned before, this is often times one of the toughest concepts new programmers need to grasp. We started exploring the Web (instead of just programming, which we&#8217;ve been doing since the first week with Ruby) using <a href="http://www.sinatrarb.com/" target="_blank">Sinatra</a>, a light-weight framework for developing applications. This week, we&#8217;re moving on to <a href="http://rubyonrails.org/" target="_blank">Rails</a>, which is a more robust framework that many modern web applications are built on (Twitter started on Rails). Think of frameworks as the scaffolding upon which an application is built. A framework is just a collection of files that makes it easier to build stuff; it provides ready-to-execute code to streamline more mundane web processes, like connecting to a server or querying a database.</p>
+<p>The presence method goes one step further than <code>@object.present?</code> by returning the attribute or value being checked for rather than just true. Both <code>.present?</code> and <code>.presence</code> return <code>nil</code> for falsey evaluations, but using <code>.presence</code> helps streamline the common pattern of checking for the presence of a value before returning it in order to prevent nil reference errors. For example, say you have a nested hash that looks like this:</p>
 
-<p>As we&#8217;re moving into web applications, we&#8217;re learning about the <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" target="_blank">model-view-controller</a> design pattern. This MVC concept demonstrates the notions of modularity and composition that make programming complex on its face but learnable at its core. There are a lot of resources online about the MVC pattern, but in short, models provide the analytical engine that defines an application&#8217;s database, views generate the browser-side display that users actually see and controllers connect the two together so that when you type in www.espn.com, the correct HTML page is rendered in your browser (views) with the necessary data from ESPN&#8217;s database (models).</p>
+<p><code>team = {name: 'Chicago Bears', mascot: 'Bears', coach: {name: 'Marc Trestman', years: '1'}}</code></p>
 
-<p>Avi often uses the metaphor of a restaurant to explain the MVC pattern and demonstrate the principles of modularity and composition. Broadly speaking, a restraunt can be broken down into the kitchen (model), staff (controller) and atmosphere/ambiance (view). The chefs in the kitchen need to cook and make dishes. They have to know the food offered on the menu inside-and-out, and their responsibility is to create food. However, they don&#8217;t have any responsibility for actually connecting with the restaurant patrons and figuring out what they want. That&#8217;s the role of the wait staff. They serve the patrons, get their orders and deliver them to the chef. The staff doesn&#8217;t have to know how to actually cook, all they do is transmit information (a very critical task nevertheless, as anyone who has had a bad restaurant experience due to bad service can attest to). Finally, the restaurant atmosphere is how the restaurant-goers experience the restaurant - the lighting, the temperature, the surrounding people, the ambiance - while the food certainly has an impact on the experience, going to a restaurant is about more than just the food.</p>
+<p>If you want to get the name of a coach for a given team, you could write the following in order to avoid an error when checking for a nested hash key that may or may not be there:</p>
 
-<p>Taken together, the kitchen, staff and atmosphere need to work together to produce a pleasant restaurant experience for customers. If any one of them fails to do its job - the kitchen produces bad food, the staff is unfriendly or the restaurant smells - the customer has a lousy experience. That said, each part of the restaurant is responsible for its own task and does not need to know the inner workings of the other part. Cooks need to focus on food and how that food gets to customers is not their concern. Wait staff need to get food to customers, but how that food is made is irrelevant. Each component of the restaurant is able to specialize, yet the restaurant experience is best when all three work together.</p>
+<p><code>team[:coach][:name].present? ? team[:coach][:name] : nil</code></p>
 
-<p>In much the same way, web applications need to have a well-designed model for the database, intuitive and beautiful views and a controller that is able to transmit user requests effectively. If any one of those three breaks down, the whole system is damaged. However, each of the three does not need to know about the inner workings of any other - that&#8217;s where the modularity comes in. As a programmer, I can work in my application&#8217;s model and focus on writing clean, efficient code that reflects the data I want to gather and use while not caring about how that data is presented to users. Then, I can move onto the views and focus on making sure that people are presented with a beautiful interface and design when using my application. In each of the model, view or controller, the design pattern of modularity and composition is repeated, as individual methods and classes in a single model have responsibilities distinct from other methods and classes, yet also relate and depend on them as well.</p>
+<p>But it would be more terse to write instead as follows:</p>
 
-<p>These concepts seem simple and intuitive, but can be difficult to implement in practice. I think of the process of refactoring as the hard work necessary to achieve more modularity and loose coupling - the &#8220;make it right&#8221; part of <a href="http://c2.com/cgi/wiki?MakeItWorkMakeItRightMakeItFast" target="_blank">&#8220;make it work, make it right, make it fast&#8221;</a> formulation that I like so much. Just like a restaurant could function with the wait staff both serving, cooking and decorating, a web application could work without the principles of MVC. However, it just wouldn&#8217;t be right and wouldn&#8217;t make much sense. Using modularity and composition as a guide to writing code and designing elegant yet powerful applications has made me appreciate the &#8220;black box&#8221; complexity of technology that we all interact with every day, yet also eager to explore and dive into the details as I come to realize that its not really magic at all, its just good design.</p>
+<p><code>team[:coach][:name].presence</code></p>
+
+<p>Here&#8217;s the documentation that describes the method (very straightforward): <a href="http://api.rubyonrails.org/classes/Object.html#method-i-presence">Rails documentation</a></p>
+
+<p><code>pp</code> <strong>for pretty printing</strong></p>
+
+<p>When printing lengthy and complex data structures, its pretty difficult to read all the text inline. Prepending <code>pp</code> when using pry or irb before a data structure prints out the object in a pretty fashion. I find <code>pp</code> most helpful when using debugger, which doesn&#8217;t provide pretty printing by default. Reading the structure of a complex JSON object is never fun; using <code>pp</code> makes it considerably more tenable by properly indenting and subordinating attributes as needed.</p>
+
+<p><code>@object#changed?</code></p>
+
+<p>While a Rails object is in memory, you can call <code>@object.changed?</code> on it to see if the object has changed in the application session. This can be helpful in minimizing database transactions in that you can check if an object has changed before persisting the object to the database. No need to save an object if nothing about that object has changed from the last time it was saved.</p>
+
+<p><code>wtf?(??????!!)</code></p>
+
+<p>Pry is one of my favorite gems because of how simple it is to use and that the console output is by default pretty printed. The developers of pry also seem to have a great sense of humor, in that when you want to see the application trace for an error, you can run <code>wtf?</code> in the pry console to see lines of the backtrace. Even better, you can keep adding <code>?</code> or <code>!</code> to the end of the <code>wtf</code> call to see more lines. I love it when software mimics the real world.</p>
+
+<p><code>constantize</code>, <code>classify</code>, <code>demodularize</code> <strong>and other Rails text helpers</strong></p>
+
+<p>People joke that Rails abstracts so many implementation details away that you could practically just write <code>rails new application</code> and your entire app would be built for you. While that&#8217;s clearly an exaggeration, there is some truth that Rails provides a slew of helper methods to properly format text or perform simple data transformations.</p>
+
+<p>For example, <code>string.constantize</code> will directly convert a string into a class representation, so you can call <code>"Article".constantize.new</code>, and a new article instance will be created. <code>string.classify</code> will transform a string of text into a string that can then converted to a class representation. Whereas <code>"string".constantize</code> will yield <code>NameError: wrong constant name string</code>, <code>"string".classify</code> will yield <code>"String"</code>, which can then be properly constantized. <code>string.classify</code> will also convert table names to object names and handle the pluralization for you (e.g., <code>"articles".classify</code> becomes <code>"Article"</code>). Finally, <code>string.demodularize</code> is used strip a module from its parent namespace so that the return value is just the module name represented as a string (e.g., <code>"Article::Foreign".demodulize</code> becomes <code>"Foreign"</code>). This can be helpful for when you have a subclasses of a parent class and want to build a view differently based on each subclass; the <code>demodulize</code> method is a quick helper that you can use to avoid writing a lengthy chain of <code>string.gsub</code> or <code>string.capitalize</code>.</p>
+
+<p><code>git commit --amend</code></p>
+
+<p>This git command opens up a previous git commit and attaches changes that you have in staging to that git commit rather than making an entirely new commit. I use this for whenever I make a git commit, but then realize that I forgot to remove a <code>debugger</code> call or have to make some other similarly mundane change. Rather than making a new commit, I&#8217;ll typically just open the previous commit with <code>git commit --amend</code> which will not only include the changes in the previous commit, but also allow me to edit the commit message if needed.</p>
+
+<p><code>git diff --cached</code></p>
+
+<p>Have you ever added a set of files to staging in git without remembering what you changed? One way to review what you changed is to run <code>git reset HEAD .</code> to unstage your changes, or you can just run <code>git diff --cached</code> and it will show you a diff between what you have staged and the latest commit.</p>
+
+<p><code>git stash</code> / <code>git stash list</code> / <code>git stash pop</code></p>
+
+<p>I use <code>git stash</code> commands fairly regularly, primarily because I&#8217;m often working on a few branches at once. The git process on my team at the NYT typically consists of feature branches with pull requests into the develop branch, which automatically builds onto the development server environment. But pull requests often take a few hours before they are merged into develop simply because the developers on my team have other things to do besides review PRs. So I&#8217;ll start working on another feature branch or bug fix, liberally using the suite of <code>git stash</code> commands to manage my working files between branches without committing incomplete work.</p>
+
+<p><strong>cmd-T for Github file quick search</strong></p>
+
+<p>I&#8217;m proud that I showed this quick Github shortcut to my senior developer. Pressing <code>command + T</code> when in a Github repo will open a file search bar at the top of the repo, allowing a quick search for any file in the repo. If you use Sublime Text, you likely already use this shortcut to quickly navigate your file directory, so hopefully its not too much of a change to start doing the same in Github.</p>
+
+<p>Those are just a few of my favorite go-to tricks for developing applications in Ruby/Rails that I find myself using on an almost daily basis. What are some of yours?</p>
 </div>
 
 
@@ -143,7 +181,7 @@
   
 
 
-<time datetime="2013-02-26T08:04:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2013</time>
+<time datetime="2013-11-14T20:47:00-05:00" pubdate data-updated="true">Nov 14<span>th</span>, 2013</time>
       
 
 
@@ -151,7 +189,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/02/26/flatiron-day-015/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/02/26/flatiron-day-015/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/" >Tweet</a>
   
   
   
@@ -162,10 +200,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/20/how-to-visualize-data-with-google-charts/" title="Previous Post: How to Visualize Data With Google Charts For Ruby">&laquo; How to Visualize Data With Google Charts For Ruby</a>
+        <a class="basic-alignment left" href="/blog/2013/11/04/how-to-manage-complex-association-with-nested-attributes-in-rails/" title="Previous Post: How to manage associations with nested forms in Rails">&laquo; How to manage associations with nested forms in Rails</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/03/02/flatiron-week-3/" title="Next Post: Flatiron - Week 4">Flatiron - Week 4 &raquo;</a>
       
     </p>
   </footer>
@@ -324,8 +360,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/02/26/flatiron-day-015/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/02/26/flatiron-day-015/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/';
+        var disqus_url = 'http://eewang.github.com/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/';
         var disqus_script = 'embed.js';
       
     (function () {
