@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-11-14T09:21:50-05:00</updated>
+  <updated>2013-12-04T07:55:38-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,137 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[With Great Power Comes Great (Single) Responsibility]]></title>
+    <link href="http://eewang.github.com/blog/2013/12/04/with-great-power-comes-great-single-responsibility/"/>
+    <updated>2013-12-04T07:37:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/12/04/with-great-power-comes-great-single-responsibility</id>
+    <content type="html"><![CDATA[<p>In software development, the Single Responsibility Principle is a bedrock principle that transcends language or framework. The SRP states that each function / method, class and module should perform a single responsibility. This enables your code to be flexible, extensible and less prone to bugs since software components that are only loosely coupled to their peer components are simpler and easier to maintain.</p>
+
+<!--more-->
+
+
+<p>Although simple on its face, the SRP is very difficult to adhere to throughout an entire codebase. When I first started to code, my tendency was to build on top of existing methods or classes as I added functionality, rather than have an eye to constantly refactoring my code and separating and isolating the responsibilties and roles of each unit. This led to overgrown <code>User</code> classes that contained all sorts of logic unrelated to a strict notion of a &#8216;user&#8217;. At a higher level, violations of the SRP can lead to monolithic applications that simply do too much, and I gather that much of the recent trend of breaking up monolothic apps into a service-based architecture has to do with trying to get back to a building apps in line with the SRP.</p>
+
+<p>In the application I&#8217;m helping build at the NYT, we recently came across a simple problem that I felt was a good example of the SRP in practice. Say you have an app like Pinterest, whereby people can pin items to their pinboard that correspond to various destinations. These destinations can be food blogs, Instagram, etc. All destinations have one or more pinned items that may have different visual displays, but not all pinned items necessarily have a destination (e.g., if you just want to pin a note or reminder).</p>
+
+<p>In this app, to create a pinned item, users have the ability to input a URL and the app can determine whether that URL relates to a popular destination (for example, Instagram) and perform some logic accordingly. There may be some additional functionality the app wants to apply for Instagram-related items on a board, given that Instagram is likely a popular source for pinned items. Similarly, a destination source should be able to tell if the its associated with Instagram by looking at the attached URL (e.g., <code>http://www.instagram.com/:user_id/:photo_id</code>). Although URLs are associated with destinations, they are accessed via the pinned items on the board, so pinned items have to delegate URL calls to their associated destination (if they have one).</p>
+
+<p>The first version of this predicate method to return <code>true</code> or <code>false</code> depending on whether the URL string matched an Instagram regex, like <code>/instagram.com/</code> might look like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Item</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:destination</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:destination</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">INSTAGRAM_REGEX</span> <span class="o">=</span> <span class="sr">/instagram.com/</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">instagram_url?</span><span class="p">(</span><span class="n">check_url</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">url</span> <span class="o">=</span> <span class="n">check_url</span> <span class="o">||=</span> <span class="p">(</span><span class="n">destination</span> <span class="p">?</span> <span class="nb">self</span><span class="o">.</span><span class="n">url</span> <span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">url</span> <span class="p">?</span> <span class="no">INSTAGRAM_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span> <span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>While terse, this <code>instagram_url?</code> predicate method does a lot of things. First, it can check any string provided in an argument and return true or false depending on whether it matches a preset Instagram URL. Second, it checks the URL associated with the destination if no URL is passed through as an argument. And finally, it manages the type checking if there is an associated destination (since not all pinned items have destinations, and calling <code>url</code> on an item without an destination will raise <code>NoMethodError: undefined method 'url' for nil:NilClass</code>.</p>
+
+<p>At first glance, the benefit as I saw it of this code is that its relatively succinct - only 4 lines of implementation to handle the multiple situations in which the app may need to handle checking URLs. That said, it clearly is not the most readable. It relies on too many ternary operators, and its not immediately evident in which situations the method returns <code>true</code> or <code>false</code>. In other words, the code smells bad. The method should actually be broken out into two different checks on URLs (one for strings, and one for the URL attribute on a destination), and another component that serves as traffic handler depending on if an item has a destination to which it can delegate a URL call.</p>
+
+<p>A better implementation that adheres more closely to the SRP may look like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Instagram</span>
+</span><span class='line'>  <span class="no">INSTAGRAM_REGEX</span> <span class="o">=</span> <span class="sr">/instagram/</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">instagram_url?</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span class='line'>    <span class="no">INSTAGRAM_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Item</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Instagram</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:destination</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:destination</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">has_instagram_destination?</span>
+</span><span class='line'>    <span class="n">destination</span><span class="o">.</span><span class="n">instagram?</span> <span class="k">if</span> <span class="n">destination</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Destination</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:items</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">instagram?</span>
+</span><span class='line'>    <span class="no">INSTAGRAM_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This changes the implementation in a few ways. First, the string checking has been moved to a module, since the method could technically be called across classes. It could even be used as a monkey patch to the <code>String</code> class, so that all you would have to do is write <code>"test url".instagram?</code>, but monkey patching is rarely the best solution for a problem, even if it is the fastest. Second, the determination of whether a destination is from Instagram (as determined by its URL) was moved to the <code>Destination</code> class, which makes logical sense. Destinations, not pinned items, should know if they are from Instagram. And finally, pinned items hold the responsibility of traffic cop - knowing if they have a destination or not, and if so, then checking if such destination is Instagram. This way, each method does just one responsibility, and the predicate methods for each are more clear, in that <code>has_instagram_destination?</code> makes sense for an item and <code>instagram?</code> makes sense for a destination.</p>
+
+<p>While this refactoring is technically more lines of code than the first version, its clearly more readable and adheres more tightly to the SRP. Each method does one thing, and the implementation code is wrapped within a clear predicate method that can be used by other methods whenever they need to check where a URL comes from - be it a string or a saved attribute on a destination. This also better encapsulates logic so that future extensions to the code are easier to make (e.g., the <code>Destination#instagram?</code> method could forseeably have a more nuanced implementation that should be abstracted away from the associated item).</p>
+
+<p>I have found this tension between terse / DRY-to-the-max code and readable / clean code to be fairly common across my projects. With Ruby, its easy to go overboard in DRYing up your code into a shriveled, unreadable mess of heavily metaprogrammed methods. But if you&#8217;re working in a team of other developers (which you almost always are), very DRY code also means that its probably less readable and may be in violation of the SRP.</p>
+
+<p>Like with any other software development principle, the SRP exists in contrast to other goals, like keeping code DRY. Exercising good judgement on when to unbundle classes or methods by refactoring comes only with time, although in my experience, beginners tend to go too far in lumping all complexity into a single class or method. The challenge lies in knowing when adhering to the SRP or DRYing out your code would make your app more maintainable and flexible in the long-run in the face of near-certain change.</p>
+
+<p>Here are a few helpful links on the SRP:</p>
+
+<br>
+
+
+<p><a href="http://www.sitepoint.com/solid-ruby-single-responsibility-principle/">SOLID Ruby: Single Responsibility Principle</a></p>
+
+<p><a href="http://www.mikepackdev.com/blog_posts/38-dci-the-king-of-the-single-responsibility-principle">The King of the Single Responsibility Principle</a></p>
+
+<p><a href="http://jonkruger.com/blog/2010/10/19/ruby-on-rails-and-the-single-responsibility-principle/">Ruby on Rails and the Single Responsibility Principle</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Favorite (Rails) developer tips and tricks]]></title>
@@ -2444,267 +2575,6 @@ The source code behind dynamic attributes proves that metaprogramming can either
 <p>I&#8217;m incredibly grateful for programs like the Flatiron School and Defy Ventures, and I&#8217;m especially thankful for the desire of individuals like Adam and Avi of Flatiron and Catherine Rohr of Defy to serve their respective target communities and give people a chance to change their personal career trajectory. Society today seems to slowly ossifying into socioeconomic categories that are defined earlier and earlier in life. We&#8217;re told that what college we go to matters because the people we meet will define the rest of our lives. We&#8217;re told that how many high school AP classes we take will ripple throughout our lives because it&#8217;ll affect what college we go to. Backtracing these assumptions to their logical conclusion partially explains why tuition at &#8220;top&#8221; pre-schools can hit five digits.</p>
 
 <p>And while I&#8217;m not saying that these early decisions don&#8217;t matter (research shows that a good early education program has a huge multiplier effect on future earnings), its dangerous to assume those decisions are destiny. Avi described in his commencement speech that his grades steadily deteriorated throughout high school and that he eventually dropped out of college. By conventional wisdom, Avi&#8217;s future should have been pretty dim. Instead, he found a way to reject the narrative that your college defines your future and is today the founder of two successful startups. Both Flatiron and Defy reminds us that humans are more malleable and mentally flexible farther along in their lives than people think; its not just children who can learn new skills and transform themselves. Flatiron and Defy are doing awesome things in New York City, and I&#8217;m humbled to have had the opportunity to play a role in the two programs.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How To Build A Simple News Reader]]></title>
-    <link href="http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader/"/>
-    <updated>2013-04-25T16:58:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/04/25/building-a-simple-news-reader</id>
-    <content type="html"><![CDATA[<p>A Flatiron TA (Blake Johnson) recently introduced us to the &#8216;say&#8217; command in the Mac terminal. The command does exactly what you think it would - if you send in a string after the command, your computer will talk back to you! With this new-found coder superpower, I thought it would be interesting to try and build a simple news reading application. I&#8217;ve pasted the code below after the fold, or you can find my code <a href="https://github.com/eewang/automated-news-reader" target="_blank">here on Github</a>.</p>
-
-<!--more-->
-
-
-<p>I used to read the news constantly, checking my Google Reader feed or the New York Times several times an hour. Since starting at Flatiron, its been difficult for me to keep up with my regular news consumption. I try to read a number of newspapers and periodicals throughout the week, including the Economist, Atlantic, NY Mag and the NYT. With my deep-end dive into coding, however, traditional news reading has been difficult, so I&#8217;ve been trying to find new ways to get my news. For example, I started to get back into podcasts, which has been great as a way not only to get my news, but to take a break from constantly looking at screens.</p>
-
-<p>I wanted to build a simple script that could scrape the New York Times front page and read the news back to me. As I thought about the problem, I decided to create two classes to represent the page that I wanted to scrape and the actual story itself. The code itself is pretty simple; it uses Nokogiri to open up the NYTimes front page and extracts the stories using a the &#8220;story&#8221; class css selector. Using Nokogiri to scrape a webpage converts the HTML into Nokogiri nodes, to which methods like &#8216;text&#8217; or &#8216;value&#8217; can be used to get information about the specific Nokogiri node. After extracting the stories, I could then execute terminal commands from my Ruby script using the backtick character - `.</p>
-
-<p>The &#8220;front_page_stories&#8221; instance method in the Page class extracts all the stories from the front page. Then, the &#8220;create_stories&#8221; method goes through each story and creates a Story instance, on which it calls various methods to get the headline, byline and lede graph.</p>
-
-<p>To get the full text of the article, I extracted the link to the full story from the front page story node and passed that link into the Nokogiri HTML parser. Each story page includes the full body text in a paragraph tag with an &#8220;itemprop = articleBody&#8221; attribute, which makes it easy to access the body text of a given article. I then save each paragraph as a separate element in an array, which can then be iterated over for the terminal &#8216;say&#8217; command to read.</p>
-
-<p>One challenge that I had to address was the fact that the NYTimes uses different headline tags for the primary, secondary, tertiary, etc. stories. So what I did was write a Story instance method to check which headline tag was not empty for a given story. The script then takes the text value of the non-empty headline tag and applies it to the story headline attribute.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-<span class='line-number'>115</span>
-<span class='line-number'>116</span>
-<span class='line-number'>117</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;net/http&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;open-uri&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;nokogiri&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Page</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">:bylines</span><span class="p">,</span> <span class="ss">:stories</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@url</span> <span class="o">=</span> <span class="n">url</span>
-</span><span class='line'>    <span class="vi">@stories</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">document</span>
-</span><span class='line'>    <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="vi">@url</span><span class="p">))</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">front_page_stories</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;.story&#39;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">create_stories</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">front_page_stories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">story</span><span class="o">|</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;h6.byline&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>        <span class="n">s</span> <span class="o">=</span> <span class="no">Story</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_headline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_byline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">s</span><span class="o">.</span><span class="n">get_lede_graph</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>        <span class="vi">@stories</span> <span class="o">&lt;&lt;</span> <span class="n">s</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">read_stories</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">create_stories</span>
-</span><span class='line'>    <span class="vi">@stories</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">story</span><span class="o">|</span>
-</span><span class='line'>      <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="n">story</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;Story </span><span class="si">#{</span><span class="vi">@stories</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">story</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="sb"> of </span><span class="si">#{</span><span class="vi">@stories</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="sb">&quot;`</span>
-</span><span class='line'>      <span class="n">story</span><span class="o">.</span><span class="n">speak_story</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Story</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:headline</span><span class="p">,</span> <span class="ss">:byline</span><span class="p">,</span> <span class="ss">:lede_graph</span><span class="p">,</span> <span class="ss">:link</span><span class="p">,</span> <span class="ss">:voice</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="no">VOICES</span> <span class="o">=</span> <span class="o">[</span>
-</span><span class='line'>    <span class="s2">&quot;Alex&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Bruce&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Fred&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Junior&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Ralph&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Agnes&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Kathy&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Princess&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Vicki&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;Victoria&quot;</span>
-</span><span class='line'>  <span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
-</span><span class='line'>    <span class="vi">@doc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>    <span class="vi">@body_paragraphs</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>    <span class="vi">@voice</span> <span class="o">=</span> <span class="no">VOICES</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1"># .shuffle[0]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">doc</span>
-</span><span class='line'>    <span class="vi">@doc</span> <span class="o">=</span> <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="vi">@link</span><span class="p">))</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">link</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">get_byline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">byline</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;h6.byline&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">get_lede_graph</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">lede_graph</span> <span class="o">=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">get_headline</span><span class="p">(</span><span class="n">story</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">attrs</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="s1">&#39;h3&#39;</span><span class="p">,</span> <span class="s1">&#39;h5&#39;</span><span class="o">]</span>
-</span><span class='line'>    <span class="n">attrs</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">headline</span><span class="o">|</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="n">headline</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>        <span class="nb">self</span><span class="o">.</span><span class="n">headline</span> <span class="o">||=</span> <span class="n">story</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="n">headline</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">full_text</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">doc</span>
-</span><span class='line'>    <span class="vi">@doc</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s2">&quot;p[itemprop=articleBody]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
-</span><span class='line'>      <span class="vi">@body_paragraphs</span> <span class="o">&lt;&lt;</span> <span class="nb">p</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="vi">@body_paragraphs</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">speak_story</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">byline</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">byline</span><span class="si">}</span><span class="sb">&quot;`</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">headline</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">headline</span><span class="si">}</span><span class="sb">&quot;`</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">lede_graph</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">lede_graph</span><span class="si">}</span><span class="sb">&quot;`</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">full_text</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">p</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="sb">`say -v &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">voice</span><span class="si">}</span><span class="sb">&quot; &quot;</span><span class="si">#{</span><span class="nb">p</span><span class="si">}</span><span class="sb">&quot;`</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">news</span> <span class="o">=</span> <span class="no">Page</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;http://www.nytimes.com&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">news</span><span class="o">.</span><span class="n">read_stories</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, I can theoretically wake up in the morning, fire up my terminal, run this script and get ready for the day as my computer reads the news to me. In practice, the computer voice isn&#8217;t all that sexy and it inaccurately pronounces some names or other proper nouns and generally has a lumpy, awkward quality to it. I&#8217;m sure there are programs out there that you can download to add custom voices to the computer that are better than the standard voices. Another feature I&#8217;d like to add would be a scrape for Twitter to add a news feed feature. Also, I&#8217;d like to add a cron job feature with the Twilio API to notify me when the NYTimes adds a banner breaking news headline to the site. I know that the NYT sends out e-mail alerts for breaking news already, but it never hurts to be the first to know!</p>
 ]]></content>
   </entry>
   
