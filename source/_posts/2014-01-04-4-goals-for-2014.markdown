@@ -1,0 +1,38 @@
+---
+layout: post
+title: "4 Goals for 2014"
+date: 2014-01-04 00:27
+comments: true
+categories: 
+---
+The turning of the calendar to a new year tends to beget nostalgia and recollection for both the good and bad from the previous year. I like to set goals for myself and check in periodically on my progress, and the start of 2013 was no different. I recently looked back on what I set as my New Year's resolutions, and I'm happy to say that I accomplished the top priority goal: learn to code. 
+
+I still feel humbled and grateful for the opportunity to transition seamlessly from finance to technology that I jumped on around this time last year. 2013 was a year of much change for me; the year I traded Excel models for web applications and committed to learning a new, complex skill set. Overall, I'm very happy with my decision - I enjoy my job, I believe in the mission of my company and I get to cultivate a valuable skillset. With last year introducing such considerable (and positive) changes in my life, I'm eagerly looking forward to what 2014 has in store for me. Here are a few of my more technical / professional goals that I hope to strive for in the new year.
+
+<!--more-->
+
+*1) Write less, but more frequently*
+
+Writing more has been a goal of mine for much of the past few years since I graduated college. While I find great comfort in committing my thoughts and ideas to (electronic) paper, writing is one of those activities that can be challenging for me to do consistently. Getting started and overcoming writer's block is never easy for me, but I'm hopeful that by writing more frequently will lessen any pressure I may feel to write extensively. 
+
+I love the idea of writing a little bit each day - a short blog post, a Yelp review, a well-crafted e-mail - to build up my writing skill gradually and consistently. Much like I learned to be a developer by coding every day, I'd like to aspire to writing something - anything, really - every day.
+
+*2) Learn iOS / Objective-C*
+
+At a high-level, the product I'm working on at the NYT aims to reimagine journalism and news for a mobile era. Invariably, this means that development is focused on building an optimal mobile experience, first for iOS and second for Android with a web-based API as the backend content tool. I've been playing around with iOS / Objective-C / Xcode sporadically in the last 6 months, and I hope to ramp up my learning in the new year. 
+
+Learning the iOS world is at once both similar yet quite different than Ruby / Rails. Object-oriented principles, class and instance methods and a dynamic runtime make Objective-C familiar enough to a Ruby developer like myself. At the same time, working in an IDE like Xcode is considerably different than a lightweight text editor like Sublime - more powerful and rich in its feature set yet consisting of a steeper learning curve. The tight integration of the iOS world is new to me and while I see its benefits (e.g., the option to graphically link front-end views to controller actions rather than just through code kind of blew my mind), it'll take some time for me to work through the coding paradigms advanced by Apple.
+
+Oh, and as an aside, if anyone reading this is or knows of solid iOS developers, shoot me an e-mail! My team is hiring actively for iOS. :)
+
+*3) Gain dev ops experience*
+
+My main work task over the holidays was to migrate our application from the existing, core NYTimes infrastructure to the newsroom developer infrastructure (i.e., interactive news and graphics). The differences between the two setups are considerable - internally hosted vs. AWS, Puppet vs. Chef for server configuration, Apache vs. Nginx for a web server. At Flatiron School, we didn't do much with web operations stuff; we were hosted on Digital Ocean servers and used Capistrano for our deploys. The dev ops we learned at Flatiron School centered more on following a set of instructions to deploy our app rather than a holistic understanding of web infrastructure. Although more dev ops education would have been great, the focus on application code is entirely understandable given the challenging task of building developers from scratch in three monthds.
+
+I've found that the lack of a traditional computer science education leaves me at something of a disadvantage when learning about web infrastructure since understanding how networks are constructed or how communication protocols are established would help me grasp software architecture principles. That said, I'm eager to learn about this slightly obscure but critically important field that has enabled the rapid integration of technology, society and culture. Hopefully, old-fashioned hard work, reading stuff online and actually setting up servers will be enough for me to learn what I need to become a somewhat passable dev ops professional. Since we don't have a dedicated dev ops person, it falls on the developers (primarily the back-end devs) to manage our infrastructure and respond to downtime. My office provides educational financing too if I wanted to take a grad course or two on general software architecture principles, but I still need to see how my non-work schedule pans out this year before committing to a class.
+
+*4) Launch a product!*
+
+This is a bit of a departure from the previous goals since its really a team goal that's driven by the NYTimes's overall business goals. Watching the product grow from a prototype to a scalable, production-ready application has been an exhilirating and educational experience so far. After the product launches this year, there will be continuing sprints to fix bugs or add new features like any iterative product development process - its not like the work stops with a product launch. 
+
+In finance, I was involved in the launch of a number of customized and specialty investment vehicles, which were great experiences in themselves, but I imagine that a consumer-facing product launch is going to impact me differently. While I don't have many friends that have the financial wherewithal to invest in hedge funds (anyone have an extra quarter-million laying around?), I do have a number of friends that are casual news consumers and broadly interested in the world around them. Building a product intended for the people I know makes me feel more invested in my work and connected to the broader mission of the paper. Regardless of success or failure from a business perspective, I'm eager to see the ~9-month effort from my team of tremendously talented designers, developers and editors come to full fruition.
