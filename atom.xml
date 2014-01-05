@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2013-12-04T07:55:38-05:00</updated>
+  <updated>2014-01-04T20:55:29-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[4 Goals for 2014]]></title>
+    <link href="http://eewang.github.com/blog/2014/01/04/4-goals-for-2014/"/>
+    <updated>2014-01-04T00:27:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2014/01/04/4-goals-for-2014</id>
+    <content type="html"><![CDATA[<p>The turning of the calendar to a new year tends to beget nostalgia and recollection for both the good and bad from the previous year. I like to set goals for myself and check in periodically on my progress, and the start of 2013 was no different. I recently looked back on what I set as my New Year&#8217;s resolutions, and I&#8217;m happy to say that I accomplished the top priority goal: learn to code.</p>
+
+<p>I still feel humbled and grateful for the opportunity to transition seamlessly from finance to technology that I jumped on around this time last year. 2013 was a year of much change for me; the year I traded Excel models for web applications and committed to learning a new, complex skill set. Overall, I&#8217;m very happy with my decision - I enjoy my job, I believe in the mission of my company and I get to cultivate a valuable skillset. With last year introducing such considerable (and positive) changes in my life, I&#8217;m eagerly looking forward to what 2014 has in store for me. Here are a few of my more technical / professional goals that I hope to strive for in the new year.</p>
+
+<!--more-->
+
+
+<p><em>1) Write less, but more frequently</em></p>
+
+<p>Writing more has been a goal of mine for much of the past few years since I graduated college. While I find great comfort in committing my thoughts and ideas to (electronic) paper, writing is one of those activities that can be challenging for me to do consistently. Getting started and overcoming writer&#8217;s block is never easy for me, but I&#8217;m hopeful that by writing more frequently will lessen any pressure I may feel to write extensively.</p>
+
+<p>I love the idea of writing a little bit each day - a short blog post, a Yelp review, a well-crafted e-mail - to build up my writing skill gradually and consistently. Much like I learned to be a developer by coding every day, I&#8217;d like to aspire to writing something - anything, really - every day.</p>
+
+<p><em>2) Learn iOS / Objective-C</em></p>
+
+<p>At a high-level, the product I&#8217;m working on at the NYT aims to reimagine journalism and news for a mobile era. Invariably, this means that development is focused on building an optimal mobile experience, first for iOS and second for Android with a web-based API as the backend content tool. I&#8217;ve been playing around with iOS / Objective-C / Xcode sporadically in the last 6 months, and I hope to ramp up my learning in the new year.</p>
+
+<p>Learning the iOS world is at once both similar yet quite different than Ruby / Rails. Object-oriented principles, class and instance methods and a dynamic runtime make Objective-C familiar enough to a Ruby developer like myself. At the same time, working in an IDE like Xcode is considerably different than a lightweight text editor like Sublime - more powerful and rich in its feature set yet consisting of a steeper learning curve. The tight integration of the iOS world is new to me and while I see its benefits (e.g., the option to graphically link front-end views to controller actions rather than just through code kind of blew my mind), it&#8217;ll take some time for me to work through the coding paradigms advanced by Apple.</p>
+
+<p>Oh, and as an aside, if anyone reading this is or knows of solid iOS developers, shoot me an e-mail! My team is hiring actively for iOS. :)</p>
+
+<p><em>3) Gain dev ops experience</em></p>
+
+<p>My main work task over the holidays was to migrate our application from the existing, core NYTimes infrastructure to the newsroom developer infrastructure (i.e., interactive news and graphics). The differences between the two setups are considerable - internally hosted vs. AWS, Puppet vs. Chef for server configuration, Apache vs. Nginx for a web server. At Flatiron School, we didn&#8217;t do much with web operations stuff; we were hosted on Digital Ocean servers and used Capistrano for our deploys. The dev ops we learned at Flatiron School centered more on following a set of instructions to deploy our app rather than a holistic understanding of web infrastructure. Although more dev ops education would have been great, the focus on application code is entirely understandable given the challenging task of building developers from scratch in three monthds.</p>
+
+<p>I&#8217;ve found that the lack of a traditional computer science education leaves me at something of a disadvantage when learning about web infrastructure since understanding how networks are constructed or how communication protocols are established would help me grasp software architecture principles. That said, I&#8217;m eager to learn about this slightly obscure but critically important field that has enabled the rapid integration of technology, society and culture. Hopefully, old-fashioned hard work, reading stuff online and actually setting up servers will be enough for me to learn what I need to become a somewhat passable dev ops professional. Since we don&#8217;t have a dedicated dev ops person, it falls on the developers (primarily the back-end devs) to manage our infrastructure and respond to downtime. My office provides educational financing too if I wanted to take a grad course or two on general software architecture principles, but I still need to see how my non-work schedule pans out this year before committing to a class.</p>
+
+<p><em>4) Launch a product!</em></p>
+
+<p>This is a bit of a departure from the previous goals since its really a team goal that&#8217;s driven by the NYTimes&#8217;s overall business goals. Watching the product grow from a prototype to a scalable, production-ready application has been an exhilirating and educational experience so far. After the product launches this year, there will be continuing sprints to fix bugs or add new features like any iterative product development process - its not like the work stops with a product launch.</p>
+
+<p>In finance, I was involved in the launch of a number of customized and specialty investment vehicles, which were great experiences in themselves, but I imagine that a consumer-facing product launch is going to impact me differently. While I don&#8217;t have many friends that have the financial wherewithal to invest in hedge funds (anyone have an extra quarter-million laying around?), I do have a number of friends that are casual news consumers and broadly interested in the world around them. Building a product intended for the people I know makes me feel more invested in my work and connected to the broader mission of the paper. Regardless of success or failure from a business perspective, I&#8217;m eager to see the ~9-month effort from my team of tremendously talented designers, developers and editors come to full fruition.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[With Great Power Comes Great (Single) Responsibility]]></title>
@@ -2549,32 +2589,6 @@ The source code behind dynamic attributes proves that metaprogramming can either
 <p><a href="http://natashatherobot.com/recursion-factorials-fibonacci-ruby/" target="_blank">Recursion and Fibonacci in Ruby</a></p>
 
 <p><a href="http://kaibun.net/blog/2010/03/17/simple-thought-about-recursion-in-ruby/" target="_blank">Recursion in Ruby</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flatiron Graduation]]></title>
-    <link href="http://eewang.github.com/blog/2013/04/27/flatiron-graduation/"/>
-    <updated>2013-04-27T07:57:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/04/27/flatiron-graduation</id>
-    <content type="html"><![CDATA[<p>Yesterday was the final day of the Flatiron School semester. I&#8217;ll write a longer blog post hopefully next week with my reflections and thoughts on the 3 month program, but I just wanted to say that its been an awesome experience. I&#8217;ve met some amazing people and I&#8217;m so happy to have a skill set now that I can continue to cultivate for the rest of my life. I used to have a lot of ideas for applications or programs that could never reach fruition without knowing how to code; now, I can have an idea and write a simple exploratory Rails app or script to see if its feasible. The skill of being able to ideate and execute simultaneously is a true blessing, and I&#8217;m thankful to have had the opportunity to build it at the Flatiron School.</p>
-
-<!--more-->
-
-
-<p>Despite the end of the program, I have no plans to slow down. Sure, I&#8217;ll be heading back to Chicago next weekend for about 5 days, but I plan to keep coding whenever I&#8217;m not hanging out with friends and family. I&#8217;ll still keep going into school to code with others. I&#8217;ll still keep blogging about what I&#8217;m learning and building. I&#8217;ll still keep reading coding books and working on Project Euler problems. In many ways, the end of Flatiron just means that I&#8217;ll have more flexibility during the day to grab coffee or a longer lunch; I don&#8217;t expect the learning process to decelerate.</p>
-
-<p>Oh, and looking for jobs. That process will start imminently. While I don&#8217;t exactly relish the idea of the job search process, it will be a great opportunity for me to meet people in the tech community and learn about what cool stuff companies in New York are building. And if you know of somewhere that looks interesting or someone you think I should meet, feel free to shoot me an e-mail (eugene.wang.77@gmail.com)!</p>
-
-<p><em>Updated Saturday, April 27, 10:00 pm</em></p>
-
-<p>I had the opportunity today to serve as a judge in the Big Stakes Challenge for <a href="http://defyventures.org/" target="_blank">Defy Ventures</a>. If you haven&#8217;t heard of Defy, its an entrepreneurial program for formerly incarcerated individuals. The program is structured as a mini-MBA; students have classes for a few hours two evenings during the week and all-day Saturday for about 8 months. They learn about the fundamentals of entrepreneurship - business plans, marketing, finance, operations, etc. And while they take classes, they apply their education to their own business ventures. As a judge in today&#8217;s competition (the last of three that they held throughout the program), I heard from promising entrepreneurs about a computer repair business, an artisan ice cream cart and a brand management agency, among many others. All of the men and women I heard from today have criminal records (a few spent the majority of their lives in prison), but I honestly forgot they served hard time after a few minutes. I found them to be articulate, passionate and eager to take on the challenge of (legal) entrepreneurship, and hearing their personal stories and business pitches helped me break down stereotypes I have of ex-convicts.  You can find more information about the program <a href="http://www.nytimes.com/2012/09/24/nyregion/helping-ex-criminals-develop-start-ups.html" target="_blank">here</a>.</p>
-
-<p>After the all-day business plan competition, I attended the graduation ceremony for the students this evening. Having just gone through my own graduation ceremony at the Flatiron School yesterday, I found it interesting to compare the missions of Defy and Flatiron. Like Flatiron, Defy just wrapped up its second semester in New York City. At its core, both Flatiron and Defy are about personal transformation and rejecting the popular narrative about their respective target populations. Flatiron seeks to refute the notion that developers and coders have to come out of computer science programs, or that programming is more about solving mathematical equations than creative expression. In the same vein, Defy aims to demonstrate that ex-convicts and felony offenders are talented, hard-working individuals who just so happened to get the short end of the straw in going to prison. Both programs inspire confidence and faith that the past is not prescient about our future and that we can shape our future if only we have the right tools at our fingertips and a supporting community to encourage us along the way. Despite the vastly different curricular focus, both Flatiron and Defy believe that its never too late to make a change for the better, and that while our past experiences undoubtedly shape our present selves, they do not define the who we&#8217;ll become.</p>
-
-<p>I&#8217;m incredibly grateful for programs like the Flatiron School and Defy Ventures, and I&#8217;m especially thankful for the desire of individuals like Adam and Avi of Flatiron and Catherine Rohr of Defy to serve their respective target communities and give people a chance to change their personal career trajectory. Society today seems to slowly ossifying into socioeconomic categories that are defined earlier and earlier in life. We&#8217;re told that what college we go to matters because the people we meet will define the rest of our lives. We&#8217;re told that how many high school AP classes we take will ripple throughout our lives because it&#8217;ll affect what college we go to. Backtracing these assumptions to their logical conclusion partially explains why tuition at &#8220;top&#8221; pre-schools can hit five digits.</p>
-
-<p>And while I&#8217;m not saying that these early decisions don&#8217;t matter (research shows that a good early education program has a huge multiplier effect on future earnings), its dangerous to assume those decisions are destiny. Avi described in his commencement speech that his grades steadily deteriorated throughout high school and that he eventually dropped out of college. By conventional wisdom, Avi&#8217;s future should have been pretty dim. Instead, he found a way to reject the narrative that your college defines your future and is today the founder of two successful startups. Both Flatiron and Defy reminds us that humans are more malleable and mentally flexible farther along in their lives than people think; its not just children who can learn new skills and transform themselves. Flatiron and Defy are doing awesome things in New York City, and I&#8217;m humbled to have had the opportunity to play a role in the two programs.</p>
 ]]></content>
   </entry>
   
