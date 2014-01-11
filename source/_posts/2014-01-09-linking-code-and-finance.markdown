@@ -4,6 +4,7 @@ title: "Linking Code and Finance"
 date: 2014-01-09 07:52
 comments: true
 categories: 
+published: false
 ---
 
 Working in technology as a developer has parallels to working in asset management as a lawyer. I'm not a lawyer, mind you, but in my previous job I worked with several lawyers who had practiced at some of the leading firms in New York. During my 2.5 year stint in the hedge fund group at a large alternative asset manager, I had the opportunity to work at the nexus of institutional investors and hedge funds, where I helped build fund platforms and coordinate investments into underlying hedge funds. 
