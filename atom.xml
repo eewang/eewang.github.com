@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2014-01-04T20:55:29-05:00</updated>
+  <updated>2014-01-11T09:11:39-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Linking Code and Finance]]></title>
+    <link href="http://eewang.github.com/blog/2014/01/09/linking-code-and-finance/"/>
+    <updated>2014-01-09T07:52:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2014/01/09/linking-code-and-finance</id>
+    <content type="html"><![CDATA[<p>Working in technology as a developer has parallels to working in asset management as a lawyer. I&#8217;m not a lawyer, mind you, but in my previous job I worked with several lawyers who had practiced at some of the leading firms in New York. During my 2.5 year stint in the hedge fund group at a large alternative asset manager, I had the opportunity to work at the nexus of institutional investors and hedge funds, where I helped build fund platforms and coordinate investments into underlying hedge funds.</p>
+
+<p>From the outside, this sounds like quite a different job than the one I currently hold as a developer. But I&#8217;ve found that there are more parallels at a deeper level than I first thought. Both developers and lawyers construct complex, knowledge-intensive infrastructure, the former calling the practice &#8220;software development&#8221; and the latter calling what they do &#8220;fund structuring&#8221;.</p>
+
+<p>For those unfamiliar with hedge funds, they are often established as a set of interlinked investment companies domiciled in places like Delaware (if you&#8217;re an American taxable, or &#8220;onshore&#8221; investor) or the Cayman Islands / British Virgin Islands / Malta (if you&#8217;re a foreign or American non-taxable investor, aka &#8220;offshore&#8221;). In the popular media, hedge funds are generically labeled such that it appears like a single entity both takes in money from investors and disburses it out in the form of equity or fixed income investments. The reality, like in most spheres of life, is much more complicated. In my experience, rare are the times where the fund that actually invests the money and the fund that accepts money from investors the same. A more common fund structure is a &#8220;master-feeder&#8221; structure, where a set of feeder funds (at least two - one for onshore and one for offshore investors) will collect money from investors, then in turn invest that money into a master fund, which will actually hold the investments. Each feeder fund will own a share of the assets of the underlying master fund in proportion to the money that has been invested in them.</p>
+
+<p>This is the most basic of fund structures. From there, the level of complexity only rises. I&#8217;ve seen an</p>
+
+<p>In software,</p>
+
+<p>One difference between the two practices is the whimsical approach software takes to naming its tools compared to asset management. Hedge funds often have boring, descriptive names like or XYZ Offshore Master Fund Ltd. Software tools, on the other hand, have fun, metaphorical names like <a href="https://github.com/newsapps/beeswithmachineguns">Bees with Machine Guns</a>, which programmatically sets up EC2 instances (i.e., &#8216;bees&#8217;) to send large amounts of traffic to your web server (i.e., &#8216;machine guns&#8217;) in order to test an application&#8217;s load handling.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[4 Goals for 2014]]></title>
@@ -181,6 +200,99 @@
 <p><a href="http://www.mikepackdev.com/blog_posts/38-dci-the-king-of-the-single-responsibility-principle">The King of the Single Responsibility Principle</a></p>
 
 <p><a href="http://jonkruger.com/blog/2010/10/19/ruby-on-rails-and-the-single-responsibility-principle/">Ruby on Rails and the Single Responsibility Principle</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[With Great Power Comes Great (Single) Responsibility]]></title>
+    <link href="http://eewang.github.com/blog/2013/11/21/with-great-power-comes-great-single-responsibility/"/>
+    <updated>2013-11-21T08:37:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2013/11/21/with-great-power-comes-great-single-responsibility</id>
+    <content type="html"><![CDATA[<p>In software development, the Single Responsibility Principle is a bedrock principle that transcends language or framework. The SRP states that each function / method, class and module should perform a single responsibility. This enables your code to be flexible, extensible and less prone to bugs since software components that are only loosely coupled to their peer components are simpler and easier to maintain.</p>
+
+<p>Although simple on its face, the SRP is very difficult to adhere to throughout an entire codebase. When I first started to code, my tendency was to build on top of existing methods or classes as I added functionality, rather than have an eye to constantly refactoring my code and separating and isolating the responsibilties and roles of each unit. This led to overgrown User classes that contained all sorts of logic unrelated to a strict notion of a &#8216;user&#8217;. At a higher level, violations of the SRP can lead to monolithic applications that simply do too much, and I gather that much of the recent theme of breaking up monolothic apps into a service-based architecture has to do with trying to get back to a building apps in line with the SRP.</p>
+
+<p>In the application I&#8217;m helping build at the NYT, we recently came across a simple problem that I felt was a good example of the SRP in practice. In our web form, users have the ability to input a URL and the form can determine whether that URL relates to an NYT article or a non-NYT article. Similarly, an asset should be able to tell if the its associated with the NYT by looking at the attached URL. Although URLs are associated with assets, they are accessed via the post form, so posts delegate URL calls its asset.</p>
+
+<p>The first version of this predicate method (to return <code>true</code> or <code>false</code> depending on whether the URL string matched an nytimes regex) looked like this:</p>
+
+<p>Demonstrating the Single Responsibility Principle</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:asset</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt_url?</span><span class="p">(</span><span class="n">check_url</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">url</span> <span class="o">=</span> <span class="n">check_url</span> <span class="o">||=</span> <span class="p">(</span><span class="n">asset</span> <span class="p">?</span> <span class="nb">self</span><span class="o">.</span><span class="n">url</span> <span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">url</span> <span class="p">?</span> <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span> <span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">NYT</span>
+</span><span class='line'>  <span class="no">NYT_REGEX</span> <span class="o">=</span> <span class="sr">/.nytimes\.com/</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt_url?</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span class='line'>    <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">NYT</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:asset</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">has_nyt_asset?</span>
+</span><span class='line'>    <span class="n">asset</span><span class="o">.</span><span class="n">nyt?</span> <span class="k">if</span> <span class="n">asset</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Asest</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt?</span>
+</span><span class='line'>    <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
@@ -1988,607 +2100,6 @@ the useful functionality without adding unwieldy dependencies.</p>
 <p>Callback macros are useful for cleaning and validating data and ensuring that objects are saved to the database are properly vetted. If you&#8217;re saving the results of an API call as we were doing for ViewFinder, these callback macros can programmatically insert your application logic into the chain of events in converting the raw JSON result of an API call to application data.</p>
 
 <p>Overall, Antipatterns provides useful nuggets of advice when creating Rails applications. That said, its important to know what to expect when reading the book - you won&#8217;t get much in terms of explaining the inner workings of Rails or how Ruby code can generate all those dynamic finder and callback methods. Best go to Metaprogramming Ruby for a full walk-through of the Ruby object model. But, if you&#8217;re looking for immediate, practical advice on how to leave behind bad habits, Antipatterns is a useful guide. When I started reading Antipatterns, I would only have to read a few pages before I could apply what I was reading to an application I was building. Think of it as a what-not-to-do guide to Rails and you&#8217;ll be able to apply its instructions to an application right away.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 1 of 2)]]></title>
-    <link href="http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails/"/>
-    <updated>2013-04-29T15:03:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/04/29/metaprogramming-ruby-and-antipatterns-in-rails</id>
-    <content type="html"><![CDATA[<p>I recently finished reading two programming books in parallel - Metaprogramming Ruby and Rails Antipatterns. As Ruby/Rails books go, the two could not be further apart. Metaprogramming Ruby focuses on explaining the Ruby object model and how core Ruby is constructed in order to enable you as a Ruby programmer to unlock functionality that isn&#8217;t immediately obvious. Conversely, Rails Antipatterns is more about focusing on the bad coding habits most new Rails developers experience and simple, tangible ways to avoid those  pitfalls. One book explains core Ruby (although also touches some on Rails), while the other applies specifically to Rails. One book goes as deep as possible into Ruby&#8217;s construction as a language, while the other aims to hit developers in their day-to-day programming habits. Arguably, Rails Antipatterns is more &#8220;practical&#8221; and Metaprogramming Ruby is more &#8220;theoretical,&#8221; as its generally easier to find more daily code applications of Rails Antipatterns than Metaprogramming Ruby. This post will focus on Metaprogramming Ruby and the next will focus on Rails Antipatterns.</p>
-
-<!--more-->
-
-
-<p>Reading the two books in tandem, however, has forced me to move quickly between Rails and Ruby. Its oftentimes easy to forget that Rails is just a Ruby library at its core and is constructed using many of the metaprogramming techniques described in Metaprogramming Ruby. While the two books are pretty different in their construction, they&#8217;ve helped me better understand how programming works generally along all levels of abstraction - from the Ruby core object model to the abstract class macros provided in Rails. In many ways, Metaprogramming Ruby picks up where Rails Antipatterns ends up. Reading the latter might inspire you to begin using the <a href="http://apidock.com/rails/Module/delegate" target="_blank">&#8220;delegate &#8230; to&#8221;</a> pattern in your Rails applications as a way to avoid long method chains, but Antipatterns won&#8217;t go into the nitty gritty of how Rails implements that class macro. Metaprogramming, however, will go pretty deep into how a macro like &#8220;delegate &#8230; to&#8221; is implemented and how it uses dynamic method definition to create methods in the class in which the &#8220;delegate&#8221; method is called.</p>
-
-<p>Metaprogramming is a great way to act on the mantra that good developers take complexity and deliver simplicity. A simple definition for metaprogramming is code that writes code. An application that actively uses metaprogramming seems simple on the outside (like magic!) but is quite complex on the inside. Arguably the best example for this in the Ruby community is the eponymous Ruby on Rails. Rails presents simplicity to users; for example, whenever you create model and corresponding table and call a finder method (e.g., #find_by_name()), these finder methods are generated dynamically by Rails. The internal source code for these finder methods use liberal doses of metaprogramming and thus are tough to decipher, but the benefit of designing the application in that way means that users can build quickly using a huge library of &#8220;free&#8221; methods provided by Rails (specifically ActiveRecord in this example) without thinking too much about the method implementation.</p>
-
-<p>I would definitely recommend reading Metaprogramming Ruby if you feel like you have a decent grasp of the language and would like to accelerate your learning. If you feel like you don&#8217;t fully understand the concepts the first time you read it, don&#8217;t worry, just read it again. Then read it a third time. Metaprogramming Ruby is one of those books that you could read it multiple times and keep learning new things from it each time, since the material is dense and the opportunities to apply the concepts are not always obvious in every Ruby script or application. Here&#8217;s a quote from the book that I think explains the value of metaprogramming and tradeoffs to consider when applying the technique.</p>
-
-<blockquote>
-If you use it sparingly, metaprogramming can make your code more readable for humans—but it will probably make it less readable for programs such as refactoring engines or code analysis tools. Ruby’s extremely dynamic nature makes life very hard for such tools, and that’s why some IDE features that work great for static languages (such as finding all the calls to a method, renaming a variable, or jumping from a method usage to its definition) are difficult to implement well in Ruby. Add metaprogramming to the mix, and your poor IDE will be even more confused. That’s one of the fundamental trade-offs of metaprogramming (and, to a point, of dynamic languages). You have the freedom to write expressive, terse code, but to read that code, you need a human brain.
-</blockquote>
-
-
-<p>I try to explain some of the topics included in Metaprogramming Ruby below, but its difficult to take each of these independent of the other. The most valuable part of the book for me was the in-depth explanation of the overall structure of the Ruby language and how objects and methods work. I&#8217;m someone who likes to have an understanding of the broad, high-level context in which I work, and Metaprogramming Ruby provides that context so that whenever I&#8217;m looking at a piece of code, I feel like I have a better understanding now of what&#8217;s going on (e.g., What variables are in scope? What is &#8216;self&#8217;? What methods can be accessed?).</p>
-
-<p><strong>Procs vs. Lambdas</strong></p>
-
-<p>At a high level, procs and lambdas define blocks of code that can be executed when called. They are somewhat analogous to anonymous functions in Javascript. Procs and lambdas are generally used for the same purpose, but they have subtle differences between them:</p>
-
-<p>1) Procs are more flexible when evaluating arguments vs. lambdas. For example, if you define 2 arguments for a proc and only call the proc with 1, the other will be considered nil, whereas for a lambda, the call will return an ArgumentError</p>
-
-<p>2) The return value for a proc comes from the scope in which the proc itself was defined, whereas the return value for a lambda comes from the lambda block.</p>
-
-<p>Lambdas tend to be the first choice for Rubyists because they&#8217;re more similar to methods in that they are strict about the number of methods they accept (the &#8216;arity&#8217; of a method) and exit when return is called. Both lambdas and Procs are part of the Proc class.</p>
-
-<p><strong>Dynamic Methods</strong></p>
-
-<p>Dynamic methods are a set of methods that can create or call methods when the actual name of the method is not known. I&#8217;ve listed out a few of the methods used to either create or call methods dynamically and apply them to the following example:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">toy</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
-</span><span class='line'>    <span class="vi">@favorite_toy</span> <span class="o">=</span> <span class="n">toy</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">colors</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">args</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">define_method</span> <span class="n">arg</span> <span class="k">do</span>
-</span><span class='line'>        <span class="s2">&quot;I am </span><span class="si">#{</span><span class="n">arg</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="n">method_call</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Sorry, we don&#39;t recognize the color </span><span class="si">#{</span><span class="n">method_call</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">colors</span><span class="p">(</span><span class="ss">:green</span><span class="p">,</span> <span class="ss">:blue</span><span class="p">,</span> <span class="ss">:red</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">private</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">private_method</span>
-</span><span class='line'>    <span class="s2">&quot;You shouldn&#39;t be able to see me!&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">fido</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Fido&quot;</span><span class="p">,</span> <span class="s2">&quot;Ball&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>#send</em><br></p>
-
-<p>The #send method is useful for whenever you want to call a method dynamically and are not sure of the method name at runtime. In the example above, a user can input a color among the three available options, and the #send method will figure out which method to call in the Dog class. Another use case for #send is to call private methods:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">puts</span> <span class="s2">&quot;What color do you want your dog?&quot;</span>
-</span><span class='line'><span class="n">color</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">chomp</span> <span class="c1"># =&gt; blue</span>
-</span><span class='line'><span class="nb">puts</span> <span class="n">fido</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="c1"># =&gt; I am blue</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">puts</span> <span class="n">fido</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;private_method&quot;</span><span class="p">)</span> <span class="c1"># =&gt; &quot;You shouldn&#39;t be able to see me!&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>#define_method and #define_singleton_method</em><br></p>
-
-<p>These two methods are used to define instance methods and class methods, respectively. They are methods that, when executed, create other methods that can then be called on either an instance or class object. In the code above, I call a class method called &#8220;colors&#8221; at runtime. This class method takes in an arbitrary number of arguments (in this instance, 3 colors) and creates a method for each argument. The methods that get created then return the name of the method. Admittedly, this example is a bit contrived as the same behavior could be achieved by just passing a color argument into a method that returns the value of the color. However, using #define_method and #define_singleton_method can help keep code DRY if you find a certain pattern used repeatedly in a number of different methods in your code. For me, I&#8217;ve used #define_method and #define_singleton_method whenever I notice that I&#8217;m repeating code in methods where the only difference is a reference to another object or column.</p>
-
-<p><em>#method_missing</em><br></p>
-
-<p>&#8220;#method_missing&#8221; acts as a catch-all method for intercepting method calls that an object doesn&#8217;t know how to interpret. If a method is called on an object that doesn&#8217;t know how to respond to the method after Ruby goes through the method lookup chain (i.e., first going into the immediate class, then upward into modules, parent classes, etc.), Ruby will call the #method_missing method that&#8217;s part of the Kernal module and mixed into every Ruby object. By creating a #method_missing method, you can hijack Ruby&#8217;s call stack and redefine what gets executed or returned whenever an unknown method is called on an object.</p>
-
-<p>In my example, I used #method_missing to serve as a catch-all for any colors that are not recognized by the Dog class. However, #method_missing can be used to define attributes dynamically:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
-</span><span class='line'>    <span class="vi">@attributes</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">method_missing</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">attribute</span> <span class="o">=</span> <span class="nb">name</span><span class="o">.</span><span class="n">to_s</span>
-</span><span class='line'>    <span class="k">if</span> <span class="n">attribute</span> <span class="o">=~</span> <span class="sr">/=$/</span>
-</span><span class='line'>      <span class="vi">@attributes</span><span class="o">[</span><span class="n">attribute</span><span class="o">.</span><span class="n">chop</span><span class="o">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="vi">@attributes</span><span class="o">[</span><span class="n">attribute</span><span class="o">]</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This allows me to create any attribute of a dog that I want on the fly and #method_missing will create both a setter and getter for the method. This is possible because in the below example, &#8220;fido.legs = 4&#8221; is equivalent to fido.legs=(4), where &#8220;legs=&#8221; is the name of the method called on &#8220;fido&#8221; and &#8220;4&#8221; is the sole argument. When this method is first called, the Dog class doesn&#8217;t know how to respond to the method since there is no method called &#8220;legs&#8221;. Thus, the method call is directed to #missing_method, which then sets the attribute to the name of the method and sets the value to the first argument that is passed in.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">fido</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Fido&quot;</span><span class="p">,</span> <span class="s2">&quot;Ball&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">legs</span> <span class="o">=</span> <span class="mi">4</span>
-</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">legs</span> <span class="c1"># =&gt; 4</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">bark</span> <span class="o">=</span> <span class="s2">&quot;BARK BARK&quot;</span>
-</span><span class='line'><span class="n">fido</span><span class="o">.</span><span class="n">bark</span> <span class="c1"># =&gt; &quot;BARK BARK&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Binding Module</strong></p>
-
-<p>One of my favorite gems in the Ruby universe is the <a href="https://github.com/pry/pry" target="_blank">Pry</a> gem. Pry is a debugging tool that allows you to enter into the local universe when code is run. Including &#8220;binding.pry&#8221; in a set of code will pry open the code at runtime and enable you to poke around and see how certain variables are defined or used. Its probably the gem I use the most - whenever I&#8217;m writing code, be it a full-blown Rails app or a simple Ruby script, Pry tends to be the first gem I include.</p>
-
-<p>But even though I use the gem quite often, I didn&#8217;t exactly realize how it worked. Metaprogramming Ruby explains that &#8220;binding&#8221; is actually a method in Ruby that converts a scope into an object that can then be called at a later moment. This can be an incredible tool, as the use of the &#8220;binding&#8221; method in a block of code makes that scope portable for future use, even to the point where &#8220;self&#8221; can change based on the binding context.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">toy</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
-</span><span class='line'>    <span class="vi">@favorite_toy</span> <span class="o">=</span> <span class="n">toy</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">get_binding</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nb">binding</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">fido</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Fido&quot;</span><span class="p">,</span> <span class="s2">&quot;Ball&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">fido_scope</span> <span class="o">=</span> <span class="n">fido</span><span class="o">.</span><span class="n">get_binding</span>
-</span><span class='line'><span class="n">snuffles</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Snuffles&quot;</span><span class="p">,</span> <span class="s2">&quot;Stick&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">snuffles_scope</span> <span class="o">=</span> <span class="n">snuffles</span><span class="o">.</span><span class="n">get_binding</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;puts @name; puts @favorite_toy&quot;</span><span class="p">,</span> <span class="n">fido_scope</span><span class="p">)</span> <span class="c1"># =&gt; Fido Ball</span>
-</span><span class='line'><span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;puts @name; puts @favorite_toy&quot;</span><span class="p">,</span> <span class="n">snuffles_scope</span><span class="p">)</span> <span class="c1"># =&gt; Snuffles Stick</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using the &#8220;binding&#8221; is helpful for accessing a scope in an object-oriented manner. The binding method is defined within the Kernal module, which is mixed into Ruby&#8217;s Object class, from which all objects inherit. This is why you can use the binding method in any class, since all classes inherit the Kernal module functionality. Pry essentially adds functionality to the binding method and literally prys open the scope and creates an IRB-like environment out of a scope, which makes testing and debugging considerably easier than if there was not a binding method.</p>
-
-<p><strong>Flat Scope</strong></p>
-
-<p>Flat scope is used to enable the use of variables and methods defined outside of a traditional scope gate (e.g., a method definition, class or module). Variables defined outside of a block can be accessed within a block, so a nifty technique is to define a class via a block rather than a using the &#8220;class&#8221; keyword, as in the following:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dog</span> <span class="o">=</span> <span class="s2">&quot;Fido&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Dog</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">define_method</span> <span class="s2">&quot;name&quot;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="n">dog</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">myDog</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="n">myDog</span><span class="o">.</span><span class="n">name</span> <span class="c1"># =&gt; Fido</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is in contrast to the &#8220;normal&#8221; way of defining a class, which acts as a scope gate and prevents previously defined variables from being accessed within the class scope.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dog</span> <span class="o">=</span> <span class="s2">&quot;Fido&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Dog</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">name</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="n">dog</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">myDog</span> <span class="o">=</span> <span class="no">Dog</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="n">myDog</span><span class="o">.</span><span class="n">name</span> <span class="c1"># =&gt; ERROR: undefined local variable or method &quot;name&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Using alias_method</strong></p>
-
-<p>The #alias method is a helpful way of changing method names while still maintaining the functionality of the old method name. It can also be used to modify programmer behavior; for example, #alias is used for deprecating functionality by providing warnings and advice on what other method to use instead of the called method, while still allowing users to call the old method.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Array</span>
-</span><span class='line'>  <span class="k">alias</span> <span class="ss">:size</span> <span class="ss">:length</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">length</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Please use #size to determine array element count from now on.&quot;</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">size</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Metaprogramming in Rails</strong></p>
-
-<p>Rails makes heavy use of metaprogramming techniques to provide a huge amount of functionality out of the box whenever a new application is created. For example, one of the benefits of using Rails and ActiveRecord specifically is that ActiveRecord creates an array of attribute accessors and dynamic finder methods that match the columns in the database tables. If you have a User model that includes columns for name, date_of_birth and phone_number, ActiveRecord will create methods like User#find_by_name, User#find_all_by_date_of_birth and User#find_or_create_by_phone_number dynamically. How does ActiveRecord know what finder methods to create? Through metaprogramming, and specifically through the #method_missing method.</p>
-
-<p>Whenever you first make a call to a dynamic finder method in Rails, #method_missing will get triggered. If you look at the source code for ActiveRecord::Base, you&#8217;ll find a class method called #method_missing, which hijacks the method call chain for Ruby and create finder methods if the method you are calling follows the find_by pattern. The finder methods are based on the table columns in the database. In the first call to a finder method, #method_missing will create the necessary finder methods in your application, so that the second time you call that finder method, it will execute an actual block of code that corresponds with that method rather than make a call to a ghost method within #method_missing. This pattern seems to be a theme within the construction of Rails - active use of #method_missing and ghost methods to create the potential for a lot of functionality, but to not create that functionality until its actually called as adding all possible functionality at runtime could slow down the application. Rails wants to make sure that you&#8217;re going to use a dynamic finder method before it actually adds the code to your codebase. Thus, the first call to a dynamic finder generates the actual method via #method_missing.</p>
-
-<p>Its interesting to think about the design decisions that went into the construction of ActiveRecord. The first call to a dynamic finder method is to a ghost method within #method_missing. However, this first call is enough for Rails to infer that you probably want to use the ghost method again. At this point, Rails creates an actual method for you to use in the future. Accessing a real method is generally faster than accessing a ghost method. However, adding a ton of real methods can also make your application bloated, especially if you never use most of them. Knowing some more about metaprogramming has made me appreciate even more the construction of Rails and how it enables rapid application development.</p>
-
-<p>I particularly like this excerpt from Metaprogramming Ruby, as I think it explains well design decision for ActiveRecord as it relates to creating dynamic methods.</p>
-
-<blockquote>
-If you look at the current optimized source code [for Rails], you can try to guess some of the motivations behind it. Calling a real method is faster than calling a Ghost Method, so Rails chooses to define real methods to access attributes. On the other hand, defining a method also takes time, so Rails doesn’t do that until it’s sure that you really want to access at least one attribute on your ActiveRecord objects. Also, define_ method() is known to be slower than def on some Ruby implementations (but not on others!), and that might be one reason why the authors of Rails opted to use Strings of Code to define accessors.
-
-None of these considerations is obvious, however. As a rule, you should never optimize your code prematurely—whether it’s metaprogramming code or not.
-The source code behind dynamic attributes proves that metaprogramming can either impair your system’s performance or help you optimize it. For example, if you find out that you’re slowing down your system by calling too many Ghost Methods, you can get some performance back by defining Dynamic Methods. So, when it comes to metaprogramming, performance generally is no more of an issue than it is with any other code.
-</blockquote>
-
-
-<p>Overall, I&#8217;d recommend cracking open Metaprogramming Ruby if you have a decent grasp of Ruby and want to really delve into the inner workings. It&#8217;s probably not the most practical book, in that you may not use many of the metaprogramming recipes on a day-to-day basis, but its great for providing an overall understanding of how the Ruby method lookup chain works, how different classes and modules interact, etc. That said, its a dense book, and it took me a while to get through. I&#8217;ll likely try and read it again at some point, as it feels like one of those books where you can read over and over again and keep discovering new and interesting nuggets of wisdom.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Recursion With Project Euler]]></title>
-    <link href="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/"/>
-    <updated>2013-04-28T08:00:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler</id>
-    <content type="html"><![CDATA[<p>I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what with all the coding, reading and blogging that I&#8217;m trying to do on a day-to-day basis. However, I was able to work in a problem earlier this week that helped me get a better grasp of using recursion in Ruby.</p>
-
-<!--more-->
-
-
-<p>For those who don&#8217;t know, recursion is a computer science concept that seems simple on its face, but can mask considerable complexity. A recursive function is basically a function that calls itself. You know how when you go to a barbershop and your barber puts a mirror up to the back of your head after the haircut? The resulting mirror-on-mirror effect that looks like a never-ending pyramid of the same image in increasingly smaller size is an example of recursion. Applying recursion in a Ruby script can be a powerful and succinct way of moving programmatically applying a pattern to a given problem until the solution is found.</p>
-
-<p>However, using recursion can also lead to &#8220;call stack too deep&#8221; errors the same way that using a while loop without providing for some incrementor will lead to an infinite loop. Recursion can also be difficult to track mentally since each call to method is made within the execution of such method, just one &#8220;layer&#8221; above. This means that when the executing code finally reaches its terminating condition, it has to go &#8220;back&#8221; through all the previous calls to the same method. At school, we had explored recursion early on in the semester to solve the Tower of Hanoi problem, but I&#8217;ll admit that it was difficult for me to grasp and follow the logic. Thankfully, as I went through Project Euler problem 7 earlier this week, I was able to apply the principles of recursion to solve it and gain a better understanding of using recursion in the process.</p>
-
-<p>Problem 7 asks you to find the 10,001st prime number. My strategy for solving this problem was to take a starting number, pass in prime index that I would like to solve for, then move iteratively toward that index based on the starting index (i.e. the prime index of the closest prime number less than or equal to the starting number). To do this, I created an Integer#prime? method to check if a number is prime and metaprogrammed an Integer#next_prime and Integer#previous_prime method to find the closest prime number greater than and less than, respectively, the given number. I then created an Integer#find_prime method that would recursively call itself via the Integer#move_to_next_prime method that would eventually return the value of the prime_index that was initally passed to the #find_prime method.</p>
-
-<p>I think the code that I ended up with is okay, but I could have made other changes to make the search process of finding the n-th prime faster. For example, instead of having the script move incrementally to find the value of the n-th prime given a starting number, I could have written it so that based on the delta between the prime index of the starting number and the target prime index, the script could make a someone intelligent guess as to how much to add or subtract to the starting number to get closer to the target value. The difference between the value of the starting prime index of 10 (i.e., the 10th prime) and the 15th prime will be smaller than the difference between the 10th and 20th prime. This fact could be baked into the recursive function in order to find a better &#8220;ballpark&#8221; estimate of the target prime index value rather than just incrementing by one prime number each time the function is called.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># PROBLEM NUMBER 7</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># PROBLEM NAME</span>
-</span><span class='line'><span class="c1"># 10001st prime</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># PROBLEM DESCRIPTION</span>
-</span><span class='line'><span class="c1"># By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># What is the 10 001st prime number?</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># PROCESS</span>
-</span><span class='line'><span class="c1"># =&gt; I want to be able to determine a prime number by passing in the index for it within the prime number universe</span>
-</span><span class='line'><span class="c1"># =&gt; Find the pattern of determining prime numbers</span>
-</span><span class='line'>  <span class="c1"># =&gt; Look at factors for determining a prime number</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># ANSWER</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># =&gt; 104743</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">prime?</span>
-</span><span class='line'>    <span class="n">prime</span> <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">even?</span>
-</span><span class='line'>      <span class="n">prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">even_prime_check</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="n">prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">odd_prime_check</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">prime</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">odd_prime_check</span>
-</span><span class='line'>    <span class="n">prime</span> <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'>    <span class="n">divisor</span> <span class="o">=</span> <span class="mi">3</span>
-</span><span class='line'>    <span class="k">while</span> <span class="n">prime</span> <span class="o">==</span> <span class="kp">true</span> <span class="o">&amp;&amp;</span> <span class="n">divisor</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="nb">self</span><span class="o">**</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nb">self</span> <span class="o">%</span> <span class="n">divisor</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>        <span class="n">prime</span> <span class="o">=</span> <span class="kp">false</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="n">divisor</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">prime</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">even_prime_check</span>
-</span><span class='line'>    <span class="nb">self</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">?</span> <span class="kp">true</span> <span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">check_for_primes</span>
-</span><span class='line'>    <span class="n">primes</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>    <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="n">.self</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>        <span class="n">primes</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">primes</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">sum_all_primes</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">check_for_primes</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">result</span><span class="p">,</span> <span class="n">num</span><span class="o">|</span> <span class="n">result</span> <span class="o">+</span> <span class="n">num</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">which_prime?</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">check_for_primes</span><span class="o">.</span><span class="n">size</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">prime_search</span><span class="p">(</span><span class="o">*</span><span class="n">searches</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">searches</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">search</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">search</span><span class="si">}</span><span class="s2">_prime&quot;</span> <span class="k">do</span>
-</span><span class='line'>        <span class="n">prime_test</span> <span class="o">=</span> <span class="nb">self</span>
-</span><span class='line'>        <span class="k">case</span> <span class="n">search</span>
-</span><span class='line'>        <span class="k">when</span> <span class="ss">:next</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">until</span> <span class="n">prime_test</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>        <span class="k">when</span> <span class="ss">:previous</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">until</span> <span class="n">prime_test</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>        <span class="n">prime_test</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">prime_search</span> <span class="ss">:next</span><span class="p">,</span> <span class="ss">:previous</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">find_prime</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>      <span class="n">starting_prime</span> <span class="o">=</span> <span class="nb">self</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="n">starting_prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">previous_prime</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">starting_prime</span><span class="o">.</span><span class="n">which_prime?</span><span class="si">}</span><span class="s2"> prime: </span><span class="si">#{</span><span class="n">starting_prime</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="n">starting_index</span> <span class="o">=</span> <span class="n">starting_prime</span><span class="o">.</span><span class="n">which_prime?</span>
-</span><span class='line'>    <span class="n">move_to_next_prime</span><span class="p">(</span><span class="n">starting_prime</span><span class="p">,</span> <span class="n">starting_index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">move_to_next_prime</span><span class="p">(</span><span class="n">start_prime</span><span class="p">,</span> <span class="n">start_index</span><span class="p">,</span> <span class="n">target_index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">case</span>
-</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">==</span> <span class="n">target_index</span>
-</span><span class='line'>      <span class="n">start_prime</span>
-</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">&lt;</span> <span class="n">target_index</span>
-</span><span class='line'>      <span class="n">next_num</span> <span class="o">=</span> <span class="n">start_prime</span><span class="o">.</span><span class="n">next_prime</span>
-</span><span class='line'>      <span class="n">next_num</span><span class="o">.</span><span class="n">find_prime</span><span class="p">(</span><span class="n">target_index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">&gt;</span> <span class="n">target_index</span>
-</span><span class='line'>      <span class="n">next_num</span> <span class="o">=</span> <span class="n">start_prime</span><span class="o">.</span><span class="n">previous_prime</span>
-</span><span class='line'>      <span class="n">next_num</span><span class="o">.</span><span class="n">find_prime</span><span class="p">(</span><span class="n">target_index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">binding</span><span class="o">.</span><span class="n">pry</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As I&#8217;ve mentioned before, working on Project Euler problems has forced me to dust off the Ruby core documentation and practice applying concepts that I learned before but may have forgotten over time. Also, given that we&#8217;ve focused so much on the abstractions of Rails over the past two months, its great to have to go back to working with just Ruby. Its not easy to make time to do Project Euler problems, but I definitely recommend trying to work on at least a few of them (or similar logic problems) just to get more practice at writing Ruby scripts.</p>
-
-<p>Finally, I&#8217;ll leave you with some other good resources on recursion in Ruby in case you&#8217;re interested in learning more:</p>
-
-<p><a href="http://natashatherobot.com/recursion-factorials-fibonacci-ruby/" target="_blank">Recursion and Fibonacci in Ruby</a></p>
-
-<p><a href="http://kaibun.net/blog/2010/03/17/simple-thought-about-recursion-in-ruby/" target="_blank">Recursion in Ruby</a></p>
 ]]></content>
   </entry>
   

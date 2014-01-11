@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Of Science Fairs and Space Apps (Flatiron - Week 11) - eugenius</title>
+  <title>Linking Code and Finance - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="I can hardly believe that there is only one week left in the Flatiron School. This past week we had our Science Fair where we showed off the &hellip;">
+  <meta name="description" content="Working in technology as a developer has parallels to working in asset management as a lawyer. I&#8217;m not a lawyer, mind you, but in my previous &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2014/01/09/linking-code-and-finance/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Of Science Fairs and Space Apps (Flatiron - Week 11)</h1>
+      <h1 class="entry-title">Linking Code and Finance</h1>
     
     
       <p class="meta">
@@ -94,7 +94,7 @@
   
 
 
-<time datetime="2013-04-21T21:56:00-04:00" pubdate data-updated="true">Apr 21<span>st</span>, 2013</time>
+<time datetime="2014-01-09T07:52:00-05:00" pubdate data-updated="true">Jan 9<span>th</span>, 2014</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -103,24 +103,17 @@
   </header>
 
 
-<div class="entry-content"><p>I can hardly believe that there is only one week left in the Flatiron School. This past week we had our Science Fair where we showed off the applications that we had been building for most of the second half of the semester. I talked about <a href="http://handrai.se" target="_blank">HandRaise</a> and <a href="http://viewfinder.io" target="_blank">ViewFinder</a>, the two apps that I&#8217;ve spent the most time building. We had a strong showing from the NYC tech community; I was definitely exhausted by the end of the four-hour long event.</p>
+<div class="entry-content"><p>Working in technology as a developer has parallels to working in asset management as a lawyer. I&#8217;m not a lawyer, mind you, but in my previous job I worked with several lawyers who had practiced at some of the leading firms in New York. During my 2.5 year stint in the hedge fund group at a large alternative asset manager, I had the opportunity to work at the nexus of institutional investors and hedge funds, where I helped build fund platforms and coordinate investments into underlying hedge funds.</p>
 
-<!--more-->
+<p>From the outside, this sounds like quite a different job than the one I currently hold as a developer. But I&#8217;ve found that there are more parallels at a deeper level than I first thought. Both developers and lawyers construct complex, knowledge-intensive infrastructure, the former calling the practice &#8220;software development&#8221; and the latter calling what they do &#8220;fund structuring&#8221;.</p>
 
+<p>For those unfamiliar with hedge funds, they are often established as a set of interlinked investment companies domiciled in places like Delaware (if you&#8217;re an American taxable, or &#8220;onshore&#8221; investor) or the Cayman Islands / British Virgin Islands / Malta (if you&#8217;re a foreign or American non-taxable investor, aka &#8220;offshore&#8221;). In the popular media, hedge funds are generically labeled such that it appears like a single entity both takes in money from investors and disburses it out in the form of equity or fixed income investments. The reality, like in most spheres of life, is much more complicated. In my experience, rare are the times where the fund that actually invests the money and the fund that accepts money from investors the same. A more common fund structure is a &#8220;master-feeder&#8221; structure, where a set of feeder funds (at least two - one for onshore and one for offshore investors) will collect money from investors, then in turn invest that money into a master fund, which will actually hold the investments. Each feeder fund will own a share of the assets of the underlying master fund in proportion to the money that has been invested in them.</p>
 
-<p>Most of the week other than the Science Fair was spent working on apps. This next week will be pretty heavy on testing (we worked some on Rspec the previous week) and interview prep as the program wraps up. There are also a few side projects that I&#8217;d like to focus on more. Also, I&#8217;m hoping to write a post looking back on my Flatiron experience toward the end of this week and early next, as well as my next goals that I hope others both in Flatiron and in the dev community more broadly can hold me accountable to.</p>
+<p>This is the most basic of fund structures. From there, the level of complexity only rises. I&#8217;ve seen an</p>
 
-<p>This weekend me and a few other Flatiron classmates went to <a href="http://spaceappschallenge.org/" target="_blank">NYC Space Apps</a>. The hackathon was sponsored by NASA and focused on an array of space- and not-so-space-related projects. While other projects focused on using Arduinos to build space-related hardware to an Asteroid mapper, our project was to build an app to help people discover ways to boost energy efficiency and save money. Specifically, we were hoping to build a social tool for people to input in information about their energy and gas bills, see how much they pay relative to the neighborhood average and their friends (via Facebook OAuth) and, ultimately, discover relevant incentive programs (often tax credits or rebates offered at the federal, state and local levels) that they can use to lower their energy bills. It didn&#8217;t have anything to do with space, but here&#8217;s <a href="http://spaceappschallenge.org/challenge/mobile-incentives-tied-to-utility-rates/" target="_blank">proof</a> that it was actually a project on offer. Its a conceptually interesting idea, but one that we found was difficult to put together as we would have liked to do ideally within the course of a hackathon weekend. And while we didn&#8217;t end up presenting our product, I think I learned a few useful lessons for future hackathons.</p>
+<p>In software,</p>
 
-<p><strong>1) Establish a clear workflow </strong> - At Flatiron, I take for granted my HandRaise team&#8217;s process of pushing code to a feature branch, submitting pull requests and requiring the developer to explain the code to the pull request acceptor. I think this is a solid process, but it may not be the best process for a hackathon, where code is pushed more regularly. I found it difficult to work on a project with so many people all pushing code at the same time. I&#8217;m not sure what the best git process is for a hackathon, but whatever is decided, make sure the whole team agrees to it and is communicating regularly on what they&#8217;re pushing to either the master or staging branch.</p>
-
-<p><strong>2) Use the recommended APIs </strong> - Hackathons often encourage participants to use the APIs of the sponsoring firms, and Space Apps was no different. Companies like FourSquare, TokBox and 10gen were there to talk about their products and APIs. While we had to listen to some marketing pitches early on, I would have liked to try and integrate the sponsoring company APIs more into the product we tried to build, if only to get the practice and be considered in the running for the best app to use a given API.</p>
-
-<p><strong>3) Meet people </strong> - This mostly goes without saying, but hackathons are an awesome way to meet people in the development community. Its not easy to balance the desire to hack away and build something with being social, but its important to see what others are working on and trying to create. I find inspiration in the creative pursuits of others, and hackathons are a great way to see how people can bring an array of different skills to the table to be productive and create cool stuff.</p>
-
-<p><strong>4) Start hacking early and iterate quickly</strong> - An agile development process is all the rage (so hot right now), and hackathons are a great way to put to apply agile best practices. When we were discussing what to do for the hackathon on Saturday morning, I think we spent too much time planning out our application and not enough time just hacking away. In part this was unavoidable given the size of our team (we had about 10 people at one point), but in general, its a good idea to have something small to start with and just see where that goes.</p>
-
-<p><strong>5) Think big, but start (and demo) small</strong> - Its great to think of how your hackathon app might change lives, but in reality, its best to focus tightly in on a single user flow that can be reliably demoed by the end of the hackathon. Best for the team to each work on different components of the same flow or feature than for each member to work on the first part of multiple features.</p>
+<p>One difference between the two practices is the whimsical approach software takes to naming its tools compared to asset management. Hedge funds often have boring, descriptive names like or XYZ Offshore Master Fund Ltd. Software tools, on the other hand, have fun, metaphorical names like <a href="https://github.com/newsapps/beeswithmachineguns">Bees with Machine Guns</a>, which programmatically sets up EC2 instances (i.e., &#8216;bees&#8217;) to send large amounts of traffic to your web server (i.e., &#8216;machine guns&#8217;) in order to test an application&#8217;s load handling.</p>
 </div>
 
 
@@ -143,7 +136,7 @@
   
 
 
-<time datetime="2013-04-21T21:56:00-04:00" pubdate data-updated="true">Apr 21<span>st</span>, 2013</time>
+<time datetime="2014-01-09T07:52:00-05:00" pubdate data-updated="true">Jan 9<span>th</span>, 2014</time>
       
 
 
@@ -151,7 +144,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2014/01/09/linking-code-and-finance/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2014/01/09/linking-code-and-finance/" >Tweet</a>
   
   
   
@@ -162,10 +155,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/04/17/in-praise-of-project-euler/" title="Previous Post: In Praise of Project Euler">&laquo; In Praise of Project Euler</a>
+        <a class="basic-alignment left" href="/blog/2014/01/04/4-goals-for-2014/" title="Previous Post: 4 Goals for 2014">&laquo; 4 Goals for 2014</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/04/22/sort-algorithms/" title="Next Post: Not All Sort Algorithms Are Created Equal">Not All Sort Algorithms Are Created Equal &raquo;</a>
       
     </p>
   </footer>
@@ -324,8 +315,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/04/21/science-fairs-and-space-apps-flatiron-week-11/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2014/01/09/linking-code-and-finance/';
+        var disqus_url = 'http://eewang.github.com/blog/2014/01/09/linking-code-and-finance/';
         var disqus_script = 'embed.js';
       
     (function () {

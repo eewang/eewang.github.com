@@ -224,6 +224,12 @@
     </url>
     <url>
         <loc>
+            http://eewang.github.com/blog/2013/11/21/with-great-power-comes-great-single-responsibility/
+        </loc>
+        <lastmod>2014-01-08T22:41:00-05:00</lastmod>
+    </url>
+    <url>
+        <loc>
             http://eewang.github.com/blog/2013/12/04/with-great-power-comes-great-single-responsibility/
         </loc>
         <lastmod>2013-12-04T07:55:13-05:00</lastmod>
@@ -233,15 +239,19 @@
         <lastmod>2014-01-04T20:54:18-05:00</lastmod>
     </url>
     <url>
+        <loc>http://eewang.github.com/blog/2014/01/09/linking-code-and-finance/</loc>
+        <lastmod>2014-01-09T08:24:00-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://eewang.github.com/archives/</loc>
-        <lastmod>2014-01-04T20:54:18-05:00</lastmod>
+        <lastmod>2014-01-09T08:24:00-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/archives/</loc>
-        <lastmod>2014-01-04T20:54:18-05:00</lastmod>
+        <lastmod>2014-01-09T08:24:00-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/</loc>
-        <lastmod>2014-01-04T20:54:18-05:00</lastmod>
+        <lastmod>2014-01-09T08:24:00-05:00</lastmod>
     </url>
 </urlset>

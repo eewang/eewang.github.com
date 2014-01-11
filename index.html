@@ -9,7 +9,7 @@
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="The turning of the calendar to a new year tends to beget nostalgia and recollection for both the good and bad from the previous year. I like to set &hellip;">
+  <meta name="description" content="Working in technology as a developer has parallels to working in asset management as a lawyer. I&#8217;m not a lawyer, mind you, but in my previous &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +75,54 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/09/linking-code-and-finance/">Linking Code and Finance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-09T07:52:00-05:00" pubdate data-updated="true">Jan 9<span>th</span>, 2014</time>
+        
+         | <a href="/blog/2014/01/09/linking-code-and-finance/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Working in technology as a developer has parallels to working in asset management as a lawyer. I&#8217;m not a lawyer, mind you, but in my previous job I worked with several lawyers who had practiced at some of the leading firms in New York. During my 2.5 year stint in the hedge fund group at a large alternative asset manager, I had the opportunity to work at the nexus of institutional investors and hedge funds, where I helped build fund platforms and coordinate investments into underlying hedge funds.</p>
+
+<p>From the outside, this sounds like quite a different job than the one I currently hold as a developer. But I&#8217;ve found that there are more parallels at a deeper level than I first thought. Both developers and lawyers construct complex, knowledge-intensive infrastructure, the former calling the practice &#8220;software development&#8221; and the latter calling what they do &#8220;fund structuring&#8221;.</p>
+
+<p>For those unfamiliar with hedge funds, they are often established as a set of interlinked investment companies domiciled in places like Delaware (if you&#8217;re an American taxable, or &#8220;onshore&#8221; investor) or the Cayman Islands / British Virgin Islands / Malta (if you&#8217;re a foreign or American non-taxable investor, aka &#8220;offshore&#8221;). In the popular media, hedge funds are generically labeled such that it appears like a single entity both takes in money from investors and disburses it out in the form of equity or fixed income investments. The reality, like in most spheres of life, is much more complicated. In my experience, rare are the times where the fund that actually invests the money and the fund that accepts money from investors the same. A more common fund structure is a &#8220;master-feeder&#8221; structure, where a set of feeder funds (at least two - one for onshore and one for offshore investors) will collect money from investors, then in turn invest that money into a master fund, which will actually hold the investments. Each feeder fund will own a share of the assets of the underlying master fund in proportion to the money that has been invested in them.</p>
+
+<p>This is the most basic of fund structures. From there, the level of complexity only rises. I&#8217;ve seen an</p>
+
+<p>In software,</p>
+
+<p>One difference between the two practices is the whimsical approach software takes to naming its tools compared to asset management. Hedge funds often have boring, descriptive names like or XYZ Offshore Master Fund Ltd. Software tools, on the other hand, have fun, metaphorical names like <a href="https://github.com/newsapps/beeswithmachineguns">Bees with Machine Guns</a>, which programmatically sets up EC2 instances (i.e., &#8216;bees&#8217;) to send large amounts of traffic to your web server (i.e., &#8216;machine guns&#8217;) in order to test an application&#8217;s load handling.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -159,6 +207,128 @@
     <footer>
       <a rel="full-article" href="/blog/2013/12/04/with-great-power-comes-great-single-responsibility/">Read on &rarr;</a>
     </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/21/with-great-power-comes-great-single-responsibility/">With Great Power Comes Great (Single) Responsibility</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-21T08:37:00-05:00" pubdate data-updated="true">Nov 21<span>st</span>, 2013</time>
+        
+         | <a href="/blog/2013/11/21/with-great-power-comes-great-single-responsibility/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In software development, the Single Responsibility Principle is a bedrock principle that transcends language or framework. The SRP states that each function / method, class and module should perform a single responsibility. This enables your code to be flexible, extensible and less prone to bugs since software components that are only loosely coupled to their peer components are simpler and easier to maintain.</p>
+
+<p>Although simple on its face, the SRP is very difficult to adhere to throughout an entire codebase. When I first started to code, my tendency was to build on top of existing methods or classes as I added functionality, rather than have an eye to constantly refactoring my code and separating and isolating the responsibilties and roles of each unit. This led to overgrown User classes that contained all sorts of logic unrelated to a strict notion of a &#8216;user&#8217;. At a higher level, violations of the SRP can lead to monolithic applications that simply do too much, and I gather that much of the recent theme of breaking up monolothic apps into a service-based architecture has to do with trying to get back to a building apps in line with the SRP.</p>
+
+<p>In the application I&#8217;m helping build at the NYT, we recently came across a simple problem that I felt was a good example of the SRP in practice. In our web form, users have the ability to input a URL and the form can determine whether that URL relates to an NYT article or a non-NYT article. Similarly, an asset should be able to tell if the its associated with the NYT by looking at the attached URL. Although URLs are associated with assets, they are accessed via the post form, so posts delegate URL calls its asset.</p>
+
+<p>The first version of this predicate method (to return <code>true</code> or <code>false</code> depending on whether the URL string matched an nytimes regex) looked like this:</p>
+
+<p>Demonstrating the Single Responsibility Principle</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:asset</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt_url?</span><span class="p">(</span><span class="n">check_url</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">url</span> <span class="o">=</span> <span class="n">check_url</span> <span class="o">||=</span> <span class="p">(</span><span class="n">asset</span> <span class="p">?</span> <span class="nb">self</span><span class="o">.</span><span class="n">url</span> <span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">url</span> <span class="p">?</span> <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span> <span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">NYT</span>
+</span><span class='line'>  <span class="no">NYT_REGEX</span> <span class="o">=</span> <span class="sr">/.nytimes\.com/</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt_url?</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span class='line'>    <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">NYT</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:asset</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">has_nyt_asset?</span>
+</span><span class='line'>    <span class="n">asset</span><span class="o">.</span><span class="n">nyt?</span> <span class="k">if</span> <span class="n">asset</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Asest</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt?</span>
+</span><span class='line'>    <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
   
 
 
@@ -422,98 +592,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/12/thoughts-on-windy-city-rails/">Thoughts on Windy City Rails, Day 1</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-12T20:06:00-04:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/09/12/thoughts-on-windy-city-rails/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have the good fortune to be in Chicago today and tomorrow for the <a href="http://www.windycityrails.org/" target="_blank">Windy City Rails</a> conference. The NYT was kind enough to pay for me to fly here and attend the conferece, and I&#8217;m sure it helps that I can crash with my brother in the south Loop rather than get a hotel room. Whenever I can get the chance to come back home and see my family and friends, I try to jump at the opportunity.</p>
-
-<p>Here are some thoughts on the most interesting talks I heard on WCR Day 1.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/12/thoughts-on-windy-city-rails/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/">Applying Vector Bitmask Fields in Rails</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-31T12:49:00-04:00" pubdate data-updated="true">Aug 31<span>st</span>, 2013</time>
-        
-         | <a href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" target="_blank">Flag Shih-Tzu</a> in a number of my projects
-recently. In addition to being a wonderfully (and aptly) named gem,
-FlagShihTzu makes it super simple to add bit mask fields, or Boolean
-indicators, without having to run additional migrations. In other
-words, it allows you to flag shit on your models and makes it easier to avoid technical debt when there is little certainty of an application&#8217;s trajectory.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -579,6 +657,10 @@ words, it allows you to flag shit on your models and makes it easier to avoid te
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/01/09/linking-code-and-finance/">Linking Code and Finance</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/01/04/4-goals-for-2014/">4 Goals for 2014</a>
       </li>
     
@@ -587,15 +669,11 @@ words, it allows you to flag shit on your models and makes it easier to avoid te
       </li>
     
       <li class="post">
+        <a href="/blog/2013/11/21/with-great-power-comes-great-single-responsibility/">With Great Power Comes Great (Single) Responsibility</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/">Favorite (Rails) developer tips and tricks</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/04/how-to-manage-complex-association-with-nested-attributes-in-rails/">How to manage associations with nested forms in Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/17/are-dev-bootcamps-a-scam-an-alums-perspective/">Are dev bootcamps a scam? An alum&#8217;s perspective</a>
       </li>
     
   </ul>
