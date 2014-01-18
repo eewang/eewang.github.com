@@ -169,128 +169,6 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/11/21/with-great-power-comes-great-single-responsibility/">With Great Power Comes Great (Single) Responsibility</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-21T08:37:00-05:00" pubdate data-updated="true">Nov 21<span>st</span>, 2013</time>
-        
-         | <a href="/blog/2013/11/21/with-great-power-comes-great-single-responsibility/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In software development, the Single Responsibility Principle is a bedrock principle that transcends language or framework. The SRP states that each function / method, class and module should perform a single responsibility. This enables your code to be flexible, extensible and less prone to bugs since software components that are only loosely coupled to their peer components are simpler and easier to maintain.</p>
-
-<p>Although simple on its face, the SRP is very difficult to adhere to throughout an entire codebase. When I first started to code, my tendency was to build on top of existing methods or classes as I added functionality, rather than have an eye to constantly refactoring my code and separating and isolating the responsibilties and roles of each unit. This led to overgrown User classes that contained all sorts of logic unrelated to a strict notion of a &#8216;user&#8217;. At a higher level, violations of the SRP can lead to monolithic applications that simply do too much, and I gather that much of the recent theme of breaking up monolothic apps into a service-based architecture has to do with trying to get back to a building apps in line with the SRP.</p>
-
-<p>In the application I&#8217;m helping build at the NYT, we recently came across a simple problem that I felt was a good example of the SRP in practice. In our web form, users have the ability to input a URL and the form can determine whether that URL relates to an NYT article or a non-NYT article. Similarly, an asset should be able to tell if the its associated with the NYT by looking at the attached URL. Although URLs are associated with assets, they are accessed via the post form, so posts delegate URL calls its asset.</p>
-
-<p>The first version of this predicate method (to return <code>true</code> or <code>false</code> depending on whether the URL string matched an nytimes regex) looked like this:</p>
-
-<p>Demonstrating the Single Responsibility Principle</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:asset</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt_url?</span><span class="p">(</span><span class="n">check_url</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">url</span> <span class="o">=</span> <span class="n">check_url</span> <span class="o">||=</span> <span class="p">(</span><span class="n">asset</span> <span class="p">?</span> <span class="nb">self</span><span class="o">.</span><span class="n">url</span> <span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">url</span> <span class="p">?</span> <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span> <span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">NYT</span>
-</span><span class='line'>  <span class="no">NYT_REGEX</span> <span class="o">=</span> <span class="sr">/.nytimes\.com/</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt_url?</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-</span><span class='line'>    <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">NYT</span>
-</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:url</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:asset</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">has_nyt_asset?</span>
-</span><span class='line'>    <span class="n">asset</span><span class="o">.</span><span class="n">nyt?</span> <span class="k">if</span> <span class="n">asset</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Asest</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">nyt?</span>
-</span><span class='line'>    <span class="no">NYT_REGEX</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
       <h1 class="entry-title"><a href="/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/">Favorite (Rails) Developer Tips and Tricks</a></h1>
     
     
@@ -589,6 +467,53 @@
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/">Applying Vector Bitmask Fields in Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-31T12:49:00-04:00" pubdate data-updated="true">Aug 31<span>st</span>, 2013</time>
+        
+         | <a href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been using a gem called <a href="https://github.com/pboling/flag_shih_tzu" target="_blank">Flag Shih-Tzu</a> in a number of my projects
+recently. In addition to being a wonderfully (and aptly) named gem,
+FlagShihTzu makes it super simple to add bit mask fields, or Boolean
+indicators, without having to run additional migrations. In other
+words, it allows you to flag shit on your models and makes it easier to avoid technical debt when there is little certainty of an application&#8217;s trajectory.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/08/31/applying-vector-bitmask-fields-in-rails/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -662,15 +587,15 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2013/11/21/with-great-power-comes-great-single-responsibility/">With Great Power Comes Great (Single) Responsibility</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2013/11/14/useful-tips-and-tricks-for-building-a-rails-app/">Favorite (Rails) developer tips and tricks</a>
       </li>
     
       <li class="post">
         <a href="/blog/2013/11/04/how-to-manage-complex-association-with-nested-attributes-in-rails/">How to manage associations with nested forms in Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/17/are-dev-bootcamps-a-scam-an-alums-perspective/">Are dev bootcamps a scam? An alum&#8217;s perspective</a>
       </li>
     
   </ul>
