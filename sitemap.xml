@@ -233,15 +233,21 @@
         <lastmod>2014-01-11T11:35:40-05:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://eewang.github.com/blog/2014/01/18/how-to-smell-check-your-code-quality-in-ruby-and-rails/
+        </loc>
+        <lastmod>2014-01-19T18:29:14-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://eewang.github.com/archives/</loc>
-        <lastmod>2014-01-11T11:35:40-05:00</lastmod>
+        <lastmod>2014-01-19T18:29:14-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/blog/archives/</loc>
-        <lastmod>2014-01-11T11:35:40-05:00</lastmod>
+        <lastmod>2014-01-19T18:29:14-05:00</lastmod>
     </url>
     <url>
         <loc>http://eewang.github.com/</loc>
-        <lastmod>2014-01-11T11:35:40-05:00</lastmod>
+        <lastmod>2014-01-19T18:29:14-05:00</lastmod>
     </url>
 </urlset>

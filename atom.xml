@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2014-01-19T18:28:39-05:00</updated>
+  <updated>2014-01-19T18:29:29-05:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,374 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[What's that (code) smell? How to monitor code quality in Ruby and Rails]]></title>
+    <link href="http://eewang.github.com/blog/2014/01/18/how-to-smell-check-your-code-quality-in-ruby-and-rails/"/>
+    <updated>2014-01-18T09:24:00-05:00</updated>
+    <id>http://eewang.github.com/blog/2014/01/18/how-to-smell-check-your-code-quality-in-ruby-and-rails</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve found that as you progress in your code career, you start to discover more patterns in how to structure code and how to address common questions. In the same vein, you also learn what not to do and your sense for code smells improves. Your methods might get smaller, your logic better encapsulated and your classes more singularly responsible. Thinking more strategically about how to implement features with an eye to code maintainability, complexity and readability is a career-long endeavor. There&#8217;s no single set of tools that will make you a better developer, but I&#8217;ve recently come across several gems that have helped me develop a better sense for code quality and development standards.</p>
+
+<!--more-->
+
+
+<p>As you become a better developer, it never hurts to have someone watching over your code, keeping you accountable to the best practices that you know in your heart but rarely exercise with your hands. In a perfect world, that would be a senior developer or other more seasoned mentor who can pair program with you and is highly invested in your success. If you happen to find yourself in that situation, that&#8217;s fantastic. In any case, it doesn&#8217;t hurt to have some automated tools that can quickly run through your code, find duplication, unused methods or non-descriptive variable names.</p>
+
+<p>At the more involved end of the spectrum, there are hosted solutions for checking code quality like <a href="http://codeclimate.com" target="_blank">Code Climate</a>. But those can get pretty expensive and might be overkill for keeping your code up to snuff on a daily basis for small projects. On my team, we&#8217;re exploring using tools like Code Climate, but me and my fellow developers have started integrating more code quality checks on our local branches so that any PRs we submit are as clean as can be.</p>
+
+<p>Reek, rails_best_practices, Rubocop and metric_fu are 4 gems in particular that I&#8217;ve been using recently to sniff my code and tell me what&#8217;s pleasant, what&#8217;s pungent and what downright reeks. While each gem takes a slightly different approach to checking your code and displaying the results, I&#8217;ve found them all to be useful in finding syntactic sugar or challenging me to apply more sustainable code paradigms to solving problems in my applications.</p>
+
+<p>The gems aim to notify you of where your code falls short of accepted best practices and suggest ways you can improve code quality. The phrase &#8216;code quality&#8217; has always appeared a little slippery to me, since determining whether a code base is high-quality seems linked to the idiosyncracies of a particular application&#8217;s purpose and is thus difficult to establish universal code quality standards. However, there are rules-of-thumb that are relevant for all applications when determining how &#8220;good&#8221; a code base is. These criteria range from high-level, design pattern implementation to low-level, syntactical choices. Properly applying concepts like well-encapsulated logic, division of responsibilities and descriptive method names can help improve the quality of an application, regardless of the application&#8217;s purpose.</p>
+
+<p>I decided to run these four gems against what was probably my most hacky, yet functional, piece of code that I&#8217;ve written - my Lollapalooza scraper. I wrote about this previously in <a href="http://eewang.github.io/blog/2013/03/21/how-to-hack-lollapalooza-and-still-not-get-tickets/">my blog here</a>, but basically I hacked together a web scraper back when I was at Flatiron that would check the Lollapalooza website and text me via Twilio whenever early bird tickets went on sale. The overarching goal was so that I could get discounted tickets without checking the site randomly but frequently over the course of a few days, since the festival organizers wouldn&#8217;t say when early bird tickets would go on sale.</p>
+
+<p><strong>Reek</strong></p>
+
+<p><a href="https://github.com/troessner/reek" target="_blank">Reek</a> is a gem that will comb through your application (or specific folder / file) and notify you of where you&#8217;re not following best practices. Generally accepted practices like not using single letters for variable names or not having multiple nested conditional statements are caught pretty quickly. What&#8217;s also great about Reek is that it also informs you of what coding practice you&#8217;re violating with your smelly code. There&#8217;s a slew of code patterns that Reek checks for, and I&#8217;ve found their <a href="https://github.com/troessner/reek/wiki">wiki page</a> quite useful for better understanding antipatterns like Feature Envy, where a class references other objects more than it does itself, or Long Paramter List (pretty self-explanatory).</p>
+
+<p>Here&#8217;s what came out when I ran Reek against my Lollapalooza scraper.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>♥ reek lolla.rb
+</span><span class='line'>lolla.rb -- 9 warnings:
+</span><span class='line'>  <span class="o">[</span>16, 14<span class="o">]</span>:Lolla declares the class variable @@account_sid <span class="o">(</span>ClassVariable<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>17, 15<span class="o">]</span>:Lolla declares the class variable @@auth_token <span class="o">(</span>ClassVariable<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>54, 16<span class="o">]</span>:Lolla declares the class variable @@client <span class="o">(</span>ClassVariable<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>22, 30, 34, 20<span class="o">]</span>:Lolla declares the class variable @@doc <span class="o">(</span>ClassVariable<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>61, 22<span class="o">]</span>:Lolla declares the class variable @@lolla_node <span class="o">(</span>ClassVariable<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>20, 18<span class="o">]</span>:Lolla declares the class variable @@source <span class="o">(</span>ClassVariable<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>83, 86<span class="o">]</span>:Lolla#self.check calls Lolla.index_check twice <span class="o">(</span>DuplicateMethodCall<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>80<span class="o">]</span>:Lolla#self.check has approx 7 statements <span class="o">(</span>TooManyStatements<span class="o">)</span>
+</span><span class='line'>  <span class="o">[</span>73, 73<span class="o">]</span>:Lolla#self.node_contains_link? calls Lolla.node_names twice <span class="o">(</span>DuplicateMethodCall<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, I wasn&#8217;t the best at following best practices back then (and, probably still now). I also wrote this scraper in a few hours one evening, so I&#8217;ll give myself a break. Reek catches on that I used a lot of class variables in the file, which is generally not a great thing to do. The output also helpfully includes the line number of the infraction, so I can quickly find the source if the issue.</p>
+
+<p>What&#8217;s also great about Reek is that you can add <a href="https://github.com/troessner/reek/wiki/Configuration-Files" target="_blank">configuration files</a> to your application to fine-tune how Reek evaluates your code. Don&#8217;t like that a long parameter list is defined as any method with greater than 3 parameters? You can modify that within the config file so that Reek hits that evaluation sweet spot - not too noisy for you to gloss over violations that it finds, but not too lenient so that it doesn&#8217;t find any problems to begin with.</p>
+
+<p><strong>Rails Best Practices</strong></p>
+
+<p>Like Reek, you can run <a href="https://github.com/railsbp/rails_best_practices" target="_blank">rails_best_practices</a> simply by passing the command a folder or file (e.g., <code>rails_best_practices app/models</code> will check all your model files). The gem will then check your code against a configurable list of accepted best practices for Rails, like skinny controller / fat models or treatment of mass assignment. Unlike reek, RBP is focused specifically on Rails conventions, not necessarily general code best practices, even though there are considerable parallels between the two.</p>
+
+<p>I ran RBP against my Lollapalooza scraper, and these were the results:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>♥ rails_best_practices lolla.rb
+</span><span class='line'>Source Codes: |<span class="o">=====================================================================================================================================================</span>|
+</span><span class='line'>/Users/eugenewang/projects/lollapalooza/lolla_check/app/models/lolla.rb:29 - remove unused methods <span class="o">(</span>Lolla#document<span class="o">)</span>
+</span><span class='line'>/Users/eugenewang/projects/lollapalooza/lolla_check/app/models/lolla.rb:80 - remove unused methods <span class="o">(</span>Lolla#check<span class="o">)</span>
+</span><span class='line'>/Users/eugenewang/projects/lollapalooza/lolla_check/app/models/lolla.rb:49 - remove trailing whitespace
+</span><span class='line'>
+</span><span class='line'>Please go to http://rails-bestpractices.com to see more useful Rails Best Practices.
+</span><span class='line'>
+</span><span class='line'>Found 3 warnings.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, I would be well served to go back through my code and take out some unused methods. While unused methods don&#8217;t necessarily hurt a code base, they add to the amount of code that needs to be maintained, and I&#8217;ve found that old code that is deprecated but still included in a code base replaces some of the value that version control systems like git provide. Rather than leaving in code that you think may or may not be used again in the future, best to keep in only what you&#8217;re currently using and leave the rest to version control so you don&#8217;t have to maintain code that you&#8217;re not using.</p>
+
+<p><strong>Rubocop</strong></p>
+
+<p>Of these four code quality gems, I&#8217;ve found <a href="https://github.com/bbatsov/rubocop" target="_blank">Rubocop</a> to be both the most informative and specific yet also the most nitpicky. Whereas Reek will simply state what you have in your code with the implicit understanding that its not a good coding practice, Rubocop suggests specific changes to your code to clean it up.</p>
+
+<p>For example, Reek states that the <code>Lolla</code> class declares multiple class variables - generally a code smell that the class is not written well (see <a href="http://oreilly.com/ruby/excerpts/ruby-best-practices/worst-practices.html" target="_blank">this</a> for why). Rubocop also spots these class variables, yet goes the extra step to say that I should replace those class variables with an instance variable. Sometimes the help Reek provides in simply spotting improper use of code conventions is enough, but in other cases, having the specific suggestion of what to change can save time, especially when I&#8217;m don&#8217;t have the muscle memory to know how to implement certain coding practices.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>♥ rubocop lolla.rb
+</span><span class='line'>Inspecting 1 file
+</span><span class='line'>W
+</span><span class='line'>
+</span><span class='line'>Offences:
+</span><span class='line'>
+</span><span class='line'>lolla.rb:1:1: C: Missing utf-8 encoding comment.
+</span><span class='line'>require <span class="s1">&#39;twilio-ruby&#39;</span>
+</span><span class='line'>^
+</span><span class='line'>lolla.rb:13:1: C: Extra blank line detected at body beginning.
+</span><span class='line'>lolla.rb:14:3: C: Replace class var @@account_sid with a class instance var.
+</span><span class='line'>  @@account_sid <span class="o">=</span> <span class="s1">&#39;###############################&#39;</span>
+</span><span class='line'>  ^^^^^^^^^^^^^
+</span><span class='line'>lolla.rb:15:3: C: Replace class var @@auth_token with a class instance var.
+</span><span class='line'>  @@auth_token <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="c">###############################&#39;&#39;</span>
+</span><span class='line'>  ^^^^^^^^^^^^
+</span><span class='line'>lolla.rb:16:3: C: Replace class var @@client with a class instance var.
+</span><span class='line'>  @@client <span class="o">=</span> Twilio::REST::Client.new @@account_sid, @@auth_token
+</span><span class='line'>  ^^^^^^^^
+</span><span class='line'>lolla.rb:18:3: C: Replace class var @@source with a class instance var.
+</span><span class='line'>  @@source <span class="o">=</span> <span class="s2">&quot;http://www.lollapalooza.com&quot;</span>
+</span><span class='line'>  ^^^^^^^^
+</span><span class='line'>lolla.rb:18:14: C: Prefer single-quoted strings when you don<span class="s1">&#39;t need string interpolation or special symbols.</span>
+</span><span class='line'><span class="s1">  @@source = &quot;http://www.lollapalooza.com&quot;</span>
+</span><span class='line'><span class="s1">             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:20:3: C: Replace class var @@doc with a class instance var.</span>
+</span><span class='line'><span class="s1">  @@doc = Nokogiri::XML(open(@@source))</span>
+</span><span class='line'><span class="s1">  ^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:22:3: C: Replace class var @@lolla_node with a class instance var.</span>
+</span><span class='line'><span class="s1">  @@lolla_node = @@doc.children[1].children[3].children[1].children[1].children[7].children[0].children[0]</span>
+</span><span class='line'><span class="s1">  ^^^^^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:22:80: C: Line is too long. [106/79]</span>
+</span><span class='line'><span class="s1">  @@lolla_node = @@doc.children[1].children[3].children[1].children[1].children[7].children[0].children[0]</span>
+</span><span class='line'><span class="s1">   ^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:25:5: C: Use the new Ruby 1.9 hash syntax.</span>
+</span><span class='line'><span class="s1">    :SOON =&gt; 764,</span>
+</span><span class='line'><span class="s1">    ^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:26:5: C: Use the new Ruby 1.9 hash syntax.</span>
+</span><span class='line'><span class="s1">    :Souvenir =&gt; 743</span>
+</span><span class='line'><span class="s1">    ^^^^^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:49:23: C: Trailing whitespace detected.</span>
+</span><span class='line'><span class="s1">  def self.index_check</span>
+</span><span class='line'><span class="s1">                      ^</span>
+</span><span class='line'><span class="s1">lolla.rb:54:5: W: Useless assignment to variable - message</span>
+</span><span class='line'><span class="s1">    message = @@client.account.sms.messages.create(:body =&gt; msg,</span>
+</span><span class='line'><span class="s1">    ^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:54:52: C: Use the new Ruby 1.9 hash syntax.</span>
+</span><span class='line'><span class="s1">    message = @@client.account.sms.messages.create(:body =&gt; msg,</span>
+</span><span class='line'><span class="s1">                                                   ^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:55:9: C: Align the elements of a hash literal if they span more than one line.</span>
+</span><span class='line'><span class="s1">        :to =&gt; &quot;+16303791842&quot;,</span>
+</span><span class='line'><span class="s1">        ^^^^^^^^^^^^^^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:55:9: C: Use the new Ruby 1.9 hash syntax.</span>
+</span><span class='line'><span class="s1">        :to =&gt; &quot;+16303791842&quot;,</span>
+</span><span class='line'><span class="s1">        ^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:55:16: C: Prefer single-quoted strings when you don&#39;</span>t need string interpolation or special symbols.
+</span><span class='line'>        :to <span class="o">=</span>&gt; <span class="s2">&quot;+16303791842&quot;</span>,
+</span><span class='line'>               ^^^^^^^^^^^^^^
+</span><span class='line'>lolla.rb:56:9: C: Align the elements of a <span class="nb">hash </span>literal <span class="k">if </span>they span more than one line.
+</span><span class='line'>        :from <span class="o">=</span>&gt; <span class="s2">&quot;+17082219589&quot;</span><span class="o">)</span>
+</span><span class='line'>        ^^^^^^^^^^^^^^^^^^^^^^^
+</span><span class='line'>lolla.rb:56:9: C: Use the new Ruby 1.9 <span class="nb">hash </span>syntax.
+</span><span class='line'>        :from <span class="o">=</span>&gt; <span class="s2">&quot;+17082219589&quot;</span><span class="o">)</span>
+</span><span class='line'>        ^^^^^^^^
+</span><span class='line'>lolla.rb:56:18: C: Prefer single-quoted strings when you don<span class="s1">&#39;t need string interpolation or special symbols.</span>
+</span><span class='line'><span class="s1">        :from =&gt; &quot;+17082219589&quot;)</span>
+</span><span class='line'><span class="s1">                 ^^^^^^^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:57:10: C: Prefer single-quoted strings when you don&#39;</span>t need string interpolation or special symbols.
+</span><span class='line'>    puts <span class="s2">&quot;Message sent!&quot;</span>
+</span><span class='line'>         ^^^^^^^^^^^^^^^
+</span><span class='line'>lolla.rb:73:34: C: Prefer single-quoted strings when you don<span class="s1">&#39;t need string interpolation or special symbols.</span>
+</span><span class='line'><span class="s1">    if Lolla.node_names.include?(&quot;a&quot;) || Lolla.node_names.include?(&quot;href&quot;)</span>
+</span><span class='line'><span class="s1">                                 ^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:73:68: C: Prefer single-quoted strings when you don&#39;</span>t need string interpolation or special symbols.
+</span><span class='line'>    <span class="k">if </span>Lolla.node_names.include?<span class="o">(</span><span class="s2">&quot;a&quot;</span><span class="o">)</span> <span class="o">||</span> Lolla.node_names.include?<span class="o">(</span><span class="s2">&quot;href&quot;</span><span class="o">)</span>
+</span><span class='line'>                                                                   ^^^^^^
+</span><span class='line'>lolla.rb:80:3: C: Method has too many lines. <span class="o">[</span>12/10<span class="o">]</span>
+</span><span class='line'>  def self.check
+</span><span class='line'>  ^^^
+</span><span class='line'>lolla.rb:81:29: C: Prefer single-quoted strings when you don<span class="s1">&#39;t need string interpolation or special symbols.</span>
+</span><span class='line'><span class="s1">    if Lolla.index_changed?(&quot;SOON&quot;)</span>
+</span><span class='line'><span class="s1">                            ^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:83:80: C: Line is too long. [114/79]</span>
+</span><span class='line'><span class="s1">      puts &quot;Site changed! &#39;</span>SOON<span class="s1">&#39; was at #{Lolla.index_check[:SOON]} before, now at #{Lolla.search_index(&quot;SOON&quot;)}.&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">lolla.rb:84:32: C: Prefer single-quoted strings when you don&#39;</span>t need string interpolation or special symbols.
+</span><span class='line'>    elsif Lolla.index_changed?<span class="o">(</span><span class="s2">&quot;Souvenir&quot;</span><span class="o">)</span>
+</span><span class='line'>                               ^^^^^^^^^^
+</span><span class='line'>lolla.rb:85:80: C: Line is too long. <span class="o">[</span>83/79<span class="o">]</span>
+</span><span class='line'>      Lolla.notify<span class="o">(</span><span class="s2">&quot;The placement of &#39;Souvenir&#39; changed on the Lollapalooza site!&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>lolla.rb:86:80: C: Line is too long. <span class="o">[</span>122/79<span class="o">]</span>
+</span><span class='line'>      puts <span class="s2">&quot;Site changed! &#39;SOON&#39; was at #{Lolla.index_check[:Souvenir]} before, now at #{Lolla.search_index(&quot;</span>Souvenir<span class="s2">&quot;)}.&quot;</span>
+</span><span class='line'>lolla.rb:88:20: C: Prefer single-quoted strings when you don<span class="s1">&#39;t need string interpolation or special symbols.</span>
+</span><span class='line'><span class="s1">      Lolla.notify(&quot;A link has been added to the node on the Lollapalooza site!&quot;)</span>
+</span><span class='line'><span class="s1">                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+</span><span class='line'><span class="s1">lolla.rb:88:80: C: Line is too long. [81/79]</span>
+</span><span class='line'><span class="s1">      Lolla.notify(&quot;A link has been added to the node on the Lollapalooza site!&quot;)</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">lolla.rb:89:12: C: Prefer single-quoted strings when you don&#39;</span>t need string interpolation or special symbols.
+</span><span class='line'>      puts <span class="s2">&quot;Site changed!&quot;</span>
+</span><span class='line'>           ^^^^^^^^^^^^^^^
+</span><span class='line'>lolla.rb:94:1: C: Extra blank line detected at body end.
+</span><span class='line'>
+</span><span class='line'>1 file inspected, 34 offences detected
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rubocop catches a lot of basic syntax infractions that Reek and rails_best_practices don&#8217;t. Stuff like using double quotes for strings that do not interpolate Ruby variables, or using simple if/else statements when a one-line ternary operator would be sufficient. That&#8217;s the nitpicky part of Rubocop, but its also a feature that I appreciate as it helps enforce a common style guide for projects with multiple collaborators, each with their own code style. One of my pet peeves is when there&#8217;s no consistency in how many spaces are used for indentation (2!), how to add comments in code or whether to use the hash-rocket syntax for hash key-value pairs or the Ruby 1.9, JSON-like syntax. At the end of the day, these syntactical inconsistencies are less mission-critical than poorly implemented features, but getting the simple stuff right helps ensure a baseline level of consistency within development teams.</p>
+
+<p><strong>metric_fu</strong></p>
+
+<p>Of these four tools, I&#8217;ve integrated <a href="https://github.com/jscruggs/metric_fu" target="_blank">metric_fu</a> the least into my coding process. Running metric_fu against your codebase will open up a webpage with a variety of metrics and measurements of code quality. Metric_fu acts as a web interface around other code quality tools - including reek and rails_best_practices. I&#8217;ve found it less useful, though, than the other three because its harder to translate the resulting metrics into actual changes to make to your codebase. I do like that it seems comprehensive and provides a quick way to run an array of checks on your code, but I prefer the in-terminal results that the other three gems provide to an interactive web browser.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>♥ metric_fu .
+</span><span class='line'>*****churn metric not activated, cannot load such file -- churn/churn_calculator
+</span><span class='line'>******* STARTING METRIC cane
+</span><span class='line'>******* ENDING METRIC cane
+</span><span class='line'>******* STARTING METRIC flay
+</span><span class='line'>******* ENDING METRIC flay
+</span><span class='line'>******* STARTING METRIC flog
+</span><span class='line'>******* ENDING METRIC flog
+</span><span class='line'>******* STARTING METRIC stats
+</span><span class='line'>******* ENDING METRIC stats
+</span><span class='line'>******* STARTING METRIC saikuro
+</span><span class='line'>******* ENDING METRIC saikuro
+</span><span class='line'>******* STARTING METRIC reek
+</span><span class='line'>******* ENDING METRIC reek
+</span><span class='line'>******* STARTING METRIC roodi
+</span><span class='line'>******* ENDING METRIC roodi
+</span><span class='line'>******* STARTING METRIC rails_best_practices
+</span><span class='line'>******* ENDING METRIC rails_best_practices
+</span><span class='line'>******* STARTING METRIC hotspots
+</span><span class='line'>******* ENDING METRIC hotspots
+</span><span class='line'>******* SAVING REPORTS
+</span><span class='line'>******* GENERATING GRAPHS
+</span><span class='line'>*****Generating graphs
+</span><span class='line'>*****Generating graphs <span class="k">for </span>tmp/metric_fu/_data/20140119.yml
+</span><span class='line'>all <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One thing these tools all have in common is that they count how many code quality infractions you commit. They vary in their specificity and the standards to which your code is compared, but having that number of &#8216;X&#8217; number of warnings / offenses in your face is very helpful. It provides a tangible measurement of how you can improve your code; write better code and you&#8217;ll have fewer warnings and offenses. That said, its important not to be a slave to Rubocop or adopt RDD (Reek Driven Development), since seeking to maximize only code quality (by minimizing warnings or offenses) is like teaching to the test. There may be cases when Reek yells at you for having Feature Envy in your code base, but who knows, there may be a specific reason for that, or refactoring your code extensively just to placate Reek would simply be infeasible.</p>
+
+<p>At the end of the day, these gems help keep you accountable as you work on a feature or bug fix. They should never drive your development - rather, they should supplement your development and even if you don&#8217;t take Rubocop&#8217;s suggestions, you at least become more aware after using these tools of code best practices that you can start building muscle memory to implement.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[4 Goals for 2014]]></title>
@@ -2330,265 +2698,6 @@ The source code behind dynamic attributes proves that metaprogramming can either
 
 
 <p>Overall, I&#8217;d recommend cracking open Metaprogramming Ruby if you have a decent grasp of Ruby and want to really delve into the inner workings. It&#8217;s probably not the most practical book, in that you may not use many of the metaprogramming recipes on a day-to-day basis, but its great for providing an overall understanding of how the Ruby method lookup chain works, how different classes and modules interact, etc. That said, its a dense book, and it took me a while to get through. I&#8217;ll likely try and read it again at some point, as it feels like one of those books where you can read over and over again and keep discovering new and interesting nuggets of wisdom.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Recursion With Project Euler]]></title>
-    <link href="http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler/"/>
-    <updated>2013-04-28T08:00:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/04/28/using-recursion-with-project-euler</id>
-    <content type="html"><![CDATA[<p>I previously set a goal for myself to try and do one Project Euler problem every day. In retrospect, I think that goal was a little ambitious, what with all the coding, reading and blogging that I&#8217;m trying to do on a day-to-day basis. However, I was able to work in a problem earlier this week that helped me get a better grasp of using recursion in Ruby.</p>
-
-<!--more-->
-
-
-<p>For those who don&#8217;t know, recursion is a computer science concept that seems simple on its face, but can mask considerable complexity. A recursive function is basically a function that calls itself. You know how when you go to a barbershop and your barber puts a mirror up to the back of your head after the haircut? The resulting mirror-on-mirror effect that looks like a never-ending pyramid of the same image in increasingly smaller size is an example of recursion. Applying recursion in a Ruby script can be a powerful and succinct way of moving programmatically applying a pattern to a given problem until the solution is found.</p>
-
-<p>However, using recursion can also lead to &#8220;call stack too deep&#8221; errors the same way that using a while loop without providing for some incrementor will lead to an infinite loop. Recursion can also be difficult to track mentally since each call to method is made within the execution of such method, just one &#8220;layer&#8221; above. This means that when the executing code finally reaches its terminating condition, it has to go &#8220;back&#8221; through all the previous calls to the same method. At school, we had explored recursion early on in the semester to solve the Tower of Hanoi problem, but I&#8217;ll admit that it was difficult for me to grasp and follow the logic. Thankfully, as I went through Project Euler problem 7 earlier this week, I was able to apply the principles of recursion to solve it and gain a better understanding of using recursion in the process.</p>
-
-<p>Problem 7 asks you to find the 10,001st prime number. My strategy for solving this problem was to take a starting number, pass in prime index that I would like to solve for, then move iteratively toward that index based on the starting index (i.e. the prime index of the closest prime number less than or equal to the starting number). To do this, I created an Integer#prime? method to check if a number is prime and metaprogrammed an Integer#next_prime and Integer#previous_prime method to find the closest prime number greater than and less than, respectively, the given number. I then created an Integer#find_prime method that would recursively call itself via the Integer#move_to_next_prime method that would eventually return the value of the prime_index that was initally passed to the #find_prime method.</p>
-
-<p>I think the code that I ended up with is okay, but I could have made other changes to make the search process of finding the n-th prime faster. For example, instead of having the script move incrementally to find the value of the n-th prime given a starting number, I could have written it so that based on the delta between the prime index of the starting number and the target prime index, the script could make a someone intelligent guess as to how much to add or subtract to the starting number to get closer to the target value. The difference between the value of the starting prime index of 10 (i.e., the 10th prime) and the 15th prime will be smaller than the difference between the 10th and 20th prime. This fact could be baked into the recursive function in order to find a better &#8220;ballpark&#8221; estimate of the target prime index value rather than just incrementing by one prime number each time the function is called.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># PROBLEM NUMBER 7</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># PROBLEM NAME</span>
-</span><span class='line'><span class="c1"># 10001st prime</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># PROBLEM DESCRIPTION</span>
-</span><span class='line'><span class="c1"># By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># What is the 10 001st prime number?</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># PROCESS</span>
-</span><span class='line'><span class="c1"># =&gt; I want to be able to determine a prime number by passing in the index for it within the prime number universe</span>
-</span><span class='line'><span class="c1"># =&gt; Find the pattern of determining prime numbers</span>
-</span><span class='line'>  <span class="c1"># =&gt; Look at factors for determining a prime number</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># ANSWER</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># =&gt; 104743</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">prime?</span>
-</span><span class='line'>    <span class="n">prime</span> <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">even?</span>
-</span><span class='line'>      <span class="n">prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">even_prime_check</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="n">prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">odd_prime_check</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">prime</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">odd_prime_check</span>
-</span><span class='line'>    <span class="n">prime</span> <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'>    <span class="n">divisor</span> <span class="o">=</span> <span class="mi">3</span>
-</span><span class='line'>    <span class="k">while</span> <span class="n">prime</span> <span class="o">==</span> <span class="kp">true</span> <span class="o">&amp;&amp;</span> <span class="n">divisor</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="nb">self</span><span class="o">**</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nb">self</span> <span class="o">%</span> <span class="n">divisor</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>        <span class="n">prime</span> <span class="o">=</span> <span class="kp">false</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="n">divisor</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">prime</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">even_prime_check</span>
-</span><span class='line'>    <span class="nb">self</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">?</span> <span class="kp">true</span> <span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">check_for_primes</span>
-</span><span class='line'>    <span class="n">primes</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>    <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="n">.self</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>        <span class="n">primes</span> <span class="o">&lt;&lt;</span> <span class="n">i</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">primes</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">sum_all_primes</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">check_for_primes</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">result</span><span class="p">,</span> <span class="n">num</span><span class="o">|</span> <span class="n">result</span> <span class="o">+</span> <span class="n">num</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">which_prime?</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">check_for_primes</span><span class="o">.</span><span class="n">size</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">prime_search</span><span class="p">(</span><span class="o">*</span><span class="n">searches</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">searches</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">search</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">search</span><span class="si">}</span><span class="s2">_prime&quot;</span> <span class="k">do</span>
-</span><span class='line'>        <span class="n">prime_test</span> <span class="o">=</span> <span class="nb">self</span>
-</span><span class='line'>        <span class="k">case</span> <span class="n">search</span>
-</span><span class='line'>        <span class="k">when</span> <span class="ss">:next</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">until</span> <span class="n">prime_test</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>        <span class="k">when</span> <span class="ss">:previous</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>          <span class="n">prime_test</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">until</span> <span class="n">prime_test</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>        <span class="n">prime_test</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">prime_search</span> <span class="ss">:next</span><span class="p">,</span> <span class="ss">:previous</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">find_prime</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">prime?</span>
-</span><span class='line'>      <span class="n">starting_prime</span> <span class="o">=</span> <span class="nb">self</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="n">starting_prime</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">previous_prime</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">starting_prime</span><span class="o">.</span><span class="n">which_prime?</span><span class="si">}</span><span class="s2"> prime: </span><span class="si">#{</span><span class="n">starting_prime</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="n">starting_index</span> <span class="o">=</span> <span class="n">starting_prime</span><span class="o">.</span><span class="n">which_prime?</span>
-</span><span class='line'>    <span class="n">move_to_next_prime</span><span class="p">(</span><span class="n">starting_prime</span><span class="p">,</span> <span class="n">starting_index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">move_to_next_prime</span><span class="p">(</span><span class="n">start_prime</span><span class="p">,</span> <span class="n">start_index</span><span class="p">,</span> <span class="n">target_index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">case</span>
-</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">==</span> <span class="n">target_index</span>
-</span><span class='line'>      <span class="n">start_prime</span>
-</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">&lt;</span> <span class="n">target_index</span>
-</span><span class='line'>      <span class="n">next_num</span> <span class="o">=</span> <span class="n">start_prime</span><span class="o">.</span><span class="n">next_prime</span>
-</span><span class='line'>      <span class="n">next_num</span><span class="o">.</span><span class="n">find_prime</span><span class="p">(</span><span class="n">target_index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">when</span> <span class="n">start_index</span> <span class="o">&gt;</span> <span class="n">target_index</span>
-</span><span class='line'>      <span class="n">next_num</span> <span class="o">=</span> <span class="n">start_prime</span><span class="o">.</span><span class="n">previous_prime</span>
-</span><span class='line'>      <span class="n">next_num</span><span class="o">.</span><span class="n">find_prime</span><span class="p">(</span><span class="n">target_index</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">binding</span><span class="o">.</span><span class="n">pry</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As I&#8217;ve mentioned before, working on Project Euler problems has forced me to dust off the Ruby core documentation and practice applying concepts that I learned before but may have forgotten over time. Also, given that we&#8217;ve focused so much on the abstractions of Rails over the past two months, its great to have to go back to working with just Ruby. Its not easy to make time to do Project Euler problems, but I definitely recommend trying to work on at least a few of them (or similar logic problems) just to get more practice at writing Ruby scripts.</p>
-
-<p>Finally, I&#8217;ll leave you with some other good resources on recursion in Ruby in case you&#8217;re interested in learning more:</p>
-
-<p><a href="http://natashatherobot.com/recursion-factorials-fibonacci-ruby/" target="_blank">Recursion and Fibonacci in Ruby</a></p>
-
-<p><a href="http://kaibun.net/blog/2010/03/17/simple-thought-about-recursion-in-ruby/" target="_blank">Recursion in Ruby</a></p>
 ]]></content>
   </entry>
   
