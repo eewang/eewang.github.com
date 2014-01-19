@@ -4,7 +4,6 @@ title: "What's that (code) smell? How to monitor code quality in Ruby and Rails"
 date: 2014-01-18 09:24
 comments: true
 categories: 
-published: false
 ---
 I've found that as you progress in your code career, you start to discover more patterns in how to structure code and how to address common questions. In the same vein, you also learn what not to do and your sense for code smells improves. Your methods might get smaller, your logic better encapsulated and your classes more singularly responsible. Thinking more strategically about how to implement features with an eye to code maintainability, complexity and readability is a career-long endeavor. There's no single set of tools that will make you a better developer, but I've recently come across several gems that have helped me develop a better sense for code quality and development standards.
 
