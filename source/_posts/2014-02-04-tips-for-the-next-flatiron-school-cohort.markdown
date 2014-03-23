@@ -4,6 +4,7 @@ title: "Tips for The Next Flatiron School Cohort"
 date: 2014-02-04 07:21
 comments: true
 categories: 
+published: false
 ---
 Monday was the first day of the current <a href="http://flatironschool.com" target="_blank">Flatiron School</a> cohort. The day after the Super Bowl holds special resonance in my heart, because it was one year ago to the day that I started at Flatiron. I had been plodding along in my coding journey until that point, when I started on a hockey-stick growth curve that landed me to where I am today at the NYTimes.
 
