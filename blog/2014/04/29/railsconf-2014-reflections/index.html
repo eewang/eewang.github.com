@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Flatiron - Week 5 - eugenius</title>
+  <title>RailsConf 2014 Reflections, Part 1 of 2 - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="When I started at Flatiron, I set myself a goal of trying to blog every day. That goal pretty quickly fell to the wayside, as I realized how much &hellip;">
+  <meta name="description" content="This past week, I had the great privilege to visit Chicago and attend RailsConf 2014. Before RailsConf, I had been to two conferences - GORUCO 2013 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/03/09/flatiron-week-5/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2014/04/29/railsconf-2014-reflections/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Flatiron - Week 5</h1>
+      <h1 class="entry-title">RailsConf 2014 Reflections, Part 1 of 2</h1>
     
     
       <p class="meta">
@@ -94,7 +94,7 @@
   
 
 
-<time datetime="2013-03-09T09:02:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2013</time>
+<time datetime="2014-04-29T08:59:00-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2014</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -103,22 +103,28 @@
   </header>
 
 
-<div class="entry-content"><p>When I started at Flatiron, I set myself a goal of trying to blog every day. That goal pretty quickly fell to the wayside, as I realized how much work would be involved just coding and learning alone. Also, after the first few days, the lessons began to group together in longer, multi-day themes - e.g., Rails. This week, the theme was Javascript/jQuery, which controls front-end user interaction and serves as an intermediate, client-side programming language between the user and the back-end (Ruby on Rails, in our case). Learning JS brought together the whole concept of web development, and it really helped coalesce my understanding of how users interact with web applications and send data to and retrieve data from the application&#8217;s back-end.</p>
+<div class="entry-content"><p>This past week, I had the great privilege to visit Chicago and attend RailsConf 2014. Before RailsConf, I had been to two conferences - GORUCO 2013 and Windy City Rails 2013 - both of which had enough attendees to fill only a single track of talks. RailsConf, on the other hand, had four tracks (even five, at times) that were roughly grouped by focus area, like around domain design, careers or refactoring. Needless to say, RailsConf 2014 was the largest conference I’ve attended in my short career as a developer.</p>
 
 <!--more-->
 
 
-<p>To be honest, I have mixed feelings about Javascript. On the one hand, it seems to be a powerful, versatile language that increasingly is being used as a server-side language through frameworks like <a href="http://nodejs.org" target="_blank">Node.js</a>. On the other hand, however, it feels a little clunky to me after learning Ruby. Compared to Ruby, Javascript is syntax heavy, littered with seemingly unnecessary semicolons and braces. This past week, there were definitely moments of frustration when I couldn&#8217;t get my Javascript to work because of a missing semi-colon or a misplaced bracket. I found myself scouring my code to ensure that every open parenthesis or bracket had a corresponding closing character. Additionally, I started to inadvertantly use semicolons to end statements in my Ruby code. Good thing that Ruby is pretty flexible though, so I don&#8217;t think those did too much damage, and the misplaced syntax was easy to spot.</p>
+<p>In full honesty, attending RailsConf was part-work and part-vacation for me, in that in hailing from the Chicagoland area, I saw it as an easy decision to attend when offered the opportunity to go to one major conference a year on the NYT dime. Because of this, I didn’t do as much after-conference socializing as I probably would have done were RailsConf not held in a city where my family and friends live. While I wouldn’t have given up catching up with friends and seeing my family for anything, it would have been nice to have been more active in meeting people at the conference.</p>
 
-<p>And yet while on one level I find Javascript&#8217;s syntax-heavy nature to be irritating, on a deeper level I think it can actually be beneficial in forcing me to better organize and structure my code. With JS, I&#8217;ve started to put comments to indicate where certain functions end to help me not get lost in the multiple levels of embedded functions. And while this probably isn&#8217;t coding best practices in the end, its helped me think deliberately about variable scope and processing flow within my code, and to not rely on my language of choice to determine that for me. Plus, its always easy to delete the comments after I get my code working to make it more presentable.</p>
+<p>I found the best talks of the conference to be DHH’s opening keynote, Aaron Patterson’s (i.e., @tenderlove) closing keynote, and Sandi Metz’s talk on refactoring, which I’ll go into in Part 2. Sandi’s talk didn’t get the prime-time slot as the two keynote presentations, but I found it just as informative and useful in thinking about how to structure code.</p>
 
-<p>In a similar way that learning all the components of Rails separately - learning Rack, building an Object Relational Mapper, or writing SQL statements, for example - helped me understand and appreciate the work Rails does, learning Javascript has enabled me to appreciate good coding design and organization. While having frameworks like Rails or libraries like jQuery are quite useful in abstracting away common patterns and enabling rapid and efficient development, its critical to understand how those tools actually get the job done. Knowing how Rails abstracts away database queries or how jQuery simplifies event handlers makes me not only appreciate the work developers have put into building those libraries, but also enables me to customize features and fix problems more effectively. Avi and Bob have done a great job at Flatiron of demystifying abstract tools and emphasizing that Rails and jQuery are just collections of Ruby and Javascript code, respectively.</p>
+<p>DHH and Aaron gave almost polar opposite talks, in terms of style, focus and substance. DHH stayed high-level and abstract - focusing on what he sees is the emergence of an unhealthy obsession with test coverage, metrics and coding practices like TDD. We are software writers, not scientists, he said. Maintaining a religious devotion to measuring our code quality and slavishly obeying coding patterns and paradigms like TDD or “Tell, Don’t Ask” leads us to miss the mark in delivering on what we are paid to do - write functioning software.</p>
 
-<p>Learning Javascript this past week, I felt the pace of the work accelerate at Flatiron (not that we weren&#8217;t moving pretty fast already). As I&#8217;ve gained more confidence in my skillset and I&#8217;ve rounded out my understanding of the many components of web development, I&#8217;ve started working on side projects and exploring areas outside the core Flatiron curriculum. For example, I came across a pretty cool data visualization library called <a href="http://d3js.org" target="_blank">D3.js</a> that I want to explore. I find data visualization fascinating - it can be incredibly powerful tools to quickly communicate complex data in an engaging and beautiful manner. I&#8217;m hoping to spend some time this weekend exploring the documentation and to try and build some basic dynamic charts. Data visualization is the perfect encapsulation of what I find so unique about web development - the weaving together of complex data analytics with beautiful, user-centric design. Left brain and right brain working together seamlessly in awesome harmony. There&#8217;s so many cool and exciting libraries, gems and APIs out there to explore; I need to remind myself to be patient and diligent in learning, to be excited about all the potential out there rather than feel burdened by the sheer amount of material.</p>
+<p>Aaron, in contrast, gave a pretty technical talk (for a keynote presentation) on ActiveRecord internals and ended by merging his experimental AdequateRecord branch into the Rails master branch, a significant and symbolic gesture. Complete with graphs and performance benchmark numbers (i.e., science!), his talk touched on how improvements in SQL statement caching has led to the performance improvements of AdequateRecord, and also gave a helpful, whirlwind tour of how ActiveRecord translates a query (e.g., <code>Post.find_by_name(‘foo’)</code>) into raw SQL and returns a domain object.</p>
 
-<p>This next week we&#8217;ll be turning back to Rails for a few days before starting work on our group projects. I&#8217;m excited about what comes next, for the opportunity to take all that we&#8217;ve learned and combine it into a coherent and engaging product. Creating a black box, in a sense, but knowing exactly what goes into it and how it works. I know the next few weeks will be tiring, frustrating and challenging, but its great to know that I&#8217;m building a new skill set and finally starting to create cool stuff.</p>
+<p>While the two talks seemed quite dissimilar, at the end of the day, it seems to me that both Aaron and DHH are correct in how they approach software engineering / development / writing, however you want to call it. If that seems too neat, tidy and cliche for you, I apologize, but I think coding, in practice, is both art and science. Early on in the product development lifecycle, coding may be more like writing than science. Optimization and maintaining a robust test suite seems like overkill when its not even clear what it is you’re trying to build.</p>
 
-<p>Oh, also, in case you haven&#8217;t noticed, I changed the design theme of my blog. I realized that the other theme got to be a little clunky, and I didn&#8217;t quite master the responsiveness of it, so the dynamic card-flip animation that I implemented ended up being more of a hindrance to readers than a cool design element. I got some feedback on the design - some people thought the animation was nice, but more people found it unnecessary and distracting from the actual blog content. And in the end, you&#8217;ve got to give the users what they want!</p>
+<p>However, there comes a point when you start solidifying the codebase, product features become more refined and business users develop a more coherent process. At this point, traffic increases, infrastructure expands and optimization becomes a critical focus to maintaining a consistent and pleasant user experience. Here, there’s at least a few clear metrics to measure yourself against; when a user clicks on a link or takes some action on my app, how quickly can the app return a response? This question encompasses a wide array of application pain points - asset rendering, SQL query counts, database connections, etc. - but ultimately, it all boils down to actual milliseconds and (hopefully not) seconds.</p>
+
+<p>To me, this is what Aaron was getting at in his talk on AdequateRecord. Rails has matured to the point where its clear what its trying to do and the feature set is robust. Aaron even said that he doesn’t want to see more features get added to Rails. Fine-tuning Rails and ActiveRecord inevitably means benchmarking and taking a scientific approach to improvements by changing individual inputs into the system and measuring the output each time (e.g., if I call <code>includes</code> on this association rather than <code>joins</code> how does that improve my performance?).</p>
+
+<p>Software development as both writing and science do not have to be mutually exclusive. In fact, I sincerely hope they are not. I enjoy building software precisely because it engages both the creative / writing side as well as the mathematical / scientific side of my brain. When I’m busy iterating on a product early on in the lifecycle, I can both enjoy the process of coming up with creative solutions (even if they are hacky and not the most efficient) yet also know that there will come a time when I can focus on refactoring and optimizing what I’ve built. These two dimensions to code keep me from exhausting my mental resources capable of handling creative expression and scientific calculation. To my knowledge, software is one of the few industries that can maintain this duality, a healthy relationship between creativity and scientific reasoning. And for that, I’m tremendously thankful that I get to operate at that juncture.</p>
+
+<p>If you haven&#8217;t seen the DHH and Aaron Patterson keynotes, check them on on <a href="http://confreaks.com" target="_blank">ConFreaks</a> when they get posted. Definitely worth watching!</p>
 </div>
 
 
@@ -141,21 +147,15 @@
   
 
 
-<time datetime="2013-03-09T09:02:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2013</time>
+<time datetime="2014-04-29T08:59:00-04:00" pubdate data-updated="true">Apr 29<span>th</span>, 2014</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/flatiron/'>Flatiron</a>, <a class='category' href='/blog/categories/javascript/'>Javascript</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/03/09/flatiron-week-5/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/03/09/flatiron-week-5/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2014/04/29/railsconf-2014-reflections/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2014/04/29/railsconf-2014-reflections/" >Tweet</a>
   
   
   
@@ -166,10 +166,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/03/02/flatiron-week-3/" title="Previous Post: Flatiron - Week 4">&laquo; Flatiron - Week 4</a>
+        <a class="basic-alignment left" href="/blog/2014/01/18/how-to-smell-check-your-code-quality-in-ruby-and-rails/" title="Previous Post: What's that (code) smell? How to monitor code quality in Ruby and Rails">&laquo; What's that (code) smell? How to monitor code quality in Ruby and Rails</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/03/12/how-and-when-to-use-single-table-inheritance-in-rails/" title="Next Post: How (and When) to Use Single Table Inheritance in Rails">How (and When) to Use Single Table Inheritance in Rails &raquo;</a>
       
     </p>
   </footer>
@@ -328,8 +326,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/03/09/flatiron-week-5/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/03/09/flatiron-week-5/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2014/04/29/railsconf-2014-reflections/';
+        var disqus_url = 'http://eewang.github.com/blog/2014/04/29/railsconf-2014-reflections/';
         var disqus_script = 'embed.js';
       
     (function () {
