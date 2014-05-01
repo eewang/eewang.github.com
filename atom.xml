@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2014-04-29T09:12:04-04:00</updated>
+  <updated>2014-05-01T19:08:29-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RailsConf 2014 Reflections, Part 2 of 2]]></title>
+    <link href="http://eewang.github.com/blog/2014/05/01/railsconf-2014-reflections/"/>
+    <updated>2014-05-01T19:07:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2014/05/01/railsconf-2014-reflections</id>
+    <content type="html"><![CDATA[<p>At any large conference like RailsConf, there&#8217;s bound to be a mix of presentations. There&#8217;s only so many talks you can listen to about service-oriented architecture (or TDD?) before it becomes a catchphrase, devoid of all practical meaning. Thankfully, Ruby Central, the RailsConf organizers, tried to organize <a href="http://www.railsconf.com/program#sessions" target="_blank">the talks</a> around certain themes within four tracks in order to both group together and spread out the related talks. These themes had titles like &#8220;Beyond ERB&#8221; (how to set up front-end views without ERB), &#8220;Play Nicely&#8221; (how to work in a team environment and contribute to open-source) and &#8220;Big Rails&#8221; (how to manage and refactor a monolithic Rails app).</p>
+
+<!--more-->
+
+
+<p>Overall, I found these groupings helpful for determining what I wanted to focus on and largely successful in guiding me toward the talks I thought most interesting. As much as I enjoy a good technical talk on introducing a services layer into my Rails architecture, less code-centric presentations like the one I attended on the serendipitous discovery of a sensible user interface for microwaves are just as enjoyable. Coding is just a part of the wide world of software development, so the fact that the organizers sprinkled talks on career development, design sensibilities and product management throughout the four days made the technical conference more palatable and enjoyable to me.</p>
+
+<p><strong>All The Little Things - Sandi Metz</strong></p>
+
+<p>Beyond the two keynotes I mentioned <a href="http://localhost:4000/blog/2014/04/29/railsconf-2014-reflections/" target="_blank">in my last post</a>, Sandi Metz gave a fantastic presentation on refactoring - I recommend everyone reading this to go check it out when it comes online. She took a massively nested conditional (clocking in at around 50 lines of code) and systematically broke it down into small methods and then small classes with a well-defined API of limited scope, all the while using the existing test suite to guide her actions. This is what’s so useful about a robust test suite - you can refactor the underlying code without knowing anything about the problem domain, so long as the tests cover all the business-necessary functionality (which, granted, is a big IF).</p>
+
+<p>Sandi turned me on to the Squint Test - a process of inferring complexity in your code from the shape and color of your classes and methods. The Squint Test basically recommends squinting at your screen, or otherwise turning down the visual clarity of your code, and discerning the shape and color of your code. A flat shape indicates less nesting compared to a lumpy shape, since if-statements and blocks cause indentation within a method. Similar colors indicate a similar level of abstraction, since text editors will color constants differently from local or instance variables. The rule of thumb this hits on is keeping your methods to a tight layer of abstraction - i.e., mostly of the same color - rather than having all colors of the abstraction rainbow in a single method. I love this test because its a visual heuristic - taking advantage of our natural recognition of colors, shapes and forms to indicate code complexity.</p>
+
+<p>She also argued that keeping code DRY at all times should not be your first priority as a developer. Duplication is sometimes an easy monster to slay because it is both easy to spot and we’re taught that its bad from the very beginning of our coding journey. Yet duplication is preferable over the wrong abstraction (e.g., a massively complex conditional or large classes), and so the focus should first be on refactoring toward the right abstraction before cutting back on duplication. In fact, as you move toward the goal of simplicity, you’ll likely encounter more intermediate complexity and duplicated code along the way.</p>
+
+<p>What I love about Sandi Metz is that even though she’s clearly a great developer, she is able to address the obstacles facing new or junior developers who may not have heard of half the concepts in many a RailsConf presentation. She speaks about code in a plain, accessible manner without the mumbo-jumbo of developer buzzwords like TDD or Domain-Driven Design. She takes everyday anti-patterns that developers face on a daily basis (who hasn’t encountered a multi-level nested conditional?) and systematically demonstrates both why those anti-patterns are harmful for the long-term development of an application and how to correct it.</p>
+
+<p><strong>Tricks That Rails Didn’t Tell You About - Carlos Antonio da Silva</strong></p>
+
+<p>Many talks at RailsConf described how to move from a monolithic Rails app to a service-oriented (or, even, <a href="http://www.railsconf.com/program#prop_413" target="_blank">hexagonal</a>) architecture, or focused on how to design a better domain model. I enjoyed this talk by Carlos (developer at <a href="http://plataformatec.com.br/" target="_blank">Platformatec</a> and a member of the Rails core team) because it fell on the opposite side of the concrete-abstract spectrum, in that he spoke about numerous handy, practical tips in Rails that I was previously unaware of. Tips like the difference between <code>Array#present?</code> and <code>Array#any?</code> or <code>Array#exists?</code> (the former loads the association in one query) and the <code>rake notes</code> command to see a command-line summary of the comments and notes in your app. While I may not be able to move immediately to an SOA tomorrow, I can start using these tools in my day-to-day code.</p>
+
+<p>Also, did you know that running <code>rake rails:update</code> will initiate a guided tour of your app to update to the most recent version of Rails? I sure didn’t, but now I have a single source to figure out what I need to change when updating to the newest Rails version.</p>
+
+<p><strong>Effectively Testing Services - Neal Kemp</strong></p>
+
+<p>In his talk, Neal (independent developer) discussed several different strategies for testing services, both external APIs (e.g., Facebook) or internal services, like those I use at the NYT. As your software architecture becomes increasingly service-oriented, maintaining the touch points with other teams become all the more critical. Having a dependency on an inconsistent API can make it more challenging to identify bugs in your code, since it can create uncertainty as to whether your code is broken or the service you depend on is faulty.</p>
+
+<p>At the NYT, we often interact with other teams through an API. We&#8217;ve found that the integration points where services interact are often high on the list of pain points, especially when those services are under active development and you may be interacting with a less-than-stable version of an internal service. Even beyond stability and scalability of a service maintained outside of your immediate group, services can have other, often more insidious, problems, like inconsistent return values.</p>
+
+<p>For example, I&#8217;ve had the experience working on an internal API that I thought always returned an collection, unless there was only one object, at which point the response would be a hash of key-value pairs rather than an array of one. The most pernicious factor of these inconsistent return values is not that they occur, but that they are hidden and data-dependent, and are thus more prone to pop up in production when you least expect it.</p>
+
+<p>Helpful tools like <a href="https://github.com/bblimke/webmock" target="_blank">webmock</a>, <a href="https://github.com/mdub/sham_rack" target="_blank">ShamRack</a> and <a href="https://github.com/vcr/vcr" target="_blank">VCR</a> allow you to stub out requests in your testing suite (e.g., webmock) and record / play back specific responses so that you aren&#8217;t dependent upon network connection when running your tests (e.g., VCR). We use these mocking tools in my group, and they&#8217;ve proven quite useful in testing our integration with various services, both internal and external (e.g., AWS).</p>
+
+<p><strong>Discovering User Interactions - Cameron Daigle</strong></p>
+
+<p>Approaching user interface design from a web development perspective, I&#8217;m often bemused at the fact that many objects we come in contact with on a daily basis have unnecessarily inscrutable interfaces. For example, I still - to this day - find the average TV remote control difficult to decipher at first glance, and if I hadn&#8217;t spent many years watching TV as a child, I probably would have little intuitive understanding of what to do after I press the &#8220;ON&#8221; button. As a developer, I have the power to change a web application&#8217;s user interface by sprinkling in some JS event handlers or CSS animations. But physical objects like a remote are built at a single point in time and have no dynamic ability (disregarding more modern, touchscreen controls) to change their buttons or switches.</p>
+
+<p>Cameron (senior designer at <a href="http://hashrocket.com/" target="_blank">Hashrocket</a>) touched on these ideas in an insightful and humorous talk on how everyday objects like coffee makers and ATMs can provide guidance on how best to design a user interface. He made the argument for consistent interfaces that leverage commonly held patterns of behavior and understanding among the expected user group. Avoid using different &#8220;modes&#8221;, like how some microwaves confusingly have various modes for defrosting, cooking, softening, etc. Make use of low-cost shortcuts that minimize the need for a user to make a decision, like how certain coffeepots automatically turn the hot water spout over the ground coffee when the lid is closed. And don&#8217;t make assumptions about user behavior that could have disasterous consequences, like how a certain other coffeepot has a &#8220;self-destruct&#8221; button that swivels the pouring vessel away from the pot when pressed, even while brewing.</p>
+
+<p> Intuitive user interfaces are great, but I sense that there is a tension between the simplicity of a user interface and the broad usability of that interface. Cameron argued that design should leverage your users&#8217; intuitive understanding of interaction. But whose intuition? A simple, intuitive design implicity and by necessity builds off of some cultural assumptions about how people respond to commands and instructions. Everyone &#8220;knows&#8221; that red means stop and green means go, except when they don&#8217;t, so doesn&#8217;t an interface built with this in mind potentially exclude users that don&#8217;t have that cultural understanding? Granted, this is a contrived example, and clearly the goals of achieving interface clarity, deep functionality and broad usability are not entirely mutually exclusive. Nevertheless, its important to recognize the tradeoffs between these goals. There will always be a tension in priorities when trying to design the &#8220;best&#8221; user interface. What I think matters the most is being purposeful in your design choices and knowing what they cost.</p>
+
+<p><strong>Curmudgeon: An Opinionated Look at an Opinionated Framework - Ernie Miller</strong></p>
+
+<p>After all the talks by the heavy hitters in the Ruby/Rails community (e.g., DHH, tenderlove and Sandi), I thought this final-day presentation by Ernie on the drawbacks of Rails as a heavy framework quite insightful.</p>
+
+<p>For example, run the following command via console in a bare-bones Rails app: <code>ActiveRecord::Base.ancestors</code>, and you’ll see what Ernie was talking about regarding the heaviness of ActiveRecord in how many modules and classes are included when you inherit from ActiveRecord. The ORM simply tries to do a ton of stuff - timestamps, reflection, serialization, nested attributes, associations, persistence, validation, querying, etc. As Ernie put it, ActiveRecord does follow the single-responsibility principle, but only if you consider that responsibility to include everything that it does.</p>
+
+<p>When I was starting off with Rails, I fell into the trap of thinking that all models had to inherit from ActiveRecord::Base. Adding a plain-old Ruby class to my app seemed to run against the grain of ActiveRecord, when in fact, I’ve found that starting with simple Ruby objects and adding components from ActiveRecord (e.g., ActiveRecord::Validations, ActiveRecord::Callbacks) independently as modules to be both more targeted and purposeful but also a better way of communicating to other developers how you envision that object operating within your domain. I like to think of models that inherit from ActiveRecord::Base as my primary objects and ActiveModel::Model classes and my simple Ruby classes or to be secondary and tertiary concerns in my object graph.</p>
+
+<p>Ernie&#8217;s argument about being more picky about what to include or exclude from Rails&#8217;s large toolbox of sub-frameworks makes sense. Why add all that cruft to your application if you don&#8217;t even plan to use it (you could also just build a Sinatra app)? Yet in some ways, and especially for developers new to Rails who just want to build stuff, all the extra functionality that comes with the seemingly innocuous inheritance from ActiveRecord::Base is free, helps you get set up with a working website quickly and is reasonably performant, at least initially.</p>
+
+<p>Those were just five of the many sessions at RailsConf 2014, covering not just technical topics but also more general interest stuff like career development. In particular, there were two panel discussions about the future of Rails jobs and what it takes to teach the next generation of great developers that generated some great conversation. Those panels featured well-known people in the Ruby/Rails community like Ben Orenstein of <a href="http://thoughtbot.com/" target="_blank">Thoughtbot</a> and Jeff Casimir of <a href="http://jumpstartlab.com/" target="_blank">Jumpstart Labs</a>.</p>
+
+<p>And according to <a href="https://twitter.com/railsconf/status/460860347025354753" target="_blank">this tweet by @RailsConf2015</a>, the talks should be up on <a href="http://www.confreaks.com" target="_blank">ConFreaks</a> in about a month. So check them out for yourself!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RailsConf 2014 Reflections, Part 1 of 2]]></title>
@@ -2270,122 +2332,6 @@ the useful functionality without adding unwieldy dependencies.</p>
 <p>Throughout the last three weeks, I&#8217;ve had the opportunity to speak with a variety of start-ups and technology firms. While there are a ton of great start-ups out there doing amazing work, I couldn&#8217;t have asked for a better opportunity to learn more about the craft of code and work at the epicenter of a rapidly-changing journalism industry that continues to grapple with the effects of technology on its business and product model. I&#8217;ve been blessed to find a position that can combine my professional experience serving as an editor at the <a href="http://dukechronicle.com" target="_blank">Duke Chronicle</a> and working on investment products at <a href="http://www.blackstone.com/our-businesses/aam/hedge-fund-solutions-(baam)" target="_blank">Blackstone</a>. I&#8217;ll likely be coding mostly in Ruby and Javascript, and will have the chance to learn other languages and technologies, like Objective-C. I&#8217;m incredibly thankful to Avi &amp; Co. and my classmates at <a href="http://flatironschool.com/" target="_blank">the Flatiron School</a> for not only teaching me how to code, but showing me how code can be equal parts analytical and creative.</p>
 
 <p>The job will undoubtedly be challenging, having to build products for a newspaper that gets <a href="http://en.wikipedia.org/wiki/The_New_York_Times#Online_activity" target="_blank">30 million unique visitors per month</a>, but I&#8217;m eager for the challenge and excited for the growth potential at the NYT!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Metaprogramming Ruby and Rails Antipatterns (Part 2 of 2)]]></title>
-    <link href="http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2/"/>
-    <updated>2013-05-17T08:45:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/05/17/metaprogramming-ruby-and-rails-antipatterns-part-2-of-2</id>
-    <content type="html"><![CDATA[<p>I wrapped up Rails Antipatterns about a week ago shortly after reading Metaprogramming Ruby. Reading both books side-by-side has helped me better understand the relationship between Ruby and Rails and how Ruby&#8217;s metaprogramming capabilities provide the &#8220;magic&#8221; that Rails is often associated with. Rails Antipatterns is a great book that uses commonly abused patterns in Rails to illustrate refactoring opportunities. I was able to complete the book a few weeks back, but I&#8217;ve been keeping busy with the interview process (more on that in another post) and side projects such that I haven&#8217;t been able to blog as much as I would have wanted. That&#8217;s been one of the hardest parts of the interview process in that I just have less time to actually code, blog and read. Anyways, I figured that I&#8217;d write down some of my thoughts on Rails Antipatterns alongside Metaprogramming Ruby and the areas where Antipatterns helped me the most in structuring my Rails code.</p>
-
-<!--more-->
-
-
-<p>I recommend Rails Antipatterns as a great way to improve your &#8220;code smell.&#8221; It provides practical advice to how to structure your code and general best practices when developing a Rails application. Compared to Metaprogramming Ruby, you won&#8217;t get the same depth into Ruby&#8217;s object model and method dispatch process in Rails Antipatterns, but then again, that&#8217;s not the purpose of the book. Rails Antipatterns will tell you that you should use &#8220;delegate_to&#8221; as a way to reduce method chaining for your domain objects, whereas Metaprogramming Ruby will explain the fundamentals of how &#8220;delegate_to&#8221; actually works and less about the day-to-day use cases for the macro. One of my favorite parts of Metaprogramming Ruby is that it goes in depth in the second half of the book into how ActiveRecord creates its so-called &#8220;magical&#8221; finder methods dynamically using #method_missing. Conversely, Rails Antipatterns provides practical advice on when to use those macros and helper methods that Rails provides. Antipatterns explains what&#8217;s in the Rails toolkit and how to use it, while Metaprogramming explains how the toolkit works.</p>
-
-<p>I thought Antipatterns was overall a useful book, but at times I found it a bit disjointed. More like a compilation of various how-to guides rather than a coherent instruction flow. Whereas Metaprogramming has the core theme of the Ruby object model, Antipatterns is less grounded on an overriding programming construct and is driven more by observation of bad habits by the average Rails programmer (hence the title). Its still a useful book, but one that I think can be valuable even if you just skim to the sections that you struggle with the most and read the book in bits and parts. Here were a few of the sections that I found most useful to remind myself of a few overarching principles in application development - keep code DRY (don&#8217;t repeat yourself), minimize and manage dependencies and properly encapsulate logic.</p>
-
-<p><strong>Use view helpers</strong></p>
-
-<p>When I first started building applications with Rails, I tended to put logic in the first place where I could fit it in. Unfortunately, this often meant in my application views. Over time, my views would look like convoluted piles of mixed in HTML and ERb code with loops and conditionals alongside div tags and class attribute declarations. Antipatterns explains that one way to avoid this tendency is to move presentation logic into view helpers. Rails provides all sorts of helpful methods to mimic HTML markup in view helpers. For example, #content_tag is an instance method created by Rails that can be used to define a block of markup. The first argument is the HTML tag as a symbol, followed by any number of attributes structured as a hash that you want to appear in the markup (e.g., :class => &#8220;new_project&#8221;), followed by a block, like so:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">rss_link</span><span class="p">(</span><span class="n">project</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">content_tag</span> <span class="ss">:div</span><span class="p">,</span> <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s2">&quot;feed&quot;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">link_to</span> <span class="s2">&quot;Subscribe to these </span><span class="si">#{</span><span class="n">project</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">project</span><span class="si">}</span><span class="s2"> alerts.&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="n">alerts_rss_url</span><span class="p">(</span><span class="n">project</span><span class="p">),</span>
-</span><span class='line'>            <span class="ss">:class</span> <span class="o">=&gt;</span> <span class="s2">&quot;feed_link&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This code does the same as the below HTML, but instead extracts the logic into a Ruby method that can then be applied elsewhere in your views. This makes the code easier to maintain by centralizing any updates into one file rather than having to wade through multiple ERb files to pick out the same block of code to fix.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;feed&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="err">&lt;</span>% if @project %&gt;
-</span><span class='line'>    <span class="err">&lt;</span>%= link_to &quot;Subscribe to #{@project.name} alerts.&quot;, project_alerts_url(@project, :format =&gt; :rss), :class =&gt; &quot;feed_link&quot; %&gt;
-</span><span class='line'>  <span class="err">&lt;</span>% else %&gt;
-</span><span class='line'>    <span class="err">&lt;</span>%= link_to &quot;Subscribe to these alerts.&quot;,
-</span><span class='line'>    alerts_url(format =&gt; :rss), :class =&gt; &quot;feed_link&quot; %&gt;
-</span><span class='line'>  <span class="err">&lt;</span>% end %&gt;
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In fact, the #rss_link helper method can be abstracted even more by replacing the #link_to macro with another #content_tag macro. #content_tag (documentation <a href="http://apidock.com/rails/ActionView/Helpers/TagHelper/content_tag" target="_blank">here</a>)is an abstracted method that can be used to define other view methods like link_to or image_tag. All you have to do is define the HTML tag in the first argument, the content in the second argument, then pass in all the other arguments as a hash after that. Its useful in structuring HTML in a friendly Ruby syntax, and can be especially helpful in creating view helpers that provide semantic method names to blocks of logic.</p>
-
-<p>This last point is why I like using view helpers so much. The larger an application becomes, the more difficult it is to look at code in views and understand what&#8217;s going on. For example, there may a block of ERb code that loops over a collection of objects and conditionally inserts a div element if a certain condition is met. Overtime, relying on this block of code can get cumbersome, especially as more conditionals are added, which further decreases the readability of code. View helpers provide a name to a block of logic so that people reading your code have insight into what that code is meant to do. They properly encapsulate logic and provide semantic meaning to what is at first glance just a bundle of HTML tags and Ruby code.</p>
-
-<p><strong>Organize finder methods into scopes</strong></p>
-
-<p>When I was building my TicketTracker side project during the first half of the Flatiron School, I quickly realized that I needed to have an easy way to query my database and organize / filter the results. ActiveRecord provides a helpful #scope class macro that can be used to chain together database query logic that you find yourself using regularly. For example, if you find yourself always retrieving objects from the database that are less than 5 days old, its easy in Rails to define a scope called &#8220;recent&#8221; that you can then apply as a class method to your model (e.g., Model.recent) rather than using (Model.where(:timestamp &lt; Time.now - 5.days) ). There&#8217;s a good deal of documentation on scopes in Rails, but at its core, scopes are just class methods. Here is a <a href="http://blog.plataformatec.com.br/2013/02/active-record-scopes-vs-class-methods/" target="_blank">great blog post from Platformatec</a> about using scopes and class methods to organize your database queries.</p>
-
-<p><strong>Apply callback macros</strong></p>
-
-<p>Rails has a slew of useful class macros that are executed during the ActiveRecord saving process. Similar to how Ruby has a few built in methods that are automatically triggered when a module is included (#self.included) or a method is added (#method_added), methods which conveniently allow for some pretty cool metaprogramming techniques, Rails also has methods that it looks out for when saving to the database. These callback macros include #before_validation, #after_validation, #before_save and #after_save. You can find a full listing of them <a href="http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html" target="_blank">here</a>.</p>
-
-<p>For example, when building ViewFinder, we wanted to add the address of a  geotagged photo to the database immediately after the photo was saved. This way, we could always query the database by address as well as by coordinates rather than calculating the address at runtime. This was the result of decision that we had to make - do we save the address data to the database or calculate it whenever we need to use it? From a performance perspective, we figured that given that we were planning to make regular use of the address data (e.g., when displaying the actual location of a guessed photo), it would be more optimal to just retrieve static data from the database rather than using Geocoder each time to determine the address from the coordinates (which itself would make a Google Maps API call, so it would be slower than a database call).</p>
-
-<p>Here is what the method looks like to convert coordinates to address. This was part of the Locatable (Locateable?) module that was mixed into the photo and guess models to enable point mapping.</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Locatable</span>
-</span><span class='line'>  <span class="c1"># ...</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">generate_street_address</span>
-</span><span class='line'>    <span class="k">unless</span> <span class="n">latitude</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">longitude</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="no">Geocoder</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">latitude</span><span class="si">}</span><span class="s2">, </span><span class="si">#{</span><span class="n">longitude</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">address</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>    <span class="n">save</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="c1"># ...</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>By using a callback macro, we could ensure that Rails would execute the #generate_street_address method whenever a new photo was deemed valid to our database by including the following into any model that included Locatable instance methods:</p>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Photo</span>
-</span><span class='line'>  <span class="c1"># ...</span>
-</span><span class='line'>  <span class="n">after_validation</span> <span class="ss">:generate_street_address</span>
-</span><span class='line'>  <span class="c1"># ...</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Callback macros are useful for cleaning and validating data and ensuring that objects are saved to the database are properly vetted. If you&#8217;re saving the results of an API call as we were doing for ViewFinder, these callback macros can programmatically insert your application logic into the chain of events in converting the raw JSON result of an API call to application data.</p>
-
-<p>Overall, Antipatterns provides useful nuggets of advice when creating Rails applications. That said, its important to know what to expect when reading the book - you won&#8217;t get much in terms of explaining the inner workings of Rails or how Ruby code can generate all those dynamic finder and callback methods. Best go to Metaprogramming Ruby for a full walk-through of the Ruby object model. But, if you&#8217;re looking for immediate, practical advice on how to leave behind bad habits, Antipatterns is a useful guide. When I started reading Antipatterns, I would only have to read a few pages before I could apply what I was reading to an application I was building. Think of it as a what-not-to-do guide to Rails and you&#8217;ll be able to apply its instructions to an application right away.</p>
 ]]></content>
   </entry>
   

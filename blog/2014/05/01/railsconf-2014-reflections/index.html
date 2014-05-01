@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>RailsConf 2014 Reflections, Part 2 of 2 - eugenius</title>
+  <meta name="author" content="Eugene Wang">
+
+  
+  <meta name="description" content="At any large conference like RailsConf, there&#8217;s bound to be a mix of presentations. There&#8217;s only so many talks you can listen to about &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eewang.github.com/blog/2014/05/01/railsconf-2014-reflections/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="eugenius" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38259585-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eewang.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">RailsConf 2014 Reflections, Part 2 of 2</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-01T19:07:00-04:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>At any large conference like RailsConf, there&#8217;s bound to be a mix of presentations. There&#8217;s only so many talks you can listen to about service-oriented architecture (or TDD?) before it becomes a catchphrase, devoid of all practical meaning. Thankfully, Ruby Central, the RailsConf organizers, tried to organize <a href="http://www.railsconf.com/program#sessions" target="_blank">the talks</a> around certain themes within four tracks in order to both group together and spread out the related talks. These themes had titles like &#8220;Beyond ERB&#8221; (how to set up front-end views without ERB), &#8220;Play Nicely&#8221; (how to work in a team environment and contribute to open-source) and &#8220;Big Rails&#8221; (how to manage and refactor a monolithic Rails app).</p>
+
+<!--more-->
+
+
+<p>Overall, I found these groupings helpful for determining what I wanted to focus on and largely successful in guiding me toward the talks I thought most interesting. As much as I enjoy a good technical talk on introducing a services layer into my Rails architecture, less code-centric presentations like the one I attended on the serendipitous discovery of a sensible user interface for microwaves are just as enjoyable. Coding is just a part of the wide world of software development, so the fact that the organizers sprinkled talks on career development, design sensibilities and product management throughout the four days made the technical conference more palatable and enjoyable to me.</p>
+
+<p><strong>All The Little Things - Sandi Metz</strong></p>
+
+<p>Beyond the two keynotes I mentioned <a href="http://localhost:4000/blog/2014/04/29/railsconf-2014-reflections/" target="_blank">in my last post</a>, Sandi Metz gave a fantastic presentation on refactoring - I recommend everyone reading this to go check it out when it comes online. She took a massively nested conditional (clocking in at around 50 lines of code) and systematically broke it down into small methods and then small classes with a well-defined API of limited scope, all the while using the existing test suite to guide her actions. This is what’s so useful about a robust test suite - you can refactor the underlying code without knowing anything about the problem domain, so long as the tests cover all the business-necessary functionality (which, granted, is a big IF).</p>
+
+<p>Sandi turned me on to the Squint Test - a process of inferring complexity in your code from the shape and color of your classes and methods. The Squint Test basically recommends squinting at your screen, or otherwise turning down the visual clarity of your code, and discerning the shape and color of your code. A flat shape indicates less nesting compared to a lumpy shape, since if-statements and blocks cause indentation within a method. Similar colors indicate a similar level of abstraction, since text editors will color constants differently from local or instance variables. The rule of thumb this hits on is keeping your methods to a tight layer of abstraction - i.e., mostly of the same color - rather than having all colors of the abstraction rainbow in a single method. I love this test because its a visual heuristic - taking advantage of our natural recognition of colors, shapes and forms to indicate code complexity.</p>
+
+<p>She also argued that keeping code DRY at all times should not be your first priority as a developer. Duplication is sometimes an easy monster to slay because it is both easy to spot and we’re taught that its bad from the very beginning of our coding journey. Yet duplication is preferable over the wrong abstraction (e.g., a massively complex conditional or large classes), and so the focus should first be on refactoring toward the right abstraction before cutting back on duplication. In fact, as you move toward the goal of simplicity, you’ll likely encounter more intermediate complexity and duplicated code along the way.</p>
+
+<p>What I love about Sandi Metz is that even though she’s clearly a great developer, she is able to address the obstacles facing new or junior developers who may not have heard of half the concepts in many a RailsConf presentation. She speaks about code in a plain, accessible manner without the mumbo-jumbo of developer buzzwords like TDD or Domain-Driven Design. She takes everyday anti-patterns that developers face on a daily basis (who hasn’t encountered a multi-level nested conditional?) and systematically demonstrates both why those anti-patterns are harmful for the long-term development of an application and how to correct it.</p>
+
+<p><strong>Tricks That Rails Didn’t Tell You About - Carlos Antonio da Silva</strong></p>
+
+<p>Many talks at RailsConf described how to move from a monolithic Rails app to a service-oriented (or, even, <a href="http://www.railsconf.com/program#prop_413" target="_blank">hexagonal</a>) architecture, or focused on how to design a better domain model. I enjoyed this talk by Carlos (developer at <a href="http://plataformatec.com.br/" target="_blank">Platformatec</a> and a member of the Rails core team) because it fell on the opposite side of the concrete-abstract spectrum, in that he spoke about numerous handy, practical tips in Rails that I was previously unaware of. Tips like the difference between <code>Array#present?</code> and <code>Array#any?</code> or <code>Array#exists?</code> (the former loads the association in one query) and the <code>rake notes</code> command to see a command-line summary of the comments and notes in your app. While I may not be able to move immediately to an SOA tomorrow, I can start using these tools in my day-to-day code.</p>
+
+<p>Also, did you know that running <code>rake rails:update</code> will initiate a guided tour of your app to update to the most recent version of Rails? I sure didn’t, but now I have a single source to figure out what I need to change when updating to the newest Rails version.</p>
+
+<p><strong>Effectively Testing Services - Neal Kemp</strong></p>
+
+<p>In his talk, Neal (independent developer) discussed several different strategies for testing services, both external APIs (e.g., Facebook) or internal services, like those I use at the NYT. As your software architecture becomes increasingly service-oriented, maintaining the touch points with other teams become all the more critical. Having a dependency on an inconsistent API can make it more challenging to identify bugs in your code, since it can create uncertainty as to whether your code is broken or the service you depend on is faulty.</p>
+
+<p>At the NYT, we often interact with other teams through an API. We&#8217;ve found that the integration points where services interact are often high on the list of pain points, especially when those services are under active development and you may be interacting with a less-than-stable version of an internal service. Even beyond stability and scalability of a service maintained outside of your immediate group, services can have other, often more insidious, problems, like inconsistent return values.</p>
+
+<p>For example, I&#8217;ve had the experience working on an internal API that I thought always returned an collection, unless there was only one object, at which point the response would be a hash of key-value pairs rather than an array of one. The most pernicious factor of these inconsistent return values is not that they occur, but that they are hidden and data-dependent, and are thus more prone to pop up in production when you least expect it.</p>
+
+<p>Helpful tools like <a href="https://github.com/bblimke/webmock" target="_blank">webmock</a>, <a href="https://github.com/mdub/sham_rack" target="_blank">ShamRack</a> and <a href="https://github.com/vcr/vcr" target="_blank">VCR</a> allow you to stub out requests in your testing suite (e.g., webmock) and record / play back specific responses so that you aren&#8217;t dependent upon network connection when running your tests (e.g., VCR). We use these mocking tools in my group, and they&#8217;ve proven quite useful in testing our integration with various services, both internal and external (e.g., AWS).</p>
+
+<p><strong>Discovering User Interactions - Cameron Daigle</strong></p>
+
+<p>Approaching user interface design from a web development perspective, I&#8217;m often bemused at the fact that many objects we come in contact with on a daily basis have unnecessarily inscrutable interfaces. For example, I still - to this day - find the average TV remote control difficult to decipher at first glance, and if I hadn&#8217;t spent many years watching TV as a child, I probably would have little intuitive understanding of what to do after I press the &#8220;ON&#8221; button. As a developer, I have the power to change a web application&#8217;s user interface by sprinkling in some JS event handlers or CSS animations. But physical objects like a remote are built at a single point in time and have no dynamic ability (disregarding more modern, touchscreen controls) to change their buttons or switches.</p>
+
+<p>Cameron (senior designer at <a href="http://hashrocket.com/" target="_blank">Hashrocket</a>) touched on these ideas in an insightful and humorous talk on how everyday objects like coffee makers and ATMs can provide guidance on how best to design a user interface. He made the argument for consistent interfaces that leverage commonly held patterns of behavior and understanding among the expected user group. Avoid using different &#8220;modes&#8221;, like how some microwaves confusingly have various modes for defrosting, cooking, softening, etc. Make use of low-cost shortcuts that minimize the need for a user to make a decision, like how certain coffeepots automatically turn the hot water spout over the ground coffee when the lid is closed. And don&#8217;t make assumptions about user behavior that could have disasterous consequences, like how a certain other coffeepot has a &#8220;self-destruct&#8221; button that swivels the pouring vessel away from the pot when pressed, even while brewing.</p>
+
+<p> Intuitive user interfaces are great, but I sense that there is a tension between the simplicity of a user interface and the broad usability of that interface. Cameron argued that design should leverage your users&#8217; intuitive understanding of interaction. But whose intuition? A simple, intuitive design implicity and by necessity builds off of some cultural assumptions about how people respond to commands and instructions. Everyone &#8220;knows&#8221; that red means stop and green means go, except when they don&#8217;t, so doesn&#8217;t an interface built with this in mind potentially exclude users that don&#8217;t have that cultural understanding? Granted, this is a contrived example, and clearly the goals of achieving interface clarity, deep functionality and broad usability are not entirely mutually exclusive. Nevertheless, its important to recognize the tradeoffs between these goals. There will always be a tension in priorities when trying to design the &#8220;best&#8221; user interface. What I think matters the most is being purposeful in your design choices and knowing what they cost.</p>
+
+<p><strong>Curmudgeon: An Opinionated Look at an Opinionated Framework - Ernie Miller</strong></p>
+
+<p>After all the talks by the heavy hitters in the Ruby/Rails community (e.g., DHH, tenderlove and Sandi), I thought this final-day presentation by Ernie on the drawbacks of Rails as a heavy framework quite insightful.</p>
+
+<p>For example, run the following command via console in a bare-bones Rails app: <code>ActiveRecord::Base.ancestors</code>, and you’ll see what Ernie was talking about regarding the heaviness of ActiveRecord in how many modules and classes are included when you inherit from ActiveRecord. The ORM simply tries to do a ton of stuff - timestamps, reflection, serialization, nested attributes, associations, persistence, validation, querying, etc. As Ernie put it, ActiveRecord does follow the single-responsibility principle, but only if you consider that responsibility to include everything that it does.</p>
+
+<p>When I was starting off with Rails, I fell into the trap of thinking that all models had to inherit from ActiveRecord::Base. Adding a plain-old Ruby class to my app seemed to run against the grain of ActiveRecord, when in fact, I’ve found that starting with simple Ruby objects and adding components from ActiveRecord (e.g., ActiveRecord::Validations, ActiveRecord::Callbacks) independently as modules to be both more targeted and purposeful but also a better way of communicating to other developers how you envision that object operating within your domain. I like to think of models that inherit from ActiveRecord::Base as my primary objects and ActiveModel::Model classes and my simple Ruby classes or to be secondary and tertiary concerns in my object graph.</p>
+
+<p>Ernie&#8217;s argument about being more picky about what to include or exclude from Rails&#8217;s large toolbox of sub-frameworks makes sense. Why add all that cruft to your application if you don&#8217;t even plan to use it (you could also just build a Sinatra app)? Yet in some ways, and especially for developers new to Rails who just want to build stuff, all the extra functionality that comes with the seemingly innocuous inheritance from ActiveRecord::Base is free, helps you get set up with a working website quickly and is reasonably performant, at least initially.</p>
+
+<p>Those were just five of the many sessions at RailsConf 2014, covering not just technical topics but also more general interest stuff like career development. In particular, there were two panel discussions about the future of Rails jobs and what it takes to teach the next generation of great developers that generated some great conversation. Those panels featured well-known people in the Ruby/Rails community like Ben Orenstein of <a href="http://thoughtbot.com/" target="_blank">Thoughtbot</a> and Jeff Casimir of <a href="http://jumpstartlab.com/" target="_blank">Jumpstart Labs</a>.</p>
+
+<p>And according to <a href="https://twitter.com/railsconf/status/460860347025354753" target="_blank">this tweet by @RailsConf2015</a>, the talks should be up on <a href="http://www.confreaks.com" target="_blank">ConFreaks</a> in about a month. So check them out for yourself!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eugene Wang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-01T19:07:00-04:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2014/05/01/railsconf-2014-reflections/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2014/05/01/railsconf-2014-reflections/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/29/railsconf-2014-reflections/" title="Previous Post: RailsConf 2014 Reflections, Part 1 of 2">&laquo; RailsConf 2014 Reflections, Part 1 of 2</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1 style="font-size: 28px;"><a href="http://eewang.github.com/">eugenius blog</a></h1>
+</section><section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://eewang.github.com" alt="Home"><img src="/images/Home.png"></a>
+      <a href="http://eewang.github.com/archives/" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="mailto:eugene.wang.77@gmail.com" alt="E-Mail"><img src="/images/Envelope.png"></a>
+      <a href="http://eewang.github.com/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Lazy, Impatient, Prideful</h1>
+  <p>
+  	My name is Eugene Wang, and I am currently a software developer at the New York Times on the New Products team, primarily using Ruby and Javascript. It should go without saying that the thoughts and opinions expressed here are my own and not representative of my employer.
+  </p>
+	<p>
+		Formerly, I was a student at <a href="http://www.flatironschool.com/" target="_blank">The Flatiron School</a> in New York City from January to April 2013. This blog is about my ongoing journey to learn how to build awesome web products and develop, as <a href="http://en.wikipedia.org/wiki/Larry_Wall" target="_blank">Larry Wall</a> once said, the three great virtues of a programmer: laziness, impatience, and hubris.
+	</p>  
+  <p>Damn, it feels good to be a hacker. </p>
+</section>
+<section>
+  <h1>Flatiron Blogs</h1>
+  <h4>Check out these awesome blogs by my Flatiron School classmates</h4>
+  <ul>
+      <li><a href="http://anabecker.tumblr.com/" target="_blank">Ana Becker</a></li>
+      <li><a href="http://1aurabrown.github.com/" target="_blank">Laura Brown</a></li>
+      <li><a href="http://andrewcallahan.tumblr.com/" target="_blank">Andrew Callahan</a></li>
+      <li><a href="http://christinachang.github.com/" target="_blank">Christina Chang</a></li>
+      <li><a href="http://acrystalc.github.com/" target="_blank">Crystal Chang</a></li>
+      <li><a href="http://tylerdavis.github.com/#blog" target="_blank">Tyler Davis</a></li>
+      <li><a href="http://johnkellyferguson.github.com/" target="_blank">John Kelly Ferguson</a></li>
+      <li><a href="http://vicfriedman.github.com/" target="_blank">Victoria Friedman</a></li>
+      <li><a href="http://ei-lene.github.com/" target="_blank">Ei-lene Heng</a></li>
+      <li><a href="http://aspectratio.github.com/" target="_blank">Tim Hunter</a></li>
+      <li><a href="http://iacutone.github.com/" target="_blank">Eric Iacutone</a></li>      
+      <li><a href="http://modernlegend.github.com/" target="_blank">Yanik Jayaram</a></li>
+      <li><a href="http://meowist.github.com/" target="_blank">Justin Kestler</a></li>
+      <li><a href="http://chokim.github.com/" target="_blank">Cho Kim</a></li>
+      <li><a href="http://jlarusso.github.com/" target="_blank">Jesse LaRusso</a></li>
+      <li><a href="http://www.erinandcode.com/" target="_blank">Erin Lee</a></li>
+      <li><a href="http://dolin.github.com/" target="_blank">Danny Olinksy</a></li>
+      <li><a href="http://mrikhter.github.com/" target="_blank">Masha Rikhter</a></li>
+      <li><a href="http://rseshan.github.com/" target="_blank">Rahul Seshan</a></li>
+      <li><a href="http://walliswt.github.com/" target="_blank">Wallis Wilkinson-Tsai</a></li>
+      <li><a href="http://janeeats.github.com/" target="_blank">Jane Vora</a></li>
+      <li><a href="http://hwang0214.github.com/" target="_blank">Harrison Wang</a></li>
+      <li><a href="http://anthonywijnen.com/" target="_blank">Anthony Wignen</a></li>
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/01/railsconf-2014-reflections/">RailsConf 2014 Reflections, Part 2 of 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/29/railsconf-2014-reflections/">RailsConf 2014 Reflections, Part 1 of 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/18/how-to-smell-check-your-code-quality-in-ruby-and-rails/">What's that (code) smell? How to monitor code quality in Ruby and Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/04/4-goals-for-2014/">4 Goals for 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/04/with-great-power-comes-great-single-responsibility/">With Great Power Comes Great (Single) Responsibility</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/eewang">@eewang</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'eewang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("eugenewang", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/eugenewang" class="twitter-follow-button" data-show-count="false">Follow @eugenewang</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Eugene Wang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eugenewang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eewang.github.com/blog/2014/05/01/railsconf-2014-reflections/';
+        var disqus_url = 'http://eewang.github.com/blog/2014/05/01/railsconf-2014-reflections/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
