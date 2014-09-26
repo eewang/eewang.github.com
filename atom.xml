@@ -4,7 +4,7 @@
   <title><![CDATA[eugenius]]></title>
   <link href="http://eewang.github.com/atom.xml" rel="self"/>
   <link href="http://eewang.github.com/"/>
-  <updated>2014-05-01T19:08:29-04:00</updated>
+  <updated>2014-09-25T21:15:56-04:00</updated>
   <id>http://eewang.github.com/</id>
   <author>
     <name><![CDATA[Eugene Wang]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Of Spreadsheets and Software]]></title>
+    <link href="http://eewang.github.com/blog/2014/09/24/of-spreadsheets-and-software/"/>
+    <updated>2014-09-24T21:14:00-04:00</updated>
+    <id>http://eewang.github.com/blog/2014/09/24/of-spreadsheets-and-software</id>
+    <content type="html"><![CDATA[<p>A co-worker of mine recently attended <a href="https://thestrangeloop.com/">Strange Loop</a> in St. Louis and directed me to a <a href="https://www.youtube.com/watch?v=0CKru5d4GPk">presentation by Felienne Hermans about spreadsheets</a> and their potential as a tool for developers. Although I&#8217;ve lost some of my Excel skill since my finance days, I find that the thought process underlying software applications and spreadsheets are remarkably similar.</p>
+
+<!--more-->
+
+
+<p>I entirely agree with Felienne about the power and ubiquity of spreadsheets. My initial foray into software development was through the trojan horse of Excel. What started out as basic functions to support models around investor liquidity and product pricing eventually morphed into a tangle of VBA code to automate data processing. I never thought of Excel functions themselves as code, although now it makes a lot more sense.</p>
+
+<p>Perhaps the best argument from my perspective for learning about spreadsheets is that they are practically the lingua franca of business people. As developers, our main task is to build software for users in a way they understand, and what better tool to use than one that comes installed by default in most corporate laptop setups.</p>
+
+<p>Felienne points out that while spreadsheets haven&#8217;t typically been the playground of serious developers, modern best practices in building software can be a deep resource for spreadsheet users to improve and standardize their Excel models. Testing and refactoring are the two examples cited in the presentation. When I was building Excel models in my previous job in finance, I never thought about testing my code. As for refactoring, I knew the benefits that could be gained, but it was never something I thought important or could systematically implement (or even successfully, given that I didn&#8217;t have any tests to protect business functionality).</p>
+
+<p>Looking back, I realize that had I known how to code, I could have been more effective at my job. That said, I probably would have still used the same tools (i.e., Excel) to do my work. Its hard to overstate the utility of Excel as a proto-software IDE in a business environment. A language, framework and text editor all wrapped in one, Excel runs consistently on every person&#8217;s machine (provided that everyone is on the same version) and doesn&#8217;t run the same risk of customization among its users (less technically saavy than the average developer) as software packages have. Excel files are easy to email around and don&#8217;t typically rely on third-party libraries likes a Rails app would, so there is a low barrier to use and distribution.</p>
+
+<p>Where I would have done my job differently had I known how to code is in the area of version control and distribution. I&#8217;m consistently impressed with the Git and Github model of version control and collaboration, and I would like to think that using Git to manage Excel models would have been a better strategy - provided that others on my team were willing to learn the technology - than renaming Excel files with a &#8220;v*&#8221; suffix and re-emailing out the latest version each time I made a change.</p>
+
+<p>Coding with all our preferred tooling is great, but at the end of the day, if our job is to build usable software for the less-technically inclined, spreadsheets are a great way to achieve some level of automation and computing power while avoiding the steep learning curve demanded by traditional software development. When I first started to code, simply using my terminal was a challenge (don&#8217;t get me started on vim). And while understanding and manipulating spreadsheets is still an acquired skill, spreadsheets are a great tool just to get something up and running that can be shared and used by other, non-technical people.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RailsConf 2014 Reflections, Part 2 of 2]]></title>
@@ -2316,22 +2340,6 @@ the useful functionality without adding unwieldy dependencies.</p>
 <p><strong>Work on a Project</strong></p>
 
 <p>This is a bit of no-brainer as a learning technique. Completing a project will help me most with learning front-end frameworks. I am familiar with Angular, having used that in project, but I&#8217;m planning to turn my focus to Backbone, given that the NYT uses Backbone pretty heavily for its front-end code (perhaps because Jeremy Ashkenas, the creator of Backbone, used to be a developer on the NYT&#8217;s Interactive News team). I&#8217;m still tossing around a few ideas of what I could build, but this Backbone tutorial for an <a href="http://coenraets.org/blog/2011/12/backbone-js-wine-cellar-tutorial-part-1-getting-started/" target="_blank">interactive wine cellar</a> seems like a good project that I could translate to another domain.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Landing the Dream Job]]></title>
-    <link href="http://eewang.github.com/blog/2013/05/18/landing-the-dream-job/"/>
-    <updated>2013-05-18T23:40:00-04:00</updated>
-    <id>http://eewang.github.com/blog/2013/05/18/landing-the-dream-job</id>
-    <content type="html"><![CDATA[<p>I&#8217;m happy to announce that I will be joining the New York Times as a software developer this July. I&#8217;ll be working on the new Emerging Technologies team, which is a team tasked with building a new suite of web and mobile technologies for consuming NYT content. The small group consists of developers, designers, product folks and journalists/editors. I&#8217;m extremely excited to join the world&#8217;s newspaper of record and a talented developer team that will define the future of such a storied institution. I feel humbled and honored for the opportunity, and I&#8217;m eager to explore the opportunities to grow at an organization like the NYT.</p>
-
-<!--more-->
-
-
-<p>Throughout the last three weeks, I&#8217;ve had the opportunity to speak with a variety of start-ups and technology firms. While there are a ton of great start-ups out there doing amazing work, I couldn&#8217;t have asked for a better opportunity to learn more about the craft of code and work at the epicenter of a rapidly-changing journalism industry that continues to grapple with the effects of technology on its business and product model. I&#8217;ve been blessed to find a position that can combine my professional experience serving as an editor at the <a href="http://dukechronicle.com" target="_blank">Duke Chronicle</a> and working on investment products at <a href="http://www.blackstone.com/our-businesses/aam/hedge-fund-solutions-(baam)" target="_blank">Blackstone</a>. I&#8217;ll likely be coding mostly in Ruby and Javascript, and will have the chance to learn other languages and technologies, like Objective-C. I&#8217;m incredibly thankful to Avi &amp; Co. and my classmates at <a href="http://flatironschool.com/" target="_blank">the Flatiron School</a> for not only teaching me how to code, but showing me how code can be equal parts analytical and creative.</p>
-
-<p>The job will undoubtedly be challenging, having to build products for a newspaper that gets <a href="http://en.wikipedia.org/wiki/The_New_York_Times#Online_activity" target="_blank">30 million unique visitors per month</a>, but I&#8217;m eager for the challenge and excited for the growth potential at the NYT!</p>
 ]]></content>
   </entry>
   

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Semantics and Scrapers (Flatiron - Day 007) - eugenius</title>
+  <title>Of Spreadsheets and Software - eugenius</title>
   <meta name="author" content="Eugene Wang">
 
   
-  <meta name="description" content="We covered a lot of material today, from the value of semantic mark-up in HTML to how to build web scrapers in Ruby. The day started with a review of &hellip;">
+  <meta name="description" content="A co-worker of mine recently attended Strange Loop in St. Louis and directed me to a presentation by Felienne Hermans about spreadsheets and their &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eewang.github.com/blog/2013/02/12/scrapers/">
+  <link rel="canonical" href="http://eewang.github.com/blog/2014/09/24/of-spreadsheets-and-software/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Semantics and Scrapers (Flatiron - Day 007)</h1>
+      <h1 class="entry-title">Of Spreadsheets and Software</h1>
     
     
       <p class="meta">
@@ -94,7 +94,7 @@
   
 
 
-<time datetime="2013-02-12T23:55:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2013</time>
+<time datetime="2014-09-24T21:14:00-04:00" pubdate data-updated="true">Sep 24<span>th</span>, 2014</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -103,16 +103,22 @@
   </header>
 
 
-<div class="entry-content"><p>We covered a lot of material today, from the value of semantic mark-up in HTML to how to build web scrapers in Ruby. The day started with a review of our homework from the previous night, which was to recreate a song cataloging program that we had written using hash iteration. Using hashes rather than arrays to organize our song list enabled us to utilize metadata about the artist, album and song title that are accessible via hash keys.</p>
+<div class="entry-content"><p>A co-worker of mine recently attended <a href="https://thestrangeloop.com/">Strange Loop</a> in St. Louis and directed me to a <a href="https://www.youtube.com/watch?v=0CKru5d4GPk">presentation by Felienne Hermans about spreadsheets</a> and their potential as a tool for developers. Although I&#8217;ve lost some of my Excel skill since my finance days, I find that the thought process underlying software applications and spreadsheets are remarkably similar.</p>
 
 <!--more-->
 
 
-<p>Later on in the day we went to work on our student profiles, and Avi taught us about the value of semantic markup along the way and other front-end best practices. Applying proper markup to an HTML document enables search engines to more effectively place content and generally aligns with the spirit of the Internet in writing web pages that are aware of the structure of their own content. In creating our student profiles, it was tempting to take semantic shortcuts and place content in the incorrect enclosing tags (e.g., list data in a table, which has a preset formatting). Avi emphasized, however, that the separation of content and style is a fundamental underpinning of the Web and should be respected. Content that is properly structured via HTML can be styled in an infinite number of ways, so we shouldn&#8217;t let our interest in maintaining beautiful design affect how we semantically define our content. A great example of this is the <a href="http://www.csszengarden.com/" target="_blank">CSS Zen Garden</a> project. Take a look at a few of the projects - you&#8217;ll realize that wildly different website designs can be based on the exact same HTML content.</p>
+<p>I entirely agree with Felienne about the power and ubiquity of spreadsheets. My initial foray into software development was through the trojan horse of Excel. What started out as basic functions to support models around investor liquidity and product pricing eventually morphed into a tangle of VBA code to automate data processing. I never thought of Excel functions themselves as code, although now it makes a lot more sense.</p>
 
-<p>In the afternoon, we were tasked with building our very first web scraper, on the student profile page we had just created, in fact. Using Nokogiri, a Ruby gem, I was able to write a program that parsed the individual student profile pages from the central index page and return a hash of attributes, covering each student&#8217;s work history, education, favorite apps, etc. For those who don&#8217;t know, scrapers are pretty awesome. They allow you to collect and organize data in any way you want from web sites, so long as you know what you&#8217;re looking for. Using scrapers, I could quickly collect sports data, or find all fitness classes at my gym, or pull out information from Wikipedia. Scrapers essentially allow you to extract large amounts of data for your own use. This is pretty powerful, and I&#8217;m excited to try and build more complex scrapers, and even attach those to analytical engines to provide useful intelligence about a topic.</p>
+<p>Perhaps the best argument from my perspective for learning about spreadsheets is that they are practically the lingua franca of business people. As developers, our main task is to build software for users in a way they understand, and what better tool to use than one that comes installed by default in most corporate laptop setups.</p>
 
-<p>In the evening, I made it over to an event on civic technology and public hacking with a fellow student. The talk focused on the state of civic technology, and included short speeches by politicians, city officials and active members of the civic tech community. Although it was all very interesting and exciting to know that this community is filled with passionate people who care about solving problems, I was exhausted after a long day at Flatiron, so I high-tailed it out of there when I got a chance and went back home to keep working on my scraper and watch the State of the Union.</p>
+<p>Felienne points out that while spreadsheets haven&#8217;t typically been the playground of serious developers, modern best practices in building software can be a deep resource for spreadsheet users to improve and standardize their Excel models. Testing and refactoring are the two examples cited in the presentation. When I was building Excel models in my previous job in finance, I never thought about testing my code. As for refactoring, I knew the benefits that could be gained, but it was never something I thought important or could systematically implement (or even successfully, given that I didn&#8217;t have any tests to protect business functionality).</p>
+
+<p>Looking back, I realize that had I known how to code, I could have been more effective at my job. That said, I probably would have still used the same tools (i.e., Excel) to do my work. Its hard to overstate the utility of Excel as a proto-software IDE in a business environment. A language, framework and text editor all wrapped in one, Excel runs consistently on every person&#8217;s machine (provided that everyone is on the same version) and doesn&#8217;t run the same risk of customization among its users (less technically saavy than the average developer) as software packages have. Excel files are easy to email around and don&#8217;t typically rely on third-party libraries likes a Rails app would, so there is a low barrier to use and distribution.</p>
+
+<p>Where I would have done my job differently had I known how to code is in the area of version control and distribution. I&#8217;m consistently impressed with the Git and Github model of version control and collaboration, and I would like to think that using Git to manage Excel models would have been a better strategy - provided that others on my team were willing to learn the technology - than renaming Excel files with a &#8220;v*&#8221; suffix and re-emailing out the latest version each time I made a change.</p>
+
+<p>Coding with all our preferred tooling is great, but at the end of the day, if our job is to build usable software for the less-technically inclined, spreadsheets are a great way to achieve some level of automation and computing power while avoiding the steep learning curve demanded by traditional software development. When I first started to code, simply using my terminal was a challenge (don&#8217;t get me started on vim). And while understanding and manipulating spreadsheets is still an acquired skill, spreadsheets are a great tool just to get something up and running that can be shared and used by other, non-technical people.</p>
 </div>
 
 
@@ -135,7 +141,7 @@
   
 
 
-<time datetime="2013-02-12T23:55:00-05:00" pubdate data-updated="true">Feb 12<span>th</span>, 2013</time>
+<time datetime="2014-09-24T21:14:00-04:00" pubdate data-updated="true">Sep 24<span>th</span>, 2014</time>
       
 
 
@@ -143,7 +149,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2013/02/12/scrapers/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2013/02/12/scrapers/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eewang.github.com/blog/2014/09/24/of-spreadsheets-and-software/" data-via="eugenewang" data-counturl="http://eewang.github.com/blog/2014/09/24/of-spreadsheets-and-software/" >Tweet</a>
   
   
   
@@ -154,10 +160,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/12/flatiron-day-006/" title="Previous Post: Flatiron - Day 006">&laquo; Flatiron - Day 006</a>
+        <a class="basic-alignment left" href="/blog/2014/05/01/railsconf-2014-reflections/" title="Previous Post: RailsConf 2014 Reflections, Part 2 of 2">&laquo; RailsConf 2014 Reflections, Part 2 of 2</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/02/13/coding/" title="Next Post: Coding, Fast and Slow (Flatiron - Day 008)">Coding, Fast and Slow (Flatiron - Day 008) &raquo;</a>
       
     </p>
   </footer>
@@ -316,8 +320,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://eewang.github.com/blog/2013/02/12/scrapers/';
-        var disqus_url = 'http://eewang.github.com/blog/2013/02/12/scrapers/';
+        var disqus_identifier = 'http://eewang.github.com/blog/2014/09/24/of-spreadsheets-and-software/';
+        var disqus_url = 'http://eewang.github.com/blog/2014/09/24/of-spreadsheets-and-software/';
         var disqus_script = 'embed.js';
       
     (function () {
